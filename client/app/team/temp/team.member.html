@@ -1,0 +1,148 @@
+<div class="form-inline text-center">
+	<div class="form-group">
+	    <label for="captain" class="control-label">隊長</label>
+	    <!-- <input type="text" class="form-control" name="captain" ng-model="formData.captain"> -->
+	    <input type="text" ng-model="formData.captain" placeholder="聯絡人" typeahead="person as person.name for person in availablePeople | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" typeahead-no-results="noCaptain" class="form-control">
+	    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+	    <div ng-show="noCaptain">
+	      <p>邀請他加入KB</p>
+	      <div class="form-group">
+		      <label for="captainEmail" class="control-label">隊長的Email</label>
+		      <input type="email" ng-model="email.captain" class="form-control">
+	      </div>
+	    </div>
+		<!-- <ui-select ng-model="formData.captain"
+			class="nameBox"
+			theme="bootstrap"
+			ng-disabled="disabled"
+			reset-search-input="false">
+			<ui-select-match placeholder="請輸入人名">
+			{{$select.selected.name}}
+			</ui-select-match>
+			<ui-select-choices repeat="captain in availablePeople | filter: {name: $select.search}" 
+			refresh-delay="0">
+			  <div ng-bind-html="captain.name | highlight: $select.search"></div>
+			</ui-select-choices>
+		</ui-select>	 -->
+	</div>
+	<div class="form-group">
+	    <label for="coach" class="control-label">教練</label>
+	    <!-- <input type="text" class="form-control" name="coach" ng-model="formData.coach"> -->
+	    <input type="text" ng-model="formData.coach" placeholder="聯絡人" typeahead="person as person.name for person in availablePeople | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" typeahead-no-results="noCoach" class="form-control">
+	    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+	    <div ng-show="noCoach">
+	      <p>邀請他加入KB</p>
+	      <div class="form-group">
+		      <label for="captainEmail" class="control-label">教練的Email</label>
+		      <input type="email" ng-model="email.coach" class="form-control">
+	      </div>
+	    </div>
+	    <!-- <ui-select ng-model="formData.coach"
+		    class="nameBox"
+			theme="bootstrap"
+			ng-disabled="disabled"
+			reset-search-input="false">
+			<ui-select-match placeholder="請輸入人名">
+			{{$select.selected.name}}
+			</ui-select-match>
+			<ui-select-choices repeat="coach in availablePeople | filter: {name: $select.search}" 
+			refresh-delay="0">
+			  <div ng-bind-html="coach.name | highlight: $select.search"></div>
+			</ui-select-choices>
+		</ui-select> -->
+	</div>
+	<div class="form-group">
+	    <label for="manager" class="control-label">球隊經理</label>
+	    <!-- <input type="text" class="form-control" name="manager" ng-model="formData.manager"> -->
+	    <input type="text" ng-model="formData.manager" placeholder="聯絡人" typeahead="person as person.name for person in availablePeople | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" typeahead-no-results="noManager" class="form-control">
+	    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+	    <div ng-show="noManager">
+			<label for="captainEmail" class="control-label">經理的Email</label>
+			<input type="email" ng-model="email.manager" class="form-control">
+	    </div>
+	    <!-- <ui-select ng-model="formData.manager"
+		    class="nameBox"
+			theme="bootstrap"
+			ng-disabled="disabled"
+			reset-search-input="false">
+			<ui-select-match placeholder="請輸入人名">
+			{{$select.selected.name}}
+			</ui-select-match>
+			<ui-select-choices repeat="manager in availablePeople | filter: {name: $select.search}" 
+			refresh-delay="0">
+			  <div ng-bind-html="manager.name | highlight: $select.search"></div>
+			</ui-select-choices>
+		</ui-select> -->
+	</div>
+</div>
+<div class="form-inline text-center">
+	<div class="form-group">
+	    <label for="intro" class="control-label">球隊成員</label>
+	    <!-- <input type="text" class="form-control" name="intro" ng-model="formData.member"> -->
+	    <div class="input-group">
+	    	<input type="text" ng-model="person" placeholder="聯絡人" typeahead="person as person.name for person in availablePeople | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+		    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+		    <div ng-show="noResults">
+		      <label for="captainEmail" class="control-label">{{person.name}}的Email</label>
+		      <input type="email" ng-model="email.teammate" class="form-control">
+		    </div>
+		    <!-- <ui-select ng-model="member.selected"
+			    class="nameBox"
+				theme="bootstrap"
+				ng-disabled="disabled"
+				reset-search-input="true">
+				<ui-select-match placeholder="請輸入人名">
+				{{$select.selected.name}}
+				</ui-select-match>
+				<ui-select-choices repeat="member in availablePeople | filter: {name: $select.search}" 
+				refresh-delay="0">
+				  <div ng-bind-html="member.name | highlight: $select.search"></div>
+				</ui-select-choices>
+			</ui-select> -->
+	    	<span class="input-group-btn">
+	    		<button type="button" class="btn" ng-click="addMember(person)">
+					<span class="glyphicon glyphicon-plus"></span>
+	    		</button>
+	    	</span>
+	    </div>
+	    
+	</div>
+	<div >
+		<!-- <div class="previewBox clearfix">
+			<div>
+				<img class="img-responsive" ng-src="{{member.avatar}}" alt="{{member.name}}">
+			</div>
+		</div> -->
+		<ul class="list-group">
+			<li ng-repeat="member in list" class="list-group-item">	
+				<div class="imageWords">
+					<div class="previewBox">
+					    <img class="img-responsive" ng-src="{{member.avatar}}" alt="{{member.name}}">
+				    </div>
+				    <h3>{{member.name}}</h3>
+				    <p>&nbsp{{member.jerseynumber}}&nbsp{{member.position}}</p>
+				</div>
+		  </li>
+		</ul>
+		<!-- <ul class="media-list">
+		  <li  ng-repeat="member in list" class="media">
+		    <div class="media-left">
+		      <div class="previewBox">
+		        <img class="img-responsive media-object" ng-src="{{member.avatar}}" alt="{{member.name}}">
+		      </div>
+		    </div>
+		    <div class="media-body">
+		      <h4 class="media-heading">{{member.name}}</h4>
+		    </div>
+		  </li>
+		</ul> -->
+	</div>
+</div>
+
+<div class="form-group row">
+<div class="col-xs-6 col-xs-offset-3">
+    <a ui-sref="settings.represent" class="btn btn-block btn-primary">
+    下一步 <span class="glyphicon glyphicon-circle-arrow-right"></span>
+    </a>
+</div>
+</div>

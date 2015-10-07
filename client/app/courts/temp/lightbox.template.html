@@ -1,0 +1,52 @@
+<div class="modal-body"
+    ng-swipe-left="Lightbox.nextImage()"
+    ng-swipe-right="Lightbox.prevImage()">
+  <!-- navigation -->
+  <div class="lightbox-nav">
+    <!-- close button -->
+    <button class="close" aria-hidden="true" ng-click="$dismiss()">×</button>
+  </div>
+  <div class="picNav">
+    <!-- <div class="btn-group"> -->
+      <a class="left" ng-click="Lightbox.prevImage()">
+        <i class="fa fa-angle-left fa-5x"></i>
+      </a>
+      <a class="right" ng-click="Lightbox.nextImage()">
+       <i class="fa fa-angle-right fa-5x"></i>
+      </a>
+   <!--  </div> -->
+  </div>
+
+  <div class="lightbox-image-container">
+    <!-- caption -->
+    <div class="lightbox-image-caption">
+      <span>由{{Lightbox.images[Lightbox.index].user.name}}提供
+      </span>
+    </div>
+
+    <!-- image -->
+    <img ng-if="!Lightbox.isVideo(Lightbox.image)"
+        lightbox-src="{{Lightbox.imageUrl}}">
+
+    <!-- video -->
+    <div ng-if="Lightbox.isVideo(Lightbox.image)"
+        class="embed-responsive embed-responsive-16by9">
+      <!-- video file embedded directly -->
+      <video ng-if="!Lightbox.isSharedVideo(Lightbox.image)"
+          lightbox-src="{{Lightbox.imageUrl}}"
+          controls
+          autoplay="true">
+      </video>
+
+      <!-- video embedded with an external service using
+           `ng-videosharing-embed` -->
+      <embed-video ng-if="Lightbox.isSharedVideo(Lightbox.image)"
+          lightbox-src="{{Lightbox.imageUrl}}"
+          ng-href="{{Lightbox.imageUrl}}"
+          iframe-id="lightbox-video"
+          class="embed-responsive-item">
+        <a ng-href="{{Lightbox.imageUrl}}">Watch video</a>
+      </embed-video>
+    </div>
+  </div>
+</div>

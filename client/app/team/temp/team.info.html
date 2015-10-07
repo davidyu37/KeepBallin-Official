@@ -1,0 +1,48 @@
+<div class="form-inline text-center">
+	<div class="form-group">
+	    <label for="teamname" class="control-label">球隊名稱</label>
+	    <input type="text" class="form-control" name="teamname" ng-model="formData.teamname" placeholder="*必要" required>
+	</div>
+    <span >請輸入名字</span>
+	<div class="form-group">
+	    <label for="founded" class="control-label">成立日期</label>
+	    <input type="date" class="form-control" name="founded" ng-model="formData.founded">
+	</div>
+	<div class="form-group">
+	    <label for="teampic" class="control-label">球隊照片</label>
+	    <div class="input-group">
+		    <div ng-hide="load" type="file" class="form-control teampic" name="teampic" ng-model="picture" ngf-select="upload(picture)">選檔案</div>
+		    <img ng-src="{{preview}}" class="img-responsive">
+		    <span class="input-group-addon" ng-show="load">
+			    <div class="loaderWrapper">
+		        	<div class="loader">Loading</div>
+		      	</div>
+		    </span>
+	    </div>
+	</div>
+</div>
+<div class="form-group text-center" ng-class="{'has-error': noResults}">
+    <label for="contactperson">聯絡人</label>
+    <!-- <input type="tel" class="form-control" name="contactperson" ng-model="formData.contactperson"/> -->
+    <input type="text" name="contactperson" ng-model="formData.contactperson" placeholder="*必要" typeahead="person as person.name for person in availablePeople | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" required>
+    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+    <div ng-show="noResults">
+		<p>聯絡人必須是KB成員</p>
+    </div>
+</div>
+<div class="form-group text-center">
+    <label for="contact">聯絡電話</label>
+    <input type="tel" name="contactnumber" class="form-control" name="contact" ng-model="formData.contact" placeholder="*必要" required/>
+</div>
+<div class="form-group text-center">
+    <label for="intro">球隊簡介</label>
+    <textarea type="text" class="form-control" name="intro" ng-model="formData.intro"></textarea>
+</div>
+
+<div class="form-group row">
+<div class="col-xs-6 col-xs-offset-3">
+    <a ui-sref="settings.member" class="btn btn-block btn-primary">
+    下一步 <span class="glyphicon glyphicon-circle-arrow-right"></span>
+    </a>
+</div>
+</div>

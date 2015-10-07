@@ -1,0 +1,89 @@
+<div class="insideModal">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>加入熱血追夢家們</h1>
+      <span>
+        <i class="fa fa-3x fa-users faa-burst animated"></i>
+      </span>
+      <hr>
+    </div>
+    <div class="col-sm-12">
+      <form class="form" name="form" ng-submit="register(form)" novalidate>
+
+        <div class="form-group" ng-class="{ 'has-success': form.name.$valid && submitted,
+        'has-error': form.name.$invalid && submitted }">
+          <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
+            <span class="input-group-addon fa-icon-addon"><i class="fa fa-user fa-fw"></i></span>
+            <input type="text" name="name" class="form-control" ng-model="user.name" placeholder="請輸入姓名" autofocus required/>
+          </div>
+          <p class="help-block" ng-show="form.name.$error.required && submitted">
+            姓名是必要的
+          </p>
+        </div>
+
+        <div class="form-group" ng-class="{ 
+        'has-success': form.email.$valid && submitted,
+        'has-error': form.email.$invalid && submitted }">
+          <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
+            <span class="input-group-addon fa-icon-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+            <input type="email" name="email" class="form-control" ng-model="user.email" 
+            required mongoose-error placeholder="請輸入Email"/>
+          </div>
+
+          
+          <p class="help-block" ng-show="form.email.$error.email && submitted">
+            請輸入有效的Email
+          </p>
+          <p class="help-block" ng-show="form.email.$error.required && submitted">
+            你的Email是？
+          </p>
+          <p class="help-block" ng-show="form.email.$error.mongoose">
+            {{ errors.email }}
+          </p>
+        </div>
+
+        <div class="form-group" ng-class="{ 
+        'has-success': form.password.$valid && submitted,
+        'has-error': form.password.$invalid && submitted }">
+          <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
+            <span class="input-group-addon fa-icon-addon"><i class="fa fa-lock fa-fw"></i></span>
+            <input type="password" name="password" class="form-control" ng-model="user.password" ng-minlength="3"
+            placeholder="請輸入密碼"
+            required mongoose-error/>
+          </div>
+
+          
+          <p class="help-block"
+             ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
+            密碼需要至少三個字母
+          </p>
+          <p class="help-block" ng-show="form.password.$error.mongoose">
+            {{ errors.password }}
+          </p>
+        </div>
+
+        <div>
+          <button class="btn btn-primary btn-lg btn-login" type="submit">
+            註冊
+          </button>
+          <a class="btn btn-default btn-lg btn-register" 
+          ng-click="closeModal()"
+          href="/login">
+            登入
+          </a>
+        </div>
+
+        <hr>
+        <div>
+          <a class="btn btn-facebook" href="" ng-click="loginOauth('facebook')">
+            <i class="fa fa-facebook"></i> Facebook登入
+          </a>
+          <a class="btn btn-google-plus" href="" ng-click="loginOauth('google')">
+            <i class="fa fa-google-plus"></i> Google+登入
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+  <hr>
+</div>

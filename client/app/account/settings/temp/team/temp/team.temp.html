@@ -1,0 +1,81 @@
+<header class="business-header" back-img="{{team.teampic.url}}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="tagline">{{team.teamname}}</h1>
+                <p class="tagline">since:{{team.founded | date}}</p>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Page Content -->
+<div class="container">
+    
+    <div class="row">
+        <div class="col-sm-8">
+            <h2>有關我們</h2>
+            <p>{{team.intro}}</p>
+            <h2>為何打球？</h2>
+            <p>{{team.represent}}</p>
+        </div>
+        <div class="col-sm-4">
+            <h2>聯絡我們</h2>
+            <address>
+                <strong>{{team.manager.name}}</strong>
+                <br>
+                <p>
+                    <span class="glyphicon glyphicon-earphone">
+                    {{team.contact}}
+                    </span>
+                </p>
+            </address>
+        </div>
+    </div>
+    <!-- /.row -->
+    <hr>
+    <div class="row">
+        <div class="col-sm-4">
+            <img class="img-circle img-responsive img-center" ng-src="{{team.captain.avatar}}" alt="">
+            <h2>隊長-{{team.captain.name}}</h2>
+            <p>位置:{{team.captain.position}}</p>
+            <p>號碼:#{{team.captain.jerseynumber}}</p>
+            <p>身高:{{team.captain.height}}</p>
+            <p>體重:{{team.captain.height}}</p>
+        </div>
+        <div class="col-sm-4">
+            <img class="img-circle img-responsive img-center" ng-src="{{team.manager.avatar}}" alt="">
+            <h2>經理-{{team.manager.name}}</h2>
+            
+            
+        </div>
+        <div class="col-sm-4">
+            <img class="img-circle img-responsive img-center" ng-src="{{team.coach.avatar}}" alt="">
+            <h2>教練-{{team.coach.name}}</h2>
+        </div>
+    </div>
+    <h2>隊員</h2>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-md-4" ng-repeat="member in team.members">
+            <img class="img-responsive" ng-src="{{member.avatar}}" alt="">
+            <h3>
+               {{member.name}}
+            </h3>
+            <p>位置:{{member.position}}</p>
+            <p>號碼:#{{member.jerseynumber}}</p>
+            <p>身高:{{member.height}}</p>
+            <p>體重:{{member.height}}</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Copyright &copy; Your Website 2014</p>
+            </div>
+        </div>
+        <!-- /.row -->
+    </footer>
+
+</div>

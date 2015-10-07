@@ -1,0 +1,215 @@
+<div>
+    <div id="searchbox">
+        <form ng-submit="searchCourt(searchParams)"
+            popover-placement="bottom" 
+            popover="再試一次" 
+            popover-is-open="emptyField"
+            popover-trigger="none">
+            <nit-advanced-searchbox
+                ng-model="searchParams"
+                parameters="availableSearchParams"
+                submit="searchCourt(searchParams)"
+                placeholder="任意輸入或用以下的選項"
+                focus="searchFocus"
+                popover-placement="bottom" 
+                popover="目前還沒有此球場" 
+                popover-is-open="noResult"
+                popover-trigger="none">
+            </nit-advanced-searchbox>
+            <button ng-hide="searchFocus" type="submit" class="btn pull-right" ng-class="{'btn-primary': !gotResult, 'btn-success btn-sm': gotResult}">
+            <span ng-show="!gotResult">
+            送出  
+            </span>
+            <span ng-show="gotResult && !searchFocus"><i class="fa fa-2x fa-check-circle"></i></span>
+            </button>
+        </form>
+        <span ng-show="gotResult && searchFocus" class="pull-right text-success"><i class="fa fa-lg fa-check-circle"></i></span> 
+    </div>
+    <div id="map" marker 
+    courts="courts"
+    currentcourt="currentcourt" 
+    map="map" 
+    markernow="markernow"
+    markers="markers" 
+    infowindow="infowindow" 
+    editmode="editmode" 
+    finishedit="finishedit"
+    deletemarker="deletemarker"
+    expanded="expanded"
+    ng-class="{'mapShadow': currentcourt}"
+    ></div>
+    <button title="定位(解除瀏覽器的封鎖才可以使用喔)" type="button" id="geolocate" class="geolocateBtn"
+    ng-click="geolocate()">
+    	<span class="glyphicon glyphicon-screenshot"></span>
+    </button>
+    <!-- Make a button that let user select the courts to appear -->
+    <button class="btn"
+    ng-class="{'btn-primary': !enable, 'btn-success': enable}"
+    id="addMarker" 
+    ng-init="enable=false" 
+    ng-show="isAdmin || isManager" 
+    ng-click="enable = !enable; enableAddMarker(enable)">
+        <span class="glyphicon" 
+        ng-class="{'glyphicon-map-marker': !enable, 'glyphicon-ok': enable}"></span>
+    </button>
+    <!-- Slide button for court detail -->
+    <button class="btn slideBtn" slide-toggle="#detail" expanded="expanded" map="map" ng-model="expanded" 
+    ng-show="currentcourt">
+        <i class="fa fa-3x" ng-class="{'fa-angle-double-up black faa-bounce animated': !expanded, 'fa-angle-double-down white': expanded}"></i>
+        <!-- <span class="glyphicon"
+        ng-class="{'glyphicon-chevron-up': !expanded, 'glyphicon-chevron-down': expanded}"></span> -->
+    </button>
+    <!-- Court detail starts here -->
+    <div id="detail" class="court-detail slideable" ng-show="currentcourt">
+        <div class="row detail-inner">
+            <!-- Picture Area -->
+            <div 
+            ng-controller="uploadCtrl">             
+                <div 
+                ng-show="slides[0]"
+                ng-mouseover="hovered=true" 
+                ng-mouseleave="hovered=false" 
+                class="picture-area" 
+                ng-class="{'col-sm-12': hovered, 'col-sm-3': !hovered}">
+                    <div class="wrapper">
+                        <div ng-hide="hovered" class="singleImage">
+                            <img ng-src="{{slides[0].url}}">
+                        </div>
+                        <div ng-show="hovered" ng-repeat="slide in slides" class="carousel">
+                            <div>
+                                <a style="cursor: pointer;" ng-click="openLightboxModal($index)">
+                                    <img ng-src="{{slide.url}}">
+                                </a>
+                                <button class="picDeleteBtn" 
+                                ng-click="deletePic(slide)"
+                                ng-show="isAdmin || isManager">
+                                    <span class="glyphicon glyphicon-trash">
+                                    </span>
+                                </button>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                <div class="col-sm-3" ng-show="!slides.length">
+                    <p class="picPlaceholder text-center">目前還沒有照片</p>
+                    <img class="img-responsive" src="assets/images/courtpicplaceholder.png">
+                </div>
+            </div>
+            <!-- Picture Area ends -->
+            <div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
+                <!-- City -->
+                <h2>{{currentcourt.court}}</h2>
+                <h2 ng-show="!currentcourt.court">球場名</h2>
+                </h2>
+                <!-- Hours -->
+                <p>開放時間:</p>
+                <p ng-show="currentcourt.hours">
+                    {{currentcourt.hours.begin | date:'shortTime'}}~{{currentcourt.hours.end | date:'shortTime'}}
+                </p>
+               
+                 <!-- Peaktime -->
+                <p>尖峰:</p>
+                <p ng-show="currentcourt.peaktime">
+                    {{currentcourt.peaktime.begin | date:'shortTime'}}~{{currentcourt.peaktime.end | date:'shortTime'}}
+                </p>
+            </div>
+            <div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
+                <!-- Indoor -->
+                <h2>球場情報</h2>
+                <div class="col-sm-6">
+                    <div 
+                    ng-mouseover="showceiling=true"
+                    ng-mouseleave="showceiling=false">
+                        <div ng-show="!showceiling">
+                            <p ng-show="currentcourt.indoor">室內</p>
+                            <p ng-show="!currentcourt.indoor">室外</p>
+                        </div>
+                        <p ng-show="showceiling">屋簷:{{currentcourt.ceiling | exist}}</p>
+                    </div>
+                    <!-- Net -->
+                    <div
+                    ng-mouseover="shownet=true"
+                    ng-mouseleave="shownet=false">
+                        <p ng-show="!shownet">
+                        籃網:{{currentcourt.net | exist}}</p>
+                        <p ng-show="shownet">{{currentcourt.nettype}}</p>
+                        <p ng-show="shownet && !currentcourt.nettype">沒籃網</p>
+
+                    </div>
+                    <!-- Basket number -->
+                    <p>籃框數:{{currentcourt.basketnumber}}</p>
+                    <!-- Floor -->
+                    <p>地質:{{currentcourt.floor}}</p>
+                </div>
+                <div class="col-sm-6">
+                    
+                    <!-- Water -->
+                    <div
+                    ng-mouseover="showwater=true"
+                    ng-mouseleave="showwater=false">
+                        <p ng-show="!showwater">飲水機:{{currentcourt.water.exist | exist}}</p>
+                        <p ng-show="showwater && currentcourt.water.desc">{{currentcourt.water.desc}}</p>
+                        <p ng-show="showwater && !currentcourt.water.desc">記得帶水喔</p>
+                    </div>
+                    <!-- Toilet -->
+                    <div
+                    ng-mouseover="showtoilet=true"
+                    ng-mouseleave="showtoilet=false">
+                        <p ng-show="!showtoilet">廁所:{{currentcourt.toilet.exist | exist}}</p>
+                        <p ng-show="showtoilet && currentcourt.toilet.desc">{{currentcourt.toilet.desc}}</p>
+                        <p ng-show="showtoilet && !currentcourt.toilet.desc">辦完事再出門</p>
+                    </div>
+                    <!-- Lights -->
+                    <p>燈:{{currentcourt.lights | exist}}</p>
+                    <!-- Rent -->
+                    <div
+                    ng-mouseover="showrent=true"
+                    ng-mouseleave="showrent=false">
+                        <p ng-show="!showrent">租金:{{currentcourt.rent | exist}}</p>
+                        <p ng-show="showrent && currentcourt.rentprice">
+                            {{"$" + currentcourt.rentprice + "/小時"}}
+                        </p>
+                        <p ng-show="showrent && !currentcourt.rentprice">免費喔</p>
+                    </div>
+                </div>
+            </div>
+            <div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
+                <h2>管理員留言</h2>
+                <p>{{currentcourt.desc}}</p>
+            </div>
+            <div class="editBtns">
+                <!--Upload button-->
+                <button class="editDetailButton" 
+                ng-click="uploadmode()" 
+                ng-model="upload" 
+                ng-show="isAdmin || isManager">
+                    <span class="glyphicon glyphicon-camera"></span>
+                </button>
+                <!--Edit button-->
+                <button class="editDetailButton"
+                ng-click="editmode()" 
+                ng-model="edit" 
+                ng-show="isAdmin || isManager">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!--Upload page-->
+    <div id="uploadPic" class="editPage col-lg-12" 
+    ng-include="'app/courts/temp/upload.page.html'" 
+    ng-init="upload=false" ng-show="upload" 
+    ng-click="uploadmode()"
+    ></div>
+    <!--Edit page-->
+    <div id="courtEditPage" class="editPage col-lg-12" 
+    ng-include="'app/courts/temp/edit.page.html'" 
+    ng-init="edit=false" ng-show="edit" 
+    ng-click="editmode()"></div>
+    <!-- Court detail ends -->
+    <div class="detailForMobile" ng-show="currentcourt" ng-include="'app/courts/temp/court.detail.html'"></div>
+    
+    <!-- Comments start here -->
+    <div ng-show="currentcourt" ng-include="'app/comments/comments.html'"></div>
+    <!-- Comments end -->
+</div>

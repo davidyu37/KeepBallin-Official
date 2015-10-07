@@ -1,0 +1,8 @@
+<div class="inviteMessage">
+	<h1>註冊你的球隊</h1>
+	<button ng-click="showToggle()" ui-sref="settings.info" class="btn-primary btn-lg">
+		新球隊
+	</button>
+</div>
+<!-- This opens team.signup.html -->
+<div class="editPage col-lg-12" ng-show="showSignup" ui-view="teamsignup" ng-click="showToggle()"></div>

@@ -1,0 +1,31 @@
+<p class="dateDisplay">
+	<select class="selectBtn" ng-model="myTime" id="time" 
+	ng-options="tChoice as (tChoice.dt*1000 | date: 'MM/dd HH:mm') for tChoice in future" 
+	ng-change="showFutureWeather(myTime)">
+		<option value="">
+		選擇未來...
+		</option>
+	</select>
+</p>
+<div id="weatherContent" class="panel-body">
+	<div class="timeDisplay">
+		<ul>
+			<li>
+			<div>{{futureDisplay.diff.day}}</div>
+			天</li>
+			<li>
+			<div>{{futureDisplay.diff.hour}}</div>
+			時</li>
+			<li><div>{{futureDisplay.diff.minute}}</div>
+			分</li>
+			<li><div>{{futureDisplay.diff.second}}</div>
+			秒</li>
+		</ul>
+		<span>後</span>
+  	</div>
+	<p id="temperature">{{futureDisplay.temp}}&deg;C</p>
+	<div class="weatherConditionBox">
+		<div id="weatherIcon" ng-include="icon.whereFuture"></div>
+		<p id="weatherDescription">{{futureDisplay.description}}</p>
+	</div>
+</div>

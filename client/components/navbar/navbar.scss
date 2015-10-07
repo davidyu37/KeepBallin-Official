@@ -1,0 +1,104 @@
+.header {
+  z-index: 1000;
+  width: 100%;
+  height: auto;
+  border: none;
+  margin: 0;
+  background-color: rgba(0,0,0,0.8);
+  transition: top 0.4s ease-in-out;
+  box-shadow: 0 0 10px rgba(0,0,0,0.9);
+}
+/* scroll.js adds this class when scrol up */
+.header-up {
+  top: -80px;
+}
+/*.nav-header class includes thing that appear on smaller screen*/
+/*It includes .navbar-toggle button*/
+.navbar-inverse .navbar-toggle .icon-bar {
+  background-color: $brand-primary;
+}
+.navbar-inverse .navbar-toggle:hover {
+  background-color: rgba(255,255,255,0.9);
+}
+.navbar-collapse {
+  background: $brand-primary;
+  padding: 0;
+}
+/* overwrite the default colors for .navbar inverse*/
+.navbar-inverse .navbar-nav > li > a {
+  color: black;
+  transition: all linear 0.4s;
+  @media screen and (min-width: $screen-sm-min) {
+    padding-top: 20px;
+    height: 60px;
+    font-size: 150%;
+    text-align: center;
+    
+  }
+  &:hover {
+    color: $brand-primary;
+    background-color: white;
+    font-size: 200%;
+    border-bottom: 10px solid $brand-primary;
+    span {
+      bottom: 0px;
+      padding-right: 5px;
+      position: relative;
+      top: 0;
+    }
+  }
+}
+/* the spans hold the glyphicon */
+.navbar-nav {
+  position: relative;
+  margin: 0;
+  span{
+    /* overwrite glyphicon class's default positioning and line height */
+    position: absolute;
+    top: -9999px;
+    line-height: 0;
+    transition: 0.4s;
+  }
+}
+.right-padding {
+  @media screen and (min-width: $screen-sm-min) {
+    padding-right: 30px;    
+  }
+}
+.navbar-inverse .navbar-text {
+  font-size: 150%;
+  color: white;
+  margin: 0;
+}
+
+/* align text to center for mobile view */
+.nav > li > a {
+  @media screen and (max-width: $screen-sm-min) {
+    text-align: center;
+    padding-left: 30px;
+    border-bottom: 1px solid black;
+  }
+}
+
+/* Logo here */
+.navbar-brand {
+  padding-left: 0;
+}
+.logo {
+  color: white;
+  margin: 0;
+  font-size: 20pt;
+
+}
+#mobileLogo {
+  color: $brand-primary;
+  @media screen and (min-width: $screen-sm-min) {
+    display: none;
+  }
+}
+#desktopLogo {
+  padding-left: 0;
+  @media screen and (max-width: $screen-sm-min) {
+    display: none;
+  }
+}

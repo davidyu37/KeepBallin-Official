@@ -1,0 +1,234 @@
+@import 'temp/_weatherIcon.scss';
+
+.navbar-text {
+  margin-left: 15px;
+}
+
+@font-face {
+  font-family: digital;
+  src: url(../assets/fonts/digital.ttf);
+}
+
+.courtBG {
+  background-image: url('../assets/images/courtpicplaceholder.png');
+  background-size: cover;
+  height: 110vh;
+}
+
+.mailForm {
+  background-color: $brand-primary;
+  color: white;
+}
+
+/* Video css */
+#bgVideo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  /*background: url(polina.jpg) no-repeat;*/
+  background-size: cover;
+}
+
+/* Main marketing message */
+.jumbotron {
+  text-align: center;
+  margin: 0;
+  overflow: hidden;
+  background: none;
+}
+
+
+
+.basketBackground {
+  background-image: url('../assets/images/bg.jpg');
+  background-size: cover;
+}
+
+.parallaxBackground {
+  background-attachment: fixed;
+  background-position: 50% 0;
+  background-repeat: no-repeat;
+  height: 100vh;
+  position: relative;
+}
+
+.parallaxContent {
+  color: white;
+  text-shadow: 0 2px 0 black, 0 0 10px black;
+  padding-top: 20%;
+  border-radius: 50%;
+  .btn-primary {
+  background: none;
+  border: 2px solid $brand-primary;
+  transition: all ease .8s;
+    &:hover {
+      background-color: $brand-primary;
+    }
+  }
+}
+
+.bounceBall {
+  height: 50px; 
+  width: 50px;
+  margin: 20px;
+  cursor: grab;
+}
+
+/* Container that wraps the weather info */
+.leftContainer {
+  background: #333;
+  text-align: center;
+  min-height: 100%;
+  padding: 60px;
+  margin-bottom: -5px;
+}
+
+/* weather display */
+#weatherBox {
+  /* let weatherLocation locates itself */
+  background: none;
+  position: relative;
+  width: 250px;
+  margin: 0 auto;
+  padding: 5px;
+  text-align: center;
+  border: none;
+}
+/* Box that contain the actual weather info */
+#weatherContent {
+  background: rgba(255, 255, 255, 0.8);
+  min-height: 200px
+}
+
+/* date display */
+.dateDisplay {
+  font-size: 200%;
+  padding: 0;
+  color: white;
+  text-align: left;
+}
+
+/* time display */
+.timeDisplay {
+  font-family: digital;
+  font-size: 550%;
+  color: darken(#FFB35E, 10%);
+  text-shadow: 0 0 5px #FFB35E;
+  background: black;
+  position: relative;
+  &:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+  }
+  p {
+    margin: 0;
+    &:nth-child(2) {
+      color: red;
+      font-size: 170%;
+      margin-top: -70px;
+      height: 160px;
+    }  
+  }
+  ul {
+    text-align: left;
+    list-style: none;
+    padding-left: 10px;
+    li {
+      float: left;
+      padding: 10px 8px;
+      text-shadow: none;
+      font-size: 30%;
+
+    }
+  }
+  div {
+    color: white;
+    float: left;
+    text-shadow: none;
+    padding-right: 10px;
+  }
+  span {
+    font-size: 50%;
+    text-shadow: none;
+    position: relative;
+    margin-left: 5px;
+    top: -10px;
+    right: 15px;
+
+  }
+}
+
+/* weather location */
+.weatherLocation {
+  /*position: absolute;
+  left: 0px;
+  top: -90px;*/
+  text-align: left;
+  width: 100%;
+  height: 100px;
+  @media (min-width: $screen-sm-min) {
+    left: -100px;
+    top: 15%;
+    width: 100px;
+    height: auto;
+  }
+  h2 {
+    font-size: 500%;
+    color: white;
+  }
+}
+/* A toggle button that let users switch between weather now and forecast*/
+#weatherTimeBtn {
+  font-size: 150%;
+}
+
+#temperature {
+  font-size: 400%;
+  font-weight: bolder;
+  color: black;
+  margin: 0;
+}
+/* This box includes weatherIcon and weatherDescription */
+.weatherConditionBox {
+  display: table;
+  width: 100%;
+  height: 100px;
+  p {
+    color: black;
+  }
+}
+#weatherIcon {
+  display: table-cell;
+  vertical-align: middle;
+  width: 100px;
+  height: 100px;
+  line-height: 0;  
+}
+
+#weatherDescription {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 200%;
+}
+/* Weather stuff ends here */
+
+.brand-mission {
+  font-size: 40%;
+  width: 80%;
+  margin: 10% auto;
+  @media screen and (min-width: $screen-sm-min) {
+    text-align: right;
+    font-size: 100%;
+    width: 50%;
+    margin: 15% auto;
+  }
+}

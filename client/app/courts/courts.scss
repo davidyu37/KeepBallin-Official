@@ -1,0 +1,309 @@
+/* css for google map */
+#searchbox {
+    padding-top: 65px;
+    width: 90%;
+    font-size: 120%;
+    @media(min-width: $screen-sm-min) {
+        width: 30%;
+    }
+}
+
+.search-parameter-input {
+    width: 100%;
+}
+
+#map {
+    height: 100vh;
+    width: 100%;
+}
+.mapShadow {
+    box-shadow: 0 12px 10px -5px rgba(221, 221, 221, 0.8);
+}
+
+.infoWindowContent {
+    font-size:  120%;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+/* Style for geolocate button */
+.geolocateBtn {
+    margin-right: 18px;
+    width: 50px;
+    height: 50px;
+    /*padding: 3px;*/
+    text-align: center;
+    border: 2px solid $brand-primary;
+    background: none;
+    border-radius: 50%;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    -webkit-transition:font-size linear 0.3s;
+    transition:font-size linear 0.3s;
+}
+
+.geolocateBtn:hover {
+    background: white;
+    font-size: 150%;
+    display: table;
+    span.glyphicon {
+        display: table-cell;
+        vertical-align: middle;
+    }
+}
+
+.glyphicon-screenshot {
+    font-size: 200%;
+    color: $brand-primary;       
+}
+/* Geolocate button ends here */
+/* Close button for panorama */
+.closeBtn {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+}
+
+/* close button ends here */
+/* Add marker button */
+#addMarker {
+    border-radius: 50%;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    margin-top: 15px;
+    margin-right: 18px;
+    width: 50px;
+    height: 50px;
+    border: 0;
+    -webkit-transition:all linear 0.3s;
+    transition:all linear 0.3s;
+}
+
+/* Add marker button ends here*/
+/* The container for all the court's detail */
+.court-detail {
+    @media(min-width: $screen-sm-min) {
+        background: rgba(0,0,0,0.7);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        color: white;
+        z-index: 10;
+        display: block;
+    }
+    display: none;
+    width: 100%;
+    text-align: center;    
+}
+
+.court-detail.ng-hide {
+    opacity:0;
+}
+
+.detail-inner {
+    margin-top: 15px;
+}
+
+/* Edit page stuff starts here */
+/* The dark transparent overlay for the edit page */
+.editPage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    z-index: 1000;
+    background: rgba(0,0,0,0.8);
+    -webkit-transition:all linear 0.5s;
+    transition:all linear 0.5s;
+    overflow: scroll;
+    
+}
+/*This is for ng-animate*/
+.editPage.ng-hide {
+    opacity: 0;
+}
+/*The white space that contains the edit form*/
+.whitebackground {
+    @media(min-width: $screen-sm-min) {
+        font-size: 120%;
+        height: 90%;
+    }
+    color: black;
+    background: white;
+    margin: 5% auto;
+    padding: 5%;
+    width: 80%;
+    overflow: scroll;    
+}
+/* The check box with words(toilet, water fountain) */
+.checkboxWithWords {
+    @media(min-width: $screen-sm-min) {
+        margin-bottom: 0;
+        display: inline-block;
+    }
+    margin-bottom: 15px;
+}
+
+.editBtns {
+    position: absolute;
+    top: 0px;
+    right: 25px;
+    button.editDetailButton {
+        background: none;
+        position: relative;    
+    }   
+}
+
+/* Edit page stuff ends here */
+
+.slideBtn {
+    display: none;
+    @media(min-width: $screen-sm-min) {
+        display: block;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        bottom: 0;
+        left: -webkit-calc(50% - 50px);
+        left: -moz-calc(50% - 50px);
+        left: calc(50% - 50px);
+        background: none;
+        z-index: 100;
+        transition: all 0.5s ease-in-out;   
+    }
+}
+
+.white {
+    color: white;
+}
+
+.black {
+    color: black;
+}
+/* style for upload pics */
+
+.uploadbtn {
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    width: 100px;
+    border-radius: 25px;
+    border: 2px solid #DDD;
+    transition: all 0.5s ease-in-out;
+    &:hover {
+        cursor: pointer;
+        color: white;
+        background: $brand-primary;
+    }
+}
+
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed $brand-primary;
+    border-radius: 25px;
+    width: 100%;
+    height: auto;
+    text-align: center;
+    padding: 25px;
+    margin: 10px;
+    transition: all 0.5s ease-in-out;
+    .message {
+        font-size: 0px;
+        display: none;
+        transition: all 0.5s ease-in-out;
+    }
+}
+.dragover {
+    border: 5px dashed green;
+    height: 100vh;
+    .message {
+        font-size: 300%;
+        display: block;
+    }
+}
+.uploadForm {
+    button {
+        position: relative;
+    }
+}
+/* upload form ends here */
+
+/* For court pictures */
+.picture-area {
+    text-align: center;
+    transition: width linear 0.5s;
+}
+
+.wrapper {
+    width: 100%;
+    height: 183px;
+    overflow: hidden;
+}
+
+.carousel {
+    div {
+        text-align: center;
+        height: 180px;
+        width: 20%;
+        padding: 20px;
+        float: left;
+        position: relative;
+        overflow: hidden;
+    }
+    div img {
+        transition: none;
+        width: 100%;
+        height: auto;
+    }
+}
+
+.singleImage {
+    img {
+        padding: 20px;
+        width: 100%;
+        height: auto;     
+    }
+}
+.infoBox {
+    transition: width linear 0.5s;
+}
+
+.picDeleteBtn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    span {
+        color: $brand-danger;
+    }
+}
+
+.picPlaceholder {
+    @media(min-width: $screen-sm-min) {
+        position: absolute;
+        top: 0;
+        width: 100px;
+        height: auto;
+        margin: auto;
+        background: rgba(0,0,0,0.8);
+    }
+}
+
+.addressBtn {
+    border-radius: 50%;
+    background: none;
+    border: none;
+}
+
+.detailForMobile {
+    @media(min-width: $screen-sm-min) {
+        display: none;
+    }
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #999999;
+}
+.editDetailButton {
+    @media(min-width: $screen-sm-min) {
+        display: inline-block;
+    }
+    display: none;
+}

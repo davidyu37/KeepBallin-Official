@@ -1,0 +1,20 @@
+<div class="whitebackground" ng-click="stopPropagate($event)">
+	<span class="glyphicon glyphicon-remove pull-right" ng-click="showToggle()"></span>
+	<div id="form-container" ng-controller="TeamSignUpCtrl">
+		<div class="page-header text-center">
+		    <h2>建立球隊吧</h2>
+		    <div id="status-buttons" class="text-center">
+		        <a ui-sref-active="active" ui-sref=".info"><span>1</span> 基本資料</a>
+		        <a ui-sref-active="active" ui-sref=".member"><span>2</span> 球員</a>
+		        <a ui-sref-active="active" ui-sref=".represent"><span>3</span> 代表</a>
+		    </div>
+
+		</div>	
+		<!-- info, member, represent html are nested in this form -->
+	    <form id="signup-form" name="myForm" ng-submit="processForm()" novalidate>
+
+            <!-- our nested state views will be injected here -->
+            <div id="form-views" ui-view></div>
+        </form>
+	</div>
+</div>

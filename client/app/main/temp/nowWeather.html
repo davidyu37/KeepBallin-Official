@@ -1,0 +1,12 @@
+<p class="dateDisplay">{{time | date: "MM/dd/yyyy"}}</p>
+<div id="weatherContent" class="panel-body">
+  <div class="timeDisplay">
+    <p>{{time | date: "HH:mm"}}</p>
+    <p>{{time | date: "ss"}}</p>
+  </div>
+  <p id="temperature" ng-show="now.main.temp">{{now.main.temp}}&deg;C</p>
+  <div class="weatherConditionBox" ng-show="now.weather[0].description">
+    <div id="weatherIcon" ng-include="icon.whereNow"></div>
+    <p id="weatherDescription">{{now.weather[0].description}}</p>
+  </div>
+</div>

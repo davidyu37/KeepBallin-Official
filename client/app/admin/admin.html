@@ -1,0 +1,21 @@
+<div class="container spaceFromTop">
+  <p>The delete user and user index api routes are restricted to users with the 'admin' role.</p>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="user in users">
+        <strong>{{user.name}}-</strong>
+        <strong ng-hide="user.open">{{user.role}}</strong>
+        <select name="role" class="form-control" ng-show="user.open" ng-model="user.role">
+        	<option value="admin">admin</option>
+        	<option value="manager">manager</option>
+        	<option value="user">user</option>
+        </select>
+		<!-- <input ng-show="user.open" type="text" ng-model="user.role"> -->
+		<a ng-click="edit(user)" class=""><span class="glyphicon glyphicon-pencil" ng-hide="user.open"></span></a>
+		<a ng-click="send(user)"><span class="glyphicon glyphicon-pencil" ng-show="user.open"></span></a>
+        <br>
+        <span class="text-muted">{{user.email}}</span>
+
+        <a ng-click="delete(user)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+    </li>
+  </ul>
+</div>

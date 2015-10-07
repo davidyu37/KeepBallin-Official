@@ -1,0 +1,95 @@
+<div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
+    <!-- City -->
+    <h2>{{currentcourt.court}}</h2>
+    <h2 ng-show="!currentcourt.court">球場名</h2>
+    </h2>
+    <!-- Hours -->
+    <p>開放時間:</p>
+    <p ng-show="currentcourt.hours">
+        {{currentcourt.hours.begin | date:'shortTime'}}~{{currentcourt.hours.end | date:'shortTime'}}
+    </p>
+   
+     <!-- Peaktime -->
+    <p>尖峰:</p>
+    <p ng-show="currentcourt.peaktime">
+        {{currentcourt.peaktime.begin | date:'shortTime'}}~{{currentcourt.peaktime.end | date:'shortTime'}}
+    </p>
+</div>
+<div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
+    <!-- Indoor -->
+    <h2>球場情報</h2>
+    <div class="col-sm-6">
+        <div 
+        ng-mouseover="showceiling=true"
+        ng-mouseleave="showceiling=false">
+            <div ng-show="!showceiling">
+                <p ng-show="currentcourt.indoor">室內</p>
+                <p ng-show="!currentcourt.indoor">室外</p>
+            </div>
+            <p ng-show="showceiling">屋簷:{{currentcourt.ceiling | exist}}</p>
+        </div>
+        <!-- Net -->
+        <div
+        ng-mouseover="shownet=true"
+        ng-mouseleave="shownet=false">
+            <p ng-show="!shownet">
+            籃網:{{currentcourt.net | exist}}</p>
+            <p ng-show="shownet">{{currentcourt.nettype}}</p>
+            <p ng-show="shownet && !currentcourt.nettype">沒籃網</p>
+
+        </div>
+        <!-- Basket number -->
+        <p>籃框數:{{currentcourt.basketnumber}}</p>
+        <!-- Floor -->
+        <p>地質:{{currentcourt.floor}}</p>
+    </div>
+    <div class="col-sm-6">
+        
+        <!-- Water -->
+        <div
+        ng-mouseover="showwater=true"
+        ng-mouseleave="showwater=false">
+            <p ng-show="!showwater">飲水機:{{currentcourt.water.exist | exist}}</p>
+            <p ng-show="showwater && currentcourt.water.desc">{{currentcourt.water.desc}}</p>
+            <p ng-show="showwater && !currentcourt.water.desc">記得帶水喔</p>
+        </div>
+        <!-- Toilet -->
+        <div
+        ng-mouseover="showtoilet=true"
+        ng-mouseleave="showtoilet=false">
+            <p ng-show="!showtoilet">廁所:{{currentcourt.toilet.exist | exist}}</p>
+            <p ng-show="showtoilet && currentcourt.toilet.desc">{{currentcourt.toilet.desc}}</p>
+            <p ng-show="showtoilet && !currentcourt.toilet.desc">辦完事再出門</p>
+        </div>
+        <!-- Lights -->
+        <p>燈:{{currentcourt.lights | exist}}</p>
+        <!-- Rent -->
+        <div
+        ng-mouseover="showrent=true"
+        ng-mouseleave="showrent=false">
+            <p ng-show="!showrent">租金:{{currentcourt.rent | exist}}</p>
+            <p ng-show="showrent && currentcourt.rentprice">
+                {{"$" + currentcourt.rentprice + "/小時"}}
+            </p>
+            <p ng-show="showrent && !currentcourt.rentprice">免費喔</p>
+        </div>
+    </div>
+</div>
+<div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
+    <h2>管理員留言</h2>
+    <p>{{currentcourt.desc}}</p>
+</div>
+<!--Upload button-->
+<button class="editDetailButton" 
+ng-click="uploadmode()" 
+ng-model="upload" 
+ng-show="isAdmin || isManager">
+    <span class="glyphicon glyphicon-camera"></span>
+</button>
+<!--Edit button-->
+<button class="editDetailButton"
+ng-click="editmode()" 
+ng-model="edit" 
+ng-show="isAdmin || isManager">
+    <span class="glyphicon glyphicon-pencil"></span>
+</button>

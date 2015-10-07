@@ -1,0 +1,87 @@
+$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+$fa-font-path: "/bower_components/font-awesome/fonts";
+
+@import '../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
+@import '../bower_components/font-awesome/scss/font-awesome';
+
+/**
+ * App-wide Styles
+ */
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+//Make sure everything in the site is contained
+html, body {
+  width: auto !important;
+  overflow-x: hidden !important;
+}
+#wrap {
+  min-height: 100vh;
+}
+
+.spaceFromTop {
+  margin-top: 60px;
+}
+
+@media (min-width: 768px) {
+    .container-small {
+        width: 300px;
+    }
+    .container-large {
+        width: 970px;
+    }
+}
+@media (min-width: 992px) {
+    .container-small {
+        width: 500px;
+    }
+    .container-large {
+        width: 1170px;
+    }
+}
+@media (min-width: 1200px) {
+    .container-small {
+        width: 700px;
+    }
+    .container-large {
+        width: 1500px;
+    }
+}
+
+.container-small, .container-large {
+    max-width: 100%;
+    margin: 20px auto;
+}
+
+//Take out all blue border after clicking on button
+button:focus {outline:0 !important;} 
+
+// Component styles are injected through grunt
+// injector
+@import 'account/login/login.scss';
+@import 'account/settings/setting.scss';
+@import 'account/settings/temp/court/mycourt.scss';
+@import 'account/settings/temp/match/match.scss';
+@import 'account/settings/temp/team/temp/team.temp.scss';
+@import 'admin/admin.scss';
+@import 'comments/comments.scss';
+@import 'courts/_bubble.scss';
+@import 'courts/courts.scss';
+@import 'courts/temp/lightbox.scss';
+@import 'events/events.scss';
+@import 'loader/_loader.scss';
+@import 'main/main.scss';
+@import 'main/temp/_weatherIcon.scss';
+@import 'profile/profile.scss';
+@import 'select/customizedSelect.scss';
+@import 'select/select.scss';
+@import 'team/teamsignup.scss';
+@import '../components/footer/footer.scss';
+@import '../components/modal/modal.scss';
+@import '../components/navbar/navbar.scss';
+// endinjector

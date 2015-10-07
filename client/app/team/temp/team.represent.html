@@ -1,0 +1,72 @@
+<div class="text-center">
+	<div class="form-group">
+	    <label for="manager" class="control-label">為何打球？</label>
+	    <input type="text" class="form-control" name="manager" ng-model="formData.represent">
+	</div>
+	<h5>球隊附屬於</h5>
+	<fieldset>
+	    <label class="radio-inline">
+		  <input type="radio" name="belong" value="school" ng-model="belong">學校
+		</label>
+		<label class="radio-inline">
+		  <input type="radio" name="belong" value="company" ng-model="belong">公司
+		</label>
+		<label class="radio-inline">
+		  <input type="radio" name="belong" value="club" ng-model="belong">社團
+		</label>
+		<label class="radio-inline">
+		  <input type="radio" name="belong" value="private" ng-model="formData.private" ng-click="belong=''">私人
+		</label>
+		<label class="radio-inline">
+		  <input type="radio" name="belong" value="other" ng-model="belong">其他
+		</label>
+	</fieldset>
+
+	<!-- School -->
+	<div class="form-inline">
+		<div class="form-group" ng-show="belong=='school'">
+		    <label for="school" class="control-label">學校名稱</label>
+		    <input type="text" class="form-control" name="school" ng-model="formData.school.name">
+		</div>
+		<div class="form-group" ng-show="belong=='school'">
+		  	<div class="input-group">
+			    <input type="text" class="form-control" name="school" ng-model="formData.school.major">
+			    <span class="input-group-addon">系</span>
+		  	</div>
+		</div>
+		<div class="form-group" ng-show="belong=='school'">
+		    <label for="school" class="control-label">班級</label>
+		    <input type="text" class="form-control" name="school" ng-model="formData.school.class">
+		</div>
+	</div>
+	<!-- Company -->
+	<div class="form-inline">
+		<div class="form-group" ng-show="belong=='company'">
+		    <label for="company" class="control-label">公司名稱</label>
+		    <input type="text" class="form-control" name="company" ng-model="formData.company.name">
+		</div>
+		<div class="form-group" ng-show="belong=='company'">
+		  	<div class="input-group">
+			    <input type="text" class="form-control" name="company" ng-model="formData.company.department">
+			    <span class="input-group-addon">部門</span>
+		  	</div>
+		</div>
+	</div>
+	<!-- Club -->
+	<div class="form-inline">
+		<div class="form-group" ng-show="belong=='club'">
+		    <label for="club" class="control-label">社團名稱</label>
+		    <input type="text" class="form-control" name="club" ng-model="formData.club.name">
+		</div>
+	</div>
+	<!-- Other -->
+	<div class="form-inline">
+		<div class="form-group" ng-show="belong=='other'">
+		    <label for="other" class="control-label">說明</label>
+		    <input type="text" class="form-control" name="other" ng-model="formData.other">
+		</div>
+	</div>
+</div>
+<div class="col-xs-6 col-xs-offset-3">
+    <button type="submit" class="btn btn-block btn-primary">送出</button>
+</div>

@@ -1,0 +1,10 @@
+<div class="col-sm-12" ng-controller="NameCtrl">
+  <form class="form" name="form" ng-submit="changeName(form)" novalidate>
+    <div class="form-group">
+      <label>新球員名</label>
+      <input type="text" name="name" class="form-control" ng-model="user.name"/>
+    </div>
+    <p class="help-block"> {{ message }} </p>
+    <button class="btn btn-sm btn-primary" type="submit">儲存</button>
+  </form>
+</div>

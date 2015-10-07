@@ -1,0 +1,23 @@
+<div class="container spaceFromTop">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>個人檔案</h1>
+    </div>
+    <div class="col-sm-12">
+      <tabset justified="true">
+        <tab class="tab" heading="我是誰?" ng-click="getTemplate(0)"></tab>
+        <tab class="tab" heading="我的球隊" ng-click="getTemplate(1)"></tab>
+        <tab class="tab" heading="我的比賽" ng-click="getTemplate(2)"></tab>
+        <tab class="tab" heading="我的球場" ng-click="getTemplate(3)"></tab>
+      </tabset>
+    </div>
+    <div class="col-sm-12">
+      <div class="col-sm-12 wrapContent">
+        <div ng-show="profile" ng-include="'app/account/settings/temp/profile/profile.html'"></div>
+        <div ng-show="team" ng-include="'app/account/settings/temp/team/team.html'"></div>
+        <div ng-show="match" ng-include="'app/account/settings/temp/match/match.html'"></div>
+        <div ng-show="court" ng-include="'app/account/settings/temp/court/court.html'"></div>  
+      </div>
+    </div>
+  </div>
+</div>

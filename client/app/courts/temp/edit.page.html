@@ -1,0 +1,110 @@
+<div class="whitebackground" ng-click="stopPropagate($event)">
+<form class="form-horizontal" name="editform">
+    <div class="form-group">
+        <div class="col-sm-4">
+            <!-- Court name -->
+            <label for="courtname" class="control-label">球場名:</label>
+            <input type="text" ng-model="currentcourt.court" placeholder="簡潔明瞭的地名" class="form-control">
+        </div>
+        <div class="col-sm-4">
+            <!-- City -->
+            <label for="city" class="control-label">城市:</label>
+            <input type="text" ng-model="currentcourt.city" placeholder="什麼市？" class="form-control">
+        </div>
+        <div class="col-sm-4">
+            <label for="district" class="control-label">區域:</label>
+            <input type="text" ng-model="currentcourt.district" placeholder="什麼區？" class="form-control">
+        </div>
+    </div>
+        
+    <div class="form-group">
+        <!-- Hours -->
+        <div class="col-sm-6">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="hours" class="control-label">開放時間(開始):</label>
+                        <timepicker ng-model="currentcourt.hours.begin" minute-step="15" show-meridian="true"></timepicker>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="hours" class="control-label">開放時間(結束):</label>
+                        <timepicker ng-model="currentcourt.hours.end" minute-step="15" show-meridian="true"></timepicker> 
+                    </div>
+                </div>  
+            </div>
+        </div>
+        <!-- Peaktime -->
+        <div class="col-sm-6">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="peaktime" class="control-label">人多時間(開始):</label>
+                        <timepicker ng-model="currentcourt.peaktime.begin" minute-step="15" show-meridian="true"></timepicker>
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="peaktime" class="control-label">人多時間(結束):</label>
+                        <timepicker ng-model="currentcourt.peaktime.end" minute-step="15" show-meridian="true"></timepicker> 
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-3">
+            <label for="rent" class="control-label">租金:</label>
+            <input type="checkbox" ng-model="currentcourt.rent">
+            <div class="input-group">
+                <div class="input-group-addon">$</div>
+                <input class="form-control" ng-show="currentcourt.rent" type="number" ng-model="currentcourt.rentprice">
+                <div class="input-group-addon">小時</div>
+                
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <!-- Net -->
+            <label for="net" class="control-label">籃網:</label>
+            <input type="checkbox" ng-model="currentcourt.net">
+            <input ng-show="currentcourt.net" type="text" ng-model="currentcourt.nettype" placeholder="籃網材質">
+        </div>
+        <div class="col-sm-3">
+            <!-- Basket number -->
+            <label for="" class="control-label">籃框數:</label>
+            <input type="number" min="0" ng-model="currentcourt.basketnumber" placeholder="阿拉伯數字">        
+        </div>
+        <div class="col-sm-3">
+            <!-- Floor -->
+            <label for="" class="control-label">地質:</label>
+            <input type="text" ng-model="currentcourt.floor" placeholder="球場地板怎麼樣？">
+        </div>
+    </div>
+    <div class="checkboxWithWords">
+        <!-- Water -->
+        <label for="" class="control-label">飲水機:</label>
+        <input type="checkbox" ng-model="currentcourt.water.exist">
+        <input ng-show="currentcourt.water.exist" type="text" ng-model="currentcourt.water.desc" placeholder="在哪裡?">   
+    </div>
+    <div class="checkboxWithWords">
+        <!-- Toilet -->
+        <label for="" class="control-label">廁所:</label>
+        <input type="checkbox" ng-model="currentcourt.toilet.exist">
+        <input ng-show="currentcourt.toilet.exist" type="text" ng-model="currentcourt.toilet.desc" placeholder="在哪裡?">
+    </div>
+    <!-- Celing -->
+    <label for="" class="control-label">屋簷:</label>
+    <input type="checkbox" ng-model="currentcourt.ceiling">
+    <!-- Indoor -->
+    <label for="indoor" class="control-label">室內:</label>
+    <input type="checkbox" ng-model="currentcourt.indoor">
+    <!-- Light -->
+    <label for="lights" class="control-label">燈:</label>
+    <input type="checkbox" ng-model="currentcourt.lights">
+    <!-- Manager Message -->
+    <div class="form-group">
+        <label for="" class="control-label">管理員留言:</label>
+        <textarea class="form-control" rows="3" ng-model="currentcourt.desc"></textarea>
+    </div>
+</form>
+<button ng-disabled="editform.$invalid" class="btn-primary pull-right" ng-click="editmode(currentcourt)">好了</button>
+
+</div>
