@@ -1,42 +1,46 @@
-import passport from 'passport';
-import {Strategy as FacebookStrategy} from 'passport-facebook';
+var passport = require('passport');
+var FacebookStrategy = require('passport-facebook').Strategy;
 
-exports.setup = function(User, config) {
+exports.setup = function (User, config) {
   passport.use(new FacebookStrategy({
-    clientID: config.facebook.clientID,
-    clientSecret: config.facebook.clientSecret,
-    callbackURL: config.facebook.callbackURL,
-    profileFields: [
+      clientID: config.facebook.clientID,
+      clientSecret: config.facebook.clientSecret,
+      callbackURL: config.facebook.callbackURL,
+      profileFields: [
       'displayName',
-      'emails'
-    ]
-  },
-  function(accessToken, refreshToken, profile, done) {
-    User.findOneAsync({
-      'facebook.id': profile.id
-    })
-      .then(function(user) {
+      'profileUrl',
+      'email'
+      ]
+    },
+    function(accessToken, refreshToken, profile, done) {
+      console.log(profile);
+      User.findOne({
+        'facebook.id': profile.id
+      },
+      function(err, user) {
+        if (err) {
+          return done(err);
+        }
+        
         if (!user) {
           user = new User({
             name: profile.displayName,
-            email: profile.emails[0].value,
+            // email: profile.emails[0].value,
+            email: profile._json.email,
             role: 'user',
+            username: profile.username,
             provider: 'facebook',
-            facebook: profile._json
+            facebook: profile._json,
+            fbprofilepic: 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large'
           });
-          user.saveAsync()
-            .then(function(user) {
-              return done(null, user);
-            })
-            .catch(function(err) {
-              return done(err);
-            });
+          user.save(function(err) {
+            if (err) return done(err);
+            done(err, user);
+          });
         } else {
-          return done(null, user);
+          return done(err, user);
         }
       })
-      .catch(function(err) {
-        return done(err);
-      });
-  }));
+    }
+  ));
 };

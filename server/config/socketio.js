@@ -4,7 +4,7 @@
 
 'use strict';
 
-import config from './environment';
+var config = require('./environment');
 
 // When the user disconnects.. perform this
 function onDisconnect(socket) {
@@ -13,22 +13,26 @@ function onDisconnect(socket) {
 // When the user connects.. perform this
 function onConnect(socket) {
   // When the client emits 'info', this listens and executes
-  socket.on('info', function(data) {
-    socket.log(JSON.stringify(data, null, 2));
+  socket.on('info', function (data) {
+    console.info('[%s] %s', socket.address, JSON.stringify(data, null, 2));
   });
 
   // Insert sockets below
-  require('../api/thing/thing.socket').register(socket);
-
+  require('../api/rating/rating.socket').register(socket);
+  require('../api/team/team.socket').register(socket);
+  require('../api/comment/comment.socket').register(socket);
+  require('../api/upload/upload.socket').register(socket);
+  // require('../api/thing/thing.socket').register(socket);
+  require('../api/court/court.socket').register(socket);
 }
 
-module.exports = function(socketio) {
+module.exports = function (socketio) {
   // socket.io (v1.x.x) is powered by debug.
   // In order to see all the debug output, set DEBUG (in server/config/local.env.js) to including the desired scope.
   //
   // ex: DEBUG: "http*,socket.io:socket"
 
-  // We can authenticate socket.io users and access their token through socket.decoded_token
+  // We can authenticate socket.io users and access their token through socket.handshake.decoded_token
   //
   // 1. You will need to send the token in `client/components/socket/socket.service.js`
   //
@@ -38,24 +42,21 @@ module.exports = function(socketio) {
   //   handshake: true
   // }));
 
-  socketio.on('connection', function(socket) {
-    socket.address = socket.request.connection.remoteAddress +
-      ':' + socket.request.connection.remotePort;
+  socketio.on('connection', function (socket) {
+    socket.address = socket.handshake.address !== null ?
+            socket.handshake.address.address + ':' + socket.handshake.address.port :
+            process.env.DOMAIN;
 
     socket.connectedAt = new Date();
 
-    socket.log = function(...data) {
-      console.log(`SocketIO ${socket.nsp.name} [${socket.address}]`, ...data);
-    };
-
     // Call onDisconnect.
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
       onDisconnect(socket);
-      socket.log('DISCONNECTED');
+      console.info('[%s] DISCONNECTED', socket.address);
     });
 
     // Call onConnect.
     onConnect(socket);
-    socket.log('CONNECTED');
+    console.info('[%s] CONNECTED', socket.address);
   });
 };

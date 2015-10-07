@@ -7,16 +7,6 @@ module.exports = {
   mongo: {
     uri: 'mongodb://localhost/keepballin-dev'
   },
-  sequelize: {
-    uri: 'sqlite://',
-    options: {
-      logging: false,
-      storage: 'dev.sqlite',
-      define: {
-        timestamps: false
-      }
-    }
-  },
 
   seedDB: true
 };

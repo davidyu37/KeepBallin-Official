@@ -4,24 +4,28 @@
 
 'use strict';
 
-import express from 'express';
-import mongoose from 'mongoose';
-import config from './config/environment';
-import http from 'http';
+// Set default node environment to development
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-// Connect to MongoDB
+var express = require('express');
+var mongoose = require('mongoose');	
+var config = require('./config/environment');
+var conn = mongoose.connection;
+var fs = require('fs');
+
+// Connect to database
 mongoose.connect(config.mongo.uri, config.mongo.options);
 mongoose.connection.on('error', function(err) {
-  console.error('MongoDB connection error: ' + err);
-  process.exit(-1);
-});
-
-// Populate databases with sample data
-if (config.seedDB) { require('./config/seed'); }
+	console.error('MongoDB connection error: ' + err);
+	process.exit(-1);
+	}
+);
+// Populate DB with sample data
+if(config.seedDB) { require('./config/seed'); }
 
 // Setup server
 var app = express();
-var server = http.createServer(app);
+var server = require('http').createServer(app);
 var socketio = require('socket.io')(server, {
   serveClient: config.env !== 'production',
   path: '/socket.io-client'
@@ -31,13 +35,9 @@ require('./config/express')(app);
 require('./routes')(app);
 
 // Start server
-function startServer() {
-  server.listen(config.port, config.ip, function() {
-    console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
-  });
-}
-
-setImmediate(startServer);
+server.listen(config.port, config.ip, function () {
+  console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+});
 
 // Expose app
 exports = module.exports = app;

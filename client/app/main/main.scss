@@ -10,7 +10,7 @@
 }
 
 .courtBG {
-  background-image: url('../assets/images/courtpicplaceholder.png');
+  background-image: url('/assets/images/courtpicplaceholder.png');
   background-size: cover;
   height: 110vh;
 }
@@ -36,6 +36,13 @@
   background-size: cover;
 }
 
+.message {
+  width: 80%;
+  height: 600px;
+  margin: 5% auto;
+  background-color: rgba(255,255,255,0.8);
+}
+
 /* Main marketing message */
 .jumbotron {
   text-align: center;
@@ -47,7 +54,7 @@
 
 
 .basketBackground {
-  background-image: url('../assets/images/bg.jpg');
+  background-image: url('/assets/images/bg.jpg');
   background-size: cover;
 }
 

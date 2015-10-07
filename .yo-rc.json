@@ -14,6 +14,7 @@
     "registerModelsFile": "server/sqldb/index.js",
     "modelsNeedle": "// Insert models below",
     "filters": {
+      "babel": false,
       "js": true,
       "html": true,
       "sass": true,
@@ -21,18 +22,11 @@
       "bootstrap": true,
       "uibootstrap": true,
       "socketio": true,
-      "auth": true,
-      "models": true,
-      "mongooseModels": true,
       "mongoose": true,
+      "auth": true,
       "oauth": true,
       "googleAuth": true,
-      "facebookAuth": true,
-      "grunt": true,
-      "jasmine": true,
-      "mocha": false,
-      "should": false,
-      "expect": false
+      "facebookAuth": true
     }
   },
   "generator-ng-component": {

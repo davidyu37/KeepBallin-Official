@@ -3,7 +3,7 @@
 
 'use strict';
 
-var config = {
+exports.config = {
   // The timeout for each script run on the browser. This should be longer
   // than the maximum time your application needs to stabilize between tasks.
   allScriptsTimeout: 110000,
@@ -12,10 +12,9 @@ var config = {
   // with relative paths will be prepended with this.
   baseUrl: 'http://localhost:' + (process.env.PORT || '9000'),
 
-  // Credientials for Saucelabs
-  sauceUser: process.env.SAUCE_USERNAME,
-
-  sauceKey: process.env.SAUCE_ACCESS_KEY,
+  // If true, only chromedriver will be started, not a standalone selenium.
+  // Tests for browsers other than chrome will not run.
+  chromeOnly: true,
 
   // list of files / patterns to load in the browser
   specs: [
@@ -32,10 +31,7 @@ var config = {
   // and
   // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
   capabilities: {
-    'browserName': 'chrome',
-    'name': 'Fullstack E2E',
-    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-    'build': process.env.TRAVIS_BUILD_NUMBER
+    'browserName': 'chrome'
   },
 
   // ----- The test framework -----
@@ -43,34 +39,12 @@ var config = {
   // Jasmine and Cucumber are fully supported as a test and assertion framework.
   // Mocha has limited beta support. You will need to include your own
   // assertion framework if working with mocha.
-  framework: 'jasmine2',
+  framework: 'jasmine',
 
   // ----- Options to be passed to minijasminenode -----
   //
-  // See the full list at https://github.com/jasmine/jasmine-npm
+  // See the full list at https://github.com/juliemr/minijasminenode
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000,
-    print: function() {}  // for jasmine-spec-reporter
-  },
-
-  // Prepare environment for tests
-  params: {
-    serverConfig: require('./server/config/environment')
-  },
-
-  onPrepare: function() {
-    require('babel-core/register');
-    var SpecReporter = require('jasmine-spec-reporter');
-    // add jasmine spec reporter
-    jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: true}));
-
-    var serverConfig = config.params.serverConfig;
-
-    // Setup mongo for tests
-    var mongoose = require('mongoose');
-    mongoose.connect(serverConfig.mongo.uri, serverConfig.mongo.options); // Connect to database
+    defaultTimeoutInterval: 30000
   }
 };
-
-config.params.baseUrl = config.baseUrl;
-exports.config = config;
