@@ -15,11 +15,12 @@
         'has-error': form.name.$invalid && submitted }">
           <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
             <span class="input-group-addon fa-icon-addon"><i class="fa fa-user fa-fw"></i></span>
-            <input type="text" name="name" class="form-control" ng-model="user.name" placeholder="請輸入姓名" autofocus required/>
+            <input type="text" name="name" class="form-control" ng-model="user.name" placeholder="請輸入姓名" autofocus required name-check/>
           </div>
           <p class="help-block" ng-show="form.name.$error.required && submitted">
             姓名是必要的
           </p>
+          <p class="help-block" ng-show="form.name.$error.nameCheck" >姓名不可包含特殊符號(例如!@#$%^&*()_+{}"';:?/)</p>
         </div>
 
         <div class="form-group" ng-class="{ 
@@ -48,7 +49,7 @@
         'has-error': form.password.$invalid && submitted }">
           <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
             <span class="input-group-addon fa-icon-addon"><i class="fa fa-lock fa-fw"></i></span>
-            <input type="password" name="password" class="form-control" ng-model="user.password" ng-minlength="3"
+            <input type="password" name="password" class="form-control" ng-model="user.password" ng-minlength="8"
             placeholder="請輸入密碼"
             required mongoose-error/>
           </div>
@@ -56,7 +57,7 @@
           
           <p class="help-block"
              ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted">
-            密碼需要至少三個字母
+            密碼需要至少八個字母
           </p>
           <p class="help-block" ng-show="form.password.$error.mongoose">
             {{ errors.password }}
