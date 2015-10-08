@@ -9,12 +9,11 @@ angular.module('keepballin')
 				var court = new Court();
 
 	    		google.maps.event.addListener(map, 'click', function(event) {
+	   				console.log('Lat:', event.latLng.lat());
+	   				console.log('Long', event.latLng.lng());
 	   				
-					console.log('Lat: ' + event.latLng.H);
-					console.log('Long: ' + event.latLng.L);
-
-					var lat = event.latLng.H;
-					var long = event.latLng.L;
+					var lat = event.latLng.lat();
+					var long = event.latLng.lng();
 
 					var address = coordinatesToAddress(lat, long);
 					address.then(function(result){

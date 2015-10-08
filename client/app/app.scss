@@ -58,6 +58,10 @@ html, body {
     margin: 20px auto;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 //Take out all blue border after clicking on button
 button:focus {outline:0 !important;} 
 
