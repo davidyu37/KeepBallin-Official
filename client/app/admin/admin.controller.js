@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('AdminCtrl', function ($scope, $http, Auth, User) {
+  .controller('AdminCtrl', ['$scope', '$window', '$http', 'Auth', 'User', function ($scope, $window, $http, Auth, User) {
 
     // Use the User $resource to fetch all users
     $scope.users = User.query();
@@ -9,12 +9,17 @@ angular.module('keepballin')
     $scope.open = false;
 
     $scope.delete = function(user) {
-      User.remove({ id: user._id });
-      angular.forEach($scope.users, function(u, i) {
-        if (u === user) {
-          $scope.users.splice(i, 1);
-        }
-      });
+      var check = $window.confirm('確定要刪嗎？');
+      if (check) {   
+        User.remove({ id: user._id });
+        angular.forEach($scope.users, function(u, i) {
+          if (u === user) {
+            $scope.users.splice(i, 1);
+          }
+        });
+      } else {
+        return;
+      }
     };
 
     $scope.edit = function(user) {
@@ -27,4 +32,4 @@ angular.module('keepballin')
       User.changeRole({id: user._id}, {role: user.role});
     };
 
-  });
+  }]);

@@ -85,14 +85,14 @@ function uploadTos3AndRecordOnDB (req, res, category) {
       var contentType = file.headers['content-type'];
       var extension = file.path.substring(file.path.lastIndexOf('.'));
       var destPath = '';
-      var courtId;
+      var courtId, userId;
       if(category === 'courts') {
         console.log(fields.courtId);
         courtId = fields.courtId;
         destPath = 'pictures/' + category + '/' + courtId + '/' + uuid.v4() + extension;
       }
       if(category === 'profile') {
-        var userId = req.user._id;
+        userId = req.user._id;
         destPath = 'pictures/' + category + '/' + userId + '/' + uuid.v4() + extension;
       }
       //Params to upload to s3

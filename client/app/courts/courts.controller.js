@@ -23,6 +23,7 @@ angular.module('keepballin')
 		$scope.isLoggedIn = Auth.isLoggedIn();
 	    $scope.isAdmin = Auth.isAdmin();
 	    $scope.isManager = Auth.isManager();
+	    $scope.isVip = Auth.isVip();
 	    $scope.getCurrentUser = Auth.getCurrentUser();
 
 		//Is the details of the court expanded?

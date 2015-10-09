@@ -1,12 +1,3 @@
-/**
- * Using Rails-like standard naming convention for endpoints.
- * GET     /courts              ->  index
- * POST    /courts              ->  create
- * GET     /courts/:id          ->  show
- * PUT     /courts/:id          ->  update
- * DELETE  /courts/:id          ->  destroy
- */
-
 'use strict';
 
 var _ = require('lodash');
@@ -48,7 +39,10 @@ exports.searchResult = function(req, res) {
 
 // Creates a new court in the DB.
 exports.create = function(req, res) {
-  court.create(req.body, function(err, court) {
+  //Attach user's id to court's info
+  var userId = { creator: req.user._id };
+  var newCourt = _.merge(req.body, userId);
+  court.create(newCourt, function(err, court) {
     if(err) { return handleError(res, err); }
     return res.status(201).json(court);
   });
@@ -60,7 +54,10 @@ exports.update = function(req, res) {
   court.findById(req.params.id, function (err, court) {
     if (err) { return handleError(res, err); }
     if(!court) { return res.status(404).send('Not Found'); }
-    var updated = _.merge(court, req.body);
+     //Attach user's id to court's info
+    var userId = { lastEditedBy: req.user._id };
+    var newCourt = _.merge(req.body, userId);
+    var updated = _.merge(court, newCourt);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(court);

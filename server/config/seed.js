@@ -45,6 +45,7 @@ User.find({}).remove(function() {
   },
   {
     provider: 'local',
+    role: 'vip',
     name: '鐘高個',
     email: 'tall@tall.com',
     password: 'tall',

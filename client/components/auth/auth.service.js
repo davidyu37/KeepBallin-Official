@@ -186,6 +186,10 @@ angular.module('keepballin')
         return currentUser.role === 'manager';
       },
 
+      isVip: function() {
+        return currentUser.role === 'vip';
+      },
+
       // Check if user has a team
       hasTeam: function() {
         return currentUser.team;

@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    ObjectId = Schema.ObjectId;
+    ObjectId = Schema.ObjectId,
+    relationship = require("mongoose-relationship");
 
 var CourtSchema = new Schema({
   country: {type: String, default: 'Taiwan'},
@@ -31,8 +32,20 @@ var CourtSchema = new Schema({
   ratings: [{
     type: Schema.ObjectId, 
     ref: 'Rating'
-  }]
+  }],
+  creator: {
+    type: Schema.ObjectId,
+    ref: 'User',
+    childPath: 'courtCreated'
+  },
+  lastEditedBy: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
 });
+
+//Record the creator of the court
+CourtSchema.plugin(relationship, { relationshipPathName:'creator' });
 
 CourtSchema.statics = {
   getRatings: function(courtID, cb) {

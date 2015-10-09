@@ -37,7 +37,9 @@ var UserSchema = new Schema({
   fbprofilepic: String,
   facebook: {},
   google: {},
-  github: {}
+  github: {},
+  createdOn: { type: Date, default: Date.now },
+  courtCreated: [{ type:Schema.ObjectId, ref:"Court" }]
 });
 
 /**
