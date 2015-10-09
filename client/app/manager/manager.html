@@ -1,12 +1,10 @@
 <div class="container spaceFromTop">
-  <p>The delete user and user index api routes are restricted to users with the 'admin' role.</p>
+  <h1>球場管理員們</h1>
   <ul class="list-group">
     <li class="list-group-item" ng-repeat="user in users">
         <strong>{{user.name}}-</strong>
         <strong ng-hide="user.open">{{user.role}}</strong>
         <select name="role" class="form-control" ng-show="user.open" ng-model="user.role">
-        	<option value="admin">admin</option>
-        	<option value="manager">manager</option>
             <option value="vip">vip</option>
         	<option value="user">user</option>
         </select>

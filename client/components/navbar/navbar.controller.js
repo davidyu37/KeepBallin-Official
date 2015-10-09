@@ -33,6 +33,7 @@ angular.module('keepballin')
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.isAdmin = Auth.isAdmin;
+    $scope.isManager = Auth.isManager;
     $scope.getCurrentUser = Auth.getCurrentUser;
 
     $scope.logout = function() {

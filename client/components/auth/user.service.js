@@ -45,10 +45,12 @@ angular.module('keepballin')
           id:'me'
         }
       },
+
       getUser: {
         method: 'GET'
       },
-      searchParams: {
+      // Manager get only vip and users
+      managerGet: {
         method: 'GET',
         isArray: true,
         params: {

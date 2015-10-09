@@ -171,6 +171,12 @@ UserSchema.statics = {
       .populate({path:'avatar', select: 'url date'})
       .select('-salt -hashedPassword')
       .exec(cb);
+  },
+  managerSearch: function(cb) {
+    this.find( {$or: [{role: 'user'}, {role: 'vip'}]} )
+    .populate({path:'avatar', select: 'url date'})
+    .select('-salt -hashedPassword')
+    .exec(cb);
   }
 };
 

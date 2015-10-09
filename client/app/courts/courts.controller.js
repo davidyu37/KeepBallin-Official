@@ -48,7 +48,6 @@ angular.module('keepballin')
 		$scope.emptyField = false;
 
 		$scope.searchCourt = function(params) {
-			console.log('submit');
 			console.log(params);
 			var hasParams = (params.query || params.court || params.city || params.district || params.address);
 			if(hasParams === undefined) {
