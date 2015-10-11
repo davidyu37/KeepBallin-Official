@@ -90,30 +90,6 @@ angular.module('keepballin')
           return cb(err);
         }).$promise;
       },
-      /* Change user name */
-      changeName: function(newName, callback) {
-        var cb = callback || angular.noop;
-
-        return User.changeName({ id: currentUser._id }, {
-          newName: newName
-        }, function(user) {
-          return cb(user);
-        }, function(err) {
-          return cb(err);
-        }).$promise;
-      },
-
-      changeEmail: function(newEmail, callback) {
-        var cb = callback || angular.noop;
-
-        return User.changeEmail({ id: currentUser._id }, {
-          newEmail: newEmail
-        }, function(user) {
-          return cb(user);
-        }, function(err) {
-          return cb(err);
-        }).$promise;
-      },
       
       /* put new url of user's profile picture */
       changeAvatar: function(newPic, callback) {

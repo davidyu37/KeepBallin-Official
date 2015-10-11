@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', function ($scope, $state, Auth, $location, $window, $modalInstance) {
+  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -23,7 +23,13 @@ angular.module('keepballin')
           console.log(err);
           $scope.errors.other = err.message;
           $modalInstance.close();
-          $window.alert(err.message);
+          SweetAlert.swal({
+            title: err.message,
+            type: 'warning',
+            confirmButtonColor: "#DD6B55",   
+            confirmButtonText: "再試一次",
+            timer: 2000
+          });
         });
       }
     };

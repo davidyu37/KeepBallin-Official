@@ -6,7 +6,7 @@ angular.module('keepballin')
     $scope.changeEmail = function(form) {
       $scope.submitted = true;
       if(form.$valid) {
-        Auth.changeEmail($scope.user.email)
+        Auth.changeDetail($scope.user)
         .then( function() {
           $scope.message = '密碼更新成功';
         })

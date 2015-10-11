@@ -1,7 +1,7 @@
 <div class="col-sm-4" ng-controller="uploadCtrl">
   <div class="profilePicOverlay" ng-mouseover="showOverlay=true" ng-mouseleave="showOverlay=false" ng-hide="loading">
     <img class="img-responsive thumbnail" ng-src="{{profilenow}}" alt="你的相片">
-    <i ngf-select="uploadprofile(newpic)" ng-model="newpic" ng-show="showOverlay" class="glyphicon glyphicon-camera glyph-overlay"></i>
+    <!-- <i ngf-select="uploadprofile(newpic)" ng-model="newpic" ng-show="showOverlay" class="glyphicon glyphicon-camera glyph-overlay"></i> -->
   </div>
   <div class="profilePicOverlay" ng-show="loading">
     <img class="img-responsive thumbnail" ng-src="{{profilenow}}" alt="profilepicplaceholder">

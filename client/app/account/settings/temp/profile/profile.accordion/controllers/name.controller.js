@@ -7,7 +7,7 @@ angular.module('keepballin')
     $scope.changeName = function(form) {
       $scope.submitted = true;
       if(form.$valid) {
-        Auth.changeName($scope.user.name)
+        Auth.changeDetail($scope.user)
         .then( function() {
           $scope.message = '名稱更新成功';
         })

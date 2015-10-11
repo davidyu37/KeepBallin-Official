@@ -55,6 +55,12 @@ var all = {
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
   }
+
+  // sendgrid: {
+  //   apiKey: process.env.SENDGRID_APIKEY || 'apikey'
+  // }
+
+
 };
 
 // Export the config object based on the NODE_ENV

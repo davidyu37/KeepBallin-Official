@@ -26,6 +26,9 @@
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
+    <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit"
+    async defer></script>
+    <!-- google map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=&sensor=false&language=zh-TW"></script>
   </head>
   <body ng-app="keepballin">
@@ -73,7 +76,9 @@
       <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
       <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
       <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+      <script src="bower_components/angular-recaptcha/release/angular-recaptcha.js"></script>
       <script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+      <script src="bower_components/ngSweetAlert/SweetAlert.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->

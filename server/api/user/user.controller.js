@@ -5,6 +5,19 @@ var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var _ = require('lodash');
+// var sendgrid  = require('sendgrid')(config.sendgrid.apiKey);
+
+// console.log(config.sendgrid.apiKey);
+
+// sendgrid.send({
+//   to:       'example@example.com',
+//   from:     'other@example.com',
+//   subject:  'Hello World',
+//   text:     'My first email through SendGrid.'
+// }, function(err, json) {
+//   if (err) { return console.error(err); }
+//   console.log(json);
+// });
 
 var validationError = function(res, err) {
   return res.status(422).json(err);
@@ -35,7 +48,12 @@ exports.search = function(req, res) {
 exports.create = function (req, res, next) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
-  newUser.role = 'user';
+  console.log(req.body.toVip);
+  if (req.body.toVip) {
+    newUser.role = 'vip'
+  } else {
+    newUser.role = 'user';
+  }
   newUser.save(function(err, user) {
     if (err) return validationError(res, err);
     var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
@@ -88,36 +106,7 @@ exports.changePassword = function(req, res, next) {
   });
 };
 
-/* Change user name */
-exports.changeName = function(req, res, next) {
-  var userId = req.user._id;
-  var newName = String(req.body.newName);
-
-  User.findById(userId, function (err, user) {
-    if (err) return console.error(err);
-    user.name = newName;
-    user.save(function(err) {
-      if(err) return console.error(err);
-      res.status(200).send('OK');
-    })
-  });
-};
-
-/* Change user email */
-exports.changeEmail = function(req, res, next) {
-  var userId = req.user._id;
-  var newEmail = String(req.body.newEmail);
-
-  User.findById(userId, function (err, user) {
-    if (err) return console.error(err);
-    user.email = newEmail;
-    user.save(function(err) {
-      if(err) return console.error(err);
-      res.status(200).send('OK');
-    })
-  });
-};
-
+//Change avatar
 exports.changeAvatar = function(req, res, next) {
   var userId = req.user._id;
   var newPic = String(req.body.newPic);

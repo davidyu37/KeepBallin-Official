@@ -12,7 +12,9 @@ angular.module('keepballin', [
   'bootstrapLightbox',
   'infinite-scroll',
   'angular-parallax',
-  'angular-advanced-searchbox'
+  'angular-advanced-searchbox',
+  'vcRecaptcha',
+  'oitozero.ngSweetAlert'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

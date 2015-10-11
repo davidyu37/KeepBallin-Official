@@ -12,7 +12,11 @@ angular.module('keepballin')
         $scope.status.opened = true;
     };
    	// Datepicker directive expects a Date object, give it
-    $scope.convertedDate = new Date($scope.user.birthday);
+    if($scope.user.birthday) {
+      $scope.convertedDate = new Date($scope.user.birthday);
+    } else {
+      $scope.convertedDate = new Date();
+    }
 
     $scope.changeDetail = function(form) {
     	$scope.user.birthday = $scope.convertedDate;

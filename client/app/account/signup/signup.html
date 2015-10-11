@@ -63,25 +63,45 @@
             {{ errors.password }}
           </p>
         </div>
-
-        <div>
-          <button class="btn btn-primary btn-lg btn-login" type="submit">
-            註冊
-          </button>
-          <a class="btn btn-default btn-lg btn-register" 
-          ng-click="closeModal()"
-          href="/login">
-            登入
-          </a>
+        <div class="form-group" ng-class="{ 
+        'has-success': user.toVip }">
+          <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
+            <div class="input-group">
+              <span class="input-group-addon">
+                <input type="checkbox" ng-model="user.toVip">
+              </span>
+              <div class="form-control">成為
+                <a class="pointer" ng-click="explain()">
+                球場管理員  
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <hr>
+        <!-- <div vc-recaptcha class="recaptcha"
+        key="'6Lca5wsTAAAAALMJuYrZE6x2dZnB6CE6ZuHebwkB'"></div>
+        </div> -->
+        <button class="btn btn-primary btn-lg btn-login" type="submit">
+          註冊
+        </button>
+        <a class="btn btn-default btn-lg btn-register" 
+        ng-click="closeModal()"
+        href="/login">
+          登入
+        </a>
+        
+        <div style="height: 1px; background-color: #efefef; 
+          text-align: center; margin: 20px 0;">
+          <span style="background-color: white; position: relative; top: -0.5em;">
+            或者
+          </span>
+        </div>
         <div>
           <a class="btn btn-facebook" href="" ng-click="loginOauth('facebook')">
-            <i class="fa fa-facebook"></i> Facebook登入
+            <i class="fa fa-facebook"></i> Facebook註冊
           </a>
           <a class="btn btn-google-plus" href="" ng-click="loginOauth('google')">
-            <i class="fa fa-google-plus"></i> Google+登入
+            <i class="fa fa-google-plus"></i> Google+註冊
           </a>
         </div>
       </form>

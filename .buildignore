@@ -1,1 +1,2 @@
 *.coffee
+/server/config/local.env.js
