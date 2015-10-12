@@ -337,3 +337,15 @@
     }
     display: none;
 }
+
+.mobileEditButton {
+    width: 50px;
+    height: 50px;
+    background: none;
+    border: 2px solid $brand-primary;
+    border-radius: 50%;
+}
+
+.mobileDetailContainer {
+    padding: 20px;
+}

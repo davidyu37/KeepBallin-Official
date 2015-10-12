@@ -1,5 +1,8 @@
 .header {
-  z-index: 1000;
+  @media(min-width: $screen-sm-min) {
+    z-index: 1000;
+  }
+  z-index: 1;
   width: 100%;
   height: auto;
   border: none;

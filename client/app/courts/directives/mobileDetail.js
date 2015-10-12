@@ -30,7 +30,7 @@ angular.module('keepballin')
     return {
         restrict: 'A',
         scope: {
-            mobileExpanded: '=mobileExpanded'
+            mobileExpanded: '='
         },
         link: function($scope, element, attrs) {
             var button, target, content;

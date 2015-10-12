@@ -1,15 +1,28 @@
  <!-- City -->
-<h2>{{currentcourt.court}}</h2>
-<h2 ng-show="!currentcourt.court">球場名</h2>
-
-<accordion close-others="true">
-    <!-- Operational time -->
-    <accordion-group is-open="name.open" class="backgroundnone">
-      <accordion-heading>營業時間
-        <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': name.open, 'glyphicon-chevron-right': !name.open}">
-        </i>
-      </accordion-heading>
-        <div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
+<h2>{{currentcourt.court}}
+    <span class="label label-primary" ng-show="currentcourt.indoor">
+        室內
+    </span>
+    <span class="label label-primary" ng-show="!currentcourt.indoor">
+        室外
+    </span>
+</h2> 
+<h2 ng-show="!currentcourt.court">球場名
+    <span class="label label-primary" ng-show="currentcourt.indoor">
+        室內
+    </span>
+    <span class="label label-primary" ng-show="!currentcourt.indoor">
+        室外
+    </span>
+</h2>
+<div class="mobileDetailContainer">
+    <accordion close-others="true">
+        <!-- Operational time -->
+        <accordion-group is-open="name.open" class="backgroundnone">
+          <accordion-heading>營業時間
+            <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': name.open, 'glyphicon-chevron-right': !name.open}">
+            </i>
+          </accordion-heading>
             <!-- Hours -->
             <p>開放時間:</p>
             <p ng-show="currentcourt.hours">
@@ -21,92 +34,67 @@
             <p ng-show="currentcourt.peaktime">
                 {{currentcourt.peaktime.begin | date:'shortTime'}}~{{currentcourt.peaktime.end | date:'shortTime'}}
             </p>
-        </div>
-    </accordion-group>
-    <accordion-group is-open="detail.open" class="backgroundnone">
-        <accordion-heading>球場細節
-            <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': detail.open, 'glyphicon-chevron-right': !detail.open}">
-            </i>
-        </accordion-heading>
-        <div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
-            <!-- Indoor -->
-            <div class="col-sm-6">
-                <div 
-                ng-mouseover="showceiling=true"
-                ng-mouseleave="showceiling=false">
-                    <div ng-show="!showceiling">
-                        <p ng-show="currentcourt.indoor">室內</p>
-                        <p ng-show="!currentcourt.indoor">室外</p>
-                    </div>
-                    <p ng-show="showceiling">屋簷:{{currentcourt.ceiling | exist}}</p>
-                </div>
-                <!-- Net -->
-                <div
-                ng-mouseover="shownet=true"
-                ng-mouseleave="shownet=false">
-                    <p ng-show="!shownet">
-                    籃網:{{currentcourt.net | exist}}</p>
-                    <p ng-show="shownet">{{currentcourt.nettype}}</p>
-                    <p ng-show="shownet && !currentcourt.nettype">沒籃網</p>
-
-                </div>
-                <!-- Basket number -->
-                <p>籃框數:{{currentcourt.basketnumber}}</p>
-                <!-- Floor -->
-                <p>地質:{{currentcourt.floor}}</p>
-            </div>
-            <div class="col-sm-6">
-                
-                <!-- Water -->
-                <div
-                ng-mouseover="showwater=true"
-                ng-mouseleave="showwater=false">
-                    <p ng-show="!showwater">飲水機:{{currentcourt.water.exist | exist}}</p>
-                    <p ng-show="showwater && currentcourt.water.desc">{{currentcourt.water.desc}}</p>
-                    <p ng-show="showwater && !currentcourt.water.desc">記得帶水喔</p>
-                </div>
-                <!-- Toilet -->
-                <div
-                ng-mouseover="showtoilet=true"
-                ng-mouseleave="showtoilet=false">
-                    <p ng-show="!showtoilet">廁所:{{currentcourt.toilet.exist | exist}}</p>
-                    <p ng-show="showtoilet && currentcourt.toilet.desc">{{currentcourt.toilet.desc}}</p>
-                    <p ng-show="showtoilet && !currentcourt.toilet.desc">辦完事再出門</p>
-                </div>
-                <!-- Lights -->
-                <p>燈:{{currentcourt.lights | exist}}</p>
-                <!-- Rent -->
-                <div
-                ng-mouseover="showrent=true"
-                ng-mouseleave="showrent=false">
-                    <p ng-show="!showrent">租金:{{currentcourt.rent | exist}}</p>
-                    <p ng-show="showrent && currentcourt.rentprice">
-                        {{"$" + currentcourt.rentprice + "/小時"}}
-                    </p>
-                    <p ng-show="showrent && !currentcourt.rentprice">免費喔</p>
-                </div>
-            </div>
-        </div>
-    </accordion-group>
-</accordion> 
-
-
-
-<div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
-    <h2>管理員留言</h2>
-    <p>{{currentcourt.desc}}</p>
+        </accordion-group>
+        <accordion-group is-open="detail.open" class="backgroundnone">
+            <accordion-heading>球場細節
+                <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': detail.open, 'glyphicon-chevron-right': !detail.open}">
+                </i>
+            </accordion-heading>
+                <ul class="list-group">
+                    <li class="list-group-item backgroundnone">
+                        <p>屋簷:&nbsp{{currentcourt.ceiling | exist}}</p>
+                    </li>
+                    <li class="list-group-item backgroundnone">
+                        <p>籃網:&nbsp{{currentcourt.net | exist}}{{currentcourt.nettype}}</p>
+                        <p ng-show="!currentcourt.nettype">沒籃網</p>
+                    </li>
+                    <li class="list-group-item backgroundnone">
+                        <p>籃框數:&nbsp{{currentcourt.basketnumber}}</p>
+                    </li>
+                    <li class="list-group-item backgroundnone">
+                        <p>地質:&nbsp{{currentcourt.floor}}</p>
+                    </li>
+                    <li class="list-group-item backgroundnone">
+                        <p>飲水機:&nbsp{{currentcourt.water.exist | exist}} &nbsp
+                        {{currentcourt.water.desc}}
+                        </p>
+                    </li>
+                    <li class="list-group-item backgroundnone">
+                        <p>廁所:&nbsp{{currentcourt.toilet.exist | exist}}
+                        &nbsp{{currentcourt.toilet.desc}}
+                        </p>
+                    </li>
+                    <li class="list-group-item backgroundnone">
+                        <p>燈:&nbsp{{currentcourt.lights | exist}}</p>
+                    </li>
+                    <li class="list-group-item backgroundnone">
+                        <p>租金:{{currentcourt.rent | exist}}</p>
+                        <p ng-show="currentcourt.rentprice">
+                            {{"$" + currentcourt.rentprice + "/小時"}}
+                        </p>
+                    </li>
+                </ul>
+        </accordion-group>
+        <accordion-group is-open="message.open" class="backgroundnone">
+            <accordion-heading>管理員留言
+                <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': message.open, 'glyphicon-chevron-right': !message.open}">
+                </i>
+            </accordion-heading>
+            <p>{{currentcourt.desc}}</p>
+            <p ng-hide="currentcourt.desc">目前無留言</p>
+        </accordion-group>
+    </accordion>
+    <!--Upload button-->
+    <!-- <button class="mobileEditButton"
+    ng-click="uploadmode()" 
+    ng-show="isAdmin || isManager">
+        <span class="glyphicon glyphicon-camera"></span>
+    </button> -->
+    <!--Edit button-->
+    <button class="mobileEditButton"
+    ng-click="editmode()"
+    ng-show="isAdmin || isManager">
+        <span class="glyphicon glyphicon-pencil"></span>
+    </button>
 </div>
-<!--Upload button-->
-<button class="editDetailButton" 
-ng-click="uploadmode()" 
-ng-model="upload" 
-ng-show="isAdmin || isManager">
-    <span class="glyphicon glyphicon-camera"></span>
-</button>
-<!--Edit button-->
-<button class="editDetailButton"
-ng-click="editmode()" 
-ng-model="edit" 
-ng-show="isAdmin || isManager">
-    <span class="glyphicon glyphicon-pencil"></span>
-</button>
+

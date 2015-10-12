@@ -35,9 +35,9 @@
     <button class="btn slideBtnMobile" 
     ng-show="currentcourt" 
     mobile-slide="#mobileDetail" 
-    mobileExpanded="mobileExpanded"
+    mobile-expanded="mobileExpanded"
     ng-model="mobileExpanded">
-        <i class="fa fa-3x fa-angle-double-up white faa-bounce animated"></i>
+        <i class="fa fa-3x white" ng-class="{'fa-angle-double-up faa-bounce animated': !mobileExpanded, 'fa-angle-double-down': mobileExpanded}"></i>
     </button>
     <div id="mobileDetail" class="detailForMobile mobileslide" ng-show="currentcourt" ng-include="'app/courts/temp/court.detail.html'"></div>
     <!-- Mobile court detail ends -->

@@ -28,7 +28,7 @@ angular.module('keepballin')
 
 		//Is the details of the court expanded?
 		$scope.expanded = false;
-		$scope.mobileExpaned = false;
+		$scope.mobileExpanded = false;
 
 		//Broadcast the currentcourt
 		$scope.$watch('currentcourt._id', function(newVal) {
