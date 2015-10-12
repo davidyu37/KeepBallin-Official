@@ -293,14 +293,44 @@
     border: none;
 }
 
+/* Mobile details */
+.slideBtnMobile {
+    display: block;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    left: -webkit-calc(50% - 27px);
+    left: -moz-calc(50% - 27px);
+    left: calc(50% - 27px);
+    background: none;
+    z-index: 100;
+    transition: all 0.5s ease-in-out;
+    @media(min-width: $screen-sm-min) {
+        display: none;
+    } 
+}
+
 .detailForMobile {
+    padding-top: 60px;
+    background: rgba(0,0,0,0.9);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: white;
+    z-index: 10;
+    display: block;
+    width: 100%;
+    text-align: center;
     @media(min-width: $screen-sm-min) {
         display: none;
     }
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #999999;
 }
+
+.backgroundnone {
+    background-color: transparent;
+}
+
 .editDetailButton {
     @media(min-width: $screen-sm-min) {
         display: inline-block;

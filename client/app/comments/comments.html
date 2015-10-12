@@ -8,8 +8,8 @@
     <div class="row container">
       <div class="col-xs-1">
         <div class="avatarBox">
-          <i ng-hide="userNow" class="fa fa-3x fa-user"></i>
-          <img class="avatar img-rounded" ng-src="{{userNow.avatar}}" alt="{{userNow.name}}">
+          <i ng-hide="userNow.avatar" class="fa fa-3x fa-user"></i>
+          <img ng-hide="userNow" class="avatar img-rounded" ng-src="{{userNow.avatar}}" alt="{{userNow.name}}">
         </div>
       </div>
       <div class="col-xs-11">
@@ -59,8 +59,8 @@
         <div class="col-xs-1">
           <div class="avatarBox">
             <img ng-show="!comment.author.avatar.url && !comment.author.fbprofilepic" ng-src="assets/images/profile/profile.jpg" alt="{{comment.author.name}}" class="avatar img-rounded">
-            <img ng-show="comment.author.avatar.url" class="avatar img-rounded" ng-src="{{comment.author.avatar.url}}" alt="avatar">
-            <img ng-show="!comment.author.avatar.url" class="avatar img-rounded" ng-src="{{comment.author.fbprofilepic}}" alt="avatar">
+            <img ng-hide="!comment.author.avatar.url" class="avatar img-rounded" ng-src="{{comment.author.avatar.url}}" alt="avatar">
+            <img ng-hide="!comment.author.fbprofilepic" class="avatar img-rounded" ng-src="{{comment.author.fbprofilepic}}" alt="avatar">
           </div>
         </div>
         <div class="col-xs-11">

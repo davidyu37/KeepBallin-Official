@@ -1,30 +1,4 @@
 <div>
-    <div id="searchbox">
-        <form ng-submit="searchCourt(searchParams)"
-            popover-placement="bottom" 
-            popover="再試一次" 
-            popover-is-open="emptyField"
-            popover-trigger="none">
-            <nit-advanced-searchbox
-                ng-model="searchParams"
-                parameters="availableSearchParams"
-                submit="searchCourt(searchParams)"
-                placeholder="任意輸入或用以下的選項"
-                focus="searchFocus"
-                popover-placement="bottom" 
-                popover="目前還沒有此球場" 
-                popover-is-open="noResult"
-                popover-trigger="none">
-            </nit-advanced-searchbox>
-            <button ng-hide="searchFocus" type="submit" class="btn pull-right" ng-class="{'btn-primary': !gotResult, 'btn-success btn-sm': gotResult}">
-            <span ng-show="!gotResult">
-            送出  
-            </span>
-            <span ng-show="gotResult && !searchFocus"><i class="fa fa-2x fa-check-circle"></i></span>
-            </button>
-        </form>
-        <span ng-show="gotResult && searchFocus" class="pull-right text-success"><i class="fa fa-lg fa-check-circle"></i></span> 
-    </div>
     <div id="map" marker 
     courts="courts"
     currentcourt="currentcourt" 
@@ -56,9 +30,17 @@
     <button class="btn slideBtn" slide-toggle="#detail" expanded="expanded" map="map" ng-model="expanded" 
     ng-show="currentcourt">
         <i class="fa fa-3x" ng-class="{'fa-angle-double-up black faa-bounce animated': !expanded, 'fa-angle-double-down white': expanded}"></i>
-        <!-- <span class="glyphicon"
-        ng-class="{'glyphicon-chevron-up': !expanded, 'glyphicon-chevron-down': expanded}"></span> -->
     </button>
+    <!-- Mobile court detail -->
+    <button class="btn slideBtnMobile" 
+    ng-show="currentcourt" 
+    mobile-slide="#mobileDetail" 
+    mobileExpanded="mobileExpanded"
+    ng-model="mobileExpanded">
+        <i class="fa fa-3x fa-angle-double-up white faa-bounce animated"></i>
+    </button>
+    <div id="mobileDetail" class="detailForMobile mobileslide" ng-show="currentcourt" ng-include="'app/courts/temp/court.detail.html'"></div>
+    <!-- Mobile court detail ends -->
     <!-- Court detail starts here -->
     <div id="detail" class="court-detail slideable" ng-show="currentcourt">
         <div class="row detail-inner">
@@ -206,10 +188,35 @@
     ng-include="'app/courts/temp/edit.page.html'" 
     ng-init="edit=false" ng-show="edit" 
     ng-click="editmode()"></div>
-    <!-- Court detail ends -->
-    <div class="detailForMobile" ng-show="currentcourt" ng-include="'app/courts/temp/court.detail.html'"></div>
     
     <!-- Comments start here -->
     <div ng-show="currentcourt" ng-include="'app/comments/comments.html'"></div>
     <!-- Comments end -->
+    <!-- Searchbox -->
+    <div id="searchbox">
+        <form ng-submit="searchCourt(searchParams)"
+            popover-placement="bottom" 
+            popover="再試一次" 
+            popover-is-open="emptyField"
+            popover-trigger="none">
+            <nit-advanced-searchbox
+                ng-model="searchParams"
+                parameters="availableSearchParams"
+                submit="searchCourt(searchParams)"
+                placeholder="任意輸入或用以下的選項"
+                focus="searchFocus"
+                popover-placement="bottom" 
+                popover="目前還沒有此球場" 
+                popover-is-open="noResult"
+                popover-trigger="none">
+            </nit-advanced-searchbox>
+            <button ng-hide="searchFocus" type="submit" class="btn pull-right" ng-class="{'btn-primary': !gotResult, 'btn-success btn-sm': gotResult}">
+            <span ng-show="!gotResult">
+            送出  
+            </span>
+            <span ng-show="gotResult && !searchFocus"><i class="fa fa-2x fa-check-circle"></i></span>
+            </button>
+        </form>
+        <span ng-show="gotResult && searchFocus" class="pull-right text-success"><i class="fa fa-lg fa-check-circle"></i></span> 
+    </div>
 </div>

@@ -3,19 +3,19 @@
 angular.module('keepballin')
   .controller('CommentCtrl', ['$scope', '$q', 'socket','Comment', 'Auth', 'CommentSource', function ($scope, $q, socket, Comment, Auth, CommentSource) {
     $scope.newComment = '';
+    // if(!Auth.getCurrentUser().avatar) {
+    //   if(Auth.getCurrentUser().fbprofilepic) {
+    //         $scope.userNow.avatar = Auth.getCurrentUser().fbprofilepic;
+    //     } else {
+    //         $scope.userNow.avatar = 'assets/images/profile/profile.jpg';
+    //     }
+    // } else {
+    //     if(Auth.getCurrentUser().avatar !== undefined) {
+    //         $scope.userNow.avatar = Auth.getCurrentUser().avatar.url;
+    //     }
+    // }
     $scope.userNow = Auth.getCurrentUser();
-    
-    if(!Auth.getCurrentUser().avatar) {
-      if(Auth.getCurrentUser().fbprofilepic) {
-            $scope.userNow.avatar = Auth.getCurrentUser().fbprofilepic;
-        } else {
-            $scope.userNow.avatar = 'assets/images/profile/profile.jpg';
-        }
-    } else {
-        if(Auth.getCurrentUser().avatar !== undefined) {
-            $scope.userNow.avatar = Auth.getCurrentUser().avatar.url;
-        }
-    }
+    console.log($scope.userNow.avatar);
 
     $scope.profile = 'app/profile/profile.html';
 

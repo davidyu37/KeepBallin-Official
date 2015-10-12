@@ -28,6 +28,7 @@ angular.module('keepballin')
 
 		//Is the details of the court expanded?
 		$scope.expanded = false;
+		$scope.mobileExpaned = false;
 
 		//Broadcast the currentcourt
 		$scope.$watch('currentcourt._id', function(newVal) {
@@ -183,7 +184,6 @@ angular.module('keepballin')
 	    //Add the addMarker button to map
 	    var addMarkerBtn = document.getElementById('addMarker');
 	    map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(addMarkerBtn);
-	    
 
 }]);//mapCtrl ends here
 
