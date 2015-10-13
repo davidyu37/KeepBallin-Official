@@ -1,7 +1,11 @@
 /* Comment stuff starts here */
 
 .commentSection{
-    box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, 12px 0 10px -5px rgba(221, 221, 221, 0.8), -12px 0 10px -4px rgba(221, 221, 221, 0.8);    
+    display: none;
+    @media(min-width: $screen-sm-min) {
+        box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, 12px 0 10px -5px rgba(221, 221, 221, 0.8), -12px 0 10px -4px rgba(221, 221, 221, 0.8);    
+        display: block;
+    }
 }
 
 .comment-list {

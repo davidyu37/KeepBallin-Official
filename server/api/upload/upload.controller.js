@@ -8,7 +8,6 @@ ObjectId = Schema.ObjectId,
 path = require('path'),
 config = require('../../config/environment');
 
-console.log(config);
 var uuid = require('uuid'); // https://github.com/defunctzombie/node-uuid
 var multiparty = require('multiparty'); // https://github.com/andrewrk/node-multiparty
 var s3 = require('s3'); // https://github.com/andrewrk/node-s3-client

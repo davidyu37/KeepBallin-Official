@@ -16,7 +16,7 @@ angular.module('keepballin')
                 attrs.easing = (!attrs.easing) ? 'ease-in-out' : attrs.easing;
 
                 element.css({
-                    'overflow': 'hidden',
+                    // 'overflow': 'hidden',
                     'height': '0px',
                     'transitionProperty': 'height',
                     'transitionDuration': attrs.duration,
@@ -44,9 +44,13 @@ angular.module('keepballin')
                     $scope.mobileExpanded = !$scope.mobileExpanded;
                     $scope.$apply();    
                 }
-                
+                var htmlTag = document.getElementsByTagName('html')[0];
+                var inner = document.getElementById('mobileDetail');
                 if($scope.mobileExpanded) {
-                    
+                    //disable global scroll and allow scorll inside of overlay
+                    htmlTag.classList.add('noscroll');
+                    inner.classList.add('scroll');
+        
                     var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
                     var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 
@@ -56,6 +60,9 @@ angular.module('keepballin')
                 } else {
                     target.style.height = '0px';
                     button.style.bottom = '0px';
+                    //allow global scroll and disable overlay scroll
+                    htmlTag.classList.remove('noscroll');
+                    inner.classList.remove('scroll');
                 }
                 
             }
@@ -63,25 +70,6 @@ angular.module('keepballin')
             element.bind('click', function() {
                 scroll(true);
             });
-
-            // $scope.$watch('expanded', function(newVal){
-            //     if(newVal) {
-                    
-            //         scroll();
-            //     }
-            // });
-
-            //Close the detail when drag start
-            // $scope.map.addListener('dragstart', function(){
-                
-            //     if($scope.expanded === true) {
-            //         $scope.expanded = false;
-            //         scroll();
-            //         $scope.$apply();    
-            //     }
-            // });
-
-            
 
         }
     };

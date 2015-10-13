@@ -1,100 +1,105 @@
- <!-- City -->
-<h2 ng-show="currentcourt.court">{{currentcourt.court}}
-    <span class="label label-primary" ng-show="currentcourt.indoor">
-        室內
-    </span>
-    <span class="label label-primary" ng-show="!currentcourt.indoor">
-        室外
-    </span>
-</h2> 
-<h2 ng-show="!currentcourt.court">球場名
-    <span class="label label-primary" ng-show="currentcourt.indoor">
-        室內
-    </span>
-    <span class="label label-primary" ng-show="!currentcourt.indoor">
-        室外
-    </span>
-</h2>
 <div class="mobileDetailContainer">
-    <accordion close-others="true">
-        <!-- Operational time -->
-        <accordion-group is-open="name.open" class="backgroundnone">
-          <accordion-heading>營業時間
-            <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': name.open, 'glyphicon-chevron-right': !name.open}">
-            </i>
-          </accordion-heading>
-            <!-- Hours -->
-            <p>開放時間:</p>
-            <p ng-show="currentcourt.hours">
-                {{currentcourt.hours.begin | date:'shortTime'}}~{{currentcourt.hours.end | date:'shortTime'}}
-            </p>
+    
+    <!-- City -->
+    <h2 ng-show="currentcourt.court">{{currentcourt.court}}
+        <span class="label label-success" ng-show="currentcourt.indoor">
+            室內
+        </span>
+        <span class="label label-primary" ng-show="!currentcourt.indoor">
+            室外
+        </span>
+    </h2> 
+    <h2 ng-show="!currentcourt.court">球場名
+        <span class="label label-primary" ng-show="currentcourt.indoor">
+            室內
+        </span>
+        <span class="label label-primary" ng-show="!currentcourt.indoor">
+            室外
+        </span>
+    </h2>
+    <p>{{currentcourt.address}}</p>
+    <div>
+        <accordion close-others="true">
+            <!-- Operational time -->
+            <accordion-group is-open="name.open" class="backgroundnone">
+              <accordion-heading>營業時間
+                <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': name.open, 'glyphicon-chevron-right': !name.open}">
+                </i>
+              </accordion-heading>
+                <!-- Hours -->
+                <p>開放時間:</p>
+                <p ng-show="currentcourt.hours">
+                    {{currentcourt.hours.begin | date:'shortTime'}}~{{currentcourt.hours.end | date:'shortTime'}}
+                </p>
 
-             <!-- Peaktime -->
-            <p>尖峰:</p>
-            <p ng-show="currentcourt.peaktime">
-                {{currentcourt.peaktime.begin | date:'shortTime'}}~{{currentcourt.peaktime.end | date:'shortTime'}}
-            </p>
-        </accordion-group>
-        <accordion-group is-open="detail.open" class="backgroundnone">
-            <accordion-heading>球場細節
-                <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': detail.open, 'glyphicon-chevron-right': !detail.open}">
-                </i>
-            </accordion-heading>
-                <ul class="list-group">
-                    <li class="list-group-item backgroundnone">
-                        <p>屋簷:&nbsp{{currentcourt.ceiling | exist}}</p>
-                    </li>
-                    <li class="list-group-item backgroundnone">
-                        <p>籃網:&nbsp{{currentcourt.net | exist}}{{currentcourt.nettype}}</p>
-                        <p ng-show="!currentcourt.nettype">沒籃網</p>
-                    </li>
-                    <li class="list-group-item backgroundnone">
-                        <p>籃框數:&nbsp{{currentcourt.basketnumber}}</p>
-                    </li>
-                    <li class="list-group-item backgroundnone">
-                        <p>地質:&nbsp{{currentcourt.floor}}</p>
-                    </li>
-                    <li class="list-group-item backgroundnone">
-                        <p>飲水機:&nbsp{{currentcourt.water.exist | exist}} &nbsp
-                        {{currentcourt.water.desc}}
-                        </p>
-                    </li>
-                    <li class="list-group-item backgroundnone">
-                        <p>廁所:&nbsp{{currentcourt.toilet.exist | exist}}
-                        &nbsp{{currentcourt.toilet.desc}}
-                        </p>
-                    </li>
-                    <li class="list-group-item backgroundnone">
-                        <p>燈:&nbsp{{currentcourt.lights | exist}}</p>
-                    </li>
-                    <li class="list-group-item backgroundnone">
-                        <p>租金:{{currentcourt.rent | exist}}</p>
-                        <p ng-show="currentcourt.rentprice">
-                            {{"$" + currentcourt.rentprice + "/小時"}}
-                        </p>
-                    </li>
-                </ul>
-        </accordion-group>
-        <accordion-group is-open="message.open" class="backgroundnone">
-            <accordion-heading>管理員留言
-                <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': message.open, 'glyphicon-chevron-right': !message.open}">
-                </i>
-            </accordion-heading>
-            <p>{{currentcourt.desc}}</p>
-            <p ng-hide="currentcourt.desc">目前無留言</p>
-        </accordion-group>
-    </accordion>
-    <!--Upload button-->
-    <!-- <button class="mobileEditButton"
-    ng-click="uploadmode()" 
-    ng-show="isAdmin || isManager">
-        <span class="glyphicon glyphicon-camera"></span>
-    </button> -->
-    <!--Edit button-->
-    <button class="mobileEditButton"
-    ng-click="editmode()"
-    ng-show="isAdmin || isManager">
-        <span class="glyphicon glyphicon-pencil"></span>
-    </button>
+                 <!-- Peaktime -->
+                <p>尖峰:</p>
+                <p ng-show="currentcourt.peaktime">
+                    {{currentcourt.peaktime.begin | date:'shortTime'}}~{{currentcourt.peaktime.end | date:'shortTime'}}
+                </p>
+            </accordion-group>
+            <accordion-group is-open="detail.open" class="backgroundnone">
+                <accordion-heading>球場細節
+                    <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': detail.open, 'glyphicon-chevron-right': !detail.open}">
+                    </i>
+                </accordion-heading>
+                    <ul class="list-group">
+                        <li class="list-group-item backgroundnone">
+                            <p>屋簷:&nbsp{{currentcourt.ceiling | exist}}</p>
+                        </li>
+                        <li class="list-group-item backgroundnone">
+                            <p>籃網:&nbsp{{currentcourt.net | exist}}{{currentcourt.nettype}}</p>
+                            <p ng-show="!currentcourt.nettype">沒籃網</p>
+                        </li>
+                        <li class="list-group-item backgroundnone">
+                            <p>籃框數:&nbsp{{currentcourt.basketnumber}}</p>
+                        </li>
+                        <li class="list-group-item backgroundnone">
+                            <p>地質:&nbsp{{currentcourt.floor}}</p>
+                        </li>
+                        <li class="list-group-item backgroundnone">
+                            <p>飲水機:&nbsp{{currentcourt.water.exist | exist}} &nbsp
+                            {{currentcourt.water.desc}}
+                            </p>
+                        </li>
+                        <li class="list-group-item backgroundnone">
+                            <p>廁所:&nbsp{{currentcourt.toilet.exist | exist}}
+                            &nbsp{{currentcourt.toilet.desc}}
+                            </p>
+                        </li>
+                        <li class="list-group-item backgroundnone">
+                            <p>燈:&nbsp{{currentcourt.lights | exist}}</p>
+                        </li>
+                        <li class="list-group-item backgroundnone">
+                            <p>租金:{{currentcourt.rent | exist}}</p>
+                            <p ng-show="currentcourt.rentprice">
+                                {{"$" + currentcourt.rentprice + "/小時"}}
+                            </p>
+                        </li>
+                    </ul>
+            </accordion-group>
+            <accordion-group is-open="message.open" class="backgroundnone">
+                <accordion-heading>管理員留言
+                    <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': message.open, 'glyphicon-chevron-right': !message.open}">
+                    </i>
+                </accordion-heading>
+                <p>{{currentcourt.desc}}</p>
+                <p ng-hide="currentcourt.desc">目前無留言</p>
+            </accordion-group>
+        </accordion>
+        <!--Upload button-->
+        <button class="mobileEditButton"
+        ng-click="uploadmode()" 
+        ng-show="isAdmin || isManager">
+            <span class="glyphicon glyphicon-camera"></span>
+        </button>
+        <!--Edit button-->
+        <button class="mobileEditButton"
+        ng-click="editmode()"
+        ng-show="isAdmin || isManager">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+    </div>
+
 </div>
 

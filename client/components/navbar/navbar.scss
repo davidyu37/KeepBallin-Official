@@ -6,7 +6,8 @@
     border: none;
     margin: 0;
     background-color: rgba(0,0,0,0.8);
-    transition: top 0.4s ease-in-out;
+    -webkit-transition: top 0.3s ease-in-out;
+    transition: top 0.3s ease-in-out;
     box-shadow: 0 0 10px rgba(0,0,0,0.9);
   }
   z-index: 1;
@@ -31,7 +32,8 @@
 /* overwrite the default colors for .navbar inverse*/
 .navbar-inverse .navbar-nav > li > a {
   color: black;
-  transition: all linear 0.4s;
+  -webkit-transition: all linear 0.3s;
+  transition: all linear 0.3s;
   @media screen and (min-width: $screen-sm-min) {
     padding-top: 20px;
     height: 60px;
@@ -61,7 +63,8 @@
     position: absolute;
     top: -9999px;
     line-height: 0;
-    transition: 0.4s;
+    transition: all linear 0.3s;
+    -webkit-transition: all linear 0.3s;
   }
 }
 .right-padding {

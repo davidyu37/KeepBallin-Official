@@ -30,23 +30,19 @@
     margin-right: 18px;
     width: 50px;
     height: 50px;
-    /*padding: 3px;*/
     text-align: center;
     border: 2px solid $brand-primary;
     background: none;
     border-radius: 50%;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-    -webkit-transition:font-size linear 0.3s;
-    transition:font-size linear 0.3s;
+    -webkit-transition: all linear 0.3s;
+    transition: all linear 0.3s;
 }
 
 .geolocateBtn:hover {
-    background: white;
-    font-size: 150%;
-    display: table;
+    background: $brand-primary;
     span.glyphicon {
-        display: table-cell;
-        vertical-align: middle;
+        color: white;
     }
 }
 
@@ -341,6 +337,7 @@
 .mobileEditButton {
     width: 50px;
     height: 50px;
+    margin-right: 10px;
     background: none;
     border: 2px solid $brand-primary;
     border-radius: 50%;
@@ -349,3 +346,13 @@
 .mobileDetailContainer {
     padding: 20px;
 }
+/* Prevent the background scrolling when overlay is on */
+.noscroll {
+    overflow: hidden;
+}
+
+.scroll {
+    overflow-y: scroll;
+}
+
+
