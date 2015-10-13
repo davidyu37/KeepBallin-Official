@@ -5,8 +5,10 @@ Upload = require('./upload.model'),
 mongoose = require('mongoose'),
 Schema = mongoose.Schema,
 ObjectId = Schema.ObjectId,
-path = require('path');
+path = require('path'),
+config = require('../../config/environment');
 
+console.log(config);
 var uuid = require('uuid'); // https://github.com/defunctzombie/node-uuid
 var multiparty = require('multiparty'); // https://github.com/andrewrk/node-multiparty
 var s3 = require('s3'); // https://github.com/andrewrk/node-s3-client
@@ -18,8 +20,8 @@ var s3Client = s3.createClient({
   multipartUploadThreshold: 20971520, // this is the default (20 MB)
   multipartUploadSize: 15728640, // this is the default (15 MB)
   s3Options: {
-    // accessKeyId: s3Config.Key,
-    // secretAccessKey: s3Config.Secret
+    accessKeyId: config.s3.key,
+    secretAccessKey: config.s3.secret
     // any other options are passed to new AWS.S3()
     // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
   }

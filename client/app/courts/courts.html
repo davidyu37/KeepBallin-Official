@@ -39,7 +39,6 @@
     ng-model="mobileExpanded">
         <i class="fa fa-3x white" ng-class="{'fa-angle-double-up faa-bounce animated': !mobileExpanded, 'fa-angle-double-down': mobileExpanded}"></i>
     </button>
-    <div id="mobileDetail" class="detailForMobile mobileslide" ng-show="currentcourt" ng-include="'app/courts/temp/court.detail.html'"></div>
     <!-- Mobile court detail ends -->
     <!-- Court detail starts here -->
     <div id="detail" class="court-detail slideable" ng-show="currentcourt">
@@ -161,12 +160,12 @@
             </div>
             <div class="editBtns">
                 <!--Upload button-->
-                <!-- <button class="editDetailButton" 
+                <button class="editDetailButton" 
                 ng-click="uploadmode()" 
                 ng-model="upload" 
                 ng-show="isAdmin || isManager || isVip">
                     <span class="glyphicon glyphicon-camera"></span>
-                </button> -->
+                </button>
                 <!--Edit button-->
                 <button class="editDetailButton"
                 ng-click="editmode()" 
@@ -220,3 +219,4 @@
         <span ng-show="gotResult && searchFocus" class="pull-right text-success"><i class="fa fa-lg fa-check-circle"></i></span> 
     </div>
 </div>
+<div id="mobileDetail" class="detailForMobile mobileslide" ng-show="currentcourt" ng-include="'app/courts/temp/court.detail.html'"></div>

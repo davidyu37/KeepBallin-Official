@@ -17,6 +17,7 @@ var UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Team'
   },
+  occupation: String,
   open: {type: Boolean, default: false},
   position: String,
   jerseynumber: Number,

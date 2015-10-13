@@ -6,7 +6,7 @@ angular.module('keepballin')
 		$scope.isReadonly = false;
 
 		//wait for the template to compile
-	    $timeout(function() { getRatings($scope.$parent.currentcourt._id); });
+	    $timeout(function() { getRatings($scope.$parent.currentcourt._id); }, 2000);
 	    
 
 		function getRatings(courtID) {

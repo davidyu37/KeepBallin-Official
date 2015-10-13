@@ -1,7 +1,8 @@
 <div class="col-sm-4" ng-controller="uploadCtrl">
   <div class="profilePicOverlay" ng-mouseover="showOverlay=true" ng-mouseleave="showOverlay=false" ng-hide="loading">
     <img class="img-responsive thumbnail" ng-src="{{profilenow}}" alt="你的相片">
-    <!-- <i ngf-select="uploadprofile(newpic)" ng-model="newpic" ng-show="showOverlay" class="glyphicon glyphicon-camera glyph-overlay"></i> -->
+    <i ngf-select="uploadprofile(newpic)" ng-model="newpic" ng-show="showOverlay" class="glyphicon glyphicon-camera glyph-overlay" ngf-max-size="10MB" ngf-resize="{width: 100, height: 100}"></i>
+    <p class="text-muted">檔案必須小於10MB</p>
   </div>
   <div class="profilePicOverlay" ng-show="loading">
     <img class="img-responsive thumbnail" ng-src="{{profilenow}}" alt="profilepicplaceholder">
@@ -16,8 +17,8 @@
   <accordion close-others="true">
     <!-- Player name -->
     <accordion-group is-open="name.open">
-      <accordion-heading>名稱:&nbsp{{userNow.name}}
-        <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': name.open, 'glyphicon-chevron-right': !name.open}">
+      <accordion-heading>姓名:&nbsp{{userNow.name}}
+        <i class="fa pull-right accordHead" ng-class="{'fa-bars': name.open, 'fa-user': !name.open}">
         </i>
       </accordion-heading>
       <div ng-include="'app/account/settings/temp/profile/profile.accordion/name.html'"></div>
@@ -25,7 +26,7 @@
     <!-- Email -->
     <accordion-group is-open="email.open">
       <accordion-heading>Email:&nbsp{{userNow.email}}
-        <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': email.open, 'glyphicon-chevron-right': !email.open}">
+        <i class="fa pull-right accordHead" ng-class="{'fa-bars': email.open, 'fa-envelope': !email.open}">
         </i>
       </accordion-heading>
       <div ng-include="'app/account/settings/temp/profile/profile.accordion/email.html'"></div>
@@ -33,14 +34,14 @@
     <!-- Password -->
     <accordion-group is-open="pw.open">
       <accordion-heading>更改密碼
-        <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': pw.open, 'glyphicon-chevron-right': !pw.open}">
+        <i class="fa pull-right accordHead" ng-class="{'fa-bars': pw.open, 'fa-lock': !pw.open}">
         </i>
       </accordion-heading>
       <div ng-include="'app/account/settings/temp/profile/profile.accordion/password.html'"></div>
     </accordion-group>
     <accordion-group is-open="preference.open">
       <accordion-heading>喜愛
-        <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': preference.open, 'glyphicon-chevron-right': !preference.open}">
+        <i class="fa pull-right accordHead" ng-class="{'fa-bars': preference.open, 'fa-heart': !preference.open}">
         </i>
       </accordion-heading>
       <div ng-include="'app/account/settings/temp/profile/profile.accordion/preference.html'"></div>
@@ -48,7 +49,7 @@
     <!-- Info -->
     <accordion-group is-open="info.open">
       <accordion-heading>基本資料
-        <i class="pull-right glyphicon accordHead" ng-class="{'glyphicon-chevron-down': info.open, 'glyphicon-chevron-right': !info.open}">
+        <i class="fa pull-right accordHead" ng-class="{'fa-bars': info.open, 'fa-info': !info.open}">
         </i>
       </accordion-heading>
       <div ng-include="'app/account/settings/temp/profile/profile.accordion/info.html'"></div>

@@ -67,10 +67,14 @@
 }
 
 .parallaxContent {
+  height: 100vh;
+  width: 100%;
+  display: table;
   color: white;
   text-shadow: 0 2px 0 black, 0 0 10px black;
-  padding-top: 20%;
-  border-radius: 50%;
+  
+  /*padding-top: 20%;*/
+  /*border-radius: 50%;*/
   .btn-primary {
   background: none;
   border: 2px solid $brand-primary;
@@ -79,6 +83,11 @@
       background-color: $brand-primary;
     }
   }
+}
+
+.messageContent {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .bounceBall {

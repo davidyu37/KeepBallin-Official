@@ -11,6 +11,7 @@
       <p class="lead" ng-show="files">上傳{{files.length}}張 
         <span>已上傳{{uploadCount}}張</span> 
       </p>
+      <p class="text-muted" ng-show="files">上傳後再點一下該球場地圖標籤，上傳的圖就會出現囉</p>
       <ul ng-repeat="file in files" class="list-group">
         <li class="list-group-item">
             <div class="media">
@@ -33,8 +34,6 @@
             </div>
         </li>
       </ul>
-      <!-- <button ng-show="files" class="btn btn-warning pull-right" 
-      ng-click="clearPreview()">淨空</button> -->
       <div class="col-md-12">
         <input class="uploadbtn"
         ng-click="uploadForm.courtId = $parent.currentcourt._id; submit(uploadForm)" 

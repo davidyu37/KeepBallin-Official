@@ -54,6 +54,11 @@ var all = {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+  },
+
+  s3: {
+    key: process.env.S3_KEY || 'key',
+    secret: process.env.S3_SECRET || 'secret'
   }
 
   // sendgrid: {

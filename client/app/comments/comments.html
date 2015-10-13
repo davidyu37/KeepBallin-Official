@@ -9,7 +9,7 @@
       <div class="col-xs-1">
         <div class="avatarBox">
           <i ng-hide="userNow.avatar" class="fa fa-3x fa-user"></i>
-          <img ng-hide="userNow" class="avatar img-rounded" ng-src="{{userNow.avatar}}" alt="{{userNow.name}}">
+          <img ng-hide="!userNow.avatar" class="avatar img-rounded" ng-src="{{userNow.avatar.url}}" alt="{{userNow.name}}">
         </div>
       </div>
       <div class="col-xs-11">
