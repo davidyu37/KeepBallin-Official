@@ -3,7 +3,7 @@
 angular.module('keepballin') 
 	.factory('Geolocate', function() {
 
-		return function(scope, map) {
+		return function(scope, map, cb) {
 			//clear the last marker from scope
 			scope.userLocation.setMap(null);
       	
@@ -39,32 +39,34 @@ angular.module('keepballin')
 	              	map.panTo(pos);
 			    });
 			  }, function() {
-			    handleNoGeolocation(true, map);
+			    cb(handleNoGeolocation(true, map));
 			  });
 			} else {
 			  // Browser doesn't support Geolocation
-			  handleNoGeolocation(false, map);
+			  cb(handleNoGeolocation(false, map));
 			}
 		};
 		//callback function that handles the errors
 		function handleNoGeolocation(errorFlag, map) {
 			var content = '';
 		  if (errorFlag) {
-		    content = 'Error: The Geolocation service failed.';
+		    content = '請解除瀏覽器封鎖';
 		  } else {
-		    content = 'Error: Your browser doesn\'t support geolocation.';
+		    content = '不好意思，您的瀏覽器不支援定位服務';
 		  }
-		  var pos = new google.maps.LatLng(25.033259, 121.543565);
-		  //when there's errorFlag, it displays the error message in a new infowindow
-		  var options = {
-		    map: map,
-		    position: pos,
-		    content: content
-		  };
 
-		  var infowindow = new google.maps.InfoWindow(options);
-		  infowindow.open(map, pos);
-		  map.setCenter(pos);
+		  return content;
+		  // var pos = new google.maps.LatLng(25.033259, 121.543565);
+		  // //when there's errorFlag, it displays the error message in a new infowindow
+		  // var options = {
+		  //   map: map,
+		  //   position: pos,
+		  //   content: content
+		  // };
+
+		  // var infowindow = new google.maps.InfoWindow(options);
+		  // infowindow.open(map, pos);
+		  // map.setCenter(pos);
 		}
 
 	});

@@ -25,7 +25,6 @@ angular.module('keepballin')
 	    $scope.isManager = Auth.isManager();
 	    $scope.isVip = Auth.isVip();
 	    $scope.getCurrentUser = Auth.getCurrentUser();
-
 		//Is the details of the court expanded?
 		$scope.expanded = false;
 		$scope.mobileExpanded = false;
@@ -47,13 +46,10 @@ angular.module('keepballin')
 
 		$scope.noResult = false;
 		$scope.gotResult = false;
-		$scope.emptyField = false;
 
 		$scope.searchCourt = function(params) {
-			console.log(params);
 			var hasParams = (params.query || params.court || params.city || params.district || params.address);
 			if(hasParams === undefined) {
-				$scope.emptyField = true;
 				$timeout(function() {
 					$scope.emptyField = false;
 				}, 1000);
@@ -67,6 +63,8 @@ angular.module('keepballin')
 						}, 1000);
 					} else {
 						$scope.courts = data;
+						$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
+						$scope.map.setZoom(13);
 						$scope.gotResult = true;
 						$timeout(function() {
 							$scope.gotResult = false;
@@ -74,11 +72,6 @@ angular.module('keepballin')
 					}
 				});
 			}
-		};
-
-		$scope.test = function(parent) {
-			console.log('inside');
-			console.log(parent);
 		};
 
 	    //Empty markers
@@ -98,7 +91,9 @@ angular.module('keepballin')
 	    //Add Marker begins here
 	    //Enable add marker mode
 	    $scope.enableAddMarker = function(state) {
-	    	AddMarker(state, $scope, map);
+	    	AddMarker(state, $scope, map, function(newMarker) {
+	    		$scope.courts.push(newMarker);
+	    	});
     	};
 
     	$scope.deletemarker = function(id) {
@@ -177,8 +172,18 @@ angular.module('keepballin')
 	    // var userLocation = $scope.userLocation;
 	    // Geolocating function
 	    $scope.userLocation = new google.maps.Marker();
+	    $scope.gotErr = false
 	    $scope.geolocate = function() {
-	    	Geolocate($scope, map);
+	    	Geolocate($scope, map, function(err) {
+	    		if(err) {
+	    			console.log(err);
+		    		$scope.geoErr = err;
+	    			$scope.gotErr = true;
+		    		$timeout(function() {
+		    			$scope.gotErr = false;
+		    		}, 3000);
+	    		}
+	    	});
 	    };
 	    //Geolocate ends here
 	    //Add the addMarker button to map

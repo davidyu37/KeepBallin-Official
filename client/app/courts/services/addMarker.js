@@ -2,7 +2,7 @@
 
 angular.module('keepballin') 
 	.factory('AddMarker', ['$q', 'socket', 'Court', function($q, socket, Court) {
-		return function(state, scope, map) {
+		return function(state, scope, map, cb) {
 			if(state) {
 				map.setOptions({ draggableCursor: 'crosshair' });
 
@@ -20,7 +20,9 @@ angular.module('keepballin')
 						var district = result.address_components[3].long_name;
 						var city = result.address_components[4].long_name;
 						court = {lat: lat, long: long, address: result.formatted_address, district: district, city: city};
-						Court.save(court);
+						Court.save(court, function(u) {
+							cb(u);
+						});
 					});
 					
 				});

@@ -13,7 +13,10 @@
     ng-class="{'mapShadow': currentcourt}"
     ></div>
     <button title="定位(解除瀏覽器的封鎖才可以使用喔)" type="button" id="geolocate" class="geolocateBtn"
-    ng-click="geolocate()">
+    ng-click="geolocate()"
+    popover="{{geoErr}}"
+    popover-placement="left"
+    popover-is-open="gotErr">
     	<span class="glyphicon glyphicon-screenshot"></span>
     </button>
     <!-- Make a button that let user select the courts to appear -->
@@ -193,11 +196,7 @@
     <!-- Comments end -->
     <!-- Searchbox -->
     <div id="searchbox">
-        <form ng-submit="searchCourt(searchParams)"
-            popover-placement="bottom" 
-            popover="再試一次" 
-            popover-is-open="emptyField"
-            popover-trigger="none">
+        <form ng-submit="searchCourt(searchParams)">
             <nit-advanced-searchbox
                 ng-model="searchParams"
                 parameters="availableSearchParams"

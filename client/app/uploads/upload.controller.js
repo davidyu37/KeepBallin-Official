@@ -17,7 +17,7 @@ angular.module('keepballin')
     //Using court id to collect an array of pictures
     $scope.getPicture = function(id) {
         $scope.slides = [];
-        Download.query({court : id},function(data) {
+        Download.query({court : id}, function(data) {
             if(!data) {
                 return;
             } else {

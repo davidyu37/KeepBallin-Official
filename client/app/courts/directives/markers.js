@@ -22,6 +22,7 @@ angular.module('keepballin')
 			//Authentication
 			$scope.isLoggedIn = Auth.isLoggedIn();
 		    $scope.isAdmin = Auth.isAdmin();
+		    $scope.isManager = Auth.isManager();
 		    $scope.getCurrentUser = Auth.getCurrentUser();
 				
 			var infowindow = $scope.infowindow;
@@ -52,12 +53,11 @@ angular.module('keepballin')
 		        marker.content = courts.desc;
 		        $scope.markers[marker.id] = marker;
                 
-		        google.maps.event.addListener(marker, 'click', function() {
-		        	
+		        google.maps.event.addListener(marker, 'click', function(e) {
+
 			        $scope.markernow = marker;
 
 			        $scope.currentcourt = Court.get({id : marker.id});
-			        console.log($scope.currentcourt);
 			        
 			        //Open court's detail when user clicks on marker
 			        $scope.expanded=true;
@@ -67,7 +67,7 @@ angular.module('keepballin')
 	   				
 	              	infowindow.setContent(infoContent);
 	              	infowindow.open($scope.map, marker);
-		            $scope.map.panTo({lat: courts.lat, lng: courts.long});
+		            $scope.map.panTo({lat: e.latLng.lat(), lng: e.latLng.lng()});
                   	$scope.$apply(function(){
                    		$compile(document.getElementById('infoWin_' +marker.id))($scope);
                 	});
@@ -76,6 +76,7 @@ angular.module('keepballin')
 
 
 			$scope.$watchCollection('courts', function(newVal, oldVal) {
+		
 				if (newVal && newVal.length) {
 					//Clean up the old markers
 					for (var j=0; j < oldVal.length; j++) {
@@ -86,7 +87,6 @@ angular.module('keepballin')
 					for(var i=0; i < newVal.length; i ++) {
 						createMarker(newVal[i]);
 					}
-					console.log('made new markers');
 				}
 			}, true);
 		}

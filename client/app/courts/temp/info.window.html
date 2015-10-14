@@ -28,6 +28,6 @@
 		</button>
 	</h5>
 </div>
-<button ng-show="isAdmin" class="btn-danger pull-left" ng-click="deletemarker(markernow.id)">
+<button ng-show="isAdmin || isManager" class="btn-danger pull-left" ng-click="deletemarker(markernow.id)">
 	<span class="glyphicon glyphicon-trash"></span>
 </button>

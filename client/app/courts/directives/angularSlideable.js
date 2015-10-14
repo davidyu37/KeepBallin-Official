@@ -48,7 +48,7 @@ angular.module('keepballin')
                 
                 if($scope.expanded) {
                     
-                    var defaultHeight = 200;
+                    var defaultHeight = 215;
                     target.style.height = defaultHeight + 'px';
                     button.style.bottom = (defaultHeight - 50) + 'px'; 
                     

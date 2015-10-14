@@ -95,6 +95,7 @@
 
 .detail-inner {
     margin-top: 15px;
+    padding-bottom: 15px;
 }
 
 /* Edit page stuff starts here */
@@ -355,4 +356,9 @@
     overflow-y: scroll;
 }
 
+/* Court search box */
+.advancedSearchBox .search-parameter-input {
+    width: 90%;
+    height: auto;
+}
 

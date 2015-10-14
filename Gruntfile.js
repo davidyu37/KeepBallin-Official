@@ -8,7 +8,7 @@ module.exports = function (grunt) {
   } catch(e) {
     localConfig = {};
   }
-
+  
   // Load grunt tasks automatically, when needed
   require('jit-grunt')(grunt, {
     express: 'grunt-express-server',
