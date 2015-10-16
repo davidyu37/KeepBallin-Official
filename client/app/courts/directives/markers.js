@@ -67,7 +67,10 @@ angular.module('keepballin')
 	   				
 	              	infowindow.setContent(infoContent);
 	              	infowindow.open($scope.map, marker);
-		            $scope.map.panTo({lat: e.latLng.lat(), lng: e.latLng.lng()});
+	              	//Pan to center if it's desktop
+	              	if(screen.width > 480) {
+			            $scope.map.panTo({lat: e.latLng.lat(), lng: e.latLng.lng()});
+				    };
                   	$scope.$apply(function(){
                    		$compile(document.getElementById('infoWin_' +marker.id))($scope);
                 	});

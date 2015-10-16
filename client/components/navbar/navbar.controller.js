@@ -2,7 +2,11 @@
 
 angular.module('keepballin')
   .controller('NavbarCtrl', ['$scope', '$window', '$location', 'Auth', 'Scroll', function ($scope, $window, $location, Auth, Scroll) {
-    Scroll.scrollInit();
+    
+    if(screen.width > 480) {
+      Scroll.scrollInit();
+    };
+
     $scope.menu = [{
       'title': '首頁',
       'link': '/',

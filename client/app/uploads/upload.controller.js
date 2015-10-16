@@ -9,6 +9,7 @@ angular.module('keepballin')
         $scope.slides = [];
         $scope.getPicture(args.newId);
     });
+
     //socket.io instant updates
     socket.syncUpdates('upload', $scope.slides);
     $scope.$on('$destroy', function () {

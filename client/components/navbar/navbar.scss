@@ -32,13 +32,13 @@
 /* overwrite the default colors for .navbar inverse*/
 .navbar-inverse .navbar-nav > li > a {
   color: black;
-  -webkit-transition: all linear 0.3s;
-  transition: all linear 0.3s;
   @media screen and (min-width: $screen-sm-min) {
     padding-top: 20px;
     height: 60px;
     font-size: 150%;
     text-align: center;
+    -webkit-transition: all linear 0.3s;
+    transition: all linear 0.3s;
     
   }
   &:hover {
