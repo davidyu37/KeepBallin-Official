@@ -5,7 +5,7 @@ angular.module('keepballin')
     
     if(screen.width > 480) {
       Scroll.scrollInit();
-    };
+    }
 
     $scope.menu = [{
       'title': '首頁',

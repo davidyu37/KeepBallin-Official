@@ -47,7 +47,7 @@ angular.module('keepballin')
 			}
 		};
 		//callback function that handles the errors
-		function handleNoGeolocation(errorFlag, map) {
+		function handleNoGeolocation(errorFlag) {
 			var content = '';
 		  if (errorFlag) {
 		    content = '請解除瀏覽器封鎖';

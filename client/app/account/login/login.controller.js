@@ -26,8 +26,8 @@ angular.module('keepballin')
           SweetAlert.swal({
             title: err.message,
             type: 'warning',
-            confirmButtonColor: "#DD6B55",   
-            confirmButtonText: "再試一次",
+            confirmButtonColor: '#DD6B55',   
+            confirmButtonText: '再試一次',
             timer: 2000
           });
         });

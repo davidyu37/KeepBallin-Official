@@ -67,7 +67,10 @@
           <div class="bubble">
           <p class="pull-right">{{comment.date | date:'short'}}</p>
             <h5>
-              {{comment.author.name}}&nbsp說:
+              <a ui-sref="profile({id: comment.author._id})">
+                {{comment.author.name}}
+              </a>
+              &nbsp說:
             </h5>
             <p>{{ comment.content }}</p>
           </div>

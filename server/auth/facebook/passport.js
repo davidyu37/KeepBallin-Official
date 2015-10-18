@@ -10,10 +10,10 @@ exports.setup = function (User, config) {
       'displayName',
       'profileUrl',
       'email'
-      ]
+      ], 
+      passReqToCallback: true
     },
-    function(accessToken, refreshToken, profile, done) {
-      console.log(profile);
+    function(req, accessToken, refreshToken, profile, done) {
       User.findOne({
         'facebook.id': profile.id
       },
@@ -21,7 +21,6 @@ exports.setup = function (User, config) {
         if (err) {
           return done(err);
         }
-        
         if (!user) {
           user = new User({
             name: profile.displayName,

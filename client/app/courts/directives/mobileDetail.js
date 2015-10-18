@@ -51,8 +51,7 @@ angular.module('keepballin')
                     htmlTag.classList.add('noscroll');
                     inner.classList.add('scroll');
         
-                    var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-                    var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+                    var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
                     target.style.height = h + 'px';
                     button.style.bottom = (h - 50) + 'px'; 

@@ -47,7 +47,7 @@ angular.module('keepballin')
 			                deferred.resolve(results[0]);
 
 			            } else {
-			            	deffered.reject(alert('沒住址'));
+			            	deferred.reject(console.log('沒住址'));
 			            }
 			        } else {
 			        	console.log('error');

@@ -1,0 +1,24 @@
+<div ng-controller="ProCtrl">
+  <p>方便其他球友找尋您</p>
+  <p class="text-muted">按住Shift可複選</p>
+  <form class="form" name="form" ng-submit="changePro(form)" novalidate>
+    <div class="input-group input-group-lg">
+      <span class="input-group-addon">職業</span>
+      <select multiple name="profession" class="form-control" aria-describedby="choose profession" ng-model="user.profession">
+        <option value="球員">球員</option>
+        <option value="教練">教練</option>
+        <option value="訓練師">訓練師</option>
+        <option value="球隊經理">球隊經理</option>
+        <option value="活動企劃">活動企劃</option>
+        <option value="攝影師">攝影師</option>
+        <option value="球探">球探</option>
+        <option value="裁判">裁判</option>
+        <option value="隊長">隊長</option>
+        <option value="球場管理者">球場管理者</option>
+        <option value="其它">其它</option>
+      </select>
+    </div>
+    <p class="help-block"> {{ message }} </p>
+    <button class="btn btn-sm btn-primary" type="submit">儲存</button>
+  </form>
+</div>

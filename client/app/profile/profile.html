@@ -2,8 +2,15 @@
 	<header class="jumbotron">
 		<div class="row">
 			<div class="col-sm-4 alight-left">
-					<h2>{{profile.name}}</h2>
-					<img class="profilePicBox thumbnail" ng-src="{{profile.avatar}}" alt="">
+				<img class="profilePicBox thumbnail" ng-show="!profile.avatar.url && !profile.fbprofilepic" ng-src="assets/images/profile/profile.jpg" alt="{{comment.author.name}}">
+	            <img ng-hide="!profile.avatar.url" class="avatar img-rounded" ng-src="{{profile.avatar.url}}" alt="avatar">
+	            <img ng-hide="!profile.fbprofilepic" class="avatar img-rounded" ng-src="{{profile.fbprofilepic}}" alt="avatar">
+			</div>
+			<div class="col-sm-8">
+				<h1>{{profile.name}}
+					<span ng-hide="!profile.jerseynumber" class="label label-primary">#{{profile.jerseynumber}}</span>
+				</h1>
+				<p>{{profile.position}}</p>
 			</div>
 
 

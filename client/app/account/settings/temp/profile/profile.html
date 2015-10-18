@@ -15,6 +15,21 @@
 </div>
 <div class="col-sm-8">
   <accordion close-others="true">
+    <accordion-group is-open="prof.open">
+      <accordion-heading>
+        <div class="clearfix">
+          <div class="pull-left">
+            職業:&nbsp
+          </div>
+          <div ng-repeat="pro in userNow.profession track by $index">
+            <span class="professionBadge">{{pro}}</span>
+          </div>
+          <i class="fa pull-right accordHead" ng-class="{'fa-bars': prof.open, 'fa-money': !prof.open}">
+          </i>
+        </div>
+      </accordion-heading>
+      <div ng-include="'app/account/settings/temp/profile/profile.accordion/profession.html'"></div>
+    </accordion-group>
     <!-- Player name -->
     <accordion-group is-open="name.open">
       <accordion-heading>姓名:&nbsp{{userNow.name}}

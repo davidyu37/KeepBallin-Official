@@ -8,6 +8,7 @@ var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');
 var User = require('../api/user/user.model');
 var validateJwt = expressJwt({ secret: config.secrets.session });
+var _ = require('lodash');
 
 /**
  * Attaches the user object to the request if authenticated
@@ -35,6 +36,8 @@ function isAuthenticated() {
     });
 }
 
+
+
 /**
  * Checks if the user role meets the minimum requirements of the route
  */
@@ -52,6 +55,63 @@ function hasRole(roleRequired) {
       }
     });
 }
+
+/**
+ * If there is a user, appends it to the req
+ * else req.user would be undefined
+ */
+
+ function appendUser() {
+  return compose()
+  // Attach user to request
+  .use(function(req, res, next) {
+      validateJwt(req, res, function(val) {
+          if(_.isUndefined(val)) {
+              User.findById(req.user._id, function(err, user) {
+                  if(err) {
+                      return next(err);
+                  } else if(!user) {
+                      req.user = undefined;
+                      return next();
+                  } else {
+                      req.user = user;
+                      next();
+                  }
+              });
+          } else {
+              req.user = undefined;
+              next();
+          }
+      });
+  });
+}
+
+function applyVip() {
+    return compose()
+      .use(function(req, res, next) {
+          if(req.query) {
+            req.vip = req.query.Vip;
+            next();
+          }
+      });
+}
+
+
+/**
+ * Takes the token cookie and adds the header
+ * for it on the request
+ */
+function addAuthHeaderFromCookie() {
+    return compose()
+        .use(function(req, res, next) {
+            if(req.cookies.token) {
+                req.headers.authorization = 'Bearer ' + _.trim(req.cookies.token, '\"');
+            }
+            return next();
+        });
+}
+
+
 
 /**
  * Returns a jwt token signed by the app secret
@@ -74,3 +134,6 @@ exports.isAuthenticated = isAuthenticated;
 exports.hasRole = hasRole;
 exports.signToken = signToken;
 exports.setTokenCookie = setTokenCookie;
+exports.appendUser = appendUser;
+exports.addAuthHeaderFromCookie = addAuthHeaderFromCookie;
+exports.applyVip = applyVip;

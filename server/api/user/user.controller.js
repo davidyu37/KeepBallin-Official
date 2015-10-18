@@ -48,7 +48,6 @@ exports.search = function(req, res) {
 exports.create = function (req, res, next) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
-  console.log(req.body.toVip);
   if (req.body.toVip) {
     newUser.role = 'vip'
   } else {
@@ -168,7 +167,6 @@ exports.me = function(req, res, next) {
 
 /* Get user by id */
 exports.getUser = function(req, res, next) {
-  console.log(req.params.id);
   var userId = req.params.id;
   User.findOne({
     _id: userId

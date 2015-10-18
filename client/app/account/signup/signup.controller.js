@@ -12,7 +12,7 @@ angular.module('keepballin')
     policy += '<li>如有任何惡意行為，KeepBallin保有暫時停止球場管理員之權利．</li>';
     policy += '<li>成為球場管理員同時，您同意提供正確並妥當的球場資訊，</li>';
     policy += '<li>其他球場管理員擁有同樣權利能編輯您創造的球場地點</li>';
-    policy += '<li>球場管理員並無任何法律上定義上的土地或不動產擁有權</li>'
+    policy += '<li>球場管理員並無任何法律上定義上的土地或不動產擁有權</li>';
     policy += '</ol>';
 
     $scope.explain = function() {
