@@ -1,6 +1,11 @@
 <div class="col-sm-12" ng-controller="InfoCtrl">
   <form class="form" name="form" ng-submit="changeDetail(form)" novalidate>
     <div class="form-group">
+      <div class="form-group">
+        <label for="intro">自我介紹</label>
+        <textarea type="text" class="form-control" ng-model="user.intro" row="3">
+        </textarea>
+      </div>
       <label for="position">出生日期</label>
       <p class="input-group">
         <input type="date" class="form-control" datepicker-popup ng-model="convertedDate" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />

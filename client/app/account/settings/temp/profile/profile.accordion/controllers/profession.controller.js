@@ -6,9 +6,10 @@ angular.module('keepballin')
     $scope.changePro = function(form) {
       $scope.submitted = true;
       if(form.$valid) {
-        Auth.changeDetail($scope.user)
+        Auth.changePro($scope.user)
         .then( function() {
           $scope.message = '更新成功';
+          $scope.user = Auth.getCurrentUser();
         })
         .catch( function() {
           $scope.errors.other = '更新失敗';

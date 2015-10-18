@@ -114,6 +114,16 @@ angular.module('keepballin')
         }).$promise;
       },
 
+      changePro: function(newData, callback) {
+        var cb = callback || angular.noop;
+        
+        return User.changePro({ id: currentUser._id }, newData ,function(user) {
+          return cb(user);
+        }, function(err) {
+          return cb(err);
+        }).$promise;
+      },
+
       /**
        * Gets all available info on authenticated user
        *

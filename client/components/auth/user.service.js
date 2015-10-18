@@ -12,21 +12,32 @@ angular.module('keepballin')
           controller:'password'
         }
       },
+
       changeAvatar: {
         method: 'PUT',
         params: {
           controller: 'avatar'
         }
       },
+
       changeDetail: {
         method: 'PUT',
       },
+
+      changePro: {
+        method: 'PUT',
+        params: {
+          controller: 'pro'
+        }
+      },
+
       changeRole: {
         method: 'PUT',
         params: {
           controller: 'changerole'
         }
       },
+
       get: {
         method: 'GET',
         params: {

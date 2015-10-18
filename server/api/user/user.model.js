@@ -17,6 +17,7 @@ var UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Team'
   },
+  intro: String,
   profession: [String],
   open: {type: Boolean, default: false},
   position: String,
@@ -42,6 +43,8 @@ var UserSchema = new Schema({
   createdOn: { type: Date, default: Date.now },
   courtCreated: [{ type:Schema.ObjectId, ref:"Court" }]
 });
+
+UserSchema.set('versionKey', false);
 
 /**
  * Virtuals

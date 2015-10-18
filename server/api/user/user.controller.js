@@ -120,6 +120,26 @@ exports.changeAvatar = function(req, res, next) {
   });
 };
 
+// Update user's profession
+
+exports.changePro = function(req, res, next) {
+  var userId = req.user._id;
+  if(req.body._id) { delete req.body._id; }
+  User.findById(userId, function (err, user) {
+    if (err) { return handleError(res, err); }
+    if(!user) { return res.status(404).send('Not Found'); }
+    //New profession
+    user.profession = req.body.profession;
+    var updated = user;
+    //markModified is necessary for array
+    updated.markModified('profession');
+    updated.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.status(200).json(user);
+    });
+  });
+}
+
 /* Update the user's detail */
 
 exports.changeDetail = function(req, res, next) {
@@ -185,5 +205,6 @@ exports.authCallback = function(req, res, next) {
 };
 
 function handleError(res, err) {
+  console.log(err);
   return res.status(500).send(err);
 }
