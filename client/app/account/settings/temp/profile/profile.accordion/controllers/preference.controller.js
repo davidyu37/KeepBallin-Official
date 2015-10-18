@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('PreferenceCtrl', ['$scope', 'User', 'Auth', function ($scope, User, Auth) {
+  .controller('PreferenceCtrl', ['$scope', 'User', 'Auth', '$timeout', function ($scope, User, Auth, $timeout) {
   	$scope.user = Auth.getCurrentUser();
 
     /* Selections for positions on preference.html */
@@ -19,6 +19,10 @@ angular.module('keepballin')
         Auth.changeDetail($scope.user)
         .then( function() {
           $scope.message = '更改成功';
+          $timeout(function() {
+            $scope.message = '';
+          }, 2000);
+          $scope.submitted = false;
         })
         .catch( function() {
           $scope.message = '';

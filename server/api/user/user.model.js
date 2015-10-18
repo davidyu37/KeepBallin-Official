@@ -22,6 +22,7 @@ var UserSchema = new Schema({
   open: {type: Boolean, default: false},
   position: String,
   jerseynumber: Number,
+  experience: Number,
   height: Number,
   weight: Number,
   birthday: Date,

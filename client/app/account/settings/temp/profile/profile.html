@@ -1,4 +1,5 @@
 <div class="col-sm-4" ng-controller="uploadCtrl">
+  <h2>{{userNow.name}}，你好</h2>
   <div class="profilePicOverlay" ng-mouseover="showOverlay=true" ng-mouseleave="showOverlay=false" ng-hide="loading">
     <img class="img-responsive thumbnail" ng-src="{{profilenow}}" alt="你的相片">
     <i ngf-select="uploadprofile(newpic)" ng-model="newpic" ng-show="showOverlay" class="glyphicon glyphicon-camera glyph-overlay" ngf-max-size="10MB" ngf-resize="{width: 100, height: 100}"></i>
@@ -14,6 +15,9 @@
   </div>
 </div>
 <div class="col-sm-8">
+  <div class="page-header">
+    
+  </div>
   <accordion close-others="true">
     <accordion-group is-open="prof.open">
       <accordion-heading>
@@ -69,9 +73,8 @@
       </accordion-heading>
       <div ng-include="'app/account/settings/temp/profile/profile.accordion/info.html'"></div>
     </accordion-group>
-
-    
-    
   </accordion>
-  
+  <a ui-sref="profile({id: userNow._id})">
+    前往個人檔案
+  </a>
 </div>

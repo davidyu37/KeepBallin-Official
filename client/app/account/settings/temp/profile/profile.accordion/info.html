@@ -16,11 +16,15 @@
     </div>
     <div class="form-group">
     	<label for="height">身高</label>
-    	<input type="number" class="form-control" ng-model="user.height">
+    	<input  min="1" type="number" class="form-control" ng-model="user.height">
     </div>
     <div class="form-group">
       <label for="weight">體重</label>
-      <input type="number" class="form-control" ng-model="user.weight">
+      <input min="1" type="number" class="form-control" ng-model="user.weight">
+    </div>
+    <div class="form-group">
+      <label for="experience">球齡</label>
+      <input min="1" type="number" class="form-control" ng-model="user.experience">
     </div>
     <p class="help-block"> {{ message }} </p>
     <button class="btn btn-sm btn-primary" type="submit">儲存</button>

@@ -1,20 +1,41 @@
 <div class="container spaceFromTop">
 	<header class="jumbotron">
 		<div class="row">
-			<div class="col-sm-4 alight-left">
-				<img class="profilePicBox thumbnail" ng-show="!profile.avatar.url && !profile.fbprofilepic" ng-src="assets/images/profile/profile.jpg" alt="{{comment.author.name}}">
-	            <img ng-hide="!profile.avatar.url" class="avatar img-rounded" ng-src="{{profile.avatar.url}}" alt="avatar">
-	            <img ng-hide="!profile.fbprofilepic" class="avatar img-rounded" ng-src="{{profile.fbprofilepic}}" alt="avatar">
+			<div class="col-sm-4">
+				<img class="img-responsive" ng-show="!profile.avatar.url && !profile.fbprofilepic" ng-src="assets/images/profile/profile.jpg" alt="{{comment.author.name}}">
+	            <img ng-hide="!profile.avatar.url" class="img-responsive" ng-src="{{profile.avatar.url}}" alt="avatar">
+	            <img ng-hide="!profile.fbprofilepic" class="img-responsive" ng-src="{{profile.fbprofilepic}}" alt="avatar">
 			</div>
 			<div class="col-sm-8">
-				<h1>{{profile.name}}
+				<h1 style="margin-top: 0px;">{{profile.name}}
 					<span ng-hide="!profile.jerseynumber" class="label label-primary">#{{profile.jerseynumber}}</span>
 				</h1>
-				<p>{{profile.profession}}</p>	
-				<p>{{profile.position}}</p>
+				<div>
+					<p style="margin-top: 30px;">{{profile.position}}</p>
+					<p>身高: {{profile.height}} cm</p>
+					<p>體重: {{profile.weight}} kg</p>
+					<p>球齡: {{profile.experience}}年</p>
+				</div>	
 			</div>
-
-
 		</div>
 	</header>
+	<hr>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">{{profile.name}}的職業</h3>
+			  </div>
+			  <div class="panel-body">
+			    <ul class="list-group">
+			    	<li class="list-group-item" ng-repeat="job in profile.profession">{{job}}</li>
+			    </ul>
+			  </div>
+			</div>
+		</div>
+		<div class="col-sm-8">
+			<h3 style="margin-top: 0px;">自我介紹</h3>
+			<p>{{profile.intro}}</p>
+		</div>
+	</div>
 </div>

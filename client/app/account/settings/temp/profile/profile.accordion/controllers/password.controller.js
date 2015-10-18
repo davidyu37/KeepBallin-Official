@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('PasswordCtrl', ['$scope', 'User', 'Auth', function ($scope, User, Auth) {
+  .controller('PasswordCtrl', ['$scope', 'User', 'Auth', '$timeout', function ($scope, User, Auth, $timeout) {
   	$scope.changePassword = function(form) {
       $scope.submitted = true;
       if(form.$valid) {
@@ -9,6 +9,11 @@ angular.module('keepballin')
         .then( function() {
           $scope.message = '密碼更新成功';
           $scope.user = {};
+          $timeout(function() {
+            $scope.message = '';
+          }, 2000);
+          $scope.submitted = false;
+
         })
         .catch( function() {
           form.password.$setValidity('mongoose', false);
