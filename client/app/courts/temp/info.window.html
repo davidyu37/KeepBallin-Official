@@ -1,13 +1,13 @@
 <h2>{{currentcourt.court}}</h2>
 <div ng-controller="ratingCtrl">
 	<rating 
-	ng-model="rate" 
+	ng-model="currentcourt.averagedRating" 
 	max="max" 
 	readonly="isReadonly" 
 	on-hover="hoveringOver(value)" 
 	on-leave="overStar = null" 
 	titles="['不要去','有瑕疵','不錯', '很好打', '極品']" 
-	ng-click="sendRate(rate)"></rating>
+	ng-click="sendRate(currentcourt.averagedRating)"></rating>
 </div>
 <div class="infoWindowContent">
 	<h5 ng-hide="showAddress">{{currentcourt.city}}

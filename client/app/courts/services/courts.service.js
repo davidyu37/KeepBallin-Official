@@ -11,8 +11,7 @@ angular.module('keepballin')
         method: 'GET',
         params: {
           controller: 'ratings'
-        },
-        isArray: true
+        }
       },
       search: {
         method: 'GET',

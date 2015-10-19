@@ -29,6 +29,7 @@ var CourtSchema = new Schema({
   bench: Boolean,
   rent: Boolean,
   rentprice: Number,
+  averagedRating: Number,
   ratings: [{
     type: Schema.ObjectId, 
     ref: 'Rating'
@@ -49,8 +50,7 @@ CourtSchema.plugin(relationship, { relationshipPathName:'creator' });
 
 CourtSchema.statics = {
   getRatings: function(courtID, cb) {
-    this.find({_id: courtID})
-      .select('ratings')
+    this.findOne({_id: courtID})
       .populate({path:'ratings', select: 'rate'})
       .exec(cb);
   },

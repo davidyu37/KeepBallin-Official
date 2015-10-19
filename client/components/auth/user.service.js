@@ -45,8 +45,18 @@ angular.module('keepballin')
         }
       },
 
+      getMyCourt: {
+        method: 'GET',
+        params: {
+          id: 'mycourt'
+        }
+      },
+
       getUser: {
-        method: 'GET'
+        method: 'GET',
+        params: {
+          controller: 'who'
+        }
       },
       // Manager get only vip and users
       managerGet: {

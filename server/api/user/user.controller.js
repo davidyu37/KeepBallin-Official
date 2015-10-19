@@ -34,6 +34,16 @@ exports.index = function(req, res) {
   });
 };
 
+//Get the courts related to the user
+exports.getMyCourt = function(req, res, next) {
+  var userId = req.user._id;
+  User.getMyCourt(userId, function(err, user) {
+    if (err) return next(err);
+    if (!user) return res.status(401).send('Unauthorized');
+    res.json(user);
+  })
+};
+
 //Search params
 exports.search = function(req, res) {
   User.managerSearch(function (err, users) {
@@ -65,11 +75,10 @@ exports.create = function (req, res, next) {
  */
 exports.show = function (req, res, next) {
   var userId = req.params.id;
-
   User.findById(userId, function (err, user) {
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
-    res.json(user.profile);
+    res.json(user);
   });
 };
 
@@ -186,16 +195,16 @@ exports.me = function(req, res, next) {
 };
 
 /* Get user by id */
-exports.getUser = function(req, res, next) {
-  var userId = req.params.id;
-  User.findOne({
-    _id: userId
-  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
-    if (err) return next(err);
-    if (!user) return res.status(401).send('Unauthorized');
-    res.json(user);
-  });
-};
+// exports.getUser = function(req, res, next) {
+//   var userId = req.params.id;
+//   User.findOne({
+//     _id: userId
+//   }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
+//     if (err) return next(err);
+//     if (!user) return res.status(401).send('Unauthorized');
+//     res.json(user);
+//   });
+// };
 
 /**
  * Authentication callback

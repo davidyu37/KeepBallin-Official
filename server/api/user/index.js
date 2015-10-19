@@ -11,8 +11,8 @@ router.post('/', controller.create);
 router.get('/', auth.hasRole('admin'), controller.index);
 router.get('/search', auth.hasRole('manager'), controller.search);
 router.get('/me', auth.isAuthenticated(), controller.me);
-router.get('/:id', controller.getUser);
-router.get('/:id', auth.isAuthenticated(), controller.show);
+router.get('/:id/who', auth.isAuthenticated(), controller.show);
+router.get('/mycourt', auth.isAuthenticated(), controller.getMyCourt);
 
 router.put('/:id/changerole', auth.hasRole('manager'), controller.changeRole);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);

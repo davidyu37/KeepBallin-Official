@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Rating = require('./rating.model');
+var Court = require('../court/court.model');
 
 // Get list of ratings
 exports.index = function(req, res) {
@@ -22,7 +23,7 @@ exports.show = function(req, res) {
 
 // Creates a new rating in the DB.
 exports.create = function(req, res) {
-  
+
   var conditions = { $and:[{court: req.body.court}, {user: req.user._id}]},
       update = { 
         user: req.user._id,
@@ -49,13 +50,37 @@ exports.create = function(req, res) {
         if (err) { return handleError(res, err); }
         doc.remove(function() {
           newRating.save(function(err, data) {
-            return res.status(201).json(data);
+            Court.getRatings(req.body.court, function(err, rates) {
+              var average = averageRate(rates);
+              rates.averagedRating = average;
+              rates.save();
+              return res.status(201).json(average);
+            });
           });
         });
       });
     } else {
-      return res.status(201).json(update);
+      Court.getRatings(req.body.court, function(err, rates) {
+        var average = averageRate(rates);
+        rates.averagedRating = average;
+        rates.save();
+        return res.status(201).json(average);
+      });
     }
+  }
+
+  function averageRate(data) {
+      var allRates = data.ratings;
+      if(allRates.length === 0) {
+        return;
+      } else {
+        var total = 0;
+        for(var i=0; i < allRates.length; i++) {
+          total += allRates[i].rate;
+        }
+        var average = total / allRates.length;
+        return average;
+      }
   }
 };
 

@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 var relationship = require('mongoose-relationship');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var UserSchema = new Schema({
   name: String,
@@ -172,6 +173,20 @@ UserSchema.methods = {
   }
 };
 
+UserSchema.plugin(deepPopulate, {
+  populate: {
+    'courtRatings.court': {
+      select: 'court address'
+    },
+    'courtRatings': {
+      select: 'rate court'
+    },
+    'courtCreated': {
+      select: 'court address averagedRating'
+    }
+  }
+});
+
 UserSchema.statics = {
   findByIdAndPopulate: function(userId, cb) {
     this.findOne({_id: userId})
@@ -184,6 +199,14 @@ UserSchema.statics = {
     .populate({path:'avatar', select: 'url date'})
     .select('-salt -hashedPassword')
     .exec(cb);
+  }, 
+  getMyCourt: function(userId, cb) {
+    this.findOne({_id: userId})
+      // .populate('courtCreated courtRatings')
+      // .select('name courtRatings courtCreated')
+      .deepPopulate('courtRatings.court courtCreated')
+      .select('name courtRatings courtCreated')
+      .exec(cb);
   }
 };
 
