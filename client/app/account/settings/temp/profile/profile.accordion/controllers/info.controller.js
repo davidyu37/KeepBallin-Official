@@ -4,13 +4,19 @@ angular.module('keepballin')
   .controller('InfoCtrl', ['$scope', 'User', 'Auth', '$timeout', function ($scope, User, Auth, $timeout) {
   	$scope.user = Auth.getCurrentUser();
     
-    $scope.status = {
-        opened: false
-    };
+    $scope.opened = false;
     
-    $scope.open = function() {
-        $scope.status.opened = true;
+    $scope.open = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $scope.opened = true;
     };
+
+    $scope.dateOptions = {
+      formatYear: 'yyyy',
+      startingDay: 1
+    };
+
    	// Datepicker directive expects a Date object, give it
     if($scope.user.birthday) {
       $scope.convertedDate = new Date($scope.user.birthday);

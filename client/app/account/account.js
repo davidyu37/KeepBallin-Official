@@ -43,7 +43,7 @@ app.config(function ($stateProvider) {
 });
 
 /**
- * Use a run block to ensure the modal will open from anywhere in the app.
+ * Use a run block to ensure the uibModal will open from anywhere in the app.
  **/
 app.run(function ($rootScope, $modal) {
   /**

@@ -5,7 +5,7 @@ var court = require('./court.model');
 
 // Get list of courts
 exports.index = function(req, res) {
-  court.find(function (err, courts) {
+  court.findAndPopulate(function (err, courts) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(courts);
   });

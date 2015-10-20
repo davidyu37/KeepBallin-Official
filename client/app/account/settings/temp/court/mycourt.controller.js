@@ -13,7 +13,6 @@ angular.module('keepballin')
 			$scope.ratedCourts= sorted;
 		}
 		if(userData.courtCreated) {
-			console.log(userData.courtCreated);
 			$scope.courtCreated = userData.courtCreated;
 		}
 	});

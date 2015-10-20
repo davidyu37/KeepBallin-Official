@@ -31,7 +31,7 @@ angular.module('keepballin')
 				$scope.markers[oldVal._id].setMap(null);
 			}
 			
-			function createMarker(courts) {
+			function createMarker(court) {
 
 				var image = {
 				  url: '../assets/images/basket.png',
@@ -43,22 +43,24 @@ angular.module('keepballin')
 
 				var marker = new google.maps.Marker({
 		            map: $scope.map,
-		            position: new google.maps.LatLng(courts.lat, courts.long),
-		            title: courts.court,
-		            id: courts._id,
+		            position: new google.maps.LatLng(court.lat, court.long),
+		            title: court.court,
+		            id: court._id,
 		            icon: image, 
 		            animation: google.maps.Animation.DROP
 		        });
 
-		        marker.content = courts.desc;
+		        marker.content = court.desc;
 		        $scope.markers[marker.id] = marker;
                 
 		        google.maps.event.addListener(marker, 'click', function(e) {
 
 			        $scope.markernow = marker;
 
-			        $scope.currentcourt = Court.get({id : marker.id});
-			        
+			        $scope.currentcourt = court;
+
+			        console.log(court);
+
 			        //Open court's detail when user clicks on marker
 			        $scope.expanded=true;
 
@@ -75,6 +77,7 @@ angular.module('keepballin')
                    		$compile(document.getElementById('infoWin_' +marker.id))($scope);
                 	});
 	        	});//Events listener ends here
+
 			}//createMarker fn ends here
 
 

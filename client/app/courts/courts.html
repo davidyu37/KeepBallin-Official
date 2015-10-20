@@ -47,25 +47,24 @@
     <div id="detail" class="court-detail slideable" ng-show="currentcourt">
         <div class="row detail-inner">
             <!-- Picture Area -->
-            <div 
-            ng-controller="uploadCtrl">             
+            <div>             
                 <div 
-                ng-show="slides[0]"
+                ng-show="currentcourt.pictures[0]"
                 ng-mouseover="hovered=true" 
                 ng-mouseleave="hovered=false" 
                 class="picture-area" 
                 ng-class="{'col-sm-12': hovered, 'col-sm-3': !hovered}">
                     <div class="wrapper">
                         <div ng-hide="hovered" class="singleImage">
-                            <img ng-src="{{slides[0].url}}">
+                            <img ng-src="{{currentcourt.pictures[0].url}}">
                         </div>
-                        <div ng-show="hovered" ng-repeat="slide in slides" class="carousel">
+                        <div ng-show="hovered" ng-repeat="picture in currentcourt.pictures" class="courtPicture">
                             <div>
                                 <a style="cursor: pointer;" ng-click="openLightboxModal($index)">
-                                    <img ng-src="{{slide.url}}">
+                                    <img ng-src="{{picture.url}}">
                                 </a>
                                 <button class="picDeleteBtn" 
-                                ng-click="deletePic(slide)"
+                                ng-click="deletePic(picture)"
                                 ng-show="isAdmin || isManager">
                                     <span class="glyphicon glyphicon-trash">
                                     </span>
@@ -74,7 +73,7 @@
                         </div> 
                     </div>
                 </div>
-                <div class="col-sm-3" ng-show="!slides.length">
+                <div class="col-sm-3" ng-show="!currentcourt.pictures.length">
                     <p class="picPlaceholder text-center">目前還沒有照片</p>
                     <img class="img-responsive" src="assets/images/courtpicplaceholder.png">
                 </div>

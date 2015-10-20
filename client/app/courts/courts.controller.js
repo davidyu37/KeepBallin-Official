@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('keepballin')
-	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth',  
-		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth) {
+	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', 'Download',  
+		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, Download) {
 	    
 		//Initialize map
 	    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -80,9 +80,32 @@ angular.module('keepballin')
 	    $scope.infowindow = new google.maps.InfoWindow();
 	    //Store courts from api
 	    $scope.courts = [];
-	    $scope.courts = Court.query(function(){
-	    	console.log('Courts loaded');
+	    $scope.courts = Court.query(function(data){
+	    	// console.log('Courts loaded', data);
 	    });
+
+	    //Lightbox
+	    $scope.openLightboxModal = function (index) {
+	        Lightbox.openModal($scope.currentcourt.pictures, index);
+	    };
+	    //Update courts when pictures uploaded
+	    $scope.$on('courtPicUploaded', function() {
+	    	$scope.courts = Court.query();
+	    });
+
+	    //Delete picture
+	    $scope.deletePic = function(pic) {
+	        var check = $window.confirm('確定要刪掉這張照片嗎？');
+	        if (check) {   
+	            Download.delete({ id: pic._id }, function(){
+	 				//sync $scope.courts from db
+	 				$scope.courts = Court.query();
+	            });
+	        } else {
+	           return;
+	        }
+	    };
+
 	    //socket.io instant updates
 	    socket.syncUpdates('court', $scope.courts);
 		$scope.$on('$destroy', function () {
@@ -117,7 +140,7 @@ angular.module('keepballin')
     	$scope.editmode = function(court) {
     		$scope.edit = !($scope.edit);
     		if(court) {
-    			console.log(court);
+    			// console.log(court);
     			Court.update({ id: court._id }, court);
     		}
     	};
@@ -129,20 +152,6 @@ angular.module('keepballin')
     	//Prevent the edit page from closing when clicking one the form
     	$scope.stopPropagate = function(event) {
     		event.stopPropagation();
-    	};
-
-    	//Logic for marker editing
-    	$scope.finishedit = function(marker) {
-    		console.log(marker);	
-    		//Grab the court data according to its id
-    		if(marker) {
-    			var updated = Court.get({ id: marker.id });
-    			updated.court = marker.title;
-    			updated.desc = marker.content;
-    			console.log(updated);
-    			Court.update({ id: marker.id }, updated);
-    		}
-    		
     	};
 
     	//Options for the hours

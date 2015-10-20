@@ -1,1 +1,17 @@
-.angular-google-map-container { height: 400px; }
+.myCourtPic {
+	.carousel-control {
+		display: none;
+	}
+	.carousel-indicators {
+		display: none;
+	}
+	.carousel-inner {
+		height: 300px;
+	}
+}
+
+.ratedCourts {
+	height: 500px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}

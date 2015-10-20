@@ -3,7 +3,8 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId,
-    relationship = require("mongoose-relationship");
+    relationship = require("mongoose-relationship"),
+    deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var CourtSchema = new Schema({
   country: {type: String, default: 'Taiwan'},
@@ -42,11 +43,32 @@ var CourtSchema = new Schema({
   lastEditedBy: {
     type: Schema.ObjectId,
     ref: 'User'
-  }
+  },
+  pictures: [{
+    type: Schema.ObjectId,
+    ref: 'Upload'
+  }]
 });
 
 //Record the creator of the court
 CourtSchema.plugin(relationship, { relationshipPathName:'creator' });
+
+CourtSchema.plugin(deepPopulate, {
+  populate: {
+    'pictures.user': {
+      select: 'name'
+    },
+    'pictures': {
+      select: 'url user'
+    },
+    'creator': {
+      select: 'name'
+    },
+    'lastEditedBy': {
+      select: 'name'
+    }
+  }
+});
 
 CourtSchema.statics = {
   getRatings: function(courtID, cb) {
@@ -67,7 +89,14 @@ CourtSchema.statics = {
       }
     }
     this.find(query)
+      .deepPopulate('pictures.user pictures creator lastEditedBy')
       .exec(cb);
+  },
+  //Populate all but individual ratings
+  findAndPopulate: function(cb) {
+    this.find()
+    .deepPopulate('pictures.user pictures creator lastEditedBy')
+    .exec(cb);
   }
 };
 // $** wildcard text search

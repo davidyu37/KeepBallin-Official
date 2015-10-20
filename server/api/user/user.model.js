@@ -175,14 +175,20 @@ UserSchema.methods = {
 
 UserSchema.plugin(deepPopulate, {
   populate: {
-    'courtRatings.court': {
-      select: 'court address'
-    },
     'courtRatings': {
       select: 'rate court'
     },
+    'courtRatings.court': {
+      select: 'court address pictures'
+    },
+    'courtRatings.court.pictures': {
+      select: 'url'
+    },
+    'courtCreated.pictures': {
+      select: 'url'
+    },
     'courtCreated': {
-      select: 'court address averagedRating'
+      select: 'court address averagedRating pictures'
     }
   }
 });
@@ -204,7 +210,7 @@ UserSchema.statics = {
     this.findOne({_id: userId})
       // .populate('courtCreated courtRatings')
       // .select('name courtRatings courtCreated')
-      .deepPopulate('courtRatings.court courtCreated')
+      .deepPopulate('courtRatings courtRatings.court courtRatings.court.pictures courtCreated courtCreated.pictures')
       .select('name courtRatings courtCreated')
       .exec(cb);
   }

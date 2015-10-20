@@ -2,34 +2,7 @@
 
 angular.module('keepballin')
 	.controller('uploadCtrl', ['$scope', '$window', 'Upload', 'Download', '$timeout', 'socket', 'Lightbox', 'Auth', function ($scope, $window, Upload, Download, $timeout, socket, Lightbox, Auth) {
-    //Slides of pictures
-    $scope.slides = [];
-    //Get picture when court id change
-    $scope.$on('courtIdChanged', function(e, args) {
-        $scope.slides = [];
-        $scope.getPicture(args.newId);
-    });
-
-    //socket.io instant updates
-    socket.syncUpdates('upload', $scope.slides);
-    $scope.$on('$destroy', function () {
-        socket.unsyncUpdates('upload');
-    });
-    //Using court id to collect an array of pictures
-    $scope.getPicture = function(id) {
-        $scope.slides = [];
-        Download.query({court : id}, function(data) {
-            if(!data) {
-                return;
-            } else {
-                $scope.slides = data;
-            }
-        });
-    };
-    //Lightbox
-    $scope.openLightboxModal = function (index) {
-        Lightbox.openModal($scope.slides, index);
-    };
+    
     //Log is the progress percentage for upload, empty the courtinfos for other previews
     $scope.log = 0;
     //Clear the preview pictures
@@ -45,16 +18,7 @@ angular.module('keepballin')
         $window.alert('請加檔案');
       }
     };
-    $scope.deletePic = function(pic) {
-        var check = $window.confirm('確定要刪掉這張照片嗎？');
-        if (check) {   
-            Download.delete({ id: pic._id }, function(){
-                $scope.getPicture($scope.currentcourt._id);
-            });
-        } else {
-           return;
-        }
-    };
+    
     //Go through the files' array and upload
     $scope.upload = function (files, courtId) {        
         $scope.uploading = true;
@@ -88,9 +52,7 @@ angular.module('keepballin')
             //Reset the progress bar
             $scope.log = 0;
             $scope.uploading = false;
-            $timeout(function() {
-                $scope.getPicture($scope.currentcourt._id);
-            }, 1000);
+            $scope.$emit('courtPicUploaded');
         });
     }
 

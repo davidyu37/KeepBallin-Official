@@ -19,7 +19,8 @@ var UploadSchema = new Schema({
 	},
 	court: {
 		type: Schema.Types.ObjectId,
-		ref: 'Court'
+		ref: 'Court',
+		childPath: 'pictures'
 	},
 	avatarOf: {
 		type: Schema.Types.ObjectId,
@@ -29,7 +30,7 @@ var UploadSchema = new Schema({
 
 }, {strict: false});
 
-UploadSchema.plugin(relationship, { relationshipPathName: 'avatarOf'});
+UploadSchema.plugin(relationship, { relationshipPathName: ['court', 'avatarOf']});
 
 UploadSchema.statics = {
   loadByCourtId: function(courtId, cb) {

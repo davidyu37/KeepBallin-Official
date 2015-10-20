@@ -235,7 +235,7 @@
     overflow: hidden;
 }
 
-.carousel {
+.courtPicture {
     div {
         text-align: center;
         height: 180px;
@@ -249,7 +249,7 @@
         transition: none;
         width: 100%;
         height: auto;
-    }
+    }    
 }
 
 .singleImage {
@@ -259,6 +259,7 @@
         height: auto;     
     }
 }
+
 .infoBox {
     transition: width linear 0.5s;
 }
