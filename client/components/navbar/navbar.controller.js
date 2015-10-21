@@ -16,6 +16,11 @@ angular.module('keepballin')
       'title': '球場',
       'link': '/courts',
       'icon': 'glyphicon-map-marker'
+    },
+    {
+      'title': '聯絡',
+      'link': '/contact',
+      'icon': 'glyphicon-envelope'
     }
     // {
     //   'title': '球員',

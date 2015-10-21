@@ -80,7 +80,7 @@ angular.module('keepballin')
 	    $scope.infowindow = new google.maps.InfoWindow();
 	    //Store courts from api
 	    $scope.courts = [];
-	    $scope.courts = Court.query(function(data){
+	    $scope.courts = Court.query(function(){
 	    	// console.log('Courts loaded', data);
 	    });
 
@@ -181,7 +181,7 @@ angular.module('keepballin')
 	    // var userLocation = $scope.userLocation;
 	    // Geolocating function
 	    $scope.userLocation = new google.maps.Marker();
-	    $scope.gotErr = false
+	    $scope.gotErr = false;
 	    $scope.geolocate = function() {
 	    	Geolocate($scope, map, function(err) {
 	    		if(err) {

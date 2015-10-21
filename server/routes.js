@@ -6,16 +6,11 @@
 
 var errors = require('./components/errors');
 var path = require('path');
-// var multipart = require('connect-multiparty');
-// var busboyBodyParser = require('busboy-body-parser');
-
 
 module.exports = function(app) {
 
-  // //Use busboy
-  // app.use(busboyBodyParser());
-
   // Insert routes below
+  app.use('/api/contacts', require('./api/contact'));
   app.use('/api/ratings', require('./api/rating'));
   app.use('/api/teams', require('./api/team'));
   app.use('/api/comments', require('./api/comment'));

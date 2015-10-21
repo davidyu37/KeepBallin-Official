@@ -59,11 +59,15 @@ var all = {
   s3: {
     key: process.env.S3_KEY || 'key',
     secret: process.env.S3_SECRET || 'secret'
-  }
+  },
 
-  // sendgrid: {
-  //   apiKey: process.env.SENDGRID_APIKEY || 'apikey'
-  // }
+  sendgrid: {
+    apiKey: process.env.SENDGRID_APIKEY || 'apikey'
+  },
+
+  email: {
+    me: process.env.COMPANY_EMAIL || 'email'
+  }
 
 
 };

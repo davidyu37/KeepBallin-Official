@@ -14,14 +14,23 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
     color: #000;
     padding: 0.2em 0;
 }
-
+* {
+    padding: 0;
+    margin: 0;
+}
 //Make sure everything in the site is contained
 html, body {
   width: auto !important;
   overflow-x: hidden !important;
 }
-#wrap {
+
+body {
+    background-color: #edebe8;
+}
+
+.wrap {
   min-height: 100vh;
+  
 }
 
 .spaceFromTop {
@@ -84,6 +93,7 @@ button:focus {outline:0 !important;}
 @import 'account/signup/signup.scss';
 @import 'admin/admin.scss';
 @import 'comments/comments.scss';
+@import 'contact/contact.scss';
 @import 'courts/_bubble.scss';
 @import 'courts/courts.scss';
 @import 'courts/temp/lightbox.scss';

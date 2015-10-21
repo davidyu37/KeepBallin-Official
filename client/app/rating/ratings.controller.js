@@ -23,7 +23,7 @@ angular.module('keepballin')
 				html: true,
 				timer: 3000
 			});
-			Rating.save(rating, function(average) {
+			Rating.save(rating, function() {
 			});
 		};
 	}]);

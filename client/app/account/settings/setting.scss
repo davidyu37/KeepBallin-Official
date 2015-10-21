@@ -4,6 +4,7 @@
 	border: 1px solid #ddd;
 	border-top: none;
     overflow: scroll;
+    background-color: white;
 }
 
 .accordHead {
@@ -40,6 +41,9 @@
 
 .tab {
     cursor: pointer;
+    a:hover{
+        color: black;
+    }
 }
 
 .inviteMessage {
@@ -48,3 +52,4 @@
     margin: 25px auto;
     text-align: center;
 }
+

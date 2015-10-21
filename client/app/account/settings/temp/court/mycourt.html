@@ -1,14 +1,17 @@
 <div ng-controller="MyCourtCtrl">
 	<h1>評價過的球場</h1>
-	<div class="ratedCourts">
+	<p>在球場地圖上，為球場評價幾顆星</p>
+	<p>五顆<i class="fa fa-star"></i>球場優先排在前面</p>
+	<div class="ratedCourts" ng-show="ratedCourts">
 		<div class="row">
 			<div class="col-sm-6 col-md-3" ng-repeat="c in ratedCourts">
 				<div class="thumbnail myCourtPic">
-					<carousel interval="5000" no-wrap="false">
+					<carousel interval="5000" no-wrap="false" ng-show="c.court.pictures[0]">
 				      <slide ng-repeat="slide in c.court.pictures" active="slide.active">
 				        <img class="img-responsive" ng-src="{{slide.url}}" style="margin:auto;">
 				      </slide>
 				    </carousel>
+				    <p>目前沒有照片</p>
 					<div class="caption">
 						<h3>{{c.court.court}}</h3>
 						<p>{{c.court.address}}</p>
@@ -23,11 +26,12 @@
 	<hr>
 	<h1>球場管理員</h1>
 	<p>你建立的球場</p>
-	<div class="ratedCourts">
+	<div class="ratedCourts" ng-show="courtCreated">
 		<div class="row">
 			<div class="col-sm-6 col-md-3" ng-repeat="created in courtCreated">
 				<div class="thumbnail myCourtPic">
-					<carousel interval="5000" no-wrap="false">
+					<carousel interval="5000" no-wrap="false"
+					ng-show="created.pictures[0]">
 				      <slide ng-repeat="slide in created.pictures" active="slide.active">
 				        <img class="img-responsive" ng-src="{{slide.url}}" style="margin:auto;">
 				      </slide>

@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('MyCourtCtrl', ['$scope', 'User', 'Auth', function ($scope, User, Auth) {
+  .controller('MyCourtCtrl', ['$scope', 'User', function ($scope, User) {
 	
   	$scope.ratedCourts = [];
   	$scope.courtCreated = [];
 
 	var userData = User.getMyCourt();
 	userData.$promise.then(function(data) {
-		if(userData.courtRatings) {
-			var sorted = sortRating(userData.courtRatings);
+		if(data.courtRatings) {
+			var sorted = sortRating(data.courtRatings);
 			$scope.ratedCourts= sorted;
 		}
-		if(userData.courtCreated) {
-			$scope.courtCreated = userData.courtCreated;
+		if(data.courtCreated) {
+			$scope.courtCreated = data.courtCreated;
 		}
 	});
 
