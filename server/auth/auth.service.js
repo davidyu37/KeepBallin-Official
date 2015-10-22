@@ -61,11 +61,12 @@ function hasRole(roleRequired) {
  * else req.user would be undefined
  */
 
- function appendUser() {
+function appendUser() {
   return compose()
   // Attach user to request
   .use(function(req, res, next) {
       validateJwt(req, res, function(val) {
+          
           if(_.isUndefined(val)) {
               User.findById(req.user._id, function(err, user) {
                   if(err) {
@@ -86,15 +87,15 @@ function hasRole(roleRequired) {
   });
 }
 
-function applyVip() {
-    return compose()
-      .use(function(req, res, next) {
-          if(req.query) {
-            req.vip = req.query.Vip;
-            next();
-          }
-      });
-}
+// function applyVip() {
+//     return compose()
+//       .use(function(req, res, next) {
+//           if(req.query) {
+//             req.vip = req.query.Vip;
+//             next();
+//           }
+//       });
+// }
 
 
 /**
@@ -104,6 +105,7 @@ function applyVip() {
 function addAuthHeaderFromCookie() {
     return compose()
         .use(function(req, res, next) {
+            console.log('token', req);
             if(req.cookies.token) {
                 req.headers.authorization = 'Bearer ' + _.trim(req.cookies.token, '\"');
             }
@@ -136,4 +138,4 @@ exports.signToken = signToken;
 exports.setTokenCookie = setTokenCookie;
 exports.appendUser = appendUser;
 exports.addAuthHeaderFromCookie = addAuthHeaderFromCookie;
-exports.applyVip = applyVip;
+// exports.applyVip = applyVip;

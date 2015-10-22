@@ -31,7 +31,7 @@ var all = {
   secrets: {
     session: 'keepballin-secret'
   },
-
+  // process.env.SESSION_SECRET
   // List of user roles
   userRoles: ['guest', 'user', 'vip', 'manager', 'admin'],
 

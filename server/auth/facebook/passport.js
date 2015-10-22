@@ -14,32 +14,72 @@ exports.setup = function (User, config) {
       passReqToCallback: true
     },
     function(req, accessToken, refreshToken, profile, done) {
-      User.findOne({
-        'facebook.id': profile.id
-      },
-      function(err, user) {
-        if (err) {
-          return done(err);
-        }
-        if (!user) {
-          user = new User({
-            name: profile.displayName,
-            // email: profile.emails[0].value,
-            email: profile._json.email,
-            role: 'user',
-            username: profile.username,
-            provider: 'facebook',
-            facebook: profile._json,
-            fbprofilepic: 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large'
-          });
-          user.save(function(err) {
-            if (err) return done(err);
-            done(err, user);
-          });
-        } else {
-          return done(err, user);
-        }
-      })
+
+      if(profile._json.email) {
+        
+        //Check if there's a user with the email
+        User.findOne({'email': profile._json.email}, function(err, user) {
+          if(user) {
+            //If there's one, attach facebook account to it
+            user.facebook = profile._json;
+            user.save(function(err) {
+              if (err) return done(err);
+              done(err, user);
+            });
+          } else {
+            User.findOne({
+              'facebook.id': profile.id
+            }, function(err, user) {
+              if (err) {
+                return done(err);
+              }
+              if (!user) {
+                user = new User({
+                  name: profile.displayName,
+                  email: profile._json.email,
+                  role: 'user',
+                  provider: 'facebook',
+                  facebook: profile._json,
+                  fbprofilepic: 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large'
+                });
+                user.save(function(err) {
+                  if (err) return done(err);
+                  done(err, user);
+                });
+              } else {
+                return done(err, user);
+              }
+            })
+          }
+        });
+
+      } else {
+
+        User.findOne({
+          'facebook.id': profile.id
+        }, function(err, user) {
+          if (err) {
+            return done(err);
+          }
+          if (!user) {
+            user = new User({
+              name: profile.displayName,
+              email: profile._json.email,
+              role: 'user',
+              provider: 'facebook',
+              facebook: profile._json,
+              fbprofilepic: 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large'
+            });
+            user.save(function(err) {
+              if (err) return done(err);
+              done(err, user);
+            });
+          } else {
+            return done(err, user);
+          }
+        })
+      }  
+
     }
   ));
 };
