@@ -53,7 +53,6 @@ exports.create = function(req, res) {
 
 // Updates an existing conversation in the DB.
 exports.update = function(req, res) {
-  console.log(req.body);
   if(req.body._id) { delete req.body._id; }
   Conversation.findById(req.params.id, function (err, conversation) {
     if (err) { return handleError(res, err); }

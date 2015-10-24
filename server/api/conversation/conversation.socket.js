@@ -6,6 +6,7 @@
 
 var Conversation = require('./conversation.model');
 
+
 exports.register = function(socket) {
   Conversation.schema.post('save', function (doc) {
     onSave(socket, doc);
@@ -16,11 +17,11 @@ exports.register = function(socket) {
 }
 
 function onSave(socket, doc, cb) {
+
 	doc.deepPopulate('messages.from messages.to messages participants.avatar participants', function(err, _doc) {
-		console.log('doc', _doc);
 		socket.emit('conversation:save', _doc);
 	});
-
+  
 }
 
 function onRemove(socket, doc, cb) {

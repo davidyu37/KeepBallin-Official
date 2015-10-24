@@ -11,7 +11,20 @@ angular.module('keepballin')
     $scope.sending = false;
 
     //socket.io instant updates
-    socket.syncUpdates('conversation', $scope.mails, function() {
+    socket.syncUpdates('conversation', $scope.mails, function(event, item, array) {
+        //Filter out all other message where the user is not part of
+        var newList = [];
+        for(var i=0; i < array.length; i++) {
+            //Go through the participants of each conversation
+            for(var j=0; j < array[i].participants.length; j++) {
+                if(array[i].participants[j]._id === $scope.userNow._id) {
+                    newList.push(array[i]);
+                    break;
+                }
+            }
+        }
+        //Set the mails to the filtered mail list
+        $scope.mails = newList;
     	$scope.display($scope.indexNow);
     });
 	$scope.$on('$destroy', function () {
