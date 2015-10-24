@@ -35,6 +35,7 @@ body {
 
 .spaceFromTop {
   margin-top: 60px;
+  padding: 20px;
 }
 
 @media (min-width: 768px) {
@@ -94,6 +95,7 @@ button:focus {outline:0 !important;}
 @import 'admin/admin.scss';
 @import 'comments/comments.scss';
 @import 'contact/contact.scss';
+@import 'conversation/conversation.scss';
 @import 'courts/_bubble.scss';
 @import 'courts/courts.scss';
 @import 'courts/temp/lightbox.scss';
@@ -104,6 +106,7 @@ button:focus {outline:0 !important;}
 @import 'profile/profile.scss';
 @import 'select/customizedSelect.scss';
 @import 'select/select.scss';
+@import 'sendmail/sendmail.scss';
 @import 'team/teamsignup.scss';
 @import 'footer/footer.scss';
 @import 'modal/modal.scss';

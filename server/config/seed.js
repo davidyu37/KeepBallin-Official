@@ -10,6 +10,7 @@ var Court = require('../api/court/court.model');
 var Upload = require('../api/upload/upload.model');
 var Comment = require('../api/comment/comment.model');
 var Rating = require('../api/rating/rating.model');
+var Conversation = require('../api/conversation/conversation.model');
 
 function randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -17,6 +18,10 @@ function randomDate(start, end) {
 
 var random = randomDate(new Date(1950, 0, 1), new Date());
 
+
+Conversation.find({}).remove(function() {
+  console.log('conversation cleared');
+});
 
 Rating.find({}).remove(function() {
   console.log('ratings cleared');

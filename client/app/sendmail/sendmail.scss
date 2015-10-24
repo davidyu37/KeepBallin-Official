@@ -1,0 +1,29 @@
+.sendmailContainer {
+	height: 300px; 
+	width: 80%; 
+	background-color: white; 
+	border-radius: 5%; 
+	margin: auto;
+	padding: 25px;
+}
+
+.messageBox {
+	color: black;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight:500;
+	font-size: 18px;
+	border-radius: 5px;
+	line-height: 22px;
+	background-color: transparent;
+	border:2px solid  $brand-primary;
+	transition: all 0.3s;
+	padding: 13px;
+	margin-bottom: 15px;
+	width:100%;
+	box-sizing: border-box;
+	outline:0;
+}
+
+.messageBox:focus { 
+	border:2px solid lighten($brand-primary, 10%); 
+}

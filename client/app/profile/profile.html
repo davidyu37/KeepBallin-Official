@@ -1,4 +1,4 @@
-<div class="container spaceFromTop">
+<div class="container spaceFromTop" style="background-color: white;">
 	<header class="jumbotron">
 		<div class="row">
 			<div class="col-sm-4">
@@ -34,6 +34,7 @@
 			</div>
 		</div>
 		<div class="col-sm-8">
+			<a class="pull-right btn btn-primary" ui-sref=".send({id: profile._id})">聯絡{{profile.name}}</a>
 			<h3 style="margin-top: 0px;">自我介紹</h3>
 			<p>{{profile.intro}}</p>
 		</div>

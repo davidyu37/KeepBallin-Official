@@ -1,0 +1,46 @@
+<div class="container" style="background-color: white; min-height: 100vh;">
+	<div class="spaceFromTop">
+		<h1>給{{userNow.name}}的訊息</h1>
+		<hr>
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading" style="text-align: center">對話</div>
+					<div class="panel-body">
+						<p class="text-muted">點選對話打開對話串</p>
+					</div>
+					<ul class="list-group" style="overflow-y: scroll">
+						<li class="list-group-item pointer" 
+						ng-repeat="mail in mails track by $index" 
+						ng-click="display($index)">
+							<strong ng-repeat="person in mail.participants" ng-hide="person._id == userNow._id">{{person.name}}</strong>
+							<span>{{mail.date | relativeDate}}</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-sm-8">
+				<div class="panel panel-primary">
+					<div class="panel-heading" style="text-align: center">對話細節</div>
+					<ul class="list-group" style="height: 300px; overflow-y: scroll" id="conversation">
+						<div id="convoContent">
+							<li class="list-group-item" ng-repeat="message in currentMessage.messages">
+								<p class="pull-right">{{message.date | relativeDate}}</p>
+								<strong>
+									{{message.from.name}}
+								</strong>
+								<p>{{message.message}}</p>
+							</li>
+						</div>
+					</ul>
+				</div>
+				<div ng-show="currentMessage.messages[0]">
+					<textarea class="messageBox" name="message" rows="5" placeholder="我想跟{{to.name}}說..." ng-model="message" autofocus required id="talkBox"></textarea>
+					<button class="btn btn-primary" ng-click="updateThread()" ng-disabled="!message || sending">送出
+					<i ng-show="sending" class="fa fa-spinner fa-pulse"></i> 
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -18,12 +18,12 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/conversation/conversation.socket').register(socket);
   require('../api/contact/contact.socket').register(socket);
   require('../api/rating/rating.socket').register(socket);
   require('../api/team/team.socket').register(socket);
   require('../api/comment/comment.socket').register(socket);
   require('../api/upload/upload.socket').register(socket);
-  // require('../api/thing/thing.socket').register(socket);
   require('../api/court/court.socket').register(socket);
 }
 
@@ -44,6 +44,7 @@ module.exports = function (socketio) {
   // }));
 
   socketio.on('connection', function (socket) {
+    // console.log(socket);
     socket.address = socket.handshake.address !== null ?
             socket.handshake.address.address + ':' + socket.handshake.address.port :
             process.env.DOMAIN;

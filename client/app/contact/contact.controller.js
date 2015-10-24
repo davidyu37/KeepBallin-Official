@@ -25,7 +25,7 @@ angular.module('keepballin')
 		}
 
 
-    	function successCb(res) {
+    	function successCb() {
     		//Alert the user that their suggestion has been sent
     		SweetAlert.swal({
 				title: '感謝您的意見',
@@ -43,7 +43,7 @@ angular.module('keepballin')
     		form.$setPristine();
     	}
 
-    	function errorCb(res) {
+    	function errorCb() {
     		SweetAlert.swal({
 				title: '喔NO~',
 				text: '網路上出了些問題，請麻煩再試一次',

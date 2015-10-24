@@ -14,7 +14,8 @@ angular.module('keepballin', [
   'angular-parallax',
   'angular-advanced-searchbox',
   'vcRecaptcha',
-  'oitozero.ngSweetAlert'
+  'oitozero.ngSweetAlert',
+  'relativeDate'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
