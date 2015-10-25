@@ -3,15 +3,12 @@
 		<h1></h1>
 		<form name="send" ng-submit="sendMessage(send)" novalidate>
 
-			<textarea class="messageBox" name="message" rows="5" placeholder="我想跟{{userTo.name}}說..." ng-model="message" required></textarea>
-			<!-- <div class="col-sm-5 alert alert-danger" role="alert" ng-show="advice.comment.$error.required && submitted">
-			<i class="fa fa-warning"></i>
-			不要害羞，請打出你想說的</div> -->
-
-			<button class="submitBtn" type="submit" ng-disabled="processing">
+			<textarea class="messageBox" name="message" rows="5" placeholder="我想跟{{userTo.name}}說..." ng-model="message" required autofocus></textarea>
+			
+			<button class="submitBtn" type="submit" ng-disabled="processing || !message">
 			<span ng-hide="processing">送出</span>
-			<!-- <span ng-show="processing">送出中</span>
-			<i ng-hide="!processing" class="fa fa-spinner fa-pulse"></i>  -->
+			
+			<i class="fa fa-check-circle success" ng-show="!processing && sent"></i>
 			</button>
 		</form>
 	</div>

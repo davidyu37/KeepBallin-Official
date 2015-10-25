@@ -59,8 +59,6 @@ angular.module('keepballin')
 
 			        $scope.currentcourt = court;
 
-			        console.log(court);
-
 			        //Open court's detail when user clicks on marker
 			        $scope.expanded=true;
 

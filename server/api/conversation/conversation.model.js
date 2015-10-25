@@ -17,14 +17,18 @@ var MessageSchema = new Schema({
   }
 });
 
+
 var ConversationSchema = new Schema({
   date: { type: Date, default: Date.now },
   messages: [MessageSchema],
   participants: [{
   	type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   }],
-  read: { type: Boolean, default: false}
+  status: [{
+    user: {type: Schema.Types.ObjectId, ref: 'User'},
+    read: {type: Boolean, default: false}
+  }]
 });
 
 ConversationSchema.plugin(deepPopulate, {

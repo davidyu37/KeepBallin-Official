@@ -13,6 +13,12 @@ angular.module('keepballin')
         params: {
           controller: 'get_mail'
         }
+      },
+      changeToRead: {
+        method: 'PUT',
+        params: {
+          controller: 'changeToRead'
+        }
       }
 	  });
   }]);

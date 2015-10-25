@@ -7,9 +7,9 @@ angular.module('keepballin')
     $scope.userFrom = Auth.getCurrentUser();
     $scope.processing = false;
     $scope.message = '';
-
+    $scope.sent = false;
     $scope.sendMessage = function(form) {
-    	console.log('sent');
+        $scope.processing = true;
     	var letter = {
     		from: $scope.userFrom._id,
     		to: $scope.userTo._id,
@@ -17,7 +17,10 @@ angular.module('keepballin')
     	};
 
     	Conversation.save(letter, function(data) {
-    		console.log(data);
+    		$scope.message = '';
+            $scope.processing = false;
+            $scope.sent = true;
+            $state.go('^');
     	});
     };
   }]);

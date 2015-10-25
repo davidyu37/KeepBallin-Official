@@ -6,17 +6,26 @@
 			<div class="col-sm-4">
 				<div class="panel panel-primary">
 					<div class="panel-heading" style="text-align: center">對話</div>
-					<div class="panel-body">
-						<p class="text-muted">點選對話打開對話串</p>
+					<div style="height: 300px; overflow-y: scroll">
+						<div class="panel-body">
+							<p class="text-muted">點選對話打開對話串</p>
+						</div>
+						<ul class="list-group">
+							<li class="list-group-item pointer" 
+							ng-repeat="mail in mails track by $index" 
+							ng-click="display($index); updateToRead($index)">
+								<strong ng-repeat="person in mail.participants" ng-hide="person._id == userNow._id">{{person.name}}</strong>
+								<span>{{mail.date | relativeDate}}</span>
+								<span class="pull-right"
+								ng-show="showNew($index)">
+									<i class="fa fa-hand-o-left faa-horizontal animated"></i>
+									<span class="badge newMessage">新訊息
+									</span>
+								</span>
+
+							</li>
+						</ul>
 					</div>
-					<ul class="list-group" style="overflow-y: scroll">
-						<li class="list-group-item pointer" 
-						ng-repeat="mail in mails track by $index" 
-						ng-click="display($index)">
-							<strong ng-repeat="person in mail.participants" ng-hide="person._id == userNow._id">{{person.name}}</strong>
-							<span>{{mail.date | relativeDate}}</span>
-						</li>
-					</ul>
 				</div>
 			</div>
 			<div class="col-sm-8">

@@ -10,6 +10,7 @@ angular.module('keepballin')
     $scope.indexNow = 0;
     $scope.sending = false;
 
+
     //socket.io instant updates
     socket.syncUpdates('conversation', $scope.mails, function(event, item, array) {
         //Filter out all other message where the user is not part of
@@ -31,7 +32,28 @@ angular.module('keepballin')
   		socket.unsyncUpdates('conversation');
 	});
 
+    //Show new message badge when the user's read is false
+    $scope.showNew = function(index) {
+        var status = $scope.mails[index].status;
+        for(var i=0; i < status.length; i++) {
+            if(status[i].user === $scope.userNow._id && !status[i].read) {
+                return true;
+            }
+        }
+        return false;
+        
+    }
 
+    //Update the conversation to read
+    $scope.updateToRead = function(index) {
+        
+        var read = Conversation.changeToRead({id: $scope.mails[index]._id});
+        read.$promise.then(function() {
+         
+        });
+    }
+
+    //When user clicks the conversation, this function fired
     $scope.display = function(index) {
     	var convoBox = document.getElementById('conversation'),
     	content;
@@ -47,7 +69,6 @@ angular.module('keepballin')
     	$scope.currentMessage = $scope.mails[index];
     	//Get the user who is NOT the user now
     	var people = $scope.currentMessage.participants;
-    	// var to = [];
     	
     	for(var i=0; i < people.length; i++) {
     		if(people[i]._id !== $scope.userNow._id ) {
@@ -56,6 +77,10 @@ angular.module('keepballin')
     	}
     };
 
+    //Open the first message on load
+    // $timeout(function(){$scope.display(0);});
+
+    //Update the current conversation opened
     $scope.updateThread = function() {
     	//Grad the textarea
     	var talkBox = document.getElementById('talkBox');
