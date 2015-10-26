@@ -16,8 +16,13 @@
 							<li class="list-group-item pointer" 
 							ng-repeat="mail in mails track by $index"
 							ng-click="display($index); updateToRead($index)">
-								<strong ng-repeat="person in mail.participants" ng-hide="person._id == userNow._id">{{person.name}}</strong>
-								<span>{{mail.date | relativeDate}}</span>
+								<div ng-repeat="person in mail.participants" ng-hide="person._id == userNow._id">
+									<img ng-src="{{person.avatar.url}}" style="height: 50px; width: 50px;" ng-hide="!person.avatar.url">
+									<img ng-hide="person.avatar.url" src="./assets/images/avatar.png" alt="basketballplayer" style="height: 50px; width: 50px;">
+
+									<strong>{{person.name}}</strong>
+									<span>{{mail.date | relativeDate}}</span>
+								</div>
 								<span class="pull-right"
 								ng-show="showNew($index)">
 									<i class="fa fa-hand-o-left faa-horizontal animated"></i>
@@ -33,13 +38,18 @@
 			<div class="col-sm-8">
 				<div class="panel panel-primary">
 					<div class="panel-heading" style="text-align: center" ng-hide="currentMessage.messages[0]">對話細節</div>
-					<div class="panel-heading" style="text-align: center" ng-show="currentMessage.messages[0]">{{to.name}}</div>
+					<div class="panel-heading" style="text-align: center" ng-show="currentMessage.messages[0]">
+					{{to.name}}</div>
 					<ul class="list-group" style="height: 300px; overflow-y: scroll" id="conversation">
 						<div id="convoContent">
 							<li class="list-group-item" ng-repeat="message in currentMessage.messages">
 								<p class="pull-right">{{message.date | relativeDate}}</p>
+								<img ng-src="{{message.from.avatar.url}}" style="height: 50px; width: 50px;" ng-hide="!message.from.avatar.url" alt="message.from.avatar.name">
+								<img ng-hide="message.from.avatar.url" src="./assets/images/avatar.png" alt="basketballplayer" style="height: 50px; width: 50px;">
 								<strong>
-									{{message.from.name}}
+									<a ui-sref="profile({id: message.from._id})">
+										{{message.from.name}}
+									</a>
 								</strong>
 								<p>{{message.message}}</p>
 							</li>
@@ -47,10 +57,18 @@
 					</ul>
 				</div>
 				<div ng-show="currentMessage.messages[0]">
-					<textarea class="messageBox" name="message" rows="5" placeholder="我想跟{{to.name}}說..." ng-model="message" autofocus required id="talkBox"></textarea>
+					<textarea ng-enter="updateThread()" enable-enter="{{sendEnter}}" class="messageBox" name="message" rows="5" placeholder="我想跟{{to.name}}說..." ng-model="message" autofocus required id="talkBox"></textarea>
 					<button class="btn btn-primary" ng-click="updateThread()" ng-disabled="!message || sending">送出
 					<i ng-show="sending" class="fa fa-spinner fa-pulse"></i> 
 					</button>
+					<div class="col-sm-4">
+						<div class="input-group">
+					      <span class="input-group-addon">
+					        <input type="checkbox" ng-model="sendEnter">
+					      </span>
+					      <p class="form-control">按Enter直接送出</p>
+					    </div>
+					</div>
 				</div>
 			</div>
 		</div>

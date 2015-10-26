@@ -33,11 +33,17 @@ var ConversationSchema = new Schema({
 
 ConversationSchema.plugin(deepPopulate, {
   populate: {
+    'messages.from.avatar': {
+      select: 'url'
+    },
+    'messages.to.avatar': {
+      select: 'url'
+    },
     'messages.from': {
-      select: 'name'
+      select: 'name avatar'
     },
     'messages.to': {
-      select: 'name'
+      select: 'name avatar'
     },
     'messages': {
       select: 'from to message date'

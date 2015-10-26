@@ -3,7 +3,7 @@
 		<h1></h1>
 		<form name="send" ng-submit="sendMessage(send)" novalidate>
 
-			<textarea ng-enter="sendMessage(send)" class="messageBox" name="message" rows="5" placeholder="我想跟{{userTo.name}}說..." ng-model="message" required autofocus></textarea>
+			<textarea enable-enter="true" ng-enter="sendMessage(send)" class="messageBox" name="message" rows="5" placeholder="我想跟{{userTo.name}}說..." ng-model="message" required autofocus></textarea>
 			
 			<button class="submitBtn" type="submit" ng-disabled="processing || !message">
 			<span ng-hide="processing">送出</span>

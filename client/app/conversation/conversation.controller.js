@@ -9,11 +9,13 @@ angular.module('keepballin')
     $scope.to = {};
     $scope.indexNow = 0;
     $scope.sending = false;
+    $scope.sendEnter = false;//Enable ng-enter if true
 
 
     //socket.io instant updates
     socket.syncUpdates('conversation', $scope.mails, function(event, item, array) {
         //Filter out all other message where the user is not part of
+       
         var newList = [];
         for(var i=0; i < array.length; i++) {
             //Go through the participants of each conversation
@@ -26,11 +28,11 @@ angular.module('keepballin')
         }
         //Set the mails to the filtered mail list
         $scope.mails = newList;
-    	$scope.display($scope.indexNow);
+        $scope.display($scope.indexNow);
     });
-	$scope.$on('$destroy', function () {
-  		socket.unsyncUpdates('conversation');
-	});
+    $scope.$on('$destroy', function () {
+        socket.unsyncUpdates('conversation');
+    });
 
     //Show new message badge when the user's read is false
     $scope.showNew = function(index) {
@@ -55,6 +57,11 @@ angular.module('keepballin')
 
     //When user clicks the conversation, this function fired
     $scope.display = function(index) {
+        //Focus onto the textarea
+        var talkBox = document.getElementById('talkBox');
+        talkBox.focus();
+
+        //The outer container for the messages
     	var convoBox = document.getElementById('conversation'),
     	content;
     	$timeout(function() {

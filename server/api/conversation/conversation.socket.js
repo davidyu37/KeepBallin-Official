@@ -18,7 +18,7 @@ exports.register = function(socket) {
 
 function onSave(socket, doc, cb) {
 
-	doc.deepPopulate('messages.from messages.to messages participants.avatar participants', function(err, _doc) {
+	doc.deepPopulate('messages.from.avatar messages.to.avatar messages.from messages.to messages participants.avatar participants', function(err, _doc) {
 		socket.emit('conversation:save', _doc);
 	});
   
