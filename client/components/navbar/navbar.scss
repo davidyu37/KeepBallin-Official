@@ -109,3 +109,31 @@
     display: none;
   }
 }
+
+.messageAlert {
+  position: absolute;
+  top: 60px;
+  font-size: 150%;
+  color: white;
+  padding: 15px;
+  width: 200px;
+  height: 100px;
+  border: solid 3px $brand-primary;
+  background-color: black;
+  overflow: hidden;
+  border-radius: 25px;
+  opacity: 1;
+  p {
+    font-size: 80%;
+  } 
+}
+
+.messageAlert.ng-hide-add, .messageAlert.ng-hide-remove {
+  transition: all linear 0.5s;
+}
+
+.messageAlert.ng-hide {
+  top: 0;
+  opacity: 0;
+
+}

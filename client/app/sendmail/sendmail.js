@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .config(function ($stateProvider, modalStateProvider) {
+  .config(function ($stateProvider) {
     $stateProvider
       .state('sendmail', {
         url: '/sendmail',

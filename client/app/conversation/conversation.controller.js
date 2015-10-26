@@ -42,7 +42,7 @@ angular.module('keepballin')
         }
         return false;
         
-    }
+    };
 
     //Update the conversation to read
     $scope.updateToRead = function(index) {
@@ -51,7 +51,7 @@ angular.module('keepballin')
         read.$promise.then(function() {
          
         });
-    }
+    };
 
     //When user clicks the conversation, this function fired
     $scope.display = function(index) {

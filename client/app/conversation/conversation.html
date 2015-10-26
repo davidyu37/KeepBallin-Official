@@ -9,10 +9,12 @@
 					<div style="height: 300px; overflow-y: scroll">
 						<div class="panel-body">
 							<p class="text-muted">點選對話打開對話串</p>
+							<p ng-hide="mails[0]">目前還沒任何私人訊息</p>
 						</div>
+
 						<ul class="list-group">
 							<li class="list-group-item pointer" 
-							ng-repeat="mail in mails track by $index" 
+							ng-repeat="mail in mails track by $index"
 							ng-click="display($index); updateToRead($index)">
 								<strong ng-repeat="person in mail.participants" ng-hide="person._id == userNow._id">{{person.name}}</strong>
 								<span>{{mail.date | relativeDate}}</span>
@@ -30,7 +32,8 @@
 			</div>
 			<div class="col-sm-8">
 				<div class="panel panel-primary">
-					<div class="panel-heading" style="text-align: center">對話細節</div>
+					<div class="panel-heading" style="text-align: center" ng-hide="currentMessage.messages[0]">對話細節</div>
+					<div class="panel-heading" style="text-align: center" ng-show="currentMessage.messages[0]">{{to.name}}</div>
 					<ul class="list-group" style="height: 300px; overflow-y: scroll" id="conversation">
 						<div id="convoContent">
 							<li class="list-group-item" ng-repeat="message in currentMessage.messages">

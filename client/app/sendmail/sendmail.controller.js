@@ -8,7 +8,7 @@ angular.module('keepballin')
     $scope.processing = false;
     $scope.message = '';
     $scope.sent = false;
-    $scope.sendMessage = function(form) {
+    $scope.sendMessage = function() {
         $scope.processing = true;
     	var letter = {
     		from: $scope.userFrom._id,
@@ -16,7 +16,7 @@ angular.module('keepballin')
     		message: $scope.message
     	};
 
-    	Conversation.save(letter, function(data) {
+    	Conversation.save(letter, function() {
     		$scope.message = '';
             $scope.processing = false;
             $scope.sent = true;
