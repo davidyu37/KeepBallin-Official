@@ -4,7 +4,7 @@ angular.module('keepballin')
 .directive('ngEnter', function() {
     return function(scope, element, attrs) {
 
-        element.bind("keydown", function(e) {
+        element.bind('keydown', function(e) {
             if(e.which === 13) {
                 //When enter is pressed check to see if it's enabled
                 if(scope.$eval(attrs.enableEnter) === true) {

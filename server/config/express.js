@@ -22,13 +22,18 @@ module.exports = function(app) {
   app.set('views', config.root + '/server/views');
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
+  app.set('trust proxy', true);
+
   app.use(compression());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
   app.use(passport.initialize());
+
+
   if ('production' === env) {
+    app.use(require('../urlredirects'));
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));
     app.set('appPath', path.join(config.root, 'public'));

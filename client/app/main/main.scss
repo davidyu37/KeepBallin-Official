@@ -36,12 +36,32 @@
   background-size: cover;
 }
 
-.message {
-  width: 80%;
-  height: 600px;
-  margin: 5% auto;
-  background-color: rgba(255,255,255,0.8);
+.brand-mission {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  -webkit-filter: blur(0px);
+  -moz-filter: blur(0px);
+  -o-filter: blur(0px);
+  -ms-filter: blur(0px);
+  filter: blur(0px);
 }
+
+.blurredBG{
+  background-image: url('/assets/images/pic4.jpg');
+  background-size: cover;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+  content: "";
+  width: 100%;
+  height: 800px;
+  z-index: -1;
+  display: block;
+}
+
 
 /* Main marketing message */
 .jumbotron {
@@ -98,17 +118,16 @@
 }
 
 /* Container that wraps the weather info */
-.leftContainer {
+/*.leftContainer {
   background: #333;
   text-align: center;
   min-height: 100%;
   padding: 60px;
   margin-bottom: -5px;
-}
+}*/
 
 /* weather display */
-#weatherBox {
-  /* let weatherLocation locates itself */
+/*#weatherBox {
   background: none;
   position: relative;
   width: 250px;
@@ -116,23 +135,23 @@
   padding: 5px;
   text-align: center;
   border: none;
-}
+}*/
 /* Box that contain the actual weather info */
-#weatherContent {
+/*#weatherContent {
   background: rgba(255, 255, 255, 0.8);
   min-height: 200px
-}
+}*/
 
 /* date display */
-.dateDisplay {
+/*.dateDisplay {
   font-size: 200%;
   padding: 0;
   color: white;
   text-align: left;
-}
+}*/
 
 /* time display */
-.timeDisplay {
+/*.timeDisplay {
   font-family: digital;
   font-size: 550%;
   color: darken(#FFB35E, 10%);
@@ -181,13 +200,10 @@
     right: 15px;
 
   }
-}
+}*/
 
 /* weather location */
-.weatherLocation {
-  /*position: absolute;
-  left: 0px;
-  top: -90px;*/
+/*.weatherLocation {
   text-align: left;
   width: 100%;
   height: 100px;
@@ -201,9 +217,9 @@
     font-size: 500%;
     color: white;
   }
-}
+}*/
 /* A toggle button that let users switch between weather now and forecast*/
-#weatherTimeBtn {
+/*#weatherTimeBtn {
   font-size: 150%;
 }
 
@@ -212,9 +228,9 @@
   font-weight: bolder;
   color: black;
   margin: 0;
-}
+}*/
 /* This box includes weatherIcon and weatherDescription */
-.weatherConditionBox {
+/*.weatherConditionBox {
   display: table;
   width: 100%;
   height: 100px;
@@ -234,17 +250,6 @@
   display: table-cell;
   vertical-align: middle;
   font-size: 200%;
-}
+}*/
 /* Weather stuff ends here */
 
-.brand-mission {
-  font-size: 40%;
-  width: 80%;
-  margin: 10% auto;
-  @media screen and (min-width: $screen-sm-min) {
-    text-align: right;
-    font-size: 100%;
-    width: 50%;
-    margin: 15% auto;
-  }
-}

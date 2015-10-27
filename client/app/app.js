@@ -15,7 +15,8 @@ angular.module('keepballin', [
   'angular-advanced-searchbox',
   'vcRecaptcha',
   'oitozero.ngSweetAlert',
-  'relativeDate'
+  'relativeDate',
+  'youtube-embed'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

@@ -12,6 +12,11 @@ angular.module('keepballin')
       'link': '/',
       'icon': 'glyphicon-home'
     },
+    // {
+    //   'title': '活動',
+    //   'link': '/events',
+    //   'icon': 'glyphicon-bullhorn'
+    // },
     {
       'title': '球場',
       'link': '/courts',
@@ -32,11 +37,7 @@ angular.module('keepballin')
     //   'link': '/teams',
     //   'icon': 'glyphicon-flag'
     // },
-    // {
-    //   'title': '活動',
-    //   'link': '/events',
-    //   'icon': 'glyphicon-bullhorn'
-    // }
+    
     ];
 
     $scope.isCollapsed = true;
