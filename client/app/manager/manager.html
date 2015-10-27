@@ -19,7 +19,12 @@
         </thead>
         <tbody>
           <tr ng-repeat="user in users">
-            <td><strong>{{user.name}}</strong></td>
+            <td>
+            <strong>
+            <a ui-sref="profile({id: user._id})">
+              {{user.name}}
+            </a>
+            </strong></td>
             <td>
               <div class="col-sm-6">
                 <strong ng-hide="user.open">{{user.role}}</strong>
@@ -41,31 +46,4 @@
       </table>
     </div>
   </div>
-  
-  <!-- <ul class="list-group">
-    li.list-group-tem
-    <li class="list-group-item" ng-repeat="user in users">
-      <div class="row">
-        <div class="col-sm-1">
-          <strong>{{user.name}}-</strong>
-        </div>
-        <div class="col-sm-1">
-          <strong ng-hide="user.open">{{user.role}}</strong>
-          <select name="role" class="form-control" ng-show="user.open" ng-model="user.role">
-              <option value="vip">vip</option>
-          	<option value="user">user</option>
-          </select>
-        </div>
-        <div class="col-sm-1">
-          <a ng-click="edit(user)" class=""><span class="glyphicon glyphicon-pencil" ng-hide="user.open"></span></a>
-          <a ng-click="send(user)"><span class="glyphicon glyphicon-check" ng-show="user.open"></span></a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-5">
-          <span class="text-muted">{{user.email}}</span>
-        </div>
-      </div>
-    </li>
-  </ul> -->
 </div>

@@ -11,9 +11,7 @@ angular.module('keepballin', [
   'ngFileUpload',
   'bootstrapLightbox',
   'infinite-scroll',
-  'angular-parallax',
   'angular-advanced-searchbox',
-  'vcRecaptcha',
   'oitozero.ngSweetAlert',
   'relativeDate',
   'youtube-embed'

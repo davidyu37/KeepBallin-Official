@@ -1,5 +1,7 @@
 @import 'temp/_weatherIcon.scss';
 
+$blurred-img: '/assets/images/blurredbg.jpg';
+
 .navbar-text {
   margin-left: 15px;
 }
@@ -9,11 +11,6 @@
   src: url(../assets/fonts/digital.ttf);
 }
 
-.courtBG {
-  background-image: url('/assets/images/courtpicplaceholder.png');
-  background-size: cover;
-  height: 110vh;
-}
 
 .mailForm {
   background-color: $brand-primary;
@@ -21,7 +18,7 @@
 }
 
 /* Video css */
-#bgVideo {
+/*#bgVideo {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -32,36 +29,36 @@
   z-index: -100;
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
-  /*background: url(polina.jpg) no-repeat;*/
   background-size: cover;
+}*/
+
+.courtBG {
+  background-image: url('/assets/images/courtpicplaceholder.png');
+  background-size: cover;
+  height: 110vh;
 }
 
 .brand-mission {
-  position: absolute;
-  width: 100%;
-  height: auto;
-  -webkit-filter: blur(0px);
-  -moz-filter: blur(0px);
-  -o-filter: blur(0px);
-  -ms-filter: blur(0px);
-  filter: blur(0px);
+  font-size: 300%;
+  background: black;
+  color: white;
+  border-radius: 25px;
+  border: 3px solid $brand-primary;
+  width: 80%;
+  height: auto; 
+  margin: 40px auto;
+  padding: 30px 40px 40px;
+}
+
+.brand-color {
+  color: $brand-primary;
 }
 
 .blurredBG{
-  background-image: url('/assets/images/pic4.jpg');
+  background-image: url('/assets/images/blurredbg.jpg');
   background-size: cover;
-  -webkit-filter: blur(5px);
-  -moz-filter: blur(5px);
-  -o-filter: blur(5px);
-  -ms-filter: blur(5px);
-  filter: blur(5px);
-  content: "";
-  width: 100%;
-  height: 800px;
-  z-index: -1;
-  display: block;
+  background-repeat: no-repeat;
 }
-
 
 /* Main marketing message */
 .jumbotron {

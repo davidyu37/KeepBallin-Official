@@ -146,6 +146,9 @@
     button.editDetailButton {
         background: none;
         position: relative;    
+    }
+    button.editDetailButton:hover {
+        color: $brand-primary;
     }   
 }
 
