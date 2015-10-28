@@ -109,15 +109,13 @@ angular.module('keepballin')
 
 	    //Share the court url
 	    $scope.share = function() {
-	    	var clipboard = new Clipboard('.shareBtn');
+	    	new Clipboard('.shareBtn');
 
-	    	var modalInstance = $modal.open({
+	    	$modal.open({
 		      animation: true,
 		      templateUrl: 'app/share/share.html',
 		      scope: $scope
 		    });
-
-		    
 	    };
 
 	    //socket.io instant updates

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('keepballin')
-  .config(function ($stateProvider, modalStateProvider) {
-  	var emptyArr = [];
+  .config(function ($stateProvider) {
+  
     $stateProvider
       .state('courts', {
         url: '/courts/:id',
@@ -18,15 +18,4 @@ angular.module('keepballin')
         templateUrl: 'app/courts/courts.html',
         controller: 'CourtsCtrl'
       });
- //      modalStateProvider.state('courts.share', {
-	// 	url: '/share/:id',
-	// 	templateUrl: 'app/share/share.html',
-	// 	resolve: {
-	//         court: ['$stateParams', 'Court', function($stateParams, Court) {
- //            console.log($stateParams);
-	//           return Court.get({id: $stateParams.id});
-	//         }]
- //      },
- //      controller: 'ShareCtrl'
-	// });
   });
