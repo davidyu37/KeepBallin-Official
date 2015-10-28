@@ -4,19 +4,7 @@ angular.module('keepballin')
 .directive('marker', ['$window', '$compile', '$q', 'Auth', function($window, $compile, $q, Auth) {
 	return {
 		restrict: 'A',
-		scope: {
-			courts: '=courts',
-			currentcourt: '=currentcourt',
-			map: '=map',
-			markernow: '=markernow',
-			markers: '=markers',
-			infowindow: '=infowindow',
-			editmode: '=editmode',
-			finishedit: '=finishedit',
-			deletemarker: '=deletemarker',
-			expanded: '=expanded'
-
-		},
+		scope: false,
 		link: function($scope) {
 
 			//Authentication
@@ -28,7 +16,9 @@ angular.module('keepballin')
 			var infowindow = $scope.infowindow;
 
 			function cleanUpMarkers(oldVal) {
-				$scope.markers[oldVal._id].setMap(null);
+				if($scope.markers[oldVal._id]) {
+					$scope.markers[oldVal._id].setMap(null);
+				}
 			}
 			
 			function createMarker(court) {
@@ -83,10 +73,13 @@ angular.module('keepballin')
 		
 				if (newVal && newVal.length) {
 					//Clean up the old markers
-					for (var j=0; j < oldVal.length; j++) {
-						cleanUpMarkers(oldVal[j]);
+					
+					if(oldVal) {
+						for (var j=0; j < oldVal.length; j++) {
+							cleanUpMarkers(oldVal[j]);
+						}
+						$scope.markers = [];
 					}
-					$scope.markers = [];
 					//convert the new group of courts to marker here
 					for(var i=0; i < newVal.length; i ++) {
 						createMarker(newVal[i]);

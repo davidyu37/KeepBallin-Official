@@ -1,13 +1,20 @@
 'use strict';
 
 angular.module('keepballin')
-	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', 'Download',  
-		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, Download) {
+	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', 'Download', 'chosenCourt', '$modal',  
+		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, Download, chosenCourt, $modal) {
 	    
 		//Initialize map
 	    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 	    var map = $scope.map;
 
+	    //Info window stuff	
+	    $scope.infowindow = new google.maps.InfoWindow();
+	    //Store courts from api
+	    $scope.courts = [];
+	    $scope.courts = chosenCourt;
+
+	    $timeout(function() {$scope.map.panTo({lat: $scope.courts[0].lat, lng: $scope.courts[0].long});});
 
 	    //Panorama stuff from here
 	    var panorama = map.getStreetView();
@@ -76,13 +83,7 @@ angular.module('keepballin')
 
 	    //Empty markers
 	    $scope.markers = [];
-	    //Info window stuff	
-	    $scope.infowindow = new google.maps.InfoWindow();
-	    //Store courts from api
-	    $scope.courts = [];
-	    $scope.courts = Court.query(function(){
-	    	// console.log('Courts loaded', data);
-	    });
+	    
 
 	    //Lightbox
 	    $scope.openLightboxModal = function (index) {
@@ -104,6 +105,19 @@ angular.module('keepballin')
 	        } else {
 	           return;
 	        }
+	    };
+
+	    //Share the court url
+	    $scope.share = function() {
+	    	var clipboard = new Clipboard('.shareBtn');
+
+	    	var modalInstance = $modal.open({
+		      animation: true,
+		      templateUrl: 'app/share/share.html',
+		      scope: $scope
+		    });
+
+		    
 	    };
 
 	    //socket.io instant updates

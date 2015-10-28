@@ -7,11 +7,12 @@ angular.module('keepballin')
       Scroll.scrollInit();
     }
 
-    $scope.menu = [{
-      'title': '首頁',
-      'link': '/',
-      'icon': 'glyphicon-home'
-    },
+    $scope.menu = [
+    // {
+    //   'title': '首頁',
+    //   'link': '/',
+    //   'icon': 'glyphicon-home'
+    // },
     // {
     //   'title': '活動',
     //   'link': '/events',
@@ -19,12 +20,12 @@ angular.module('keepballin')
     // },
     {
       'title': '球場',
-      'link': '/courts',
+      'link': 'courts',
       'icon': 'glyphicon-map-marker'
     },
     {
       'title': '聯絡',
-      'link': '/contact',
+      'link': 'contact',
       'icon': 'glyphicon-envelope'
     }
     // {

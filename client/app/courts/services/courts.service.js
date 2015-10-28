@@ -4,6 +4,7 @@ angular.module('keepballin')
   .factory('Court', ['$resource', function ($resource) {
     return $resource('/api/courts/:id/:controller', 
     { id: '@id' }, {
+      
       update: {
         method: 'PUT'
       },

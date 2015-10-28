@@ -15,7 +15,7 @@
       </a>
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-            <a ng-href="{{item.link}}">
+            <a ui-sref="{{item.link}}">
               <span class="glyphicon {{item.icon}}"></span>{{item.title}}
             </a>
         </li>
