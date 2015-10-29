@@ -1,0 +1,141 @@
+<div class="event-form-container">
+	<div class="event-form">
+		<h1>建立新活動</h1>
+		<hr>
+		<p style="margin-bottom: 50px;">
+			從練球到打一場正式的比賽，享受籃球的樂趣
+		</p>
+		<form name="event" novalidate>
+			<div class="form-group">
+				<label for="name" class="col-md-2 control-label">活動名稱:</label>
+				<div class="col-md-10">
+					<input name="name" type="text" class="event-input" placeholder="請輸入活動名稱" 
+					ng-disabled="sending" ng-model="eventName" required>
+					<!-- <div class="col-md-5 alert alert-danger" role="alert" ng-show="advice.name.$error.required && submitted">
+					<i class="fa fa-warning"></i>
+					請問您的大名是？</div> -->
+				</div>
+			</div>
+		  	<div class="form-group">
+		  		<div class="col-md-12">
+					<label for="type" class="col-md-2 control-label">活動類型:</label>
+					<span style="font-size: 18px; margin-top: 10px" ng-repeat="t in eventType track by $index">{{t.type}}
+						<i class="fa fa-remove" ng-click="remove($index, t)"></i>
+					</span>
+					<span class="alert alert-danger" style="width:100px" ng-show="tooLong">最多五種</span>
+
+					<div class="col-md-3">
+						<div class="input-group">
+							<select name="type" id="" class="event-input form-control" ng-options="t.type disable when t.disable for t in typeOptions" ng-model="type">
+								<option style="display:none" value="">可複選</option>
+							</select>
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" ng-click="addType()">
+									<i class="fa fa-plus"></i>
+								</button>
+							</span>
+							
+						</div>
+						<!-- <div class="col-md-5 alert alert-danger" role="alert" ng-show="advice.name.$error.required && submitted">
+						<i class="fa fa-warning"></i>
+						請問您的大名是？</div> -->
+					</div>
+		  			
+		  		</div>
+			</div>
+			<div class="form-group">
+				<label for="beginDate" class="col-md-2 control-label">開始日期:</label>
+				<div class="col-md-4">
+					<input name="type" type="text" class="event-input" placeholder="請輸入開始日期" 
+					ng-disabled="" ng-model="eventBeginDate" required>
+					<!-- <div class="col-md-5 alert alert-danger" role="alert" ng-show="advice.name.$error.required && submitted">
+					<i class="fa fa-warning"></i>
+					請問您的大名是？</div> -->
+				</div>
+				<label for="beginTime" class="col-md-2 control-label">開始時間:</label>
+				<div class="col-md-4">
+					<input name="type" type="text" class="event-input" placeholder="請輸入開始日期" 
+					ng-disabled="" ng-model="eventBeginTime" required>
+					<!-- <div class="col-md-5 alert alert-danger" role="alert" ng-show="advice.name.$error.required && submitted">
+					<i class="fa fa-warning"></i>
+					請問您的大名是？</div> -->
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="beginDate" class="col-md-2 control-label">結束日期:</label>
+				<div class="col-md-4">
+					<input name="type" type="text" class="event-input" placeholder="請輸入結束日期" 
+					ng-disabled="" ng-model="eventEndDate" required>
+					<!-- <div class="col-md-5 alert alert-danger" role="alert" ng-show="advice.name.$error.required && submitted">
+					<i class="fa fa-warning"></i>
+					請問您的大名是？</div> -->
+				</div>
+				<label for="beginTime" class="col-md-2 control-label">結束時間:</label>
+				<div class="col-md-4">
+					<input name="type" type="text" class="event-input" placeholder="請輸入結束時間" 
+					ng-disabled="" ng-model="eventEndTime" required>
+					<!-- <div class="col-md-5 alert alert-danger" role="alert" ng-show="advice.name.$error.required && submitted">
+					<i class="fa fa-warning"></i>
+					請問您的大名是？</div> -->
+				</div>
+			</div>
+			<!-- <div class="form-group">
+				<label for="type" class="col-md-2 control-label">找人:</label>
+				<div class="col-md-10">
+					<input name="type" type="text" class="event-input" placeholder="請輸入活動類型" 
+					ng-disabled="" required>
+				</div>
+			</div> -->
+			<textarea name="info" class="event-input" rows="3" placeholder="活動介紹" ng-model="comment" ng-disabled="sending" ng-model="eventInfo" required></textarea>
+			<!-- <div class="col-md-5 alert alert-danger" role="alert" ng-show="advice.comment.$error.required && submitted">
+			<i class="fa fa-warning"></i>
+			不要害羞，請打出你想說的</div> -->
+			<button class="submitBtn" type="submit" ng-click="createEvent(event)">
+				<span ng-hide="sending">送出</span>
+				<span ng-show="sending">送出中</span>
+				<i ng-show="sending" class="fa fa-spinner fa-pulse"></i> 
+			</button>
+
+		</form>
+	</div>
+</div>
+
+
+<!-- <div class="event-form-container">
+	<div class="event-form">
+		<h1>建立新活動</h1>	
+		<form name="event">
+		  <div class="form-group">
+		    <label for="name" class="col-md-2 control-label">活動名稱:</label>
+		    <div class="col-md-10">
+			    <input type="name" class="form-control event-input">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="type" class="col-md-2 control-label">種類:</label>
+		    <div class="col-sm-10">
+			    <input type="text" class="form-control event-input">
+		    </div>
+		  </div> -->
+		  <!-- <div class="form-group">
+		    <label for="eventinfo" class="col-sm-2 control-label">活動內容:</label>
+		    <input type="text" class="form-control event-input">
+		  </div>
+		  <div class="form-group">
+		    <label for="eventinfo" class="col-sm-2 control-label">開始日期:</label>
+		    <input type="text" class="form-control event-input">
+		  </div>
+		  <div class="form-group">
+		    <label for="eventinfo" class="col-sm-2 control-label">結束日期:</label>
+		    <input type="text" class="form-control event-input">
+		  </div>
+		  <div class="form-group">
+		    <label for="eventinfo" class="col-sm-2 control-label">缺什麼樣的人:</label>
+		    <input type="text" class="form-control event-input">
+		  </div> -->
+		  
+		 <!--  <button type="submit" class="btn btn-default">Submit</button> -->
+		<!-- </form>
+		
+	</div>
+</div> -->

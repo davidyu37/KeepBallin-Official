@@ -1,9 +1,14 @@
 /* Comment stuff starts here */
 
+.comment-form {
+    height: 60px;
+    margin-top: 20px;
+}
+
 .commentSection{
     display: none;
     @media(min-width: $screen-sm-min) {
-        box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, 12px 0 10px -5px rgba(221, 221, 221, 0.8), -12px 0 10px -4px rgba(221, 221, 221, 0.8);    
+        /*box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, 12px 0 10px -5px rgba(221, 221, 221, 0.8), -12px 0 10px -4px rgba(221, 221, 221, 0.8); */   
         display: block;
     }
 }

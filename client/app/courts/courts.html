@@ -1,7 +1,5 @@
 <div>
-    <div id="map" marker
-    ng-class="{'mapShadow': currentcourt}"
-    ></div>
+    <div id="map" marker></div>
     <button title="定位(解除瀏覽器的封鎖才可以使用喔)" type="button" id="geolocate" class="geolocateBtn"
     ng-click="geolocate()"
     popover="{{geoErr}}"
@@ -179,9 +177,16 @@
     ng-include="'app/courts/temp/edit.page.html'" 
     ng-init="edit=false" ng-show="edit" 
     ng-click="editmode()"></div>
-    
-    <!-- Comments start here -->
-    <div ng-show="currentcourt" ng-include="'app/comments/comments.html'"></div>
+    <div class="row">
+        <div class="col-sm-6">
+            <!-- Events start here -->
+            <div ng-show="currentcourt" ng-include="'app/events/events.court.html'" style="border: 1px solid grey"></div>
+        </div>
+        <div class="col-sm-6">
+            <!-- Comments start here -->
+            <div ng-show="currentcourt" ng-include="'app/comments/comments.html'"></div>
+        </div>
+    </div>
     <!-- Comments end -->
     <!-- Searchbox -->
     <div id="searchbox">

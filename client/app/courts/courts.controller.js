@@ -15,9 +15,8 @@ angular.module('keepballin')
 
 	    chosenCourt.$promise.then(function(data) {
 	    	$scope.courts = data;
+	    	$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
 	    });
-
-	    // $timeout(function() {$scope.map.panTo({lat: $scope.courts[0].lat, lng: $scope.courts[0].long});});
 
 	    //Panorama stuff from here
 	    var panorama = map.getStreetView();
