@@ -12,9 +12,12 @@ angular.module('keepballin')
 	    $scope.infowindow = new google.maps.InfoWindow();
 	    //Store courts from api
 	    $scope.courts = [];
-	    $scope.courts = chosenCourt;
 
-	    $timeout(function() {$scope.map.panTo({lat: $scope.courts[0].lat, lng: $scope.courts[0].long});});
+	    chosenCourt.$promise.then(function(data) {
+	    	$scope.courts = data;
+	    });
+
+	    // $timeout(function() {$scope.map.panTo({lat: $scope.courts[0].lat, lng: $scope.courts[0].long});});
 
 	    //Panorama stuff from here
 	    var panorama = map.getStreetView();

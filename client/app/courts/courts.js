@@ -9,7 +9,7 @@ angular.module('keepballin')
         resolve: {
         	chosenCourt: ['$stateParams', 'Court', function($stateParams, Court) {
         		if($stateParams.id) {
-	        		return [Court.get({id: $stateParams.id})];
+	        		return Court.getOne({id: $stateParams.id});
         		} else {
         			return Court.query();
         		}

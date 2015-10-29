@@ -20,6 +20,15 @@ exports.show = function(req, res) {
   });
 };
 
+exports.chosenCourt = function(req, res) {
+  court.findOneAndPopulate(req.params.id, function (err, court) {
+    if(err) { return handleError(res, err); }
+    if(!court) { return res.status(404).send('Not Found'); }
+   
+    return res.json(court);
+  });
+};
+
 // Get ratings of the court
 exports.getRating = function(req, res) {
   court.getRatings(req.params.id, function (err, court) {

@@ -97,6 +97,11 @@ CourtSchema.statics = {
     this.find()
     .deepPopulate('pictures.user pictures creator lastEditedBy')
     .exec(cb);
+  },
+  findOneAndPopulate: function(courtId, cb) {
+    this.find({_id: courtId})
+    .deepPopulate('pictures.user pictures creator lastEditedBy')
+    .exec(cb);
   }
 };
 // $** wildcard text search

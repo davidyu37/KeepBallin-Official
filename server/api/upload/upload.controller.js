@@ -132,7 +132,7 @@ function uploadTos3AndRecordOnDB (req, res, category) {
 
       uploader.on('end', function(data) {
         console.log("DONE: done uploading");
-        var url = s3.getPublicUrlHttp(params.s3Params.Bucket, params.s3Params.Key);
+        var url = s3.getPublicUrl(params.s3Params.Bucket, params.s3Params.Key, "ap-northeast-1");
         record = _.merge(record, {url: url});
         Upload.create(record, function(err, upload) {
           if(err) { return handleError(res, err); }

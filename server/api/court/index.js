@@ -7,6 +7,7 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 router.get('/', controller.index);
+router.get('/:id/chosenCourt', controller.chosenCourt)
 router.get('/search', controller.searchResult);
 router.get('/:id', controller.show);
 router.get('/:id/ratings', controller.getRating);
