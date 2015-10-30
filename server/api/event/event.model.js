@@ -1,11 +1,13 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+    relationship = require("mongoose-relationship"),
+    deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var EventSchema = new Schema({
   name: String,
-  type: [{type: String}],
+  type: [String],
   info: String,
   begin: Date,
   end: Date,
@@ -23,7 +25,8 @@ var EventSchema = new Schema({
   //when user joins the event, it adds to the list of events in their data
   participants: [{
   	type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    childPath: 'eventsJoined'
   }],
   creator: {
   	type: Schema.ObjectId,
@@ -34,5 +37,36 @@ var EventSchema = new Schema({
   lookFor: [String]
 
 });
+
+EventSchema.plugin(relationship, { relationshipPathName:'participants' });
+
+EventSchema.plugin(deepPopulate, {
+  populate: {
+    'creator.avatar': {
+      select: 'url'
+    },
+    'creator': {
+      select: 'name avatar'
+    },
+    'court': {
+      select: 'court lat long'
+    },
+    'participants': {
+      select: 'name avatar'
+    },
+    'participants.avatar': {
+      select: 'url'
+    }
+  }
+});
+
+EventSchema.statics = {
+  //Populate all but individual ratings
+  findAndPopulate: function(id, cb) {
+    this.findOne({_id: id})
+    .deepPopulate('creator.avatar creator court participants participants.avatar')
+    .exec(cb);
+  }
+};
 
 module.exports = mongoose.model('Event', EventSchema);

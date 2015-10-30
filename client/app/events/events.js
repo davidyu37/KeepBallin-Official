@@ -19,5 +19,15 @@ angular.module('keepballin')
         },
       	templateUrl: 'app/events/events.add.html',
       	controller: 'AddEventsCtrl'
+      })
+      .state('thisevent', {
+        url:'/thisevent/:event',
+        resolve: {
+          thisEvent: ['$stateParams', 'Event', function($stateParams, Event) {
+            return Event.get({id: $stateParams.event});  
+          }]
+        },
+        templateUrl: 'app/events/events.this.html',
+        controller: 'IndividualEvent'
       });
   });

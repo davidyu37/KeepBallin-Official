@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single event
 exports.show = function(req, res) {
-  Event.findById(req.params.id, function (err, event) {
+  Event.findAndPopulate(req.params.id, function (err, event) {
     if(err) { return handleError(res, err); }
     if(!event) { return res.status(404).send('Not Found'); }
     return res.json(event);
@@ -22,7 +22,15 @@ exports.show = function(req, res) {
 
 // Creates a new event in the DB.
 exports.create = function(req, res) {
-  Event.create(req.body, function(err, event) {
+  var participants = [];
+  participants.push(req.user._id);
+  var userRelated = {
+    creator: req.user._id,
+    participants: participants
+  };
+  var newEvent = _.merge(req.body, userRelated);
+  console.log(newEvent);
+  Event.create(newEvent, function(err, event) {
     if(err) { return handleError(res, err); }
     return res.status(201).json(event);
   });
@@ -55,5 +63,6 @@ exports.destroy = function(req, res) {
 };
 
 function handleError(res, err) {
+  console.log(err);
   return res.status(500).send(err);
 }

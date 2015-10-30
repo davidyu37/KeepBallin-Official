@@ -1,15 +1,60 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('AddEventsCtrl', ['$scope', 'thisCourt', '$timeout', function ($scope, thisCourt, $timeout) {
-  	// console.log(thisCourt);
+  .controller('AddEventsCtrl', ['$scope', 'thisCourt', '$timeout', 'Event', '$state', function ($scope, thisCourt, $timeout, Event, $state) {
+
+  	thisCourt.$promise.then(function(court) {
+	  	$scope.thisCourt = court;
+  	});
+
   	$scope.tooLong = false; //true when user choose more than five types
   	$scope.eventName = '';
   	$scope.eventType = [];
+  	$scope.begin = new Date();//default date begin today
+  	$scope.today = new Date();//min date for date picker
+  	$scope.end = $scope.begin; //default end to begin
+  	$scope.eventInfo = '';//event info
 
+  	$scope.sending = false;
+  	$scope.submitted = false;
    	
    	$scope.createEvent = function(event) {
-   		console.log('click', event);
+   		$scope.submitted = true;
+   		
+   		if(event.$valid && $scope.eventType[0]) {
+   			$scope.sending = true;
+
+	   		//Process the types to new array with only string
+	   		var newArr = [];
+	   		for(var i=0; i < $scope.eventType.length; i++) {
+	   			newArr.push($scope.eventType[i].type);
+	   		}
+
+	   		//Information to be sent to backend
+	   		//eventName, eventType, begin, end, info, courtID
+	   		var data = {
+	   			name: $scope.eventName,
+	   			type: newArr,
+	   			begin: $scope.begin,
+	   			end: $scope.end,
+	   			court: $scope.thisCourt._id,
+	   			location: $scope.thisCourt.address,
+	   			info: $scope.eventInfo
+	   		};
+        console.log(data);
+	   		var saved = Event.save(data);	
+   			saved.$promise.then(function(d) {
+   				console.log(d);
+
+   				$scope.sending = false;
+   				$scope.eventName = '';
+   				$scope.eventType = [];
+   				$scope.begin = new Date();
+   				$scope.end = $scope.begin;
+   				$scope.eventInfo = '';
+   				$state.go('thisevent', {event: d._id});
+   			})
+   		}
    	};
 
    	//types of event
@@ -55,6 +100,23 @@ angular.module('keepballin')
    			}
    		}
    		$scope.eventType.splice(index, 1);
+   	};
+
+   	// $scope.getClass = function(date, mode) {
+   	// 	console.log(date);
+   	// 	console.log(mode);
+   	// }
+
+   	//Open datepicker
+   	$scope.openCal1 = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$scope.opened1 = true;
+   	};
+   	$scope.openCal2 = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$scope.opened2 = true;
    	};
 
 
