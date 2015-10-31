@@ -1,31 +1,38 @@
 <div class="container" style="width: 100%" ng-controller="EventsCtrl">	
 	<div class="page-header">
 		<h1>{{currentcourt.court}}球場 
-			<!-- ui-sref="addevent({court: currentcourt._id}) -->
 		</h1>
 	</div>	
 	<span class="eventBtn" ng-click="createEvent()">在這裡辦活動</span>
-	
-	<div class="col-lg-12" ng-repeat="e in events">
-		<div class="panel" style="margin-top: 30px">
-			<div class="panel-heading">
-				<h2>{{e.name}}</h2>
-			</div>
-			<div class="thumbnail">
-		      <img src="../assets/images/court_pics/event.jpg">
-		      <div class="caption">
-		        <h3>
-					<span class="label label-primary" ng-repeat="t in e.type" style="margin-right: 5px">{{t}}</span>
-		        </h3>
-		        <p>開始時間:
-					<span style="margin-left: 5px;">{{e.begin | date: 'short'}}</span>
-				</p>
-				<p>結束時間:
-					<span style="margin-left: 5px;">{{e.end | date: 'short'}}</span>
-				</p>
-		        <p>{{e.info}}</p>
-		        <p class="pull-right"><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
-		      </div>
+
+	<div style="height: 400px; overflow-y: scroll;">
+		<div class="col-lg-12" ng-repeat="e in events track by $index">
+			<div class="panel" style="margin-top: 30px">
+				<div class="panel-heading">
+					<h2>{{e.name}}</h2>
+				</div>
+				<div class="thumbnail">
+			      <img ng-src="{{e.pics[0].url}}">
+			      <div class="caption">
+			        <h3>
+						<span class="label label-primary" ng-repeat="t in e.type" style="margin-right: 5px">{{t}}</span>
+						<span class="pull-right">
+							<i class="fa fa-user-plus"><span class="badge">{{e.participants.length}}</span></i>
+						</span>
+			        </h3>
+			        <p>開始時間:
+						<span style="margin-left: 5px;">{{e.begin | date: 'short'}}</span>
+					</p>
+					<p>結束時間:
+						<span style="margin-left: 5px;">{{e.end | date: 'short'}}</span>
+					</p>
+			        <p>{{e.info}}</p>
+				        <p class="pull-right">
+				        <button ng-click="join($index)" class="btn btn-primary" role="button" ng-hide="isParticipating($index)">+1</button> 
+				        <a ui-sref="thisevent({event: e._id})" class="btn btn-default" role="button">看更多</a>
+			        </p>
+			      </div>
+				</div>
 			</div>
 		</div>
 	</div>

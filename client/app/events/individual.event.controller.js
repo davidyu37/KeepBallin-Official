@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('IndividualEvent', ['$scope', 'thisEvent', 'Auth', '$state', 'Event', 'socket', function ($scope, thisEvent, Auth, $state, Event, socket) {
+  .controller('IndividualEvent', ['$scope', 'thisEvent', 'Auth', '$state', 'Event', 'socket', 'SweetAlert', '$filter', '$modal', function ($scope, thisEvent, Auth, $state, Event, socket, SweetAlert, $filter, $modal) {
   	thisEvent.$promise.then(function(data) {
   		$scope.event = data;
 
@@ -34,12 +34,17 @@ angular.module('keepballin')
         });
 	  	//Check if user already participating
 	  	for(var i=0; i < $scope.event.participants.length; i++) {
-			if($scope.event.participants[i]._id === Auth.getCurrentUser()._id) {
-				$scope.showMinus = true;
-			} else {
-				$scope.showMinus = false;
-			}
-		}
+  			if($scope.event.participants[i]._id === Auth.getCurrentUser()._id) {
+  				$scope.showMinus = true;
+  			} else {
+  				$scope.showMinus = false;
+  			}
+		  }
+      if($scope.event.creator._id === Auth.getCurrentUser()._id) {
+        $scope.isCreator = true;
+      } else {
+        $scope.isCreator = false;
+      }
   	});
 
 	socket.socket.on('event:save', function(item) {
@@ -67,34 +72,31 @@ angular.module('keepballin')
 
   			//Update event model
   			Event.update({id: $scope.event._id}, {participants: newArr}, function() {
-  				console.log('joined');
+  				var formatTime = $filter('date')($scope.event.begin, 'short');
+
+          SweetAlert.swal({
+            title: $scope.event.name + '加入成功',
+            text: '<p>開始時間：' + formatTime + '</p><p>地點：' + $scope.event.location + '</p>',
+            type: 'success',
+            html: true,
+            confirmButtonColor: '#DD6B55',   
+            confirmButtonText: 'Ok'
+          });
   			});
   		} else {
   			$state.go('login');
   		}
   	};
 
-  	//User leaves the event
-  	$scope.leave = function() {
-  		//create an empty array
-  		var emptyArr = [];
-  		
-  		//Loop through the current participants
-  		for(var i=0; i < $scope.event.participants.length; i++) {
-	  		//If the current participant has the same id as the user now
-			if($scope.event.participants[i]._id === Auth.getCurrentUser()._id) {
-		  		//Don't push its id to the new array
-				continue;
-			}
-			emptyArr.push($scope.event.participants[i]._id);
-		}
-		console.log(emptyArr);
-  // 		Event.update({id: $scope.event._id}, {participants: emptyArr}, function() {
-		// 	console.log('left');
-		// });
-  
+    //Share the court url
+      $scope.share = function() {
+        new Clipboard('.shareBtn');
 
-
-  	};
+        $modal.open({
+          animation: true,
+          templateUrl: 'app/share/share.event.html',
+          scope: $scope
+        });
+      };
  
   }]);

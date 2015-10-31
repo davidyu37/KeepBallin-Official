@@ -1,8 +1,16 @@
-<div class="jumbotron" style="background-image: url('/assets/images/pic4.jpg'); background-size: cover; width: 100%; height: 600px; display: table;">
+<a ng-click="share()" class="btn-sm btn-primary pointer" style="position: fixed; left: 0; top: 50%;">
+	分享<i class="fa fa-external-link" style="margin-left: 5px"></i>
+</a>
+<div class="jumbotron" style="width: 100%; height: 600px; display: table;">
+	<img src="/assets/images/pic4.jpg" class="coverPic" ng-hide="event.pics[0].url">
+	<img ng-src="{{event.pics[0].url}}" class="coverPic">
 	<div style="display: table-cell; vertical-align: middle; color: white;">
+	<!-- /assets/images/pic4.jpg -->
 		<h1 >{{event.name}}</h1>
 		<button ng-click="join()" class="eventBtn" ng-hide="showMinus">+1</button>
-		<!-- <button ng-click="leave()" class="eventBtn" ng-show="showMinus">-1</button> -->
+		<button ng-show="isCreator" class="btn btn-primary" ui-sref="thisevent.upload">
+			上傳照片<i class="fa fa-camera"></i>
+		</button>
 	</div>
 </div>
 <div class="container" style="margin-bottom: 60px;">
@@ -53,6 +61,21 @@
 				<span class="label label-primary" ng-repeat="t in event.type" style="margin-right: 5px">{{t}}</span>
 			</h3>
 			<p style="font-size: 130%;">{{event.info}}</p>	
+		</div>
+		<div class="col-sm-12">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>{{event.name}}照片</h2>
+			</div>
+			<p ng-hide="event.pics[0].url">目前還沒有照片</p>
+			<button ng-show="isCreator" class="btn btn-primary" ui-sref="thisevent.upload">
+			上傳照片<i class="fa fa-camera"></i>
+		</button>
+			<carousel interval="5000" no-wrap="false">
+				<slide ng-repeat="slide in event.pics" active="slide.active">
+					<img class="img-responsive" ng-src="{{slide.url}}" style="margin:auto;">
+				</slide>
+			</carousel>
+				
 		</div>
 	</div>
 </div>

@@ -56,6 +56,9 @@ EventSchema.plugin(deepPopulate, {
     },
     'participants.avatar': {
       select: 'url'
+    },
+    'pics': {
+      select: 'url'
     }
   }
 });
@@ -64,7 +67,13 @@ EventSchema.statics = {
   //Populate all but individual ratings
   findAndPopulate: function(id, cb) {
     this.findOne({_id: id})
-    .deepPopulate('creator.avatar creator court participants participants.avatar')
+    .deepPopulate('creator.avatar creator court participants participants.avatar pics')
+    .exec(cb);
+  },
+  findAndSort: function(cb) {
+    this.find()
+    .deepPopulate('creator.avatar creator participants pics')
+    .sort('-begin')
     .exec(cb);
   }
 };

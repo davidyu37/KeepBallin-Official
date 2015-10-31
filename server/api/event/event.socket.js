@@ -17,7 +17,7 @@ exports.register = function(socket) {
 
 function onSave(socket, doc, cb) {
 	
-	doc.deepPopulate('creator.avatar creator court participants participants.avatar', function(err, _doc) {
+	doc.deepPopulate('creator.avatar creator court participants participants.avatar pics', function(err, _doc) {
 		socket.emit('event:save', _doc);
 	});
 }

@@ -38,6 +38,11 @@ exports.createCourtPic = function(req, res) {
   uploadTos3AndRecordOnDB (req, res, category);
 };
 
+exports.eventpic = function(req, res) {
+  var category = 'events';
+  uploadTos3AndRecordOnDB (req, res, category);
+};
+
 // Get uploads by courtId
 exports.getCourtPics = function(req, res) {
   Upload.loadByCourtId(req.params.court, function(err, upload) {
@@ -85,7 +90,7 @@ function uploadTos3AndRecordOnDB (req, res, category) {
       var contentType = file.headers['content-type'];
       var extension = file.path.substring(file.path.lastIndexOf('.'));
       var destPath = '';
-      var courtId, userId;
+      var courtId, userId, eventId;
       if(category === 'courts') {
         console.log(fields.courtId);
         courtId = fields.courtId;
@@ -95,6 +100,12 @@ function uploadTos3AndRecordOnDB (req, res, category) {
         userId = req.user._id;
         destPath = 'pictures/' + category + '/' + userId + '/' + uuid.v4() + extension;
       }
+
+      if(category === 'events') {
+        eventId = fields.eventId;
+        destPath = 'pictures/' + category + '/' + eventId + '/' + uuid.v4() + extension;
+      }
+
       //Params to upload to s3
       var params = {
         localFile: file.path,
@@ -117,6 +128,12 @@ function uploadTos3AndRecordOnDB (req, res, category) {
       if(category === 'profile') {
         var avatar = {avatarOf: req.user._id};
         record = _.merge(record, avatar);
+      }
+
+      if(category === 'events') {
+        console.log(fields);
+        eventId = {event: fields.eventId[0]};
+        record = _.merge(record, eventId);
       }
 
       var uploader = s3Client.uploadFile(params);

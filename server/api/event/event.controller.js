@@ -5,7 +5,7 @@ var Event = require('./event.model');
 
 // Get list of events
 exports.index = function(req, res) {
-  Event.find(function (err, events) {
+  Event.findAndSort(function (err, events) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(events);
   });

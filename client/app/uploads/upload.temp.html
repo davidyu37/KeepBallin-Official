@@ -1,0 +1,47 @@
+<div class="whitebackground">
+    <form class="uploadForm" name="uploadForm">
+      <h2>上傳照片</h2>
+      <p>選檔案，或拖曳檔案進來紅框</p>
+      <div  ngf-select ngf-drop ng-model="files" ngf-multiple="true" class="drop-box">
+        <h2 class="message">丟吧</h2>  
+        <div class="uploadbtn" ngf-select ng-model="files" name="courtpic" ngf-multiple="true">選檔案</div>
+      </div>
+      <div ngf-no-file-drop>
+        不好意思，你的瀏覽器不支援此功能
+      </div>
+      <p class="lead" ng-show="files">上傳{{files.length}}張 
+        <span>已上傳{{uploadCount}}張</span> 
+      </p>
+      <!-- <p class="text-muted" ng-show="files">上傳後再點一下該球場地圖標籤，上傳的圖就會出現囉</p> -->
+      <ul ng-repeat="file in files" class="list-group">
+        <li class="list-group-item">
+            <div class="media">
+              <div class="pull-left" style="height: 64px; width: 64px;">
+                  <img ngf-src="file" class="img-responsive media-object">
+              </div>
+              <div class="pull-left">
+                <h4>{{file.name}}</h4>
+                <p>{{file.size | bytes}}bytes</p>
+              </div>
+              <div class="pull-right" ng-show="uploading">
+                <i class="fa fa-spinner faa-spin animated"></i>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar"
+              aria-valuenow="{{log}}" aria-valuemin="0" aria-valuemax="100" style="width:{{log}}%">
+                {{log}}%
+              </div>
+            </div>
+        </li>
+      </ul>
+      <div class="col-md-12">
+        <input class="uploadbtn"
+        ng-click="submit(uploadForm)" 
+        ng-disabled="!files"
+        value="送出"/>
+      </div>
+      
+    </form>
+</div>
+

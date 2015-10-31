@@ -41,10 +41,9 @@ angular.module('keepballin')
 	   			location: $scope.thisCourt.address,
 	   			info: $scope.eventInfo
 	   		};
-        console.log(data);
+        
 	   		var saved = Event.save(data);	
    			saved.$promise.then(function(d) {
-   				console.log(d);
 
    				$scope.sending = false;
    				$scope.eventName = '';
@@ -53,25 +52,25 @@ angular.module('keepballin')
    				$scope.end = $scope.begin;
    				$scope.eventInfo = '';
    				$state.go('thisevent', {event: d._id});
-   			})
+   			});
    		}
    	};
 
    	//types of event
    	$scope.typeOptions = [
-   		{type: "輕鬆打", disable: false},
-		{type: "練球", disable: false},
-		{type: "練體能", disable: false},
-		{type: "正式全場", disable: false},
-		{type: "正式鬥牛", disable: false},
-		{type: "錦標賽", disable: false},
-		{type: "企業贊助", disable: false},
-		{type: "選秀", disable: false},
-		{type: "上班族", disable: false},
-		{type: "打健康", disable: false},
-		{type: "學生", disable: false},
-		{type: "親子",  disable: false}
-   	]
+   		{type: '輕鬆打', disable: false},
+		{type: '練球', disable: false},
+		{type: '練體能', disable: false},
+		{type: '正式全場', disable: false},
+		{type: '正式鬥牛', disable: false},
+		{type: '錦標賽', disable: false},
+		{type: '企業贊助', disable: false},
+		{type: '選秀', disable: false},
+		{type: '上班族', disable: false},
+		{type: '打健康', disable: false},
+		{type: '學生', disable: false},
+		{type: '親子',  disable: false}
+   	];
    	//add one type to eventType array, disable that type
    	$scope.addType = function() {
    		if($scope.type) {
@@ -101,11 +100,6 @@ angular.module('keepballin')
    		}
    		$scope.eventType.splice(index, 1);
    	};
-
-   	// $scope.getClass = function(date, mode) {
-   	// 	console.log(date);
-   	// 	console.log(mode);
-   	// }
 
    	//Open datepicker
    	$scope.openCal1 = function(e) {

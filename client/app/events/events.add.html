@@ -11,7 +11,7 @@
 				<label for="name" class="col-md-2 control-label">活動名稱:</label>
 				<div class="col-md-10">
 					<input name="name" type="text" class="event-input" placeholder="請輸入活動名稱" 
-					ng-disabled="sending" ng-model="eventName" required>
+					ng-disabled="sending" ng-model="eventName" autofocus required>
 					<div class="col-md-5 alert alert-danger" role="alert" ng-show="event.name.$error.required && submitted">
 					<i class="fa fa-warning"></i>
 					活動名稱是必要的</div>

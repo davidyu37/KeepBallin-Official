@@ -11,6 +11,6 @@ router.get('/pictures/:court', controller.getCourtPics);
 router.post('/pictures', auth.isAuthenticated(), controller.createCourtPic);
 router.delete('/pictures/:id', auth.hasRole('manager'), controller.destroy);
 router.post('/pictures/profile', auth.isAuthenticated(), controller.profilepic);
-// router.post('/pictures/teampic', auth.isAuthenticated(), controller.teampic);
+router.post('/pictures/eventpic', auth.isAuthenticated(), controller.eventpic);
 
 module.exports = router;
