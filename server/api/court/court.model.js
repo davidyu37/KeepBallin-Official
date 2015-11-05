@@ -2,18 +2,19 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
+    mongoosastic = require('mongoosastic'),
     ObjectId = Schema.ObjectId,
     relationship = require("mongoose-relationship"),
     deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var CourtSchema = new Schema({
   country: {type: String, default: 'Taiwan'},
-  court: String,
+  court: {type:String, es_indexed:true},
   city: String,
   district: String,
   lat: Number,
   long: Number,
-  address: String,
+  address: {type:String, es_indexed:true},
   desc: String,
   hours: {begin: {type: Date, default: Date.now}, end: {type: Date, default: Date.now}},
   peaktime: {begin: {type: Date, default: Date.now}, end: {type: Date, default: Date.now}},
@@ -70,6 +71,8 @@ CourtSchema.plugin(deepPopulate, {
     }
   }
 });
+//search plugin
+CourtSchema.plugin(mongoosastic);
 
 CourtSchema.statics = {
   getRatings: function(courtID, cb) {
@@ -77,18 +80,20 @@ CourtSchema.statics = {
       .populate({path:'ratings', select: 'rate'})
       .exec(cb);
   },
-  // || params.court || params.city || params.district || params.address
   search: function(params, cb) {
-    var query = { $and: [] };
-    for (var key in params){
-      if(key === 'query') {
-        query.$and.push({ $text: { $search : params.query }});
-      } else {
-        var thisParam = {};
-        thisParam[key] = params[key];     
-        query.$and.push(thisParam);
-      }
-    }
+    // var query = { $and: [] };
+    // for (var key in params){
+    //   if(key === 'query') {
+    //     query.$and.push({ $text: { $search : params.query }});
+    //   } else {
+    //     var thisParam = {};
+    //     thisParam[key] = params[key];     
+    //     query.$and.push(thisParam);
+    //   }
+    // }
+    var query = {
+      $text: { $search : params.query }
+    };
     this.find(query)
       .deepPopulate('pictures.user pictures creator lastEditedBy')
       .exec(cb);
@@ -106,6 +111,8 @@ CourtSchema.statics = {
   }
 };
 // $** wildcard text search
-CourtSchema.index({ "$**": "text" });
+// CourtSchema.index({ "$**": "text" });
+
+CourtSchema.index({ court: "text", address: "text" } );
 
 module.exports = mongoose.model('Court', CourtSchema);

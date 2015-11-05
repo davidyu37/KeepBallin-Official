@@ -1,0 +1,118 @@
+<div class="jumbotron" style="width: 100%; height: 600px; display: table;">
+	<img src="/assets/images/pic4.jpg" class="coverPic" ng-hide="event.pics[0].url">
+	<img ng-src="{{event.pics[0].url}}" class="coverPic">
+	<div style="display: table-cell; vertical-align: middle; color: white;">
+	<!-- /assets/images/pic4.jpg -->
+		<h1 >{{currentcourt.court}}</h1>
+		<p>{{currentcourt.address}}</p>
+		<div style="text-align: center">
+            <!--Upload button-->
+            <button class="mobileEditButton"
+            ng-click="uploadmode()"
+            tooltip="上傳球場照片"
+            tooltip-trigger="mouseenter"
+            tooltip-placement="left">
+                <span class="glyphicon glyphicon-camera"></span>
+            </button>
+            <!--Edit button-->
+            <button class="mobileEditButton"
+            ng-click="editmode()"
+            tooltip="編輯球場資訊"
+            tooltip-trigger="mouseenter"
+            tooltip-placement="right">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+        </div>
+	</div>
+</div>
+<div class="container" style="margin-bottom: 60px; background-color: white; padding-bottom: 40px;">
+	<div class="row">
+		<div class="col-sm-6" style="font-size: 150%;">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>
+					<i class="fa fa-clock-o"></i>
+					開放時段
+				</h2>
+			</div>
+			<p>開放時間:</p>
+            <p ng-show="currentcourt.hours">
+                {{currentcourt.hours.begin | date:'shortTime'}}~{{currentcourt.hours.end | date:'shortTime'}}
+            </p>
+           
+             <!-- Peaktime -->
+            <p>尖峰:</p>
+            <p ng-show="currentcourt.peaktime">
+                {{currentcourt.peaktime.begin | date:'shortTime'}}~{{currentcourt.peaktime.end | date:'shortTime'}}
+            </p>
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>
+					<img style="width: 30px; height; 30px;" src="/assets/images/basketball.icon.png" alt="">
+					球場資訊
+				</h2>
+			</div>
+			<p ng-show="currentcurrentcourt.indoor">室內</p>
+            <p ng-show="!currentcurrentcourt.indoor">室外</p>
+            <p>籃框數:{{currentcourt.basketnumber}}</p>
+            <p>籃網:{{currentcourt.net | exist}}</p>
+            <p ng-hide="currentcourt.net">沒籃網</p>
+            <p ng-show="currentcourt.nettype">籃網類型:{{currentcourt.nettype}}</p>
+            <p>地質:{{currentcourt.floor}}</p>
+		</div>
+		<div class="col-sm-6" style="font-size: 150%;">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>
+					<i class="fa fa-map-pin"></i>
+					地點: 
+				</h2>
+			</div>
+			<div id="courtMap" style="width: 100%; height: 150px"></div>
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>
+					<i class="fa fa-building"></i>
+					設施資訊: 
+				</h2>
+			</div>
+			<p>燈:{{currentcourt.lights | exist}}</p>
+			<p>租金:{{currentcourt.rent | exist}}</p>
+            <p ng-show="currentcourt.rentprice">
+            	{{"$" + currentcourt.rentprice + "/小時"}}
+            </p>
+            <p>飲水機:{{currentcourt.water.exist | exist}}</p>
+            <p ng-show="currentcourt.water.desc">
+            飲水機位置:{{currentcourt.water.desc}}</p>
+            <p>廁所:{{currentcourt.toilet.exist | exist}}</p>
+            <p ng-show="currentcourt.toilet.desc">
+            廁所位置:{{currentcourt.toilet.desc}}</p>     
+		</div>
+		<div class="col-sm-12">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>球場管理員留言</h2>
+			</div>
+			<p style="font-size: 130%;">{{currentcourt.desc}}</p>	
+		</div>
+		<div class="col-sm-12">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>{{currentcourt.court}}照片</h2>
+			</div>
+			<p ng-hide="currentcourt.pictures[0].url">目前還沒有照片</p>
+			<carousel interval="5000" no-wrap="false">
+				<slide ng-repeat="slide in currentcourt.pictures" active="slide.active">
+					<img class="img-responsive" ng-src="{{slide.url}}" style="margin:auto;">
+				</slide>
+			</carousel>
+				
+		</div>
+	</div>
+	<div ng-include="'app/comments/comments.html'"></div>
+	<!-- Editing page -->
+	<div class="editPage col-lg-12" 
+    ng-include="'app/courts/temp/edit.page.html'" 
+    ng-init="edit=false" ng-show="edit" 
+    ng-click="editmode()"></div>
+    <!-- Pictures upload page -->
+    <div class="editPage col-lg-12" 
+    ng-include="'app/courts/temp/upload.page.html'" 
+    ng-init="upload=false" ng-show="upload" 
+    ng-click="uploadmode()"
+    ></div>
+</div>

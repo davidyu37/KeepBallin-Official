@@ -1,4 +1,11 @@
 /* add events css starts */
+.event {
+  display: none;
+  @media(min-width: $screen-sm-min) {
+    display: block;
+  }
+}
+
 .event-form-container {
 	max-width: 70%;
 	height: auto;
@@ -79,12 +86,14 @@
 .eventBtn {
   border: 2px solid $brand-primary;
   padding: 10px;
-  width: 15%;
   border-radius:5px;
   background: transparent;
   font-size:24px;
   cursor:pointer;
   transition: all 0.3s;
+  @media(min-width: $screen-sm-min) {
+    width: 15%;   
+  }
 }
 
 .eventBtn:hover {

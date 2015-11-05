@@ -1,23 +1,13 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('NavbarCtrl', ['$scope', '$window', '$location', 'Auth', 'Scroll', 'socket', '$timeout', function ($scope, $window, $location, Auth, Scroll, socket, $timeout) {
+  .controller('NavbarCtrl', ['$rootScope', '$scope', '$location', '$window', '$state', 'Auth', 'Scroll', 'socket', '$timeout', function ($rootScope, $scope, $location, $window, $state, Auth, Scroll, socket, $timeout) {
     
     if(screen.width > 480) {
       Scroll.scrollInit();
     }
 
     $scope.menu = [
-    // {
-    //   'title': '首頁',
-    //   'link': '/',
-    //   'icon': 'glyphicon-home'
-    // },
-    // {
-    //   'title': '活動',
-    //   'link': '/events',
-    //   'icon': 'glyphicon-bullhorn'
-    // },
     {
       'title': '球場',
       'link': 'courts',
@@ -28,17 +18,6 @@ angular.module('keepballin')
       'link': 'contact',
       'icon': 'glyphicon-envelope'
     }
-    // {
-    //   'title': '球員',
-    //   'link': '/players',
-    //   'icon': 'glyphicon-user'
-    // },
-    // {
-    //   'title': '球隊',
-    //   'link': '/teams',
-    //   'icon': 'glyphicon-flag'
-    // },
-    
     ];
 
     $scope.isCollapsed = true;
@@ -70,15 +49,19 @@ angular.module('keepballin')
 
     $scope.logout = function() {
       Auth.logout();
-      $location.path('/');
+      $state.go('main');
     };
 
     $scope.isActive = function(route) {
-      return route === $location.path();
+      return route === $state.current.name;
     };
 
     $scope.openLogin = function() {
      
+    };
+
+    $scope.close = function() {
+      $scope.isCollapsed = true;
     };
 
   }]);

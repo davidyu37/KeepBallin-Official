@@ -72,6 +72,10 @@ body {
     cursor: pointer;
 }
 
+input.ng-invalid, textarea.ng-invalid {
+    border-color: $brand-primary;
+}
+
 //Hide default datepicker
 input::-webkit-calendar-picker-indicator{
     display: none;

@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js scrollable"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -10,6 +10,11 @@
     <title>KeepBallin</title>
     <meta name="keepballin" content="找籃球場 打籃球">
     <meta name="viewport" content="width=device-width">
+    <meta name='Description' content='找籃球場,找球友,打籃球. Find basketball courts, find baller, play basketball. keepballin.'>
+    <meta name='Author' content='KeepBallin'>
+    <meta name="google-site-verification" content="5q76r_ET-qHSFWHWMgJPlzP31YzhgPlzvfUlqmK3fJg" />
+    <link rel="alternate" href="https://keepballin.com" hreflang="zh-Hant"/>
+    
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- build:css(client) app/vendor.css -->
@@ -19,6 +24,9 @@
       <link rel="stylesheet" href="bower_components/font-awesome-animation/dist/font-awesome-animation.css" />
       <link rel="stylesheet" href="bower_components/font-awesome-animation/dist/font-awesome-animation.min.css" />
       <link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css" />
+      <link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-hover.css" />
+      <link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-base.css" />
+      <link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-desktop.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -30,19 +38,19 @@
     async defer></script> -->
     
     <!-- google map -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=&sensor=false&language=zh-TW"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=&language=zh-TW"></script>
   </head>
-  <body ng-app="keepballin">
+  <body ng-app="keepballin" class="scrollable-content">
     <!--[if lt IE 7]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ng-include="'components/navbar/navbar.html'"></div>
+    <div ng-include="'components/navbar/navbar.html'" class="scrollable-header"></div>
     <div class="wrap">
       <div ui-view=""></div>
     </div>
-    <div ng-include="'components/footer/footer.html'"></div>
+    <div ng-include="'components/footer/footer.html'" class="scrollable-footer" style="display: none"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -86,6 +94,8 @@
       <script src="bower_components/angular-relative-date/angular-relative-date.js"></script>
       <script src="bower_components/angular-youtube-mb/src/angular-youtube-embed.js"></script>
       <script src="bower_components/clipboard/dist/clipboard.js"></script>
+      <script src="bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.js"></script>
+      <script src="bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -118,6 +128,7 @@
       <script src="app/courts/courts.controller.js"></script>
       <script src="app/courts/courts.js"></script>
       <script src="app/courts/directives/angularSlideable.js"></script>
+      <script src="app/courts/directives/dragDetail.js"></script>
       <script src="app/courts/directives/markers.js"></script>
       <script src="app/courts/directives/mobileDetail.js"></script>
       <script src="app/courts/services/Geolocate.js"></script>
@@ -125,6 +136,7 @@
       <script src="app/courts/services/courts.service.js"></script>
       <script src="app/courts/services/mapOptions.js"></script>
       <script src="app/courts/services/panorama.js"></script>
+      <script src="app/courts/this.court.controller.js"></script>
       <script src="app/events/add.events.controller.js"></script>
       <script src="app/events/event.service.js"></script>
       <script src="app/events/event.upload.ctrl.js"></script>

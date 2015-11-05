@@ -14,8 +14,6 @@ function sanitizeURLs(req, res, next) {
   var protocol = req.protocol;
   var redirectNeeded = false;
 
-  console.log('poop', host, protocol, req.originalUrl);
-
   // Remove WWW
   if (host.slice(0, 4) === 'www.') {
     host = req.headers.host.slice(4);

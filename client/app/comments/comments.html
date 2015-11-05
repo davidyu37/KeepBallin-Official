@@ -1,6 +1,6 @@
 <div class="container commentSection" ng-controller="CommentCtrl" style="width: 100%;">
   <h1>{{currentcourt.court}}留言板</h1>
-  <ul class="comment-list" infinite-scroll='comments.nextPage()' infinite-scroll-disabled='comments.busy' infinite-scroll-distance='0' infinite-scroll-immediate-check="false" ng-class="{'commentBox': comments.comments.length}">
+  <ul class="comment-list" infinite-scroll='comments.nextPage()' infinite-scroll-disabled='comments.busy' infinite-scroll-distance='0' infinite-scroll-immediate-check="true" ng-class="{'commentBox': comments.comments.length}">
     <div class="formContainer">
       <form class="comment-form" ng-submit="addComment($event)" 
     novalidate name="commentForm">

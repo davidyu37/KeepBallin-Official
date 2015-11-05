@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-.directive('mobileslide', function () {
+.directive('mobileslide', ['$drag', function ($drag) {
     return {
         restrict:'C',
         compile: function (element) {
@@ -25,8 +25,8 @@ angular.module('keepballin')
             };
         }
     };
-})
-.directive('mobileSlide', function() {
+}])
+.directive('mobileSlide', ['$drag', function($drag) {
     return {
         restrict: 'A',
         scope: {
@@ -72,4 +72,4 @@ angular.module('keepballin')
 
         }
     };
-});
+}]);

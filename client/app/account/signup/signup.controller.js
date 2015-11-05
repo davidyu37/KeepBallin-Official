@@ -35,8 +35,7 @@ angular.module('keepballin')
         Auth.createUser({
           name: $scope.user.name,
           email: $scope.user.email,
-          password: $scope.user.password,
-          toVip: $scope.user.toVip
+          password: $scope.user.password
         })
         .then( function() {
           // Account created, redirect to home

@@ -5,7 +5,8 @@
     popover="{{geoErr}}"
     popover-placement="left"
     popover-is-open="gotErr">
-    	<span class="glyphicon glyphicon-screenshot"></span>
+        <span class="fa fa-3x fa-spinner faa-spin animated" ng-hide="!locating"></span>
+        <span class="glyphicon glyphicon-screenshot" ng-hide="locating" popover="尋找鄰近球場" popover-trigger="mouseenter"></span>
     </button>
     <!-- Make a button that let user select the courts to appear -->
     <button class="btn"
@@ -13,23 +14,28 @@
     id="addMarker" 
     ng-init="enable=false" 
     ng-show="isAdmin || isManager || isVip" 
-    ng-click="enable = !enable; enableAddMarker(enable)">
+    ng-click="enable = !enable; enableAddMarker(enable)"
+    popover="增加球場" 
+    popover-trigger="mouseenter"
+    popover-placement="bottom">
         <span class="glyphicon" 
         ng-class="{'glyphicon-map-marker': !enable, 'glyphicon-ok': enable}"></span>
     </button>
+    <span>編輯模式</span>
     <!-- Slide button for court detail -->
     <button class="btn slideBtn" slide-toggle="#detail" expanded="expanded" map="map" ng-model="expanded" 
     ng-show="currentcourt">
         <i class="fa fa-3x" ng-class="{'fa-angle-double-up black faa-bounce animated': !expanded, 'fa-angle-double-down white': expanded}"></i>
     </button>
     <!-- Mobile court detail -->
-    <button class="btn slideBtnMobile" 
+    <!-- <button class="btn slideBtnMobile" 
     ng-show="currentcourt" 
     mobile-slide="#mobileDetail" 
     mobile-expanded="mobileExpanded"
     ng-model="mobileExpanded">
         <i class="fa fa-3x white" ng-class="{'fa-angle-double-up faa-bounce animated': !mobileExpanded, 'fa-angle-double-down': mobileExpanded}"></i>
-    </button>
+    </button> -->
+    <drag-me class="mobileDrag" ng-show="currentcourt"></drag-me> 
     <!-- Mobile court detail ends -->
     <!-- Court detail starts here -->
     <div id="detail" class="court-detail slideable" ng-show="currentcourt">
@@ -178,9 +184,9 @@
     ng-init="edit=false" ng-show="edit" 
     ng-click="editmode()"></div>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="event col-sm-6" style="border-right: 1px solid grey">
             <!-- Events start here -->
-            <div ng-show="currentcourt" ng-include="'app/events/events.court.html'" style="border-right: 1px solid grey"></div>
+            <div ng-show="currentcourt" ng-include="'app/events/events.court.html'"></div>
         </div>
         <div class="col-sm-6">
             <!-- Comments start here -->
@@ -189,7 +195,7 @@
     </div>
     <!-- Comments end -->
     <!-- Searchbox -->
-    <div id="searchbox">
+    <!-- <div id="searchbox">
         <form ng-submit="searchCourt(searchParams)">
             <nit-advanced-searchbox
                 ng-model="searchParams"
@@ -210,6 +216,18 @@
             </button>
         </form>
         <span ng-show="gotResult && searchFocus" class="pull-right text-success"><i class="fa fa-lg fa-check-circle"></i></span> 
+    </div> -->
+    <div id="searchbox">
+        <form name="search" ng-submit="goToLocation(Selected)">
+            <div class="input-group">
+              <input type="text" ng-model="Selected" placeholder="找球場" typeahead="court for court in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                    <i ng-hide="loadingLocations" class="fa fa-search"></i>
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                </button>
+              </span>
+            </div>         
+        </form>
     </div>
 </div>
-<div id="mobileDetail" class="detailForMobile mobileslide" ng-show="currentcourt" ng-include="'app/courts/temp/court.detail.html'"></div>

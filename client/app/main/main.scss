@@ -6,48 +6,42 @@ $blurred-img: '/assets/images/blurredbg.jpg';
   margin-left: 15px;
 }
 
-@font-face {
-  font-family: digital;
-  src: url(../assets/fonts/digital.ttf);
-}
-
-
 .mailForm {
   background-color: $brand-primary;
   color: white;
 }
 
-/* Video css */
-/*#bgVideo {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -100;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-50%) translateY(-50%);
-  background-size: cover;
-}*/
 
 .courtBG {
   background-image: url('/assets/images/courtpicplaceholder.png');
   background-size: cover;
-  height: 110vh;
+  background-repeat: no-repeat; 
+  background-position: center;
+  background-attachment: fixed;       
+  webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  @media (min-width: $screen-sm-min) {
+    height: 110vh;
+  }
 }
 
 .brand-mission {
-  font-size: 300%;
   background: black;
   color: white;
-  border-radius: 25px;
-  border: 3px solid $brand-primary;
-  width: 80%;
-  height: auto; 
-  margin: 40px auto;
-  padding: 30px 40px 40px;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  @media (min-width: $screen-sm-min) {
+    padding: 10px;
+    border-radius: 25px;
+    font-size: 300%;
+    border: 3px solid $brand-primary;
+    width: 80%;
+    height: auto; 
+    margin: 40px auto;
+    padding: 30px 40px 40px;
+  }
+  
 }
 
 .brand-color {
@@ -55,9 +49,19 @@ $blurred-img: '/assets/images/blurredbg.jpg';
 }
 
 .blurredBG{
-  background-image: url('/assets/images/blurredbg.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
+  @media (min-width: $screen-sm-min) {
+    width: 100%;
+    background-image: url('/assets/images/blurredbg.jpg');
+    background-size: inherit;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;       
+    webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    display: block;
+  }
+  display: none;
 }
 
 /* Main marketing message */
@@ -71,16 +75,24 @@ $blurred-img: '/assets/images/blurredbg.jpg';
 
 
 .basketBackground {
+  width: 100%;
   background-image: url('/assets/images/bg.jpg');
   background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;       
+  webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
 }
 
 .parallaxBackground {
   background-attachment: fixed;
-  background-position: 50% 0;
   background-repeat: no-repeat;
-  height: 100vh;
-  position: relative;
+  @media (min-width: $screen-sm-min) {
+    position: relative;
+    height: 100vh;
+  }
 }
 
 .parallaxContent {
@@ -89,9 +101,7 @@ $blurred-img: '/assets/images/blurredbg.jpg';
   display: table;
   color: white;
   text-shadow: 0 2px 0 black, 0 0 10px black;
-  
-  /*padding-top: 20%;*/
-  /*border-radius: 50%;*/
+
   .btn-primary {
   background: none;
   border: 2px solid $brand-primary;
@@ -113,6 +123,20 @@ $blurred-img: '/assets/images/blurredbg.jpg';
   margin: 20px;
   cursor: grab;
 }
+/* Video css */
+/*#bgVideo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  background-size: cover;
+}*/
 
 /* Container that wraps the weather info */
 /*.leftContainer {

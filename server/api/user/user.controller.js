@@ -58,11 +58,12 @@ exports.search = function(req, res) {
 exports.create = function (req, res, next) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
-  if (req.body.toVip) {
-    newUser.role = 'vip'
-  } else {
-    newUser.role = 'user';
-  }
+  newUser.role = 'user';
+  // if (req.body.toVip) {
+  //   newUser.role = 'vip'
+  // } else {
+  //   newUser.role = 'user';
+  // }
   newUser.save(function(err, user) {
     if (err) return validationError(res, err);
     var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });

@@ -37,7 +37,7 @@ exports.setup = function (User, config) {
                 user = new User({
                   name: profile.displayName,
                   email: profile._json.email,
-                  role: 'user',
+                  role: 'vip',
                   provider: 'facebook',
                   facebook: profile._json,
                   fbprofilepic: 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large'

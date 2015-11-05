@@ -14,7 +14,8 @@ angular.module('keepballin', [
   'angular-advanced-searchbox',
   'oitozero.ngSweetAlert',
   'relativeDate',
-  'youtube-embed'
+  'mobile-angular-ui.gestures',
+  'mobile-angular-ui.core'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

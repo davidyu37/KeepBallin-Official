@@ -9,10 +9,10 @@ angular.module('keepballin')
 	  	$scope.eventMap = new google.maps.Map(document.getElementById('eventMap'), {
 	  		//map options
 	  		center: new google.maps.LatLng(data.court.lat, data.court.long),
-			zoom: 15,
-			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			disableDefaultUI: true,
-			scrollwheel: false
+  			zoom: 15,
+  			mapTypeId: google.maps.MapTypeId.ROADMAP,
+  			disableDefaultUI: true,
+  			scrollwheel: false
 	  	});
 
 	  	//custom marker image
@@ -25,13 +25,13 @@ angular.module('keepballin')
 		};
 
 		//create marker
-	  	var marker = new google.maps.Marker({
-            map: $scope.eventMap,
-            position: new google.maps.LatLng(data.court.lat, data.court.long),
-            title: data.court.court,
-            icon: image, 
-            animation: google.maps.Animation.DROP
-        });
+	  	new google.maps.Marker({
+          map: $scope.eventMap,
+          position: new google.maps.LatLng(data.court.lat, data.court.long),
+          title: data.court.court,
+          icon: image, 
+          animation: google.maps.Animation.DROP
+      });
 	  	//Check if user already participating
 	  	for(var i=0; i < $scope.event.participants.length; i++) {
   			if($scope.event.participants[i]._id === Auth.getCurrentUser()._id) {
@@ -63,9 +63,9 @@ angular.module('keepballin')
 
   			var newArr = [];
   			//Get id of the current participants
-  			for(var i=0; i < $scope.event.participants.length; i++) {
+  			for(var j=0; j < $scope.event.participants.length; j++) {
 	  			//Put them in a new array
-  				newArr.push($scope.event.participants[i]._id);
+  				newArr.push($scope.event.participants[j]._id);
   			}
   			//push the current user id to the new array
   			newArr.push(Auth.getCurrentUser()._id);

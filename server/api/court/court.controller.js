@@ -43,6 +43,12 @@ exports.searchResult = function(req, res) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(courts);
   });
+  // court.search({query_string: {
+  //   query: req.query
+  // }}, function (err, courts) {
+  //   if(err) { return handleError(res, err); }
+  //   return res.status(200).json(courts);
+  // }); 
 }
 
 

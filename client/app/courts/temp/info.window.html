@@ -27,6 +27,7 @@
 			ng-class="{'glyphicon-plus-sign': !showAddress, 'glyphicon-minus-sign': showAddress}"></span>
 		</button>
 	</h5>
+	<div><a ui-sref="thiscourt({id: currentcourt._id})">前往球場主頁</a></div>
 </div>
 <button ng-show="isAdmin || isManager" class="btn btn-danger pull-left" ng-click="deletemarker(markernow.id)">
 	<span class="glyphicon glyphicon-trash"></span>

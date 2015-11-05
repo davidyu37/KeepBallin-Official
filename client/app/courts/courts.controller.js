@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('keepballin')
-	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', 'Download', 'chosenCourt', '$modal',  
-		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, Download, chosenCourt, $modal) {
+	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', 'Download', '$modal',  
+		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, Download, $modal) {
 	    
 		//Initialize map
 	    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -12,10 +12,18 @@ angular.module('keepballin')
 	    $scope.infowindow = new google.maps.InfoWindow();
 	    //Store courts from api
 	    $scope.courts = [];
+	    var allCourts = Court.query();
 
-	    chosenCourt.$promise.then(function(data) {
+	    allCourts.$promise.then(function(data) {
 	    	$scope.courts = data;
 	    	$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
+	    	//socket.io instant updates
+		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
+		    	// console.log(arr);
+		    });
+			$scope.$on('$destroy', function () {
+	      		socket.unsyncUpdates('court');
+	    	});
 	    });
 
 	    //Panorama stuff from here
@@ -46,24 +54,62 @@ angular.module('keepballin')
 	    });
 
 	    //Searchbox
-	    $scope.availableSearchParams = [
-		  { key: 'court', name: '球場名', placeholder: '球場名...' },
-		  { key: 'city', name: '城市', placeholder: '城市...' },
-		  { key: 'district', name: '區域', placeholder: '區域...' },
-		  { key: 'address', name: '住址', placeholder: '住址...' }
-		];
+	 //    $scope.availableSearchParams = [
+		//   { key: 'court', name: '球場名', placeholder: '球場名...' },
+		//   { key: 'city', name: '城市', placeholder: '城市...' },
+		//   { key: 'district', name: '區域', placeholder: '區域...' },
+		//   { key: 'address', name: '住址', placeholder: '住址...' }
+		// ];
 
-		$scope.noResult = false;
-		$scope.gotResult = false;
+		// $scope.noResult = false;
+		// $scope.gotResult = false;
 
-		$scope.searchCourt = function(params) {
-			var hasParams = (params.query || params.court || params.city || params.district || params.address);
-			if(hasParams === undefined) {
-				$timeout(function() {
-					$scope.emptyField = false;
-				}, 1000);
-				return;
-			} else {
+		// $scope.searchCourt = function(params) {
+		// 	var hasParams = (params.query || params.court || params.city || params.district || params.address);
+		// 	if(hasParams === undefined) {
+		// 		$timeout(function() {
+		// 			$scope.emptyField = false;
+		// 		}, 1000);
+		// 		return;
+		// 	} else {
+		// 		Court.search(params, function(data) {
+		// 			if(data.length === 0) {
+		// 				$scope.noResult = true;
+		// 				$timeout(function() {
+		// 					$scope.noResult = false;
+		// 				}, 1000);
+		// 			} else {
+		// 				$scope.courts = data;
+		// 				$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
+		// 				$scope.map.setZoom(13);
+		// 				$scope.gotResult = true;
+		// 				$timeout(function() {
+		// 					$scope.gotResult = false;
+		// 				}, 1000);
+		// 			}
+		// 		});
+		// 	}
+		// };
+
+		$scope.getLocation = function(val) {
+			
+			var params = {
+				query: val
+			};
+			return Court.search(params).$promise
+				.then(function(data) {
+					return data.map(function(item) {
+						return item.address;
+					});
+				});	
+		};
+
+		$scope.goToLocation = function(selected) {
+			// console.log(selected);
+			if(selected) {
+				var params = {
+					query: selected
+				};
 				Court.search(params, function(data) {
 					if(data.length === 0) {
 						$scope.noResult = true;
@@ -73,13 +119,14 @@ angular.module('keepballin')
 					} else {
 						$scope.courts = data;
 						$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
-						$scope.map.setZoom(13);
+						$scope.map.setZoom(15);
 						$scope.gotResult = true;
 						$timeout(function() {
 							$scope.gotResult = false;
 						}, 1000);
 					}
 				});
+				
 			}
 		};
 
@@ -120,15 +167,10 @@ angular.module('keepballin')
 		    });
 	    };
 
-	    //socket.io instant updates
-	    socket.syncUpdates('court', $scope.courts);
-		$scope.$on('$destroy', function () {
-      		socket.unsyncUpdates('court');
-    	});
 	    //Add Marker begins here
 	    //Enable add marker mode
 	    $scope.enableAddMarker = function(state) {
-	    	AddMarker(state, $scope, map, function(newMarker) {
+	    	AddMarker.addMode(state, $scope, map, function(newMarker) {
 	    		$scope.courts.push(newMarker);
 	    	});
     	};
@@ -148,7 +190,9 @@ angular.module('keepballin')
         	$animate.enabled(true);
     	}, 1000);
 
-    	
+    	$scope.exitEdit = function() {
+    		$scope.edit = !($scope.edit);
+    	};
 
     	//Logic for court editing page
     	$scope.editmode = function(court) {
@@ -191,11 +235,12 @@ angular.module('keepballin')
 	    // Place geolocate button on map
 	    var geoBtn = document.getElementById('geolocate');
 	    map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(geoBtn);
-	    // $scope.userLocation = {};
-	    // var userLocation = $scope.userLocation;
+	    
 	    // Geolocating function
-	    $scope.userLocation = new google.maps.Marker();
+	    $scope.personMarker = new google.maps.Marker();
 	    $scope.gotErr = false;
+	    //True if geolocating is taking time
+	    $scope.locating = false;
 	    $scope.geolocate = function() {
 	    	Geolocate($scope, map, function(err) {
 	    		if(err) {
@@ -206,12 +251,27 @@ angular.module('keepballin')
 		    			$scope.gotErr = false;
 		    		}, 3000);
 	    		}
+	    	}, function(pos) {
+	    		$scope.userLocation = pos;
+	    		$scope.locating = false;
+	    		$scope.$apply(function(){
+               		$compile(document.getElementById('here'))($scope);
+            	});
 	    	});
 	    };
 	    //Geolocate ends here
+
+	    $scope.addLocation = function() {
+	    	AddMarker.addOne($scope.userLocation, function(newMarker) {
+	    		$scope.courts.push(newMarker);
+	    	});
+	    };
+
 	    //Add the addMarker button to map
 	    var addMarkerBtn = document.getElementById('addMarker');
 	    map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(addMarkerBtn);
+
+
 
 }]);//mapCtrl ends here
 

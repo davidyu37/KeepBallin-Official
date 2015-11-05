@@ -3,14 +3,17 @@
 angular.module('keepballin') 
 	.factory('Geolocate', function() {
 
-		return function(scope, map, cb) {
+		return function(scope, map, errorcb, successcb) {
+
+			scope.locating = true;
 			//clear the last marker from scope
-			scope.userLocation.setMap(null);
+			scope.personMarker.setMap(null);
       	
 			//check if browser supports geolocation
 			//.getCurrentPosition() takes two functions as parameter: one shows position, one show error
 			if(navigator.geolocation) {
 			  navigator.geolocation.getCurrentPosition(function(position) {
+			  	
 			  	var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 			    var image = {
 				  url: iconBase + 'man.png',
@@ -21,29 +24,33 @@ angular.module('keepballin')
 				};
 			    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			    //create a new marker at the position of the user, important to not use var, so it can be cleared if we run getLocation again.
-			    scope.userLocation = new google.maps.Marker({
+			    scope.personMarker = new google.maps.Marker({
 			      map: map,
 			      position: pos,
 			      animation: google.maps.Animation.DROP,
 			      icon: image
 			    });
+
 			    //set center of map to user's position and zoom to 14
 			    map.setCenter(pos);
 			    map.setZoom(18);
 
 			    var infoWindow = new google.maps.InfoWindow();
+			    var me = '<div id="here"><h1>你在這</h1><div class="infoWindowContent">';
+			    me += '<button class="btn btn-primary" ng-click="addLocation()">這裡也是籃球場</button></div></div>';
+		    
+		    	infoWindow.setContent(me);
+              	infoWindow.open(map, scope.personMarker);
+	            
+			    successcb(pos);
+			    
 
-			    google.maps.event.addListener(scope.userLocation, 'click', function() {
-			    	infoWindow.setContent('你在這');
-	              	infoWindow.open(map, scope.userLocation);
-	              	map.panTo(pos);
-			    });
 			  }, function() {
-			    cb(handleNoGeolocation(true, map));
+			    errorcb(handleNoGeolocation(true, map));
 			  });
 			} else {
 			  // Browser doesn't support Geolocation
-			  cb(handleNoGeolocation(false, map));
+			  errorcb(handleNoGeolocation(false, map));
 			}
 		};
 		//callback function that handles the errors
@@ -56,17 +63,7 @@ angular.module('keepballin')
 		  }
 
 		  return content;
-		  // var pos = new google.maps.LatLng(25.033259, 121.543565);
-		  // //when there's errorFlag, it displays the error message in a new infowindow
-		  // var options = {
-		  //   map: map,
-		  //   position: pos,
-		  //   content: content
-		  // };
-
-		  // var infowindow = new google.maps.InfoWindow(options);
-		  // infowindow.open(map, pos);
-		  // map.setCenter(pos);
+		  
 		}
 
 	});

@@ -1,4 +1,5 @@
-<div class="whitebackground" ng-click="stopPropagate($event)">
+<div class="editPageBackground" ng-click="stopPropagate($event)">
+<i class="fa fa-remove pull-right pointer" ng-click="exitEdit()"></i>
 <form class="form-horizontal" name="editform">
     <div class="form-group">
         <div class="col-sm-4">
@@ -22,13 +23,13 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-xs-6">
                         <label for="hours" class="control-label">開放時間(開始):</label>
-                        <timepicker ng-model="currentcourt.hours.begin" minute-step="15" show-meridian="true"></timepicker>
+                        <timepicker ng-model="currentcourt.hours.begin" minute-step="1" show-meridian="true"></timepicker>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-xs-6">
                         <label for="hours" class="control-label">開放時間(結束):</label>
-                        <timepicker ng-model="currentcourt.hours.end" minute-step="15" show-meridian="true"></timepicker> 
+                        <timepicker ng-model="currentcourt.hours.end" minute-step="1" show-meridian="true"></timepicker> 
                     </div>
                 </div>  
             </div>
@@ -37,13 +38,13 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-xs-6">
                         <label for="peaktime" class="control-label">人多時間(開始):</label>
-                        <timepicker ng-model="currentcourt.peaktime.begin" minute-step="15" show-meridian="true"></timepicker>
+                        <timepicker ng-model="currentcourt.peaktime.begin" minute-step="1" show-meridian="true"></timepicker>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-xs-6">
                         <label for="peaktime" class="control-label">人多時間(結束):</label>
-                        <timepicker ng-model="currentcourt.peaktime.end" minute-step="15" show-meridian="true"></timepicker> 
+                        <timepicker ng-model="currentcourt.peaktime.end" minute-step="1" show-meridian="true"></timepicker> 
                     </div>
                 </div>  
             </div>
@@ -65,30 +66,30 @@
             <!-- Net -->
             <label for="net" class="control-label">籃網:</label>
             <input type="checkbox" ng-model="currentcourt.net">
-            <input ng-show="currentcourt.net" type="text" ng-model="currentcourt.nettype" placeholder="籃網材質">
+            <input ng-show="currentcourt.net" type="text" ng-model="currentcourt.nettype" placeholder="籃網材質" class="form-control">
         </div>
         <div class="col-sm-3">
             <!-- Basket number -->
             <label for="" class="control-label">籃框數:</label>
-            <input type="number" min="0" ng-model="currentcourt.basketnumber" placeholder="阿拉伯數字">        
+            <input type="number" min="0" ng-model="currentcourt.basketnumber" placeholder="阿拉伯數字" class="form-control">        
         </div>
         <div class="col-sm-3">
             <!-- Floor -->
             <label for="" class="control-label">地質:</label>
-            <input type="text" ng-model="currentcourt.floor" placeholder="球場地板怎麼樣？">
+            <input type="text" ng-model="currentcourt.floor" placeholder="球場地板怎麼樣？" class="form-control">
         </div>
     </div>
     <div class="checkboxWithWords">
         <!-- Water -->
         <label for="" class="control-label">飲水機:</label>
         <input type="checkbox" ng-model="currentcourt.water.exist">
-        <input ng-show="currentcourt.water.exist" type="text" ng-model="currentcourt.water.desc" placeholder="在哪裡?">   
+        <input ng-show="currentcourt.water.exist" type="text" ng-model="currentcourt.water.desc" placeholder="在哪裡?" class="form-control">   
     </div>
     <div class="checkboxWithWords">
         <!-- Toilet -->
         <label for="" class="control-label">廁所:</label>
         <input type="checkbox" ng-model="currentcourt.toilet.exist">
-        <input ng-show="currentcourt.toilet.exist" type="text" ng-model="currentcourt.toilet.desc" placeholder="在哪裡?">
+        <input ng-show="currentcourt.toilet.exist" type="text" ng-model="currentcourt.toilet.desc" placeholder="在哪裡?" class="form-control">
     </div>
     <!-- Celing -->
     <label for="" class="control-label">屋簷:</label>
