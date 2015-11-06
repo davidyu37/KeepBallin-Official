@@ -16,15 +16,57 @@ angular.module('keepballin')
 
 	    allCourts.$promise.then(function(data) {
 	    	$scope.courts = data;
-	    	$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
-	    	//socket.io instant updates
+    		//socket.io instant updates
 		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
 		    	// console.log(arr);
 		    });
 			$scope.$on('$destroy', function () {
 	      		socket.unsyncUpdates('court');
 	    	});
-	    });
+	    	// $scope.map.panTo({lat: data[0].lat, lng: data[0].long});
+
+			
+
+			google.maps.event.addListener(map, 'bounds_changed', function() {
+				//when user uses the search box stop changing the list
+				if($scope.searching) {
+					return
+				} else {
+					var courts = [];
+					data.forEach(function(court) {
+						var latlng = new google.maps.LatLng(court.lat, court.long);
+						//Check if the markers is contained in the map bounds
+						if(map.getBounds().contains(latlng)) {
+							courts.push(court);
+						}
+					});
+					console.log(courts);	
+					$scope.courtList = courts;
+					$scope.$apply();
+				}
+			});
+	    });//Court query promise then function ends here
+
+	    //Mouseover function to open info window
+	    $scope.openInfo = function(e, court) {
+	    	console.log($scope.markers);
+	    	console.log(court._id);
+	    	console.log('final', $scope.markers[court._id]);
+	    	var marker = $scope.markers[court._id];
+
+	    	var infoContent = '<h5>選我</h5>';
+	        // infoContent += 'ng-include="\'app/courts/temp/info.window.html\'">';
+				
+          	$scope.infowindow.setContent(infoContent);
+
+          	$scope.infowindow.open($scope.map, marker);
+        	
+	    };
+
+	    //Q&A for when edit mode is on
+	    $scope.QandA = function() {
+	    	//Open Q&A through modal or sweet alert	
+	    };
 
 	    //Panorama stuff from here
 	    var panorama = map.getStreetView();
@@ -52,6 +94,54 @@ angular.module('keepballin')
 	        	$scope.$broadcast('courtIdChanged', {newId: newVal});
 	        }
 	    });
+
+	    //Place search ------- Begin
+	    var input = document.getElementById('placeSearch');
+		var searchBox = new google.maps.places.SearchBox(input);
+
+		// Bias the SearchBox results towards current map's viewport.
+		// map.addListener('bounds_changed', function() {
+		// 	searchBox.setBounds(map.getBounds());
+		// });
+
+		var markers = [];
+		// [START region_getplaces]
+		// Listen for the event fired when the user selects a prediction and retrieve
+		// more details for that place.
+		searchBox.addListener('places_changed', function() {
+			var places = searchBox.getPlaces();
+
+			if (places.length == 0) {
+				return;
+			}
+
+			// Clear out the old markers.
+			markers.forEach(function(marker) {
+				marker.setMap(null);
+			});
+			markers = [];
+
+			// For each place, get the icon, name and location.
+			var bounds = new google.maps.LatLngBounds();
+			console.log(bounds);
+			places.forEach(function(place) {
+				// Create a marker for each place.
+				markers.push(new google.maps.Marker({
+					map: map,
+					title: place.name,
+					position: place.geometry.location
+				}));
+
+				if (place.geometry.viewport) {
+				// Only geocodes have viewport.
+					bounds.union(place.geometry.viewport);
+				} else {
+					bounds.extend(place.geometry.location);
+				}
+			});
+			map.fitBounds(bounds);
+		});
+		//Place search ------- End
 
 	    //Searchbox
 	 //    $scope.availableSearchParams = [
@@ -117,7 +207,9 @@ angular.module('keepballin')
 							$scope.noResult = false;
 						}, 1000);
 					} else {
+						$scope.searching = true;
 						$scope.courts = data;
+						$scope.courtList = data;
 						$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
 						$scope.map.setZoom(15);
 						$scope.gotResult = true;
@@ -166,13 +258,21 @@ angular.module('keepballin')
 		      scope: $scope
 		    });
 	    };
-
+	    //Popover message
+	    $scope.popMess = '增加球場';
 	    //Add Marker begins here
 	    //Enable add marker mode
 	    $scope.enableAddMarker = function(state) {
 	    	AddMarker.addMode(state, $scope, map, function(newMarker) {
 	    		$scope.courts.push(newMarker);
 	    	});
+	    	if(state) {
+	    		$scope.popMess = '離開編輯';
+	    	} else {
+	    		$scope.popMess = '增加球場';
+	    	}
+
+
     	};
 
     	$scope.deletemarker = function(id) {
@@ -229,8 +329,8 @@ angular.module('keepballin')
 	    //Add Marker ends here
 
 	    //Add searchBox to map
-	    var searchBox = document.getElementById('searchbox');
-	    map.controls[google.maps.ControlPosition.TOP].push(searchBox);
+	    // var searchBox = document.getElementById('searchbox');
+	    // map.controls[google.maps.ControlPosition.TOP].push(searchBox);
 	    //Geolocate begins here
 	    // Place geolocate button on map
 	    var geoBtn = document.getElementById('geolocate');

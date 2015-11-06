@@ -1,46 +1,87 @@
-<div>
-    <div id="map" marker></div>
-    <button title="定位(解除瀏覽器的封鎖才可以使用喔)" type="button" id="geolocate" class="geolocateBtn"
-    ng-click="geolocate()"
-    popover="{{geoErr}}"
-    popover-placement="left"
-    popover-is-open="gotErr">
-        <span class="fa fa-3x fa-spinner faa-spin animated" ng-hide="!locating"></span>
-        <span class="glyphicon glyphicon-screenshot" ng-hide="locating" popover="尋找鄰近球場" popover-trigger="mouseenter"></span>
-    </button>
-    <!-- Make a button that let user select the courts to appear -->
-    <button class="btn"
-    ng-class="{'btn-primary': !enable, 'btn-success': enable}"
-    id="addMarker" 
-    ng-init="enable=false" 
-    ng-show="isAdmin || isManager || isVip" 
-    ng-click="enable = !enable; enableAddMarker(enable)"
-    popover="增加球場" 
-    popover-trigger="mouseenter"
-    popover-placement="bottom">
-        <span class="glyphicon" 
-        ng-class="{'glyphicon-map-marker': !enable, 'glyphicon-ok': enable}"></span>
-    </button>
-    <span>編輯模式</span>
+
+<div class="row">
+    <div class="col-sm-5 desktopMap">
+        <span ng-show="enable" class="editMode">球場位置編輯模式
+            <br>
+            <a ng-click="QandA()" style="font-size: 80%">
+                有疑問<i class="fa fa-question-circle"></i>
+            </a>
+        </span>     
+        <div id="map" marker></div>
+        <drag-me class="mobileDrag" ng-show="currentcourt"></drag-me> 
+        <button title="定位(解除瀏覽器的封鎖才可以使用喔)" type="button" id="geolocate" class="geolocateBtn"
+        ng-click="geolocate()"
+        popover="{{geoErr}}"
+        popover-placement="left"
+        popover-is-open="gotErr">
+            <span class="fa fa-3x fa-spinner faa-spin animated" ng-hide="!locating"></span>
+            <span class="glyphicon glyphicon-screenshot" ng-hide="locating" popover="尋找鄰近球場" popover-trigger="mouseenter"></span>
+        </button>
+        <!-- Make a button that let user select the courts to appear -->
+        <button class="btn"
+        ng-class="{'btn-primary': !enable, 'btn-success': enable}"
+        id="addMarker" 
+        ng-init="enable=false" 
+        ng-show="isAdmin || isManager || isVip" 
+        ng-click="enable = !enable; enableAddMarker(enable)"
+        popover="{{popMess}}" 
+        popover-trigger="mouseenter"
+        popover-placement="bottom">
+            <span class="glyphicon" 
+            ng-class="{'glyphicon-map-marker': !enable, 'glyphicon-ok': enable}"></span>
+        </button>
+    </div>
+    <div class="col-sm-7 courtDisplay">
+        <div class="page-header" style="margin-top: 9px">
+            <!-- <h1 ng-hide="enable">尋找球場</h1>
+            <h1 ng-show="enable">找球場附近的地點</h1> -->
+            <div ng-hide="enable">
+                <form name="search" ng-submit="goToLocation(Selected)">
+                    <div class="input-group input-group-lg court-input-group">
+                      <input type="text" ng-model="Selected" placeholder="尋找球場" typeahead="court for court in getLocation($viewValue)" typeahead-loading="loadingLocations" class="court-input form-control">
+                      <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" style="height: 47px;">
+                            <i ng-hide="loadingLocations" class="fa fa-search"></i>
+                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                        </button>
+                      </span>
+                    </div>         
+                </form>
+            </div>
+            <div ng-show="enable">
+                <form>
+                    <div class="input-group input-group-lg court-input-group">
+                      <input id="placeSearch" type="text" placeholder="找球場附近的地點" class="court-input form-control">
+                      <span class="input-group-addon">
+                        <i class="fa fa-search"></i>       
+                      </span>
+                    </div>         
+                </form>
+            </div>
+        </div>
+        <div style="height: 75vh; width: 95%; margin: 0 auto; overflow-y: scroll;">
+            <div class="list-group" ng-repeat="c in courtList" 
+            ng-mouseover="openInfo($event, c)">
+              <a ui-sref="thiscourt({id: c._id})" class="list-group-item">
+                <h4 class="list-group-item-heading">{{c.court}}</h4>
+                <p class="list-group-item-text">{{c.address}}</p>
+              </a>
+            </div>
+        </div>
+    </div>
+
+    
     <!-- Slide button for court detail -->
-    <button class="btn slideBtn" slide-toggle="#detail" expanded="expanded" map="map" ng-model="expanded" 
+    <!-- <button class="btn slideBtn" slide-toggle="#detail" expanded="expanded" map="map" ng-model="expanded" 
     ng-show="currentcourt">
         <i class="fa fa-3x" ng-class="{'fa-angle-double-up black faa-bounce animated': !expanded, 'fa-angle-double-down white': expanded}"></i>
-    </button>
-    <!-- Mobile court detail -->
-    <!-- <button class="btn slideBtnMobile" 
-    ng-show="currentcourt" 
-    mobile-slide="#mobileDetail" 
-    mobile-expanded="mobileExpanded"
-    ng-model="mobileExpanded">
-        <i class="fa fa-3x white" ng-class="{'fa-angle-double-up faa-bounce animated': !mobileExpanded, 'fa-angle-double-down': mobileExpanded}"></i>
     </button> -->
-    <drag-me class="mobileDrag" ng-show="currentcourt"></drag-me> 
+    
+    
     <!-- Mobile court detail ends -->
     <!-- Court detail starts here -->
-    <div id="detail" class="court-detail slideable" ng-show="currentcourt">
+    <!--<div id="detail" class="court-detail slideable" ng-show="currentcourt">
         <div class="row detail-inner">
-            <!-- Picture Area -->
             <div>             
                 <div 
                 ng-show="currentcourt.pictures[0]"
@@ -72,26 +113,20 @@
                     <img class="img-responsive" src="assets/images/courtpicplaceholder.png">
                 </div>
             </div>
-            <!-- Picture Area ends -->
             <div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
-                <!-- City -->
                 <h2>{{currentcourt.court}}</h2>
                 <h2 ng-show="!currentcourt.court">球場名</h2>
                 </h2>
-                <!-- Hours -->
                 <p>開放時間:</p>
                 <p ng-show="currentcourt.hours">
                     {{currentcourt.hours.begin | date:'shortTime'}}~{{currentcourt.hours.end | date:'shortTime'}}
                 </p>
-               
-                 <!-- Peaktime -->
                 <p>尖峰:</p>
                 <p ng-show="currentcourt.peaktime">
                     {{currentcourt.peaktime.begin | date:'shortTime'}}~{{currentcourt.peaktime.end | date:'shortTime'}}
                 </p>
             </div>
             <div class="infoBox" ng-class="{'col-sm-3': !hovered}" ng-hide="hovered">
-                <!-- Indoor -->
                 <h2>球場情報</h2>
                 <div class="col-sm-6">
                     <div 
@@ -103,7 +138,6 @@
                         </div>
                         <p ng-show="showceiling">屋簷:{{currentcourt.ceiling | exist}}</p>
                     </div>
-                    <!-- Net -->
                     <div
                     ng-mouseover="shownet=true"
                     ng-mouseleave="shownet=false">
@@ -113,14 +147,10 @@
                         <p ng-show="shownet && !currentcourt.nettype">沒籃網</p>
 
                     </div>
-                    <!-- Basket number -->
                     <p>籃框數:{{currentcourt.basketnumber}}</p>
-                    <!-- Floor -->
                     <p>地質:{{currentcourt.floor}}</p>
                 </div>
                 <div class="col-sm-6">
-                    
-                    <!-- Water -->
                     <div
                     ng-mouseover="showwater=true"
                     ng-mouseleave="showwater=false">
@@ -128,7 +158,6 @@
                         <p ng-show="showwater && currentcourt.water.desc">{{currentcourt.water.desc}}</p>
                         <p ng-show="showwater && !currentcourt.water.desc">記得帶水喔</p>
                     </div>
-                    <!-- Toilet -->
                     <div
                     ng-mouseover="showtoilet=true"
                     ng-mouseleave="showtoilet=false">
@@ -136,9 +165,7 @@
                         <p ng-show="showtoilet && currentcourt.toilet.desc">{{currentcourt.toilet.desc}}</p>
                         <p ng-show="showtoilet && !currentcourt.toilet.desc">辦完事再出門</p>
                     </div>
-                    <!-- Lights -->
                     <p>燈:{{currentcourt.lights | exist}}</p>
-                    <!-- Rent -->
                     <div
                     ng-mouseover="showrent=true"
                     ng-mouseleave="showrent=false">
@@ -155,14 +182,12 @@
                 <p>{{currentcourt.desc}}</p>
             </div>
             <div class="editBtns">
-                <!--Upload button-->
                 <button class="btn editDetailButton" 
                 ng-click="uploadmode()" 
                 ng-model="upload" 
                 ng-show="isAdmin || isManager || isVip">
                     <span class="glyphicon glyphicon-camera"></span>
                 </button>
-                <!--Edit button-->
                 <button class="btn editDetailButton"
                 ng-click="editmode()" 
                 ng-model="edit" 
@@ -171,7 +196,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div>-->
     <!--Upload page-->
     <div id="uploadPic" class="editPage col-lg-12" 
     ng-include="'app/courts/temp/upload.page.html'" 
@@ -183,18 +208,18 @@
     ng-include="'app/courts/temp/edit.page.html'" 
     ng-init="edit=false" ng-show="edit" 
     ng-click="editmode()"></div>
-    <div class="row">
+    <!-- <div class="row">
         <div class="event col-sm-6" style="border-right: 1px solid grey">
-            <!-- Events start here -->
+            
             <div ng-show="currentcourt" ng-include="'app/events/events.court.html'"></div>
         </div>
         <div class="col-sm-6">
-            <!-- Comments start here -->
+            
             <div ng-show="currentcourt" ng-include="'app/comments/comments.html'"></div>
         </div>
-    </div>
+    </div> -->
     <!-- Comments end -->
-    <!-- Searchbox -->
+    <!-- Old searcbox with params -->
     <!-- <div id="searchbox">
         <form ng-submit="searchCourt(searchParams)">
             <nit-advanced-searchbox
@@ -217,17 +242,5 @@
         </form>
         <span ng-show="gotResult && searchFocus" class="pull-right text-success"><i class="fa fa-lg fa-check-circle"></i></span> 
     </div> -->
-    <div id="searchbox">
-        <form name="search" ng-submit="goToLocation(Selected)">
-            <div class="input-group">
-              <input type="text" ng-model="Selected" placeholder="找球場" typeahead="court for court in getLocation($viewValue)" typeahead-loading="loadingLocations" class="form-control">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="submit">
-                    <i ng-hide="loadingLocations" class="fa fa-search"></i>
-                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                </button>
-              </span>
-            </div>         
-        </form>
-    </div>
+    
 </div>

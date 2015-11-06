@@ -56,6 +56,7 @@ angular.module('keepballin')
 			        infoContent += 'ng-include="\'app/courts/temp/info.window.html\'">';
 	   				
 	              	infowindow.setContent(infoContent);
+
 	              	infowindow.open($scope.map, marker);
 	              	//Pan to center if it's desktop
 	              	if(screen.width > 480) {
