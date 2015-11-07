@@ -37,7 +37,7 @@ angular.module('keepballin')
 
 			    var infoWindow = new google.maps.InfoWindow();
 			    var me = '<div id="here"><h1>你在這</h1><div class="infoWindowContent">';
-			    me += '<button class="btn btn-primary" ng-click="addLocation()">這裡也是籃球場</button></div></div>';
+			    me += '<button class="btn btn-primary" ng-click="addLocation()">建立球場</button></div></div>';
 		    
 		    	infoWindow.setContent(me);
               	infoWindow.open(map, scope.personMarker);

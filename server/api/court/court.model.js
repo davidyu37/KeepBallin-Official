@@ -68,7 +68,16 @@ CourtSchema.plugin(deepPopulate, {
     },
     'lastEditedBy': {
       select: 'name'
-    }
+    },
+    'ratings.user.avatar': {
+      select: 'url'
+    },
+    'ratings.user': {
+      select: 'avatar name'
+    },
+    'ratings': {
+      select: 'user rate reason'
+    } 
   }
 });
 //search plugin
@@ -77,7 +86,9 @@ CourtSchema.plugin(mongoosastic);
 CourtSchema.statics = {
   getRatings: function(courtID, cb) {
     this.findOne({_id: courtID})
-      .populate({path:'ratings', select: 'rate'})
+      // .populate({path:'ratings', select: 'rate'})
+      .deepPopulate('ratings.user.avatar ratings.user ratings')
+      .select('ratings')
       .exec(cb);
   },
   search: function(params, cb) {

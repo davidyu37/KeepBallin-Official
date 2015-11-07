@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('keepballin')
-	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', 'Download', '$modal',  
-		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, Download, $modal) {
+	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', '$modal', 
+		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, $modal) {
 	    
 		//Initialize map
 	    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -39,8 +39,7 @@ angular.module('keepballin')
 						if(map.getBounds().contains(latlng)) {
 							courts.push(court);
 						}
-					});
-					console.log(courts);	
+					});	
 					$scope.courtList = courts;
 					$scope.$apply();
 				}
@@ -49,9 +48,6 @@ angular.module('keepballin')
 
 	    //Mouseover function to open info window
 	    $scope.openInfo = function(e, court) {
-	    	console.log($scope.markers);
-	    	console.log(court._id);
-	    	console.log('final', $scope.markers[court._id]);
 	    	var marker = $scope.markers[court._id];
 
 	    	var infoContent = '<h5>選我</h5>';
@@ -62,10 +58,16 @@ angular.module('keepballin')
           	$scope.infowindow.open($scope.map, marker);
         	
 	    };
-
+	    var modalInstance;
 	    //Q&A for when edit mode is on
 	    $scope.QandA = function() {
-	    	//Open Q&A through modal or sweet alert	
+	    	//Open Q&A through modal or sweet alert
+	    	modalInstance = $modal.open({
+				animation: true,
+				templateUrl: 'app/faq/faq.html',
+				size: 'lg',
+				controller: 'ModalCtrl'
+			});	
 	    };
 
 	    //Panorama stuff from here

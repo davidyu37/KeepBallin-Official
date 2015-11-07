@@ -1,0 +1,40 @@
+ <div class="modal-header">
+    <h1 class="modal-title">
+    <div ng-show="currentcourt.court">{{currentcourt.court + '的'}}</div>
+    評價</h1>
+</div>
+<div class="modal-body" style="text-align: center">
+    <h3>你給{{currentcourt.court}}幾顆星</h3>
+    <rating 
+    style="color: gold; font-size: 150%;"
+    ng-model="rate" 
+    max="5" 
+    on-hover="hoveringOver(value)" 
+    on-leave="overStar = null" 
+    titles="['很差','有瑕疵','不錯', '很好打', '極品']"></rating>
+    <div style="font-size: 130%; position: absolute"
+    class="label" 
+    ng-class="{'label-danger': rate<=1, 'label-warning': rate>1 && rate<=3, 'label-success': rate>3}">{{rate}}顆星
+    <span ng-show="rate <= 1">很差</span>
+    <span ng-show="rate === 2">有瑕疵</span>
+    <span ng-show="rate === 3">不錯</span>
+    <span ng-show="rate === 4">很好打</span>
+    <span ng-show="rate === 5">極品</span>
+    </div>
+    <hr>
+    <h3 ng-show="rate">給予{{rate}}顆星的原因</h3 ng-show="rate">
+    <textarea style="color: black;" name="reason" class="feedback-input" rows="3" placeholder="因為..." ng-model="reason" ng-disable="sending" required></textarea>
+    <div ng-show="!rate && submit" class="alert alert-danger" role="alert">
+        最低請給予一顆星
+    </div>
+    <div ng-show="!reason && submit" class="alert alert-danger" role="alert">
+        稍微寫一下原因，方便其他球友了解
+    </div>
+</div>
+
+<div class="modal-footer">
+    <!-- <a class="pull-left" ui-sref="contact" ng-click="close()">聯絡我們</a> -->
+    <button class="btn btn-primary" ng-click="sendRate()">送出
+    <i ng-show="sending" class="fa fa-spinner fa-pulse"></i>
+    </button>
+</div>

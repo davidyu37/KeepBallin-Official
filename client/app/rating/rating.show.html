@@ -1,0 +1,32 @@
+ <div class="modal-header">
+ <i class="fa fa-2x fa-remove pull-right pointer" ng-click="close()"></i>
+    <h1 class="modal-title">{{currentcourt.court}}</h1>
+</div>
+<div class="modal-body" style="height: 80vh; overflow-y: scroll;">
+    <div ng-hide="rates[0]">
+        <h4>目前還沒有任何評價</h4>
+        <!-- <div style="margin-top: 20px;">
+            <button style="font-size:90%" class="eventBtn" ng-click="openRate()">給予評價</button>
+        </div> -->
+    </div>
+    <div class="list-group" ng-repeat="r in rates | orderBy: '-rate'" >
+      <div class="list-group-item">
+        <h4 class="list-group-item-heading">
+        <a ui-sref="profile({id: r.user._id})">
+            {{r.user.name}}
+        </a>
+        <rating class="pointer pull-right" 
+        style="color: gold; font-size: 120%;"
+        ng-model="r.rate" 
+        max="5" 
+        readonly="true"></rating>
+                    
+        </h4>
+        <p class="list-group-item-text">{{r.reason}}</p>
+      </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="pull-left" ui-sref="contact" ng-click="close()">聯絡我們</a>
+    <!-- <button class="btn btn-primary" ng-click="close()">OK</button> -->
+</div>

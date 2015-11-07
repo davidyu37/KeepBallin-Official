@@ -63,8 +63,24 @@
             <div class="list-group" ng-repeat="c in courtList" 
             ng-mouseover="openInfo($event, c)">
               <a ui-sref="thiscourt({id: c._id})" class="list-group-item">
+                <div ng-controller="ratingCtrl" 
+                class="pull-right" 
+                ng-mouseover="totalRating = true"
+                ng-mouseleave="totalRating = false">
+                    <rating
+                    style="color: gold; font-size: 150%;"
+                    ng-model="c.averagedRating" 
+                    max="5" 
+                    readonly="true" 
+                    titles="['不要去','有瑕疵','不錯', '很好打', '極品']"></rating>
+                    <span 
+                    ng-show="c.averagedRating"
+                    style="position: absolute; font-size: 120%;" class="label" ng-class="{'label-danger': c.averagedRating<1, 'label-warning': c.averagedRating>=1 && c.averagedRating<3, 'label-success': c.averagedRating>=3}">{{c.averagedRating | number:0}}顆星</span>
+                    <span ng-show="totalRating" style="position: absolute;" class="badge">總共{{c.ratings.length}}個評價</span>
+                </div>
                 <h4 class="list-group-item-heading">{{c.court}}</h4>
                 <p class="list-group-item-text">{{c.address}}</p>
+                
               </a>
             </div>
         </div>

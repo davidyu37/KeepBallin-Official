@@ -14,7 +14,8 @@ angular.module('keepballin')
 			  		center: new google.maps.LatLng(data.lat, data.long),
 					zoom: 15,
 					mapTypeId: google.maps.MapTypeId.ROADMAP,
-					disableDefaultUI: true
+					disableDefaultUI: true,
+					scrollwheel: false
 			  	});
 
 			  	//custom marker image
@@ -33,6 +34,23 @@ angular.module('keepballin')
 					animation: google.maps.Animation.DROP
 				});
 			});
+
+			$scope.$on('ratingSaved', function() {
+				Court.get({id: $scope.currentcourt._id}, function(data) {
+					$scope.currentcourt = data;
+				});
+			});
+			//Show all the rates to the court
+			$scope.openRates = function() {
+				console.log('click');
+				$modal.open({
+					animation: true,
+					templateUrl: 'app/rating/rating.show.html',
+					scope: $scope,
+					size: 'lg',
+					controller: 'ratingShowCtrl'
+				});	
+			};
 
 			$animate.enabled(false);
 	    	$timeout(function () {

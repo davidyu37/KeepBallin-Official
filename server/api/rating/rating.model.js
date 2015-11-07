@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
 
 var RatingSchema = new Schema({
   rate: Number,
+  reason: String,
   court: {
   	type: Schema.ObjectId,
     ref: 'Court',
