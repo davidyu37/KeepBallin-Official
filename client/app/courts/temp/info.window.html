@@ -1,5 +1,6 @@
 <h2>{{currentcourt.court}}</h2>
-<div ng-controller="ratingCtrl">
+<div ng-controller="ratingCtrl" ng-mouseover="totalRating = true"
+    ng-mouseleave="totalRating = false">
 	<!-- <rating 
 	ng-model="currentcourt.averagedRating" 
 	max="max" 
@@ -9,12 +10,14 @@
 	titles="['不要去','有瑕疵','不錯', '很好打', '極品']" 
 	ng-click="sendRate(currentcourt.averagedRating)"></rating> -->
 	<rating
+	class="pointer"
 	style="color: gold; font-size: 150%;"
 	ng-model="currentcourt.averagedRating" 
 	max="5" 
 	readonly="true" 
 	titles="['不要去','有瑕疵','不錯', '很好打', '極品']"
 	ng-click="openRates()"></rating>
+    <span ng-show="totalRating" style="position: absolute;" class="badge">總共{{currentcourt.ratings.length}}個評價</span>
 </div>
 <div class="infoWindowContent">
 	<h5 ng-hide="showAddress">{{currentcourt.city}}

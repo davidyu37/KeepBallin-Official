@@ -19,16 +19,15 @@ angular.module('keepballin')
       });
       return deferred.promise;
     }
-
-    $scope.$on('courtIdChanged', function(e, args) {
-      $scope.comments = {};
-      var check = checkAllComments(args.newId);
-      check.then(function(length) {
-        $scope.comments = new CommentSource(args.newId, length);
-      });
+    
+    $scope.comments = {};
+    var check = checkAllComments($scope.currentcourt._id);
+    check.then(function(length) {
+      $scope.comments = new CommentSource($scope.currentcourt._id, length);
     });
 
- 
+    $scope.infiniteScrollContainer = document.getElementById('commentContainer');
+
     // Clean up listeners when the controller is destroyed
     $scope.$on('$destroy', function () {
       socket.unsyncUpdates('comment');

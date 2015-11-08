@@ -123,7 +123,17 @@
 				
 		</div>
 	</div>
-	<div ng-include="'app/comments/comments.html'"></div>
+	<hr>
+	<div ng-hide="showed" style="text-align: center; width: 100%; height: auto" ng-click="showed = true">
+		<div ui-sref=".comment" 
+		class="pointer eventBtn" 
+		style="font-size: 95%; margin: 0 auto;" 
+		tooltip="屬於這球場的聊天室"
+	    tooltip-trigger="mouseenter"
+        tooltip-placement="bottom">開啟聊天室</div>
+	</div>
+	<!-- <div ng-include="'app/comments/comments.html'"></div> -->
+	<div ui-view></div>
 	<!-- Editing page -->
 	<div class="editPage col-lg-12" 
     ng-include="'app/courts/temp/edit.page.html'" 

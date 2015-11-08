@@ -70,6 +70,8 @@ angular.module('keepballin')
 			});	
 	    };
 
+	    
+
 	    //Panorama stuff from here
 	    var panorama = map.getStreetView();
 	    //Create an undefined var in order to check the current existence of the btn

@@ -33,4 +33,9 @@ angular.module('keepballin')
         templateUrl: 'app/courts/temp/this.court.html',
         controller: 'ThisCourtCtrl'
       })
-  });
+      .state('thiscourt.comment', {
+        templateUrl: 'app/comments/comments.html',
+        controller: 'CommentCtrl'
+      });
+
+  });//end of config

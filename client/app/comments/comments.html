@@ -1,79 +1,82 @@
 <div class="container commentSection" ng-controller="CommentCtrl" style="width: 100%;">
-  <h1>{{currentcourt.court}}留言板</h1>
-  <ul class="comment-list" infinite-scroll='comments.nextPage()' infinite-scroll-disabled='comments.busy' infinite-scroll-distance='0' infinite-scroll-immediate-check="true" ng-class="{'commentBox': comments.comments.length}">
-    <div class="formContainer">
-      <form class="comment-form" ng-submit="addComment($event)" 
-    novalidate name="commentForm">
-        <div class="col-xs-2">
-          <div class="avatarBox">
-            <i ng-hide="userNow.avatar" class="fa fa-3x fa-user" style="color: white; margin: 5px;"></i>
-            <img ng-hide="!userNow.avatar" class="avatar img-rounded" ng-src="{{userNow.avatar.url}}" alt="{{userNow.name}}">
-          </div>
-        </div>
-        <div class="col-xs-10">
-          <div class="input-group input-group-lg">
-            <span class="input-group-addon">
-              <i class="fa fa-1x fa-quote-left"></i>
-            </span>
-            <input
-                  name="comment" 
-                  placeholder="跟球友分享球場狀況"
-                  rows="1" 
-                  tooltip="請先登入"
-                  tooltip-placement="top"
-                  tooltip-trigger="mouseenter"
-                  tooltip-enable="!userNow.name"
-                  class="form-control feedback-input" 
-                  ng-model="newComment" 
-                  ng-keydown="done=false"
-                  ng-keyup="done=true" 
-                  required>
-            <div class="input-group-btn" ng-show="newComment">
-              <button class="btn" type="submit" ng-disabled="commentForm.$invalid"
-              ng-class="{'btn-success': done, 'btn-primary': !done}">
-                <span class="glyphicon" ng-class="{'glyphicon-ok': done, 'glyphicon-pencil': !done}">
-                <!-- 'glyphicon-pencil': newComment,  -->
-                </span>
-              </button>
-              <button class="btn" ng-click="$event.preventDefault(); clear(); commentForm.$setPristine();">
-                <span class="glyphicon glyphicon-remove"></span>
-              </button>
+  <h1>{{currentcourt.court}}聊天室</h1>
+  <div id="commentContainer" class="commentBox">
+    <ul class="comment-list" infinite-scroll='comments.nextPage()' infinite-scroll-disabled='comments.busy' infinite-scroll-distance='0' infinite-scroll-immediate-check="true" infinite-scroll-container="infiniteScrollContainer">
+    <!-- ng-class="{'': comments.comments.length}" -->
+      <div class="formContainer">
+        <form class="comment-form" ng-submit="addComment($event)" 
+      novalidate name="commentForm">
+          <div class="col-xs-2">
+            <div class="avatarBox">
+              <i ng-hide="userNow.avatar" class="fa fa-3x fa-user" style="color: white; margin: 5px;"></i>
+              <img ng-hide="!userNow.avatar" class="avatar img-rounded" ng-src="{{userNow.avatar.url}}" alt="{{userNow.name}}">
             </div>
-            <span class="input-group-addon">
-              <i class="fa fa-1x fa-quote-right"></i> 
-            </span>
+          </div>
+          <div class="col-xs-10">
+            <div class="input-group input-group-lg">
+              <span class="input-group-addon">
+                <i class="fa fa-1x fa-quote-left"></i>
+              </span>
+              <input
+                    name="comment" 
+                    placeholder="跟球友分享球場狀況"
+                    rows="1" 
+                    tooltip="請先登入"
+                    tooltip-placement="top"
+                    tooltip-trigger="mouseenter"
+                    tooltip-enable="!userNow.name"
+                    class="form-control feedback-input" 
+                    ng-model="newComment" 
+                    ng-keydown="done=false"
+                    ng-keyup="done=true" 
+                    required>
+              <div class="input-group-btn" ng-show="newComment">
+                <button class="btn" type="submit" ng-disabled="commentForm.$invalid"
+                ng-class="{'btn-success': done, 'btn-primary': !done}">
+                  <span class="glyphicon" ng-class="{'glyphicon-ok': done, 'glyphicon-pencil': !done}">
+                  <!-- 'glyphicon-pencil': newComment,  -->
+                  </span>
+                </button>
+                <button class="btn" ng-click="$event.preventDefault(); clear(); commentForm.$setPristine();">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </div>
+              <span class="input-group-addon">
+                <i class="fa fa-1x fa-quote-right"></i> 
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <li class="oneComment" ng-repeat='comment in comments.comments'>
+        <div class="row">
+          <div class="col-xs-2">
+            <div class="avatarBox">
+              <img ng-show="!comment.author.avatar.url && !comment.author.fbprofilepic" ng-src="assets/images/profile/profile.jpg" alt="{{comment.author.name}}" class="avatar img-rounded">
+              <img ng-hide="!comment.author.avatar.url" class="avatar img-rounded" ng-src="{{comment.author.avatar.url}}" alt="avatar">
+              <img ng-hide="!comment.author.fbprofilepic" class="avatar img-rounded" ng-src="{{comment.author.fbprofilepic}}" alt="avatar">
+            </div>
+          </div>
+          <div class="col-xs-10">
+            <div class="bubble">
+            <p class="pull-right">{{comment.date | date:'short'}}</p>
+              <h5>
+                <a ui-sref="profile({id: comment.author._id})">
+                  {{comment.author.name}}
+                </a>
+                &nbsp說:
+              </h5>
+              <p>{{ comment.content }}</p>
+            </div>
           </div>
         </div>
-      </form>
-    </div>
-    <li class="oneComment" ng-repeat='comment in comments.comments'>
-      <div class="row">
-        <div class="col-xs-2">
-          <div class="avatarBox">
-            <img ng-show="!comment.author.avatar.url && !comment.author.fbprofilepic" ng-src="assets/images/profile/profile.jpg" alt="{{comment.author.name}}" class="avatar img-rounded">
-            <img ng-hide="!comment.author.avatar.url" class="avatar img-rounded" ng-src="{{comment.author.avatar.url}}" alt="avatar">
-            <img ng-hide="!comment.author.fbprofilepic" class="avatar img-rounded" ng-src="{{comment.author.fbprofilepic}}" alt="avatar">
-          </div>
-        </div>
-        <div class="col-xs-10">
-          <div class="bubble">
-          <p class="pull-right">{{comment.date | date:'short'}}</p>
-            <h5>
-              <a ui-sref="profile({id: comment.author._id})">
-                {{comment.author.name}}
-              </a>
-              &nbsp說:
-            </h5>
-            <p>{{ comment.content }}</p>
-          </div>
+      </li>
+      <!-- Show spinner when it's loading -->
+      <div ng-show='comments.busy'>
+        <div class="loaderWrapper">
+          <div class="loader">Loading</div>
         </div>
       </div>
-    </li>
-    <!-- Show spinner when it's loading -->
-    <div ng-show='comments.busy'>
-      <div class="loaderWrapper">
-        <div class="loader">Loading</div>
-      </div>
-    </div>
-  </ul>
+    </ul>
+  </div>
 </div>
