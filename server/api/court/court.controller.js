@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single court
 exports.show = function(req, res) {
-  court.findById(req.params.id, function (err, court) {
+  court.findOneAndPopulate(req.params.id, function (err, court) {
     if(err) { return handleError(res, err); }
     if(!court) { return res.status(404).send('Not Found'); }
     return res.json(court);

@@ -1,24 +1,28 @@
 /* Comment stuff starts here */
-
+.commentHeader {
+    @media(min-width: $screen-sm-min) {
+        font-size: 200%;
+    }
+    font-size: 150%;
+}
 .comment-form {
     height: 60px;
     margin-top: 20px;
 }
 
 .commentSection{
-    display: none;
-    @media(min-width: $screen-sm-min) {
-        /*box-shadow: 0 9px 0px 0px white, 0 -9px 0px 0px white, 12px 0 10px -5px rgba(221, 221, 221, 0.8), -12px 0 10px -4px rgba(221, 221, 221, 0.8); */   
-        display: block;
-    }
+    display: block;
 }
 
 .comment-list {
     list-style: none;
     height: auto;
-    padding: 5% 10%;
-    -webkit-box-shadow: inset 0 5px 10px rgba(221, 221, 221, 0.8);
-    box-shadow: inset 0 5px 10px rgba(221, 221, 221, 0.8);
+    padding: 0px;
+    @media(min-width: $screen-sm-min) {
+        padding: 5% 10%;
+        -webkit-box-shadow: inset 0 5px 10px rgba(221, 221, 221, 0.8);
+        box-shadow: inset 0 5px 10px rgba(221, 221, 221, 0.8);
+    }
 }
 
 .avatar {
@@ -26,7 +30,16 @@
     height: auto;
 }
 
-.avatarBox {    
+.avatarBox {
+    @media(min-width: $screen-sm-min) {    
+        width: 50px;
+        height: 50px;
+        display: block;
+    }   
+    display: none;
+}
+
+.avatarBoxList {
     width: 50px;
     height: 50px;
 }
@@ -44,6 +57,30 @@
 
 .formContainer {
     background-color: black; 
+    margin-bottom: 20px;
     padding: 20px; 
-    margin-bottom: 20px
+    .input-group-addon {
+        @media(min-width: $screen-sm-min) {
+            display: table-cell;
+        }
+        display: none;
+    }
+}
+
+.commentBtn {
+  border: 2px solid $brand-primary;
+  padding: 10px;
+  border-radius:5px;
+  background: transparent;
+  font-size:24px;
+  cursor:pointer;
+  transition: all 0.3s;
+  @media(min-width: $screen-sm-min) {
+    width: 15%;   
+  }
+}
+
+.commentBtn:hover {
+  background: $brand-primary;
+  color: white;
 }

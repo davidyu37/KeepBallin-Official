@@ -71,7 +71,7 @@ angular.module('keepballin')
 
 
 			$scope.$watchCollection('courts', function(newVal, oldVal) {
-				console.log('courts changed');
+				
 				if (newVal && newVal.length) {
 					//Clean up the old markers
 					

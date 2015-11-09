@@ -7,12 +7,16 @@
 }
 
 .courtDisplay {
-    padding-top: 60px; 
-    background-color: black; 
-    height: 100vh; 
-    color: white;
-    padding-left: 20px;
-    padding-right: 30px;
+    @media(min-width: $screen-sm-min) {
+        padding-top: 60px; 
+        background-color: black; 
+        height: 100vh; 
+        color: white;
+        padding-left: 20px;
+        padding-right: 30px;
+        display: block;
+    }
+    display: none;
 }
 
 .court-input-group {

@@ -5,9 +5,10 @@ angular.module('keepballin')
 		function ($scope, $animate, $timeout, socket, Court, Auth, Lightbox, $modal, chosenCourt) {
 			
 			$scope.isLoggedIn = Auth.isLoggedIn;
-
+			$scope.readonly = true;
 			chosenCourt.$promise.then(function(data){
 				$scope.currentcourt = data;
+				console.log($scope.currentcourt);
 				//Show google map for the court
 			  	$scope.courtMap = new google.maps.Map(document.getElementById('courtMap'), {
 			  		//map options

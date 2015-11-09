@@ -116,7 +116,7 @@ CourtSchema.statics = {
     .exec(cb);
   },
   findOneAndPopulate: function(courtId, cb) {
-    this.find({_id: courtId})
+    this.findOne({_id: courtId})
     .deepPopulate('pictures.user pictures creator lastEditedBy')
     .exec(cb);
   }

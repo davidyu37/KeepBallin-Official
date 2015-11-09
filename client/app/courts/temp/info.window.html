@@ -14,7 +14,8 @@
 	style="color: gold; font-size: 150%;"
 	ng-model="currentcourt.averagedRating" 
 	max="5" 
-	readonly="true" 
+	readonly="true"
+	ng-readonly="true"  
 	titles="['不要去','有瑕疵','不錯', '很好打', '極品']"
 	ng-click="openRates()"></rating>
     <span ng-show="totalRating" style="position: absolute;" class="badge">總共{{currentcourt.ratings.length}}個評價</span>

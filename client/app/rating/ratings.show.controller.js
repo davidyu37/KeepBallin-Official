@@ -6,7 +6,6 @@ angular.module('keepballin')
 
 		rates.then(function(data) {
 			$scope.rates = data.ratings;
-			console.log($scope.rates);
 		});
 
 		$scope.close = function() {
