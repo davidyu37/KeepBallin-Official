@@ -11,17 +11,17 @@ angular.module('keepballin', [
   'ngFileUpload',
   'bootstrapLightbox',
   'infinite-scroll',
-  'angular-advanced-searchbox',
   'oitozero.ngSweetAlert',
   'relativeDate',
   'mobile-angular-ui.gestures',
-  'mobile-angular-ui.core'
+  'mobile-angular-ui.core',
+  'djds4rce.angular-socialshare'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/');
 
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(true).hashPrefix('!');
     $httpProvider.interceptors.push('authInterceptor');
   })
 

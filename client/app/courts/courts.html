@@ -33,9 +33,38 @@
     </div>
     <div class="col-sm-7 courtDisplay">
         <div class="page-header" style="margin-top: 9px">
-            <!-- <h1 ng-hide="enable">尋找球場</h1>
-            <h1 ng-show="enable">找球場附近的地點</h1> -->
-            <div ng-hide="enable">
+        <!-- Searchbox for mobile -->
+            <div id="searchbox">
+                <div ng-hide="enable" style="color: black">
+                    <form name="search" ng-submit="goToLocation(Selected)">
+                        <div class="input-group input-group-lg court-input-group">
+                          <input type="text" ng-model="Selected" placeholder="尋找球場" typeahead="court for court in getLocation($viewValue)" typeahead-loading="loadingLocations" class="court-input form-control">
+                          <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit" style="height: 47px;">
+                                <i ng-hide="loadingLocations" class="fa fa-search"></i>
+                                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                            </button>
+                          </span>
+                        </div>         
+                    </form>
+                </div>
+                <div ng-show="enable">
+                    <form>
+                        <div class="input-group input-group-lg court-input-group">
+                          <input id="mobileSearch" type="text" placeholder="找球場附近的地點" class="court-input form-control">
+                          <span class="input-group-addon">
+                            <i class="fa fa-search"></i>       
+                          </span>
+                        </div>         
+                    </form>
+                </div>
+                <div ng-repeat="city in cities" style="display: inline-block" class="pointer" ng-click="goToLocation(city)">
+                    <h4 style="padding-left: 5px">
+                    <span class="label label-primary">{{city}}</span>
+                    </h4>
+                </div>
+            </div>
+            <!-- <div ng-hide="enable">
                 <form name="search" ng-submit="goToLocation(Selected)">
                     <div class="input-group input-group-lg court-input-group">
                       <input type="text" ng-model="Selected" placeholder="尋找球場" typeahead="court for court in getLocation($viewValue)" typeahead-loading="loadingLocations" class="court-input form-control">
@@ -47,8 +76,8 @@
                       </span>
                     </div>         
                 </form>
-            </div>
-            <div ng-show="enable">
+            </div> -->
+            <!-- <div ng-show="enable">
                 <form>
                     <div class="input-group input-group-lg court-input-group">
                       <input id="placeSearch" type="text" placeholder="找球場附近的地點" class="court-input form-control">
@@ -57,9 +86,17 @@
                       </span>
                     </div>         
                 </form>
-            </div>
+            </div> -->
+           <!--  <div ng-repeat="city in cities" style="display: inline-block" class="pointer" ng-click="goToLocation(city)">
+                <h4 style="padding-left: 5px">
+                <span class="label label-primary">{{city}}</span>
+                </h4>
+            </div> -->
         </div>
         <div style="height: 75vh; width: 95%; margin: 0 auto; overflow-y: scroll;">
+            <div ng-hide="courtList" style="width: 100%; text-align: center;">
+                <img class="bounceBall faa-spin faa-bounce animated" src="assets/images/ball.png" alt="basketball">
+            </div>
             <div class="list-group" ng-repeat="c in courtList" 
             ng-mouseover="openInfo($event, c)">
               <a ui-sref="thiscourt({id: c._id})" class="list-group-item">
@@ -86,6 +123,7 @@
             </div>
         </div>
     </div>
+    
 
     
     <!-- Slide button for court detail -->

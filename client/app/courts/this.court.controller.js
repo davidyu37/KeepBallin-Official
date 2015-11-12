@@ -8,7 +8,7 @@ angular.module('keepballin')
 			$scope.readonly = true;
 			chosenCourt.$promise.then(function(data){
 				$scope.currentcourt = data;
-				console.log($scope.currentcourt);
+				
 				//Show google map for the court
 			  	$scope.courtMap = new google.maps.Map(document.getElementById('courtMap'), {
 			  		//map options
@@ -34,7 +34,14 @@ angular.module('keepballin')
 					icon: image, 
 					animation: google.maps.Animation.DROP
 				});
+
 			});
+			
+			//Change text of fb share to chinese
+	    	var fbBtn = document.getElementsByClassName('pluginButtonLabel');
+	    	for(var i=0; i < fbBtn.length; i ++) {
+		    	fbBtn[i].innerHTML = '分享';
+	    	};
 
 			$scope.$on('ratingSaved', function() {
 				Court.get({id: $scope.currentcourt._id}, function(data) {
@@ -81,4 +88,5 @@ angular.module('keepballin')
 	    		$scope.upload = !($scope.upload);
 	    	};
 
+	    	
 	}]);

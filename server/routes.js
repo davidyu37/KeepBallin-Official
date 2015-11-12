@@ -19,6 +19,7 @@ module.exports = function(app) {
   app.use('/api/uploads', require('./api/upload'));
   app.use('/api/users', require('./api/user'));
   app.use('/api/courts', require('./api/court'));
+  app.use('/api/FB', require('./api/fb'));
 
   app.use('/auth', require('./auth'));
 

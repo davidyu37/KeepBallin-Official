@@ -1,0 +1,6 @@
+.urlShare {
+	@media(min-width: $screen-sm-min) {
+        display: inline-table;
+    }
+    display: none;
+}

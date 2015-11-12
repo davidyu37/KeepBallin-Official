@@ -19,7 +19,6 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/angular-advanced-searchbox/dist/angular-advanced-searchbox.min.css" />
       <link rel="stylesheet" href="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.css" />
       <link rel="stylesheet" href="bower_components/font-awesome-animation/dist/font-awesome-animation.css" />
       <link rel="stylesheet" href="bower_components/font-awesome-animation/dist/font-awesome-animation.min.css" />
@@ -27,6 +26,7 @@
       <link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-hover.css" />
       <link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-base.css" />
       <link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-desktop.css" />
+      <link rel="stylesheet" href="bower_components/angular-socialshare/angular-socialshare.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -72,12 +72,10 @@
       <!-- bower:js -->
       <script src="bower_components/jquery/dist/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
-      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-      <script src="bower_components/angular-advanced-searchbox/dist/angular-advanced-searchbox-tpls.js"></script>
       <script src="bower_components/angular-animate/angular-animate.js"></script>
+      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
       <script src="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-      <script src="bower_components/angular-parallax/scripts/angular-parallax.js"></script>
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
       <script src="bower_components/angular-socket-io/socket.js"></script>
@@ -92,10 +90,10 @@
       <script src="bower_components/angular-touch/angular-touch.js"></script>
       <script src="bower_components/angular-translate/angular-translate.js"></script>
       <script src="bower_components/angular-relative-date/angular-relative-date.js"></script>
-      <script src="bower_components/angular-youtube-mb/src/angular-youtube-embed.js"></script>
       <script src="bower_components/clipboard/dist/clipboard.js"></script>
       <script src="bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.js"></script>
       <script src="bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.js"></script>
+      <script src="bower_components/angular-socialshare/angular-socialshare.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -158,6 +156,9 @@
       <script src="app/rating/ratings.submit.controller.js"></script>
       <script src="app/sendmail/sendmail.controller.js"></script>
       <script src="app/sendmail/sendmail.js"></script>
+      <script src="app/share/fb.service.js"></script>
+      <script src="app/share/fb.share.js"></script>
+      <script src="app/share/share.controller.js"></script>
       <script src="app/team/controllers/team.controller.js"></script>
       <script src="app/team/controllers/teamsignup.controller.js"></script>
       <script src="app/team/directive/background.image.js"></script>

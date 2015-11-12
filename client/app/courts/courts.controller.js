@@ -23,14 +23,13 @@ angular.module('keepballin')
 			$scope.$on('$destroy', function () {
 	      		socket.unsyncUpdates('court');
 	    	});
-	    	// $scope.map.panTo({lat: data[0].lat, lng: data[0].long});
 
-			
+			sortOutCities(data);
 
 			google.maps.event.addListener(map, 'bounds_changed', function() {
 				//when user uses the search box stop changing the list
 				if($scope.searching) {
-					return
+					return;
 				} else {
 					var courts = [];
 					data.forEach(function(court) {
@@ -45,6 +44,37 @@ angular.module('keepballin')
 				}
 			});
 	    });//Court query promise then function ends here
+
+	    function sortOutCities(courts) {
+
+	    	//create empty to store all the city options
+	    	$scope.cities = [];
+	    	//loop through all the courts
+	    	for(var i=0; i<courts.length; i++) {
+	    		//if there's no city in the array yet push the first one in
+		    	if($scope.cities.length ===0) {
+		    		$scope.cities.push(courts[i].city);
+		    	} else {
+		    		var repeat = false;
+		    		for(var j=0; j<$scope.cities.length; j++) {
+		    			//if that city already exist in the city array, do nothing
+		    			if($scope.cities[j] === courts[i].city) {
+		    				repeat = true;
+		    				break;
+		    			}
+		    		}
+		    		if(repeat) {
+		    			continue;
+		    		} else if(courts[i].city === undefined) {
+		    			continue;
+		    		} else if(courts[i].city === '台灣') {
+		    			continue;
+		    		} else {
+		    			$scope.cities.push(courts[i].city);
+		    		}
+		    	}
+	    	}
+	    }; 
 
 	    //Mouseover function to open info window
 	    $scope.openInfo = function(e, court) {
@@ -99,23 +129,15 @@ angular.module('keepballin')
 	        }
 	    });
 
-	    //Place search ------- Begin
-	    var input = document.getElementById('placeSearch');
-		var searchBox = new google.maps.places.SearchBox(input);
-
-		// Bias the SearchBox results towards current map's viewport.
-		// map.addListener('bounds_changed', function() {
-		// 	searchBox.setBounds(map.getBounds());
-		// });
-
 		var markers = [];
-		// [START region_getplaces]
-		// Listen for the event fired when the user selects a prediction and retrieve
-		// more details for that place.
-		searchBox.addListener('places_changed', function() {
-			var places = searchBox.getPlaces();
 
-			if (places.length == 0) {
+		var mobileInput = document.getElementById('mobileSearch');
+		var mobileSearch = new google.maps.places.SearchBox(mobileInput);
+
+		mobileSearch.addListener('places_changed', function() {
+			var places1 = mobileSearch.getPlaces();
+
+			if (places1.length == 0) {
 				return;
 			}
 
@@ -127,14 +149,30 @@ angular.module('keepballin')
 
 			// For each place, get the icon, name and location.
 			var bounds = new google.maps.LatLngBounds();
-			console.log(bounds);
-			places.forEach(function(place) {
+			
+			places1.forEach(function(place) {
 				// Create a marker for each place.
-				markers.push(new google.maps.Marker({
+				var marker = new google.maps.Marker({
 					map: map,
 					title: place.name,
 					position: place.geometry.location
-				}));
+				});
+				var infoWindow = new google.maps.InfoWindow();
+			    var me = '<div id="searched"><h1>' + place.name + '</h1><div class="infoWindowContent">';
+			    me += '<button class="btn btn-primary" ng-click="addLocationAfterSearch()">建立球場</button></div></div>';
+		    
+		    	infoWindow.setContent(me);
+
+		    	google.maps.event.addListener(marker, 'click', function(e) {
+		    		
+		    		$scope.placeSearched = e.latLng;
+	              	infoWindow.open(map, marker);
+	              	$scope.$apply(function(){
+           				$compile(document.getElementById('searched'))($scope);
+        			});
+		    	});
+
+				markers.push(marker);
 
 				if (place.geometry.viewport) {
 				// Only geocodes have viewport.
@@ -145,8 +183,59 @@ angular.module('keepballin')
 			});
 			map.fitBounds(bounds);
 		});
-		//Place search ------- End
 
+	    //Add searchBox to map
+	    if(screen.width < 480) {
+            var searchBox = document.getElementById('searchbox');
+		    map.controls[google.maps.ControlPosition.TOP].push(searchBox);
+	    }
+	    
+	    //Place search ------- Begin
+	 //    var input = document.getElementById('placeSearch');
+		// var searchBox = new google.maps.places.SearchBox(input);
+
+		// // Bias the SearchBox results towards current map's viewport.
+		// // map.addListener('bounds_changed', function() {
+		// // 	searchBox.setBounds(map.getBounds());
+		// // });
+
+		// var markers = [];
+		// // [START region_getplaces]
+		// // Listen for the event fired when the user selects a prediction and retrieve
+		// // more details for that place.
+		// searchBox.addListener('places_changed', function() {
+		// 	var places = searchBox.getPlaces();
+
+		// 	if (places.length == 0) {
+		// 		return;
+		// 	}
+
+		// 	// Clear out the old markers.
+		// 	markers.forEach(function(marker) {
+		// 		marker.setMap(null);
+		// 	});
+		// 	markers = [];
+
+		// 	// For each place, get the icon, name and location.
+		// 	var bounds = new google.maps.LatLngBounds();
+			
+		// 	places.forEach(function(place) {
+		// 		// Create a marker for each place.
+		// 		markers.push(new google.maps.Marker({
+		// 			map: map,
+		// 			title: place.name,
+		// 			position: place.geometry.location
+		// 		}));
+
+		// 		if (place.geometry.viewport) {
+		// 		// Only geocodes have viewport.
+		// 			bounds.union(place.geometry.viewport);
+		// 		} else {
+		// 			bounds.extend(place.geometry.location);
+		// 		}
+		// 	});
+		// 	map.fitBounds(bounds);
+		// });
 	    //Searchbox
 	 //    $scope.availableSearchParams = [
 		//   { key: 'court', name: '球場名', placeholder: '球場名...' },
@@ -199,7 +288,7 @@ angular.module('keepballin')
 		};
 
 		$scope.goToLocation = function(selected) {
-			// console.log(selected);
+			
 			if(selected) {
 				var params = {
 					query: selected
@@ -240,17 +329,17 @@ angular.module('keepballin')
 	    });
 
 	    //Delete picture
-	    $scope.deletePic = function(pic) {
-	        var check = $window.confirm('確定要刪掉這張照片嗎？');
-	        if (check) {   
-	            Download.delete({ id: pic._id }, function(){
-	 				//sync $scope.courts from db
-	 				$scope.courts = Court.query();
-	            });
-	        } else {
-	           return;
-	        }
-	    };
+	    // $scope.deletePic = function(pic) {
+	    //     var check = $window.confirm('確定要刪掉這張照片嗎？');
+	    //     if (check) {   
+	    //         Download.delete({ id: pic._id }, function(){
+	 			// 	//sync $scope.courts from db
+	 			// 	$scope.courts = Court.query();
+	    //         });
+	    //     } else {
+	    //        return;
+	    //     }
+	    // };
 
 	    //Share the court url
 	    $scope.share = function() {
@@ -259,8 +348,10 @@ angular.module('keepballin')
 	    	$modal.open({
 		      animation: true,
 		      templateUrl: 'app/share/share.html',
-		      scope: $scope
+		      scope: $scope,
+		      controller: 'ShareCtrl'
 		    });
+
 	    };
 	    //Popover message
 	    $scope.popMess = '增加球場';
@@ -302,7 +393,7 @@ angular.module('keepballin')
     	$scope.editmode = function(court) {
     		$scope.edit = !($scope.edit);
     		if(court) {
-    			// console.log(court);
+    			
     			Court.update({ id: court._id }, court);
     		}
     	};
@@ -332,9 +423,6 @@ angular.module('keepballin')
 		};
 	    //Add Marker ends here
 
-	    //Add searchBox to map
-	    // var searchBox = document.getElementById('searchbox');
-	    // map.controls[google.maps.ControlPosition.TOP].push(searchBox);
 	    //Geolocate begins here
 	    // Place geolocate button on map
 	    var geoBtn = document.getElementById('geolocate');
@@ -367,6 +455,12 @@ angular.module('keepballin')
 
 	    $scope.addLocation = function() {
 	    	AddMarker.addOne($scope.userLocation, function(newMarker) {
+	    		$scope.courts.push(newMarker);
+	    	});
+	    };
+	    //Function to add marker to place search
+	    $scope.addLocationAfterSearch = function() {
+	    	AddMarker.addOne($scope.placeSearched, function(newMarker) {
 	    		$scope.courts.push(newMarker);
 	    	});
 	    };

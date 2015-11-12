@@ -18,9 +18,18 @@ angular.module('keepballin')
 
 						var address = coordinatesToAddress(lat, long);
 						address.then(function(result){
-							var district = result.address_components[3].long_name;
-							var city = result.address_components[4].long_name;
-							court = {lat: lat, long: long, address: result.formatted_address, district: district, city: city};
+							var addressFormatted = result.formatted_address;
+							console.log(addressFormatted);
+							var indexTW = addressFormatted.indexOf('台灣');
+							var city = addressFormatted.slice((indexTW + 2), (indexTW + 5));
+							var district = addressFormatted.slice((indexTW + 5), (indexTW + 8));
+
+							//If the road is unnamed, don't record the city and district automatically
+							if(addressFormatted.slice(0, 12) === 'Unnamed Road') {
+								court = {lat: lat, long: long, address: addressFormatted};
+							} else {
+								court = {lat: lat, long: long, address: addressFormatted, district: district, city: city};
+							}
 							Court.save(court, function(u) {
 								cb(u);
 							});
