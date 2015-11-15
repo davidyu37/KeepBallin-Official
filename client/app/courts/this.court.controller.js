@@ -5,7 +5,7 @@ angular.module('keepballin')
 		function ($scope, $animate, $timeout, socket, Court, Auth, Lightbox, $modal, chosenCourt) {
 			
 			$scope.isLoggedIn = Auth.isLoggedIn;
-			$scope.readonly = true;
+			// $scope.readonly = true;
 			chosenCourt.$promise.then(function(data){
 				$scope.currentcourt = data;
 				
