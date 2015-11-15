@@ -20,12 +20,12 @@ angular.module('keepballin')
 	    	$scope.courts = data;
 	    	$scope.courtList = data;
     		//socket.io instant updates
-		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
-		    	// console.log(arr);
-		    });
-			$scope.$on('$destroy', function () {
-	      		socket.unsyncUpdates('court');
-	    	});
+		 //    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
+		 //    	// console.log(arr);
+		 //    });
+			// $scope.$on('$destroy', function () {
+	  //     		socket.unsyncUpdates('court');
+	  //   	});
 
 			sortOutCities(data);
 
@@ -193,105 +193,8 @@ angular.module('keepballin')
 		    map.controls[google.maps.ControlPosition.TOP].push(searchBox);
 	    }
 	    
-	    //Place search ------- Begin
-	 //    var input = document.getElementById('placeSearch');
-		// var searchBox = new google.maps.places.SearchBox(input);
-
-		// // Bias the SearchBox results towards current map's viewport.
-		// // map.addListener('bounds_changed', function() {
-		// // 	searchBox.setBounds(map.getBounds());
-		// // });
-
-		// var markers = [];
-		// // [START region_getplaces]
-		// // Listen for the event fired when the user selects a prediction and retrieve
-		// // more details for that place.
-		// searchBox.addListener('places_changed', function() {
-		// 	var places = searchBox.getPlaces();
-
-		// 	if (places.length == 0) {
-		// 		return;
-		// 	}
-
-		// 	// Clear out the old markers.
-		// 	markers.forEach(function(marker) {
-		// 		marker.setMap(null);
-		// 	});
-		// 	markers = [];
-
-		// 	// For each place, get the icon, name and location.
-		// 	var bounds = new google.maps.LatLngBounds();
-			
-		// 	places.forEach(function(place) {
-		// 		// Create a marker for each place.
-		// 		markers.push(new google.maps.Marker({
-		// 			map: map,
-		// 			title: place.name,
-		// 			position: place.geometry.location
-		// 		}));
-
-		// 		if (place.geometry.viewport) {
-		// 		// Only geocodes have viewport.
-		// 			bounds.union(place.geometry.viewport);
-		// 		} else {
-		// 			bounds.extend(place.geometry.location);
-		// 		}
-		// 	});
-		// 	map.fitBounds(bounds);
-		// });
-	    //Searchbox
-	 //    $scope.availableSearchParams = [
-		//   { key: 'court', name: '球場名', placeholder: '球場名...' },
-		//   { key: 'city', name: '城市', placeholder: '城市...' },
-		//   { key: 'district', name: '區域', placeholder: '區域...' },
-		//   { key: 'address', name: '住址', placeholder: '住址...' }
-		// ];
-
-		// $scope.noResult = false;
-		// $scope.gotResult = false;
-
-		// $scope.searchCourt = function(params) {
-		// 	var hasParams = (params.query || params.court || params.city || params.district || params.address);
-		// 	if(hasParams === undefined) {
-		// 		$timeout(function() {
-		// 			$scope.emptyField = false;
-		// 		}, 1000);
-		// 		return;
-		// 	} else {
-		// 		Court.search(params, function(data) {
-		// 			if(data.length === 0) {
-		// 				$scope.noResult = true;
-		// 				$timeout(function() {
-		// 					$scope.noResult = false;
-		// 				}, 1000);
-		// 			} else {
-		// 				$scope.courts = data;
-		// 				$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
-		// 				$scope.map.setZoom(13);
-		// 				$scope.gotResult = true;
-		// 				$timeout(function() {
-		// 					$scope.gotResult = false;
-		// 				}, 1000);
-		// 			}
-		// 		});
-		// 	}
-		// };
-
-		// $scope.getLocation = function(val) {
-			
-		// 	var params = {
-		// 		query: val
-		// 	};
-		// 	return Court.search(params).$promise
-		// 		.then(function(data) {
-		// 			return data.map(function(item) {
-		// 				return item.address;
-		// 			});
-		// 		});	
-		// };
-
 		$scope.goToLocation = function(selected) {
-			console.log(selected);
+			
 			if(selected) {
 				var params = {
 					query: selected
@@ -324,13 +227,13 @@ angular.module('keepballin')
 	    
 
 	    //Lightbox
-	    $scope.openLightboxModal = function (index) {
-	        Lightbox.openModal($scope.currentcourt.pictures, index);
-	    };
-	    //Update courts when pictures uploaded
-	    $scope.$on('courtPicUploaded', function() {
-	    	$scope.courts = Court.query();
-	    });
+	    // $scope.openLightboxModal = function (index) {
+	    //     Lightbox.openModal($scope.currentcourt.pictures, index);
+	    // };
+	    // //Update courts when pictures uploaded
+	    // $scope.$on('courtPicUploaded', function() {
+	    // 	$scope.courts = Court.query();
+	    // });
 
 	    //Delete picture
 	    // $scope.deletePic = function(pic) {
@@ -473,6 +376,102 @@ angular.module('keepballin')
 	    var addMarkerBtn = document.getElementById('addMarker');
 	    map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(addMarkerBtn);
 
+	    //Place search ------- Begin
+	 //    var input = document.getElementById('placeSearch');
+		// var searchBox = new google.maps.places.SearchBox(input);
+
+		// // Bias the SearchBox results towards current map's viewport.
+		// // map.addListener('bounds_changed', function() {
+		// // 	searchBox.setBounds(map.getBounds());
+		// // });
+
+		// var markers = [];
+		// // [START region_getplaces]
+		// // Listen for the event fired when the user selects a prediction and retrieve
+		// // more details for that place.
+		// searchBox.addListener('places_changed', function() {
+		// 	var places = searchBox.getPlaces();
+
+		// 	if (places.length == 0) {
+		// 		return;
+		// 	}
+
+		// 	// Clear out the old markers.
+		// 	markers.forEach(function(marker) {
+		// 		marker.setMap(null);
+		// 	});
+		// 	markers = [];
+
+		// 	// For each place, get the icon, name and location.
+		// 	var bounds = new google.maps.LatLngBounds();
+			
+		// 	places.forEach(function(place) {
+		// 		// Create a marker for each place.
+		// 		markers.push(new google.maps.Marker({
+		// 			map: map,
+		// 			title: place.name,
+		// 			position: place.geometry.location
+		// 		}));
+
+		// 		if (place.geometry.viewport) {
+		// 		// Only geocodes have viewport.
+		// 			bounds.union(place.geometry.viewport);
+		// 		} else {
+		// 			bounds.extend(place.geometry.location);
+		// 		}
+		// 	});
+		// 	map.fitBounds(bounds);
+		// });
+	    //Searchbox
+	 //    $scope.availableSearchParams = [
+		//   { key: 'court', name: '球場名', placeholder: '球場名...' },
+		//   { key: 'city', name: '城市', placeholder: '城市...' },
+		//   { key: 'district', name: '區域', placeholder: '區域...' },
+		//   { key: 'address', name: '住址', placeholder: '住址...' }
+		// ];
+
+		// $scope.noResult = false;
+		// $scope.gotResult = false;
+
+		// $scope.searchCourt = function(params) {
+		// 	var hasParams = (params.query || params.court || params.city || params.district || params.address);
+		// 	if(hasParams === undefined) {
+		// 		$timeout(function() {
+		// 			$scope.emptyField = false;
+		// 		}, 1000);
+		// 		return;
+		// 	} else {
+		// 		Court.search(params, function(data) {
+		// 			if(data.length === 0) {
+		// 				$scope.noResult = true;
+		// 				$timeout(function() {
+		// 					$scope.noResult = false;
+		// 				}, 1000);
+		// 			} else {
+		// 				$scope.courts = data;
+		// 				$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
+		// 				$scope.map.setZoom(13);
+		// 				$scope.gotResult = true;
+		// 				$timeout(function() {
+		// 					$scope.gotResult = false;
+		// 				}, 1000);
+		// 			}
+		// 		});
+		// 	}
+		// };
+
+		// $scope.getLocation = function(val) {
+			
+		// 	var params = {
+		// 		query: val
+		// 	};
+		// 	return Court.search(params).$promise
+		// 		.then(function(data) {
+		// 			return data.map(function(item) {
+		// 				return item.address;
+		// 			});
+		// 		});	
+		// };
 
 
 }]);//mapCtrl ends here
