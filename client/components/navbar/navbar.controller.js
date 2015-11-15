@@ -3,15 +3,20 @@
 angular.module('keepballin')
   .controller('NavbarCtrl', ['$rootScope', '$scope', '$location', '$window', '$state', 'Auth', 'Scroll', 'socket', '$timeout', function ($rootScope, $scope, $location, $window, $state, Auth, Scroll, socket, $timeout) {
     
-    if(screen.width > 480) {
-      Scroll.scrollInit();
-    }
+    // if(screen.width > 480) {
+    //   Scroll.scrollInit();
+    // }
 
     $scope.menu = [
     {
       'title': '球場',
       'link': 'courts',
       'icon': 'glyphicon-map-marker'
+    },
+    {
+      'title': '球隊',
+      'link': 'team',
+      'icon': 'glyphicon-users'
     },
     {
       'title': '聯絡',

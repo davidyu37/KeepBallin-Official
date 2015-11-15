@@ -23,23 +23,23 @@ app.config(function ($stateProvider) {
           authenticate: true
         }
       }
-    })
-    .state('settings.info', {
-      url: '/teaminfo',
-      templateUrl: 'app/team/temp/team.info.html',
-      authenticate: true
-    })
-    .state('settings.member', {
-      url: '/teammember',
-      templateUrl: 'app/team/temp/team.member.html',
-      authenticate: true
-      
-    })
-    .state('settings.represent', {
-      url: '/teamrepresent',
-      templateUrl: 'app/team/temp/team.represent.html',
-      authenticate: true
     });
+    // .state('settings.info', {
+    //   url: '/teaminfo',
+    //   templateUrl: 'app/team/temp/team.info.html',
+    //   authenticate: true
+    // })
+    // .state('settings.member', {
+    //   url: '/teammember',
+    //   templateUrl: 'app/team/temp/team.member.html',
+    //   authenticate: true
+      
+    // })
+    // .state('settings.represent', {
+    //   url: '/teamrepresent',
+    //   templateUrl: 'app/team/temp/team.represent.html',
+    //   authenticate: true
+    // });
 });
 
 /**
