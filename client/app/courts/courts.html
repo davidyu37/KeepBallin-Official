@@ -36,7 +36,7 @@
         <!-- Searchbox for mobile -->
             <div id="searchbox">
                 <div ng-hide="enable" style="color: black">
-                    <form name="search" ng-submit="goToLocation(Selected)">
+                    <!-- <form name="search" ng-submit="goToLocation(Selected)">
                         <div class="input-group input-group-lg court-input-group">
                           <input type="text" ng-model="Selected" placeholder="尋找球場" typeahead="court for court in getLocation($viewValue)" typeahead-loading="loadingLocations" class="court-input form-control">
                           <span class="input-group-btn">
@@ -46,7 +46,25 @@
                             </button>
                           </span>
                         </div>         
+                    </form> -->
+                    <form name="search" ng-submit="goToLocation(searchText)">
+                        <div class="input-group input-group-lg court-input-group">
+                          <input type="text" ng-model="searchText" placeholder="尋找球場" typeahead="(court.court || court.address) for court in courtsCached | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" class="court-input form-control">
+                          <span class="input-group-btn">
+                            <button class="btn btn-primary" type="submit" style="height: 47px;">
+                                <i ng-hide="loadingLocations" class="fa fa-search"></i>
+                                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                            </button>
+                          </span>
+                        </div>         
                     </form>
+                    <div ng-show="noResult" class="alert alert-warning" style="width: 80%; margin: 1% auto">
+                        目前還沒有{{searchText}}球場,
+                        馬上
+                        <a ng-hide="isLoggedIn" ui-sref="signup">註冊</a>
+                        加自己的球場
+                        <a ng-show="isLoggedIn" ng-click="QandA()">怎麼加？</a>
+                    </div>
                 </div>
                 <div ng-show="enable">
                     <form>

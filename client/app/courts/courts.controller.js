@@ -15,6 +15,8 @@ angular.module('keepballin')
 	    var allCourts = Court.query();
 
 	    allCourts.$promise.then(function(data) {
+	    	//Save the courts for search
+			$scope.courtsCached = data;
 	    	$scope.courts = data;
     		//socket.io instant updates
 		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
@@ -274,21 +276,21 @@ angular.module('keepballin')
 		// 	}
 		// };
 
-		$scope.getLocation = function(val) {
+		// $scope.getLocation = function(val) {
 			
-			var params = {
-				query: val
-			};
-			return Court.search(params).$promise
-				.then(function(data) {
-					return data.map(function(item) {
-						return item.address;
-					});
-				});	
-		};
+		// 	var params = {
+		// 		query: val
+		// 	};
+		// 	return Court.search(params).$promise
+		// 		.then(function(data) {
+		// 			return data.map(function(item) {
+		// 				return item.address;
+		// 			});
+		// 		});	
+		// };
 
 		$scope.goToLocation = function(selected) {
-			
+			console.log(selected);
 			if(selected) {
 				var params = {
 					query: selected
@@ -298,8 +300,9 @@ angular.module('keepballin')
 						$scope.noResult = true;
 						$timeout(function() {
 							$scope.noResult = false;
-						}, 1000);
+						}, 10000);
 					} else {
+						$scope.noResult = false;
 						$scope.searching = true;
 						$scope.courts = data;
 						$scope.courtList = data;
