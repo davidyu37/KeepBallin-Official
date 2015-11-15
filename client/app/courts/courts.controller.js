@@ -18,6 +18,7 @@ angular.module('keepballin')
 	    	//Save the courts for search
 			$scope.courtsCached = data;
 	    	$scope.courts = data;
+	    	$scope.courtList = data;
     		//socket.io instant updates
 		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
 		    	// console.log(arr);
