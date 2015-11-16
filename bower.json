@@ -27,7 +27,8 @@
     "angular-relative-date": "~1.0.0",
     "clipboard": "~1.5.1",
     "mobile-angular-ui": "~1.2.0-rc.3",
-    "angular-socialshare": "~1.4.4"
+    "angular-socialshare": "~1.4.4",
+    "angular-easyfb": "~1.4.1"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

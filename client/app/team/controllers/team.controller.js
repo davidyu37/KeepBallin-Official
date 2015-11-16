@@ -1,8 +1,14 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeamCtrl', ['$scope','$timeout' ,'Auth', 'User', 'Team', function ($scope, $timeout, Auth, User, Team) {
-  	
+  .controller('TeamCtrl', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', function ($scope, $timeout, Auth, User, Team, $state) {
+  	$scope.createTeam = function() {
+      if(Auth.isLoggedIn()) {
+        $state.go('teamsignup.info');
+      } else {
+        $state.go('login');
+      }
+    };
     // $scope.hasTeam = false;
   	// $scope.team = [];
   	// if(Auth.hasTeam()) {

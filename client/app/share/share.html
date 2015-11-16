@@ -9,8 +9,14 @@
 		</button>
 	  </span>
 	</div>
-	<div class="fbContainer">
+	<!-- <div class="fbContainer">
 		<a facebook class="facebookShare" data-url='https://keepballin.com/courts/{{currentcourt._id}}' data-title='{{currentcourt.court}}'
 		data-picture='{{currentcourt.pictures[0].url}}'></a>
-	</div>
+	</div> -->
+	<div class="fb-like" onrender="fbLikeRendered()"
+	  data-href="https://keepballin.com/courts/{{currentcourt._id}}" 
+	  data-layout="standard" 
+	  data-action="like" 
+	  data-show-faces="true" 
+	  data-share="true"></div>
 </div>
