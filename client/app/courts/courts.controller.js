@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('keepballin')
-	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', '$modal', 
-		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, $modal) {
+	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', '$modal', 'SweetAlert', 
+		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, $modal, SweetAlert) {
 	    
 		//Initialize map
 	    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -20,12 +20,12 @@ angular.module('keepballin')
 	    	$scope.courts = data;
 	    	$scope.courtList = data;
     		//socket.io instant updates
-		 //    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
-		 //    	// console.log(arr);
-		 //    });
-			// $scope.$on('$destroy', function () {
-	  //     		socket.unsyncUpdates('court');
-	  //   	});
+		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
+		    	// console.log(arr);
+		    });
+			$scope.$on('$destroy', function () {
+	      		socket.unsyncUpdates('court');
+	    	});
 
 			sortOutCities(data);
 
@@ -124,6 +124,15 @@ angular.module('keepballin')
 		//Is the details of the court expanded?
 		$scope.expanded = false;
 		$scope.mobileExpanded = false;
+
+		//Check if user is the creator of the marker
+		$scope.isCreator = function() {
+			if(Auth.getCurrentUser()._id === $scope.currentcourt.creator._id) {
+				return true;
+			} else {
+				return false;
+			}
+		};
 
 		//Broadcast the currentcourt
 		$scope.$watch('currentcourt._id', function(newVal) {
@@ -266,7 +275,7 @@ angular.module('keepballin')
 	    //Enable add marker mode
 	    $scope.enableAddMarker = function(state) {
 	    	AddMarker.addMode(state, $scope, map, function(newMarker) {
-	    		$scope.courts.push(newMarker);
+	    		// $scope.courts.push(newMarker);
 	    	});
 	    	if(state) {
 	    		$scope.popMess = '離開編輯';
@@ -278,12 +287,30 @@ angular.module('keepballin')
     	};
 
     	$scope.deletemarker = function(id) {
-    		var check = $window.confirm('確定要刪掉這個球場嗎？');
-    		if (check) {	
-	    		Court.remove({ id: id });
-    		} else {
-    			return;
-    		}
+    		SweetAlert.swal({   
+    			title: "你確定要刪除?",   
+    			text: "按下確定後，就無法走回頭路囉",   
+    			type: "warning",   
+    			showCancelButton: true,   
+    			confirmButtonColor: "#DD6B55",   
+    			confirmButtonText: "確定",
+    			cancelButtonText: "取消",   
+    			closeOnConfirm: false }, function(confirmed){
+    				if(confirmed) {
+	    				Court.remove({ id: id });   
+	    				SweetAlert.swal("已刪除!", 
+	    					"乾淨溜溜", 
+	    					"success");
+    				} else {
+    					return;
+    				}
+    			});
+    		// var check = $window.confirm('確定要刪掉這個球場嗎？');
+    		// if (check) {	
+	    	// 	Court.remove({ id: id });
+    		// } else {
+    		// 	return;
+    		// }
     	};
 
     	//Prevent ng animate from firing on refresh

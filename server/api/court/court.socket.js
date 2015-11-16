@@ -16,7 +16,9 @@ exports.register = function(socket) {
 }
 
 function onSave(socket, doc, cb) {
-  socket.emit('court:save', doc);
+	doc.deepPopulate('pictures.user pictures creator lastEditedBy', function(err, _doc) {
+		socket.emit('court:save', _doc);
+	});
 }
 
 function onRemove(socket, doc, cb) {

@@ -1,14 +1,6 @@
 <h2>{{currentcourt.court}}</h2>
 <div ng-controller="ratingCtrl" ng-mouseover="totalRating = true"
     ng-mouseleave="totalRating = false">
-	<!-- <rating 
-	ng-model="currentcourt.averagedRating" 
-	max="max" 
-	readonly="isReadonly" 
-	on-hover="hoveringOver(value)" 
-	on-leave="overStar = null" 
-	titles="['不要去','有瑕疵','不錯', '很好打', '極品']" 
-	ng-click="sendRate(currentcourt.averagedRating)"></rating> -->
 	<rating
 	class="pointer"
 	style="color: gold; font-size: 150%;"
@@ -39,7 +31,7 @@
 	</h5>
 	<div><a ui-sref="thiscourt({id: currentcourt._id})">前往球場主頁</a></div>
 </div>
-<button ng-show="isAdmin || isManager" class="btn btn-danger pull-left" ng-click="deletemarker(markernow.id)">
+<button ng-show="isAdmin || isManager || isCreator()" class="btn btn-danger pull-left" ng-click="deletemarker(markernow.id)">
 	<span class="glyphicon glyphicon-trash"></span>
 </button>
 
