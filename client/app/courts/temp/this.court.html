@@ -128,9 +128,23 @@
 				<h2>{{currentcourt.court}}照片</h2>
 			</div>
 			<p ng-hide="currentcourt.pictures[0].url">目前還沒有照片</p>
+			<div style="width: 100%">
+				
+			</div>
+			<div ng-click="openGallery()"
+			class="pointer commentBtn" 
+			style="font-size: 120%; margin: 10px auto; text-align: center" 
+			tooltip="管理球場的照片"
+		    tooltip-trigger="mouseenter"
+	        tooltip-placement="right">看所有照片</div>
 			<carousel interval="5000" no-wrap="false">
-				<slide ng-repeat="slide in currentcourt.pictures" active="slide.active">
-					<img class="img-responsive" ng-src="{{slide.url}}" style="margin:auto;">
+				<slide ng-repeat="slide in currentcourt.pictures track by $index" active="slide.active">
+					<img class="img-responsive" 
+					ng-src="{{slide.url}}" 
+					style="margin:auto;">
+					<div class="carousel-caption">
+			          <h4>由{{slide.user.name}}提供</h4>
+			        </div>
 				</slide>
 			</carousel>
 				
@@ -140,7 +154,7 @@
 	<div ng-hide="showed" style="text-align: center; width: 100%; height: auto" ng-click="showed = true">
 		<div ui-sref=".comment" 
 		class="pointer commentBtn" 
-		style="font-size: 95%; margin: 0 auto;" 
+		style="font-size: 120%; margin: 0 auto;" 
 		tooltip="屬於這球場的聊天室"
 	    tooltip-trigger="mouseenter"
         tooltip-placement="bottom">開啟聊天室</div>

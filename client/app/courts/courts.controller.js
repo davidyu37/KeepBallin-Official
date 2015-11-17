@@ -21,7 +21,7 @@ angular.module('keepballin')
 	    	$scope.courtList = data;
     		//socket.io instant updates
 		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
-		    	// console.log(arr);
+
 		    });
 			$scope.$on('$destroy', function () {
 	      		socket.unsyncUpdates('court');
@@ -77,7 +77,7 @@ angular.module('keepballin')
 		    		}
 		    	}
 	    	}
-	    }; 
+	    } 
 
 	    //Mouseover function to open info window
 	    $scope.openInfo = function(e, court) {
@@ -233,29 +233,6 @@ angular.module('keepballin')
 
 	    //Empty markers
 	    $scope.markers = [];
-	    
-
-	    //Lightbox
-	    // $scope.openLightboxModal = function (index) {
-	    //     Lightbox.openModal($scope.currentcourt.pictures, index);
-	    // };
-	    // //Update courts when pictures uploaded
-	    // $scope.$on('courtPicUploaded', function() {
-	    // 	$scope.courts = Court.query();
-	    // });
-
-	    //Delete picture
-	    // $scope.deletePic = function(pic) {
-	    //     var check = $window.confirm('確定要刪掉這張照片嗎？');
-	    //     if (check) {   
-	    //         Download.delete({ id: pic._id }, function(){
-	 			// 	//sync $scope.courts from db
-	 			// 	$scope.courts = Court.query();
-	    //         });
-	    //     } else {
-	    //        return;
-	    //     }
-	    // };
 
 	    //Share the court url
 	    $scope.share = function() {
@@ -305,12 +282,6 @@ angular.module('keepballin')
     					return;
     				}
     			});
-    		// var check = $window.confirm('確定要刪掉這個球場嗎？');
-    		// if (check) {	
-	    	// 	Court.remove({ id: id });
-    		// } else {
-    		// 	return;
-    		// }
     	};
 
     	//Prevent ng animate from firing on refresh

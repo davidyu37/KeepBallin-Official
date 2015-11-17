@@ -8,6 +8,6 @@ angular.module('keepballin')
 	    	
 	    	for(var i=0; i < fbBtn.length; i ++) {
 		    	fbBtn[i].innerHTML = '分享';
-	    	};
+	    	}
     	});
 	}]);

@@ -15,7 +15,6 @@ angular.module('keepballin', [
   'relativeDate',
   'mobile-angular-ui.gestures',
   'mobile-angular-ui.core',
-  'djds4rce.angular-socialshare',
   'ezfb'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
