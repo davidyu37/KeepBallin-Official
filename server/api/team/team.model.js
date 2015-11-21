@@ -7,8 +7,61 @@ var relationship = require('mongoose-relationship');
 var TeamSchema = new Schema({
   name: String,
   captain: {
-  	type: Schema.Types.ObjectId, 
-  	ref: 'User'
+    account: {
+    	type: Schema.Types.ObjectId, 
+    	ref: 'User'
+    },
+    name: String,
+    confirmed: {
+      type: Boolean,
+      default: false
+    }
+  },
+  manager: {
+    account: {
+      type: Schema.Types.ObjectId, 
+      ref: 'User'
+    },
+    name: String,
+    confirmed: {
+      type: Boolean,
+      default: false
+    }
+  },
+  coach: {
+    account: {
+      type: Schema.Types.ObjectId, 
+      ref: 'User'
+    },
+    name: String,
+    confirmed: {
+      type: Boolean,
+      default: false
+    }
+  },
+  members: [{
+    account: {
+      type: Schema.Types.ObjectId, 
+      ref: 'User'
+    },
+    position: String,
+    name: String,
+    confirmed: {
+      type: Boolean,
+      default: false
+    }
+  }],
+  contactperson: {
+    account: {
+      type: Schema.Types.ObjectId, 
+      ref: 'User'
+    },
+    name: String,
+    confirmed: {
+      type: Boolean,
+      default: false
+    },
+    number: Number
   },
   teampic: {
     type: Schema.Types.ObjectId, 
@@ -31,34 +84,22 @@ var TeamSchema = new Schema({
   },
   private: Boolean,
   other: String,
-  manager: {
-    type: Schema.Types.Mixed,
-    name: String, 
-    ref: 'User'
-  },
-  coach: {
-    type: Schema.Types.Mixed,
-    name: String, 
-    ref: 'User'
-  },
   win: Number,
   lose: Number,
-  members: [{
-  	type: Schema.Types.Mixed,
-    name: String, 
-  	ref: 'User'
-  }],
-  contact: String,
-  contactperson: {
-    type: Schema.Types.Mixed, 
-    ref: 'User',
-    name: String
-  },
+  contact: Number,
   owner: {
     type: Schema.Types.ObjectId, 
     ref: 'User',
     childPath: 'team'
-  }
+  },
+  location: {
+    court: {
+      type: Schema.Types.ObjectId, 
+      ref: 'Court'
+    },
+    name: String
+  },
+  date: { type: Date, default: Date.now }, 
 }, {strict: false});
 
 // Add relationship plugin

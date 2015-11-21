@@ -60,7 +60,6 @@ angular.module('keepballin')
 	              	infowindow.open($scope.map, marker);
 	              	//Pan to center if it's desktop
 	              	if(screen.width > 480) {
-	              		console.log(e.latLng.lat(), e.latLng.lng());
 	              		var adjustedLat = e.latLng.lat() + 0.005;
 			            $scope.map.panTo({lat: adjustedLat, lng: e.latLng.lng()});
 				    }

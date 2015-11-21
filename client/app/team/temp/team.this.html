@@ -1,0 +1,120 @@
+<div class="jumbotron" style="width: 100%; height: 100vh; display: table; background: rgba(0,0,0,0.8)">
+	<img src="/assets/images/pic4.jpg" class="coverPic" ng-hide="team.pics[0].url">
+	<img ng-src="{{currentcourt.pictures[0].url}}" class="coverPic">
+	<div style="display: table-cell; vertical-align: middle; color: white;">
+	<!-- /assets/images/pic4.jpg -->
+		<h1>{{team.name}}</h1>
+		<p>~since {{team.founded | date: short}}~</p>
+		<p>{{team.represent}}</p>
+		<div style="text-align: center">
+			<!-- <div ng-controller="ratingCtrl">
+	        	<div ng-mouseover="totalRating = true"
+	        	ng-mouseleave="totalRating = false">
+		            <rating class="pointer" 
+		            style="color: gold; font-size: 150%;"
+		            ng-model="currentcourt.averagedRating" 
+		            max="5" 
+					data-readonly="true" 
+		            titles="['不要去','有瑕疵','不錯', '很好打', '極品']"
+		            ng-click="openRates()"></rating>
+		            <span ng-show="totalRating" style="position: absolute; font-size: 120%;" class="badge">總共{{currentcourt.ratings.length}}個評價</span>
+	        	</div>
+	            <br>
+	            <span>總分{{currentcourt.averagedRating | number:2}}</span>
+		        <div style="margin-top: 20px;">
+		        	<button style="font-size:90%" class="teamBtn" ng-click="openRate()">給予評價</button>
+		        </div>
+	        </div> -->
+			<div style="margin-top: 20px;">
+		        	<button style="font-size:120%" class="eventBtn" ng-click="invite()">
+		        	約戰
+		        	<i class="fa fa-envelope"></i>
+		        	</button>
+		        </div>
+	        <div style="margin-top: 20px;"> 	
+	            <!--Upload button-->
+	            <button class="mobileEditButton"
+	            ng-click="uploadmode()"
+	            tooltip="上傳球場照片"
+	            tooltip-trigger="mouseenter"
+	            tooltip-placement="left">
+	                <span class="glyphicon glyphicon-camera"></span>
+	            </button>
+	            <!--Edit button-->
+	            <button class="mobileEditButton"
+	            ng-click="editmode()"
+	            tooltip="編輯球場資訊"
+	            tooltip-trigger="mouseenter"
+	            tooltip-placement="right">
+	                <span class="glyphicon glyphicon-pencil"></span>
+	            </button>
+	        </div>
+	        <div class="fbContainer">
+		        <div class="fb-like" onrender="fbLikeRendered()"
+				  data-href="https://keepballin.com/courts/{{currentcourt._id}}" 
+				  data-layout="button_count" 
+				  data-action="like"
+				  data-image="http://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/preview.png" 
+				  data-show-faces="true" 
+				  data-share="true"></div>
+	        </div>
+        </div>
+	</div>
+</div>
+<div class="container" style="margin-bottom: 60px; background-color: white; padding-bottom: 40px;">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>有關{{team.name}}</h2>
+			</div>
+			<p style="font-size: 130%;">{{team.intro}}</p>	
+		</div>
+		<div class="col-sm-12">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>{{team.name}}成員</h2>
+			</div>
+			<div class="col-sm-3" ng-repeat="m in team.members track by $index">
+				<div class="thumbnail">
+				  <div class="caption">
+				    <h3>{{m.name}}</h3>
+				    <p>{{m.position}}</p>
+				    <hr>
+				  </div>
+				  <img ng-src="{{picPlaceholder($index)}}" alt="..." style="height: 100px;">
+				  <div class="caption">
+				  	<p><a class="btn btn-primary" role="button">我就是{{m.name}}</a></p>
+				  </div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="col-sm-12">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>代表</h2>
+			</div>
+			<p style="font-size: 130%;" ng-show="team.school.name">學校: {{team.school.name}}</p>
+			<p style="font-size: 130%;" ng-show="team.school.major">系: {{team.school.major}}</p>
+			<p style="font-size: 130%;" ng-show="team.school.class">班: {{team.school.class}}</p>
+			<p style="font-size: 130%;" ng-show="team.company.name">公司: {{team.company.name}}</p>
+			<p style="font-size: 130%;" ng-show="team.company.department">部門: {{team.company.department}}</p>
+			<p style="font-size: 130%;" ng-show="team.club">社團: {{team.club}}</p>
+			<p style="font-size: 130%;" ng-show="team.private">私人球隊</p>
+			<p style="font-size: 130%;" ng-show="team.other">{{team.other}}</p>	
+		</div>
+		<div class="col-sm-12">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>{{team.name}}照片</h2>
+			</div>
+			<p ng-hide="team.pics[0].url">目前還沒有照片</p>
+			<button ng-show="isCreator" class="btn btn-primary" ui-sref="thisteam.upload">
+			上傳照片<i class="fa fa-camera"></i>
+		</button>
+			<carousel interval="5000" no-wrap="false">
+				<slide ng-repeat="slide in team.pics" active="slide.active">
+					<img class="img-responsive" ng-src="{{slide.url}}" style="margin:auto;">
+				</slide>
+			</carousel>
+				
+		</div>
+	</div>
+</div>

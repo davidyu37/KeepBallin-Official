@@ -116,3 +116,14 @@
         color: black;
     }
 }
+
+.invite-form-container {
+    @media(min-width: $screen-sm-min) {
+        max-width: 90%;
+        margin: 5% auto;
+    }
+    margin-top: 10%; 
+    height: auto;
+    padding: 5%; 
+    background-color: black;
+}

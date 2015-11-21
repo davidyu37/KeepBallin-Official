@@ -1,11 +1,3 @@
-<!-- <div class="inviteMessage">
-	<h1>註冊你的球隊</h1>
-	<button ng-click="showToggle()" ui-sref="settings.info" class="btn-primary btn-lg">
-		新球隊
-	</button>
-</div>
-
-<div class="editPage col-lg-12" ng-show="showSignup" ui-view="teamsignup" ng-click="showToggle()"></div> -->
 <div class="jumbotron" style="width: 100%; height: 100vh; display: table; background: rgba(0,0,0,0.8)">
 	<img src="/assets/images/teamUSA.jpg" class="coverPic" ng-hide="event.pics[0].url">
 	<div style="display: table-cell; vertical-align: middle; color: white;">
@@ -19,83 +11,23 @@
         </div>
 	</div>
 </div>
-<div class="container" style="margin-bottom: 60px; background-color: white; padding-bottom: 40px;">
+<div class="container" style="margin-bottom: 60px; background-color: white; padding-bottom: 40px; padding-top: 40px;">
 	<div class="row">
-		<div class="col-sm-6" style="font-size: 150%;">
-			<div class="page-header" style="border-bottom: 1px solid black;">
-				<h2>
-					<i class="fa fa-clock-o"></i>
-					開放時段
-				</h2>
+		<div class="col-sm-4" ng-repeat="team in teams">
+			<div class="thumbnail">
+			  <div class="caption">
+			    <a ui-sref="thisteam({team: team._id})">
+			    	<h3>{{team.name}}</h3>
+			    </a>	
+			    <p>{{team.represent}}</p>
+			  </div>
+			  <img src="/assets/images/teamPic.jpg" alt="...">
+			  <div class="caption">
+			    <p>{{team.intro}}</p>
+			    <p><a href="#" class="btn btn-primary" role="button">約戰</a></p>
+			  </div>
 			</div>
-			<p>開放時間:</p>
-            <p ng-show="currentcourt.hours">
-                {{currentcourt.hours.begin | date:'shortTime'}}~{{currentcourt.hours.end | date:'shortTime'}}
-            </p>
-           
-             <!-- Peaktime -->
-            <p>尖峰:</p>
-            <p ng-show="currentcourt.peaktime">
-                {{currentcourt.peaktime.begin | date:'shortTime'}}~{{currentcourt.peaktime.end | date:'shortTime'}}
-            </p>
-			<div class="page-header" style="border-bottom: 1px solid black;">
-				<h2>
-					<img style="width: 30px; height; 30px;" src="/assets/images/basketball.icon.png" alt="">
-					球場資訊
-				</h2>
-			</div>
-			<p ng-show="currentcurrentcourt.indoor">室內</p>
-            <p ng-show="!currentcurrentcourt.indoor">室外</p>
-            <p>籃框數:{{currentcourt.basketnumber}}</p>
-            <p>籃網:{{currentcourt.net | exist}}</p>
-            <p ng-hide="currentcourt.net">沒籃網</p>
-            <p ng-show="currentcourt.nettype">籃網類型:{{currentcourt.nettype}}</p>
-            <p>地質:{{currentcourt.floor}}</p>
-		</div>
-		<div class="col-sm-6" style="font-size: 150%;">
-			<div class="page-header" style="border-bottom: 1px solid black;">
-				<h2>
-					<i class="fa fa-map-pin"></i>
-					地點: 
-				</h2>
-			</div>
-			<div id="courtMap" style="width: 100%; height: 150px"></div>
-			<div class="page-header" style="border-bottom: 1px solid black;">
-				<h2>
-					<i class="fa fa-building"></i>
-					設施資訊: 
-				</h2>
-			</div>
-			<p>燈:{{currentcourt.lights | exist}}</p>
-			<p>租金:{{currentcourt.rent | exist}}</p>
-            <p ng-show="currentcourt.rentprice">
-            	{{"$" + currentcourt.rentprice + "/小時"}}
-            </p>
-            <p>飲水機:{{currentcourt.water.exist | exist}}</p>
-            <p ng-show="currentcourt.water.desc">
-            飲水機位置:{{currentcourt.water.desc}}</p>
-            <p>廁所:{{currentcourt.toilet.exist | exist}}</p>
-            <p ng-show="currentcourt.toilet.desc">
-            廁所位置:{{currentcourt.toilet.desc}}</p>     
-		</div>
-		<div class="col-sm-12">
-			<div class="page-header" style="border-bottom: 1px solid black;">
-				<h2>球場管理員留言</h2>
-			</div>
-			<p style="font-size: 130%;">{{currentcourt.desc}}</p>	
-		</div>
-		<div class="col-sm-12">
-			<div class="page-header" style="border-bottom: 1px solid black;">
-				<h2>{{currentcourt.court}}照片</h2>
-			</div>
-			<p ng-hide="currentcourt.pictures[0].url">目前還沒有照片</p>
-			<carousel interval="5000" no-wrap="false">
-				<slide ng-repeat="slide in currentcourt.pictures" active="slide.active">
-					<img class="img-responsive" ng-src="{{slide.url}}" style="margin:auto;">
-				</slide>
-			</carousel>
-				
-		</div>
+		</div>	
 	</div>
 	<hr>
 	

@@ -12,6 +12,7 @@ var Comment = require('../api/comment/comment.model');
 var Rating = require('../api/rating/rating.model');
 var Conversation = require('../api/conversation/conversation.model');
 var Event = require('../api/event/event.model');
+var Team = require('../api/team/team.model');
 
 function randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -21,6 +22,10 @@ var random = randomDate(new Date(1950, 0, 1), new Date());
 
 Event.find({}).remove(function() {
   console.log('events cleared');
+});
+
+Team.find({}).remove(function() {
+  console.log('teams cleared');
 });
 
 

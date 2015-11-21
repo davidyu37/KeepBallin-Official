@@ -9,6 +9,13 @@ angular.module('keepballin')
         $state.go('login');
       }
     };
+
+    var allTeams = Team.query().$promise;
+    allTeams.then(function(d) {
+      console.log(d);
+      $scope.teams = d;
+    });
+
     // $scope.hasTeam = false;
   	// $scope.team = [];
   	// if(Auth.hasTeam()) {

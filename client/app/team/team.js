@@ -30,6 +30,16 @@ angular.module('keepballin')
 			url: '/teamsignuprepresent',
 			templateUrl: 'app/team/temp/team.represent.html',
 			authenticate: true
-		});
+		})
+		.state('thisteam', {
+	        url:'/thisteam/:team',
+	        resolve: {
+	          thisTeam: ['$stateParams', 'Team', function($stateParams, Team) {
+	            return Team.get({id: $stateParams.team});  
+	          }]
+	        },
+	        templateUrl: 'app/team/temp/team.this.html',
+	        controller: 'IndividualTeam'
+      	});
 
 });//config ends

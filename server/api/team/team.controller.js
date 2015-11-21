@@ -13,10 +13,10 @@ exports.index = function(req, res) {
 
 // Get a single team
 exports.show = function(req, res) {
-  Team.loadAll(req.params.id, function (err, team) {
+  Team.findById(req.params.id, function (err, team) {
     if(err) { return handleError(res, err); }
     if(!team) { return res.status(404).send('Not Found'); }
-    return res.status(201).json(team[0]);
+    return res.status(201).json(team);
   });
 };
 

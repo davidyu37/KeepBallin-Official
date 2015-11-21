@@ -4,9 +4,9 @@
 		<div class="page-header text-center">
 		    <h2>建立球隊吧</h2>
 		    <div id="status-buttons" class="text-center">
-		        <a ui-sref-active="active" ui-sref=".info"><span>1</span> 基本資料</a>
-		        <a ui-sref-active="active" ui-sref=".member"><span>2</span> 球員</a>
-		        <a ui-sref-active="active" ui-sref=".represent"><span>3</span> 代表</a>
+		        <a ui-sref-active="active" ui-sref=".info" ng-class="{active: infoState}" ng-click="moveTo(myForm, 'info')"><span>1</span> 基本資料</a>
+		        <a ng-class="{active: memberState}" ng-click="moveTo(myForm, 'member')"><span>2</span> 球員</a>
+		        <a ng-class="{active: representState}" ng-click="moveTo(myForm, 'represent')"><span>3</span> 代表</a>
 		    </div>
 		</div>	
 	    <form id="signup-form" name="myForm" ng-submit="processForm()" novalidate>

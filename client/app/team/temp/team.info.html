@@ -1,12 +1,17 @@
 <div class="form-inline text-center">
 	<div class="form-group">
 	    <label for="teamname" class="control-label">球隊名稱</label>
-	    <input type="text" class="form-control" name="teamname" ng-model="formData.teamname" placeholder="*必要" required>
+	    <input type="text" class="form-control" name="teamname" ng-model="formData.name" placeholder="*必要" required>
 	</div>
     <span >請輸入名字</span>
 	<div class="form-group">
 	    <label for="founded" class="control-label">成立日期</label>
-	    <input type="date" class="form-control" name="founded" ng-model="formData.founded">
+	    <div class="input-group">
+		    <input type="date" class="form-control" datepicker-popup ng-model="formData.founded" is-open="opened" show-button-bar="false" ng-click="open($event)">
+		    <span class="input-group-btn">
+	          <button type="button" class="btn btn-default custom-addon" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+	        </span>
+	    </div>
 	</div>
 	<div class="form-group">
 	    <label for="teampic" class="control-label">球隊照片</label>
@@ -23,25 +28,27 @@
 </div>
 <div class="form-group text-center" ng-class="{'has-error': noResults}">
     <label for="contactperson">聯絡人</label>
-    <!-- <input type="tel" class="form-control" name="contactperson" ng-model="formData.contactperson"/> -->
-    <input type="text" name="contactperson" ng-model="formData.contactperson" placeholder="*必要" typeahead="person as person.name for person in availablePeople | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" required>
-    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-    <div ng-show="noResults">
-		<p>聯絡人必須是KB成員</p>
+    <div class="input-group">
+		<span class="input-group-addon">
+			<input type="checkbox" ng-model="me" ng-click="changeToMe(me)">
+		    我就是聯絡人
+		</span>
+	    <input type="text" name="contactperson" ng-model="formData.contactperson.name" placeholder="*必要" class="form-control" ng-disabled="disableContactInput" required>
     </div>
 </div>
 <div class="form-group text-center">
     <label for="contact">聯絡電話</label>
-    <input type="tel" name="contactnumber" class="form-control" name="contact" ng-model="formData.contact" placeholder="*必要" required/>
+    <input type="number" name="contactnumber" minlength="3" class="form-control" ng-model="formData.contact" placeholder="*必要" ng-minlength="8" required/>
+    <div ng-show="myForm.contactnumber.$error.minlength" class="alert alert-warning">電話號碼至少八碼</div>
 </div>
 <div class="form-group text-center">
     <label for="intro">球隊簡介</label>
     <textarea type="text" class="form-control" name="intro" ng-model="formData.intro"></textarea>
 </div>
-
+<div ng-show="myForm.$error.required && toMember" class="alert alert-warning">必要資訊未輸入</div>
 <div class="form-group row">
 <div class="col-xs-6 col-xs-offset-3">
-    <a ui-sref="teamsignup.member" class="btn btn-block btn-primary">
+    <a ng-click="moveTo(myForm, 'member')" class="btn btn-block btn-primary">
     下一步 <span class="glyphicon glyphicon-circle-arrow-right"></span>
     </a>
 </div>

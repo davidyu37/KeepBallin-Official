@@ -13,11 +13,11 @@ angular.module('keepballin')
       'link': 'courts',
       'icon': 'glyphicon-map-marker'
     },
-    // {
-    //   'title': '球隊',
-    //   'link': 'team',
-    //   'icon': 'glyphicon-users'
-    // },
+    {
+      'title': '球隊',
+      'link': 'team',
+      'icon': 'glyphicon-users'
+    },
     {
       'title': '聯絡',
       'link': 'contact',
