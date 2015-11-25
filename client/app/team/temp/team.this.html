@@ -1,6 +1,6 @@
 <div class="jumbotron" style="width: 100%; height: 100vh; display: table; background: rgba(0,0,0,0.8)">
-	<img src="/assets/images/pic4.jpg" class="coverPic" ng-hide="team.pics[0].url">
-	<img ng-src="{{currentcourt.pictures[0].url}}" class="coverPic">
+	<img src="/assets/images/pic4.jpg" class="coverPic" ng-hide="team.teampic[0].url">
+	<img ng-src="{{team.teampic[0].url}}" class="coverPic">
 	<div style="display: table-cell; vertical-align: middle; color: white;">
 	<!-- /assets/images/pic4.jpg -->
 		<h1>{{team.name}}</h1>
@@ -34,8 +34,10 @@
 	        <div style="margin-top: 20px;"> 	
 	            <!--Upload button-->
 	            <button class="mobileEditButton"
+	            ng-init="isOwner=false"
+	            ng-show="isOwner"
 	            ng-click="uploadmode()"
-	            tooltip="上傳球場照片"
+	            tooltip="上傳球隊照片"
 	            tooltip-trigger="mouseenter"
 	            tooltip-placement="left">
 	                <span class="glyphicon glyphicon-camera"></span>
@@ -43,7 +45,9 @@
 	            <!--Edit button-->
 	            <button class="mobileEditButton"
 	            ng-click="editmode()"
-	            tooltip="編輯球場資訊"
+	            ng-init="isOwner=false"
+	            ng-show="isOwner"
+	            tooltip="編輯球隊資訊"
 	            tooltip-trigger="mouseenter"
 	            tooltip-placement="right">
 	                <span class="glyphicon glyphicon-pencil"></span>
@@ -63,32 +67,81 @@
 </div>
 <div class="container" style="margin-bottom: 60px; background-color: white; padding-bottom: 40px;">
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-9">
 			<div class="page-header" style="border-bottom: 1px solid black;">
 				<h2>有關{{team.name}}</h2>
 			</div>
 			<p style="font-size: 130%;">{{team.intro}}</p>	
 		</div>
+		<div class="col-sm-3">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>聯絡方式</h2>
+			</div>
+			<div ng-show="team.contactperson.show || team.contactperson.line">
+				<div ng-hide="show">
+					<p style="font-size: 130%;" ng-show="team.contactperson.line">LineID: {{team.contactperson.line | limitTo: 3}}******</p>	
+					<p ng-show="team.contactperson.show" style="font-size: 130%;">Tel: {{team.contactperson.number | limitTo: 4}}******</p>
+					<button class="btn btn-primary" ng-click="displayInfo()">顯示完整資料</button>		
+				</div>
+				<div ng-show="show">
+					<p style="font-size: 130%;" ng-show="team.contactperson.line">LineID: {{team.contactperson.line}}</p>	
+					<p ng-show="team.contactperson.show" style="font-size: 130%;">Tel: {{team.contactperson.number}}</p>
+				</div>
+			</div>
+			<div ng-show="!team.contactperson.show && !team.contactperson.line">
+				請透過約戰功能聯絡我們
+			</div>
+
+		</div>
 		<div class="col-sm-12">
 			<div class="page-header" style="border-bottom: 1px solid black;">
 				<h2>{{team.name}}成員</h2>
 			</div>
+			<div>
+				<p>邀請隊友來確認身份</p>
+				<div class="fbContainer">
+			        <div class="fb-send" onrender="fbSendRendered()"
+					  data-href="https://keepballin.com/thisteam/{{team._id}}" 
+					  data-layout="button_count" 
+					  data-action="send"
+					  data-image="http://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/preview.png" 
+					  data-show-faces="true" 
+					  data-share="true"></div>
+		        </div>	
+			</div>
 			<div class="col-sm-3" ng-repeat="m in team.members track by $index">
 				<div class="thumbnail">
 				  <div class="caption">
-				    <h3>{{m.name}}</h3>
+				    <h3 ng-hide="m.account.name">{{m.name}}</h3>
+				    <h3 ng-show="m.account.name">
+				    	<a ui-sref="profile({id: m.account._id})">{{m.name}}</a>
+				    </h3>
 				    <p>{{m.position}}</p>
+				    <div class="text-muted">
+						<p ng-show="!m.account">等待{{m.name}}確認</p>
+						<p ng-show="m.account && !m.confirmed">等待球隊管理員確認</p>
+						<p ng-show="m.confirmed">已確認</p>
+				    </div>
+				    
 				    <hr>
 				  </div>
-				  <img ng-src="{{picPlaceholder($index)}}" alt="..." style="height: 100px;">
+				
+				  <img ng-hide="m.account.avatar.url" ng-src="{{picPlaceholder($index)}}" alt="basketball player picture placeholder" style="height: 100px;">
 				  <div class="caption">
-				  	<p><a class="btn btn-primary" role="button">我就是{{m.name}}</a></p>
+				  <img ng-show="m.account.avatar.url" ng-src="{{m.account.avatar.url}}" alt="basketball player picture placeholder" style="height: 100px;">
+				  <div class="caption">
+				  	<p>
+				  		<a class="btn btn-primary" role="button" ng-click="isMe($index)" ng-hide="m.account">我就是{{m.name}}</a>
+				  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && !isOwner">等待確認中</a>
+				  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && isOwner" ng-click="confirmId($index)">確認隊友身份</a>
+
+				  	</p>
 				  </div>
 				</div>
 			</div>
 			
 		</div>
-		<div class="col-sm-12">
+		<div class="col-sm-9">
 			<div class="page-header" style="border-bottom: 1px solid black;">
 				<h2>代表</h2>
 			</div>
@@ -97,20 +150,29 @@
 			<p style="font-size: 130%;" ng-show="team.school.class">班: {{team.school.class}}</p>
 			<p style="font-size: 130%;" ng-show="team.company.name">公司: {{team.company.name}}</p>
 			<p style="font-size: 130%;" ng-show="team.company.department">部門: {{team.company.department}}</p>
-			<p style="font-size: 130%;" ng-show="team.club">社團: {{team.club}}</p>
+			<p style="font-size: 130%;" ng-show="team.club">社團: {{team.club.name}}</p>
 			<p style="font-size: 130%;" ng-show="team.private">私人球隊</p>
 			<p style="font-size: 130%;" ng-show="team.other">{{team.other}}</p>	
 		</div>
-		<div class="col-sm-12">
+		<div class="col-sm-3">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>主場</h2>
+			</div>
+			<a ui-sref="thiscourt({id: team.location.court})" ng-show="team.location.court">
+				<p style="font-size: 130%;">{{team.location.name}}</p>	
+			</a>
+			<p style="font-size: 130%;" ng-hide="team.location.court">{{team.location.name}}</p>	
+		</div>
+		<div class="col-sm-12" style="text-align: center">
 			<div class="page-header" style="border-bottom: 1px solid black;">
 				<h2>{{team.name}}照片</h2>
 			</div>
-			<p ng-hide="team.pics[0].url">目前還沒有照片</p>
-			<button ng-show="isCreator" class="btn btn-primary" ui-sref="thisteam.upload">
-			上傳照片<i class="fa fa-camera"></i>
-		</button>
+			<p ng-hide="team.teampic[0].url">目前還沒有照片</p>
+			<button ng-show="isOwner" class="btn btn-primary" ng-click="openGallery()">
+			管理照片<i class="fa fa-camera"></i>
+			</button>
 			<carousel interval="5000" no-wrap="false">
-				<slide ng-repeat="slide in team.pics" active="slide.active">
+				<slide ng-repeat="slide in team.teampic" active="slide.active">
 					<img class="img-responsive" ng-src="{{slide.url}}" style="margin:auto;">
 				</slide>
 			</carousel>
@@ -118,3 +180,14 @@
 		</div>
 	</div>
 </div>
+<!-- Editing page -->
+<div class="editPage col-lg-12" 
+ng-include="'app/team/temp/edit.page.html'" 
+ng-init="edit=false" ng-show="edit" 
+ng-click="editmode()"></div>
+<!-- Pictures upload page -->
+<div class="editPage col-lg-12" 
+ng-include="'app/team/temp/upload.page.html'" 
+ng-init="upload=false" ng-show="upload" 
+ng-click="uploadmode()"
+></div>

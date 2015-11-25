@@ -1,7 +1,7 @@
 <div class="form-inline text-center">
 	<div class="form-group">
 	    <label for="teamname" class="control-label">球隊名稱</label>
-	    <input type="text" class="form-control" name="teamname" ng-model="formData.name" placeholder="*必要" required>
+	    <input type="text" class="form-control" name="teamname" ng-model="formData.name" placeholder="*必要" autofocus required>
 	</div>
     <span >請輸入名字</span>
 	<div class="form-group">
@@ -37,9 +37,23 @@
     </div>
 </div>
 <div class="form-group text-center">
-    <label for="contact">聯絡電話</label>
-    <input type="number" name="contactnumber" minlength="3" class="form-control" ng-model="formData.contact" placeholder="*必要" ng-minlength="8" required/>
+    <label for="email">聯絡Email</label>
+    <input type="email" name="contactemail" class="form-control" ng-model="formData.contactperson.email" placeholder="*必要" required/>	 
+</div>
+<div class="form-group text-center">
+    <label for="number">聯絡電話</label>
+    <div class="input-group">
+	    <span class="input-group-addon" tooltip="公開給已註冊的會員" tooltip-trigger="mouseover">
+			<input type="checkbox" ng-model="yes" ng-click="givePermission(yes)">
+		    公開
+		</span>
+	    <input type="number" name="contactnumber" minlength="3" class="form-control" ng-model="formData.contactperson.number" placeholder="*必要" ng-minlength="8" required/>	
+    </div>
     <div ng-show="myForm.contactnumber.$error.minlength" class="alert alert-warning">電話號碼至少八碼</div>
+</div>
+<div class="form-group text-center">
+    <label for="line">Line ID</label>
+	<input type="text" name="line" class="form-control" ng-model="formData.contactperson.line"/>
 </div>
 <div class="form-group text-center">
     <label for="intro">球隊簡介</label>

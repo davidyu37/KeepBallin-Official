@@ -15,7 +15,7 @@ angular.module('keepballin')
       if (form.courtpic.$valid && $scope.files && !$scope.files.$error) {
         $scope.upload($scope.files, form.courtId);
       } else {
-        $window.alert('請加檔案');
+        return;
       }
     };
     
@@ -94,6 +94,43 @@ angular.module('keepballin')
             });
         });
       }      
+    };
+
+    //Upload for team picture
+    $scope.uploadTeam = function(files) {
+        var upload = function(file) {
+          if (file) {
+        
+            Upload.upload({
+                url: 'api/uploads/pictures/teampic',
+                fields: {
+                    'teamId': $scope.team._id
+                },
+                file: file
+            }).progress(function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                $scope.log = progressPercentage;
+            }).success(function () {
+                //Clear the files for more uploads
+                $scope.uploadCount += $scope.files.length;
+                $scope.files = [];
+                //Reset the progress bar
+                $scope.log = 0;
+                $scope.uploading = false;
+                $scope.$emit('teamPicUploaded');
+            });
+          }        
+        }
+
+        $scope.uploading = true;
+        if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+              var file = files[i];
+                if (!file.$error) {
+                    upload(file);     
+                }
+            }
+        }
     };
 
 

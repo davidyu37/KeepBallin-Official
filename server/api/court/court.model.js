@@ -92,16 +92,6 @@ CourtSchema.statics = {
       .exec(cb);
   },
   search: function(params, cb) {
-    // var query = { $and: [] };
-    // for (var key in params){
-    //   if(key === 'query') {
-    //     query.$and.push({ $text: { $search : params.query }});
-    //   } else {
-    //     var thisParam = {};
-    //     thisParam[key] = params[key];     
-    //     query.$and.push(thisParam);
-    //   }
-    // }
     var query = {
       $text: { $search : params.query }
     };

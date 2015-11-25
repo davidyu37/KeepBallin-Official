@@ -1,0 +1,247 @@
+<div class="editPageBackground" ng-click="stopPropagate($event)" style="padding: 0px;">
+<i class="fa fa-2x fa-remove pull-right pointer" ng-click="exitEdit()" style="margin: 10px;"></i>
+<form class="form-horizontal" name="editform" style="margin: 5%" ng-submit="submitEdit(editform)" novalidate>
+    <div class="form-group">
+        <!-- team name -->
+        <label for="teamname" class="col-sm-2 control-label">球隊名:</label>
+        <div class="col-sm-10">
+            <input type="text" name="teamname" ng-model="team.name" placeholder="好球隊名" class="form-control" required>
+            <div class="alert alert-warning" ng-show="editform.teamname.$error.required">球隊名是必要的</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <!-- team founded date -->
+        <label for="teamname" class="col-sm-2 control-label">創始日:</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <input type="date" ng-model="editFounded" class="form-control" ng-blur="team.founded = editFounded" datepicker-popup is-open="opened" datepicker-options="dateOptions" show-button-bar="false">
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <!-- team represent -->
+        <label for="teamname" class="col-sm-2 control-label">球隊宗旨:</label>
+        <div class="col-sm-10">
+            <input type="text" ng-model="team.represent" class="form-control" placeholder="代表球隊的一句話">
+        </div>
+    </div>    
+    
+    <div class="form-group">
+        <!-- team contact -->
+        <label for="teamname" class="col-sm-2 control-label">聯絡人:</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <input type="checkbox" ng-model="me" ng-click="changeToMe(me, 'contact')">
+                    我就是聯絡人
+                </span>
+                <input type="text" name="contactname" ng-model="team.contactperson.name" class="form-control" placeholder="其他球友可以聯絡的人" ng-disabled="disableContactInput" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectPerson($item)"
+                tooltip="打字後出現在下面的名字是已註冊的用戶" required>
+            </div>
+            <div class="alert alert-warning" ng-show="editform.contactname.$error.required">聯絡人是必要的</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <!-- team contact -->
+        <label for="teamname" class="col-sm-2 control-label">聯絡電話:</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <span class="input-group-addon" tooltip="公開給已註冊的會員" tooltip-trigger="mouseover">
+                    <input type="checkbox" ng-model="team.contactperson.show">
+                    公開
+                </span>
+                <input type="text" name="contactnumber" ng-model="team.contactperson.number" class="form-control" placeholder="其他球友可以聯絡的電話" required>
+            </div>
+            <div class="alert alert-warning" ng-show="editform.contactnumber.$error.required">聯絡電話是必要的</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <!-- team contact -->
+        <label for="teamname" class="col-sm-2 control-label">聯絡email:</label>
+        <div class="col-sm-10">
+            <input type="email" name="contactemail" ng-model="team.contactperson.email" class="form-control" placeholder="其他球友可以聯絡的email" tooltip="Email不會公開顯示，球友透過約戰功能寄到這個信箱" required>
+            <div class="alert alert-warning" ng-show="editform.contactemail.$error.required">聯絡Email是必要的</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <!-- team contact -->
+        <label for="teamname" class="col-sm-2 control-label">聯絡LineID:</label>
+        <div class="col-sm-10">
+            <input type="text" ng-model="team.contactperson.line" class="form-control" placeholder="其他球友可以聯絡的LineID">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="location" class="col-sm-2 control-label">主場:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="location" ng-model="team.location.name" placeholder="輸入球場" typeahead="(court.court || court.address) for court in courts | filter:$viewValue | limitTo:8" typeahead-on-select="selected($item)">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="location" class="col-sm-2 control-label">球隊成員:</label>
+        <div class="col-sm-10">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <input type="checkbox" ng-model="me2" ng-click="changeToMe(me2, 'member')">
+                        我
+                    </span>
+                    <input type="text" ng-model="person" placeholder="成員姓名" class="form-control" ng-disabled="disablePersonInput">
+                    <select ng-options="position for position in positions" ng-model="position" class="form-control">
+                         <option value="">-- 擔任的角色 --</option>
+                    </select>
+                    <span class="input-group-addon">
+                        <button type="button" class="btn" ng-click="addMember(person, position)">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <ul class="list-group">
+                <li ng-repeat="member in team.members track by $index" class="list-group-item"> 
+                    <div class="pull-right pointer" style="color: black" ng-click="removeMember($index)">
+                        <i class="fa fa-remove"></i>
+                    </div>
+                    <div class="imageWords">
+                        <div class="previewBox">
+                            <img src="/assets/images/avatar.png" alt="avatar placeholder">
+                        </div>
+                        <i class="pointer fa fa-pencil-square-o" ng-click="editPerson($index)" ng-hide="editNow($index)"
+                        tooltip="編輯球員資訊"></i>
+                        <i class="pointer fa fa-check-square-o" ng-click="exitEditPerson($index, name, positionForEdit)" ng-show="editNow($index)" tooltip="完成"></i>
+                        <div ng-hide="editNow($index)" style="display: table-cell; vertical-align: middle">
+                            <h3>&nbsp{{member.name}}</h3>
+                            <p>&nbsp{{member.position}}</p>
+                        </div>
+                        <div ng-show="editNow($index)" style="display: table-cell; vertical-align: middle">
+                            <input type="text" ng-model="name" placeholder="姓名" class="form-control">
+                            <select ng-options="position for position in positions" ng-model="positionForEdit" class="form-control">
+                                 <option value="">-- 擔任的角色 --</option>
+                            </select>
+                        </div>
+                        <p ng-show="member.confirmed">已確認身份</p>
+                        <p ng-hide="member.confirmed">未確認身份</p>
+                    </div>
+              </li>
+            </ul>
+        </div>
+    </div>
+    <label for="represent">球隊附屬於</label>
+    <fieldset>
+        <label class="radio-inline">
+          <input type="radio" name="belong" value="school" ng-model="belong">學校
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="belong" value="company" ng-model="belong">公司
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="belong" value="club" ng-model="belong">社團
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="belong" value="true" ng-model="team.private" ng-click="belong=''">私人
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="belong" value="other" ng-model="belong">其他
+        </label>
+    </fieldset>
+
+    <!-- School -->
+    <div class="form-inline">
+        <div class="form-group" ng-show="belong=='school'">
+            <label for="school">學校名稱</label>
+            <input type="text" class="form-control" name="school" ng-model="team.school.name">
+        </div>
+        <div class="form-group" ng-show="belong=='school'" style="margin-left: 15px">
+            <label for="major">系</label>
+            <input type="text" class="form-control" name="school" ng-model="team.school.major">
+                
+        </div>
+        <div class="form-group" ng-show="belong=='school'" style="margin-left: 15px">
+            <label for="school">班</label>
+            <input type="text" class="form-control" name="school" ng-model="team.school.class">
+        </div>
+    </div>
+    <!-- Company -->
+    <div class="form-inline">
+        <div class="form-group" ng-show="belong=='company'">
+            <label for="company" class="control-label">公司名稱</label>
+            <input type="text" class="form-control" name="company" ng-model="team.company.name">
+        </div>
+        <div class="form-group" ng-show="belong=='company'">
+            <div class="input-group">
+                <input type="text" class="form-control" name="company" ng-model="team.company.department">
+                <span class="input-group-addon">部門</span>
+            </div>
+        </div>
+    </div>
+    <!-- Club -->
+    <div class="form-inline">
+        <div class="form-group" ng-show="belong=='club'">
+            <label for="club" class="control-label">社團名稱</label>
+            <input type="text" class="form-control" name="club" ng-model="team.club.name">
+        </div>
+    </div>
+    <!-- Other -->
+    <div class="form-inline">
+        <div class="form-group" ng-show="belong=='other'">
+            <label for="other" class="control-label">說明</label>
+            <input type="text" class="form-control" name="other" ng-model="team.other">
+        </div>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item" ng-show="team.school.name">
+        學校名稱: {{team.school.name}}
+            <div class="pull-right pointer" style="color: black" ng-click="team.school.name = undefined">
+                <i class="fa fa-remove"></i>
+            </div>
+        </li>
+        <li class="list-group-item" ng-show="team.school.major">系:{{team.school.major}}
+            <div class="pull-right pointer" style="color: black" ng-click="team.school.major = undefined">
+                <i class="fa fa-remove"></i>
+            </div>
+        </li>
+        <li class="list-group-item" ng-show="team.school.class">班:{{team.school.class}}
+            <div class="pull-right pointer" style="color: black" ng-click="team.school.class = undefined">
+                <i class="fa fa-remove"></i>
+            </div>
+        </li>
+        <li class="list-group-item" ng-show="team.company.name">公司名稱:{{team.company.name}}
+            <div class="pull-right pointer" style="color: black" ng-click="team.company.name = undefined">
+                <i class="fa fa-remove"></i>
+            </div>
+        </li>
+        <li class="list-group-item" ng-show="team.company.department">公司部門:{{team.company.department}}
+            <div class="pull-right pointer" style="color: black" ng-click="team.company.department = undefined">
+                <i class="fa fa-remove"></i>
+            </div>
+        </li>
+        <li class="list-group-item" ng-show="team.club.name">社團名稱:{{team.club.name}}
+            <div class="pull-right pointer" style="color: black" ng-click="team.club.name = undefined">
+                <i class="fa fa-remove"></i>
+            </div>
+        </li>
+        <li class="list-group-item" ng-show="team.private">私人
+            <div class="pull-right pointer" style="color: black" ng-click="team.private = false">
+                <i class="fa fa-remove"></i>
+            </div>
+        </li>
+        <li class="list-group-item" ng-show="team.other">其他:{{team.other}}
+            <div class="pull-right pointer" style="color: black" ng-click="team.other = ''">
+                <i class="fa fa-remove"></i>
+            </div>
+        </li>
+    </ul>
+    
+    <!-- Message -->
+    <div class="form-group">
+        <label for="" class="control-label">球隊簡介:</label>
+        <textarea class="form-control" rows="3" ng-model="team.intro"></textarea>
+    </div>
+    <div class="alert alert-warning" ng-show="editform.$error.required">必要資訊未填寫</div>
+    <button class="btn btn-lg btn-default pull-left" type="button" style="margin-bottom: 20px;" ng-click="deleteTeam()">刪除此球隊</button>
+    <button class="btn btn-lg btn-primary pull-right" type="submit" style="margin-bottom: 20px;">儲存</button>
+</form>
+
+</div>

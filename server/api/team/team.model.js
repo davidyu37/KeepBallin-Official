@@ -1,44 +1,12 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
-var relationship = require('mongoose-relationship');
+    Schema = mongoose.Schema,
+    relationship = require('mongoose-relationship'),
+    deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var TeamSchema = new Schema({
   name: String,
-  captain: {
-    account: {
-    	type: Schema.Types.ObjectId, 
-    	ref: 'User'
-    },
-    name: String,
-    confirmed: {
-      type: Boolean,
-      default: false
-    }
-  },
-  manager: {
-    account: {
-      type: Schema.Types.ObjectId, 
-      ref: 'User'
-    },
-    name: String,
-    confirmed: {
-      type: Boolean,
-      default: false
-    }
-  },
-  coach: {
-    account: {
-      type: Schema.Types.ObjectId, 
-      ref: 'User'
-    },
-    name: String,
-    confirmed: {
-      type: Boolean,
-      default: false
-    }
-  },
   members: [{
     account: {
       type: Schema.Types.ObjectId, 
@@ -61,12 +29,18 @@ var TeamSchema = new Schema({
       type: Boolean,
       default: false
     },
-    number: Number
+    number: Number,
+    show: {
+      type: Boolean,
+      default: false
+    },
+    line: String,
+    email: String
   },
-  teampic: {
+  teampic: [{
     type: Schema.Types.ObjectId, 
     ref: 'Upload'
-  },
+  }],
   founded: Date,
   intro: String,
   represent: String,
@@ -86,7 +60,6 @@ var TeamSchema = new Schema({
   other: String,
   win: Number,
   lose: Number,
-  contact: Number,
   owner: {
     type: Schema.Types.ObjectId, 
     ref: 'User',
@@ -100,36 +73,37 @@ var TeamSchema = new Schema({
     name: String
   },
   date: { type: Date, default: Date.now }, 
-}, {strict: false});
+});
 
 // Add relationship plugin
 TeamSchema.plugin(relationship, { relationshipPathName: 'owner'});
 
+TeamSchema.plugin(deepPopulate, {
+  populate: {
+    'members.account.avatar': {
+      select: 'url'
+    },
+    'members.account': {
+      select: 'name avater'
+    },
+    'members': {
+      select: 'account position name confirmed'
+    },
+    'teampic': {
+      select: 'url'
+    }
+  }
+});
 
 TeamSchema.statics = {
-  loadAll: function(id, cb) {
-    this.find({'_id': id})
-      .populate(
-      {
-        path: 'captain',
-        select: '-salt -hashedPassword'
-      })
-      .populate('teampic')
-      .populate(
-      {
-        path: 'manager',
-        select: '-salt -hashedPassword'
-      })
-      .populate(
-      {
-        path: 'members',
-        select: '-salt -hashedPassword'
-      })
-      .populate(
-      {
-        path: 'coach',
-        select: '-salt -hashedPassword'
-      })
+  findByIdAndPopulate: function(id, cb) {
+    this.findOne({'_id': id})
+      .deepPopulate('members.account.avatar members.account members teampic')
+      .exec(cb);
+  },
+  findAndPopulate: function(cb) {
+    this.find()
+      .deepPopulate('members.account.avatar teampic')
       .exec(cb);
   }
 };

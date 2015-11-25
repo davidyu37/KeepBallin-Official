@@ -5,7 +5,7 @@ var Team = require('./team.model');
 
 // Get list of teams
 exports.index = function(req, res) {
-  Team.find(function (err, teams) {
+  Team.findAndPopulate(function (err, teams) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(teams);
   });
@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single team
 exports.show = function(req, res) {
-  Team.findById(req.params.id, function (err, team) {
+  Team.findByIdAndPopulate(req.params.id, function (err, team) {
     if(err) { return handleError(res, err); }
     if(!team) { return res.status(404).send('Not Found'); }
     return res.status(201).json(team);
@@ -31,15 +31,42 @@ exports.create = function(req, res) {
 
 // Updates an existing team in the DB.
 exports.update = function(req, res) {
+  console.log('body', req.body);
   if(req.body._id) { delete req.body._id; }
   Team.findById(req.params.id, function (err, team) {
     if (err) { return handleError(res, err); }
     if(!team) { return res.status(404).send('Not Found'); }
     var updated = _.merge(team, req.body);
+    updated.members = req.body.members;
+    
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(team);
     });
+  });
+};
+
+//Update subdoc
+// findOneAndUpdate(conditions, update, options, callback)
+exports.updateInside = function(req, res) {
+  Team.findOneAndUpdate(
+    {'_id': req.params.id, 'members._id': req.params.memberId},
+    {
+      '$set': {
+        'members.$.account': req.body.account,
+        'members.$.confirmed': req.body.confirmed
+      }
+    },
+    //Options for findOneAndUpdate
+    {
+      'new': true
+    }, function (err, team) {
+      if (err) { return handleError(res, err); }
+      if(!team) { return res.status(404).send('Not Found'); }
+      team.save(function (err) {
+      if (err) { return handleError(res, err); }
+        return res.status(200).json(team);
+      });
   });
 };
 

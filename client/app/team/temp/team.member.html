@@ -2,15 +2,15 @@
 <div class="form-inline text-center">
 	<div class="form-group">
 	    <label for="captain" class="control-label">隊長</label>
-	    <input type="text" ng-model="formData.captain.name" placeholder="請輸入隊長姓名" class="form-control" ng-blur="addMember(formData.captain.name, '隊長')">
+	    <input type="text" ng-model="captain" placeholder="請輸入隊長姓名" class="form-control" ng-blur="addMember(captain, '隊長')">
 	</div>
 	<div class="form-group">
 	    <label for="coach" class="control-label">教練</label>
-	    <input type="text" ng-model="formData.coach.name" placeholder="請輸入教練姓名" class="form-control" ng-blur="addMember(formData.coach.name, '教練')">
+	    <input type="text" ng-model="coach" placeholder="請輸入教練姓名" class="form-control" ng-blur="addMember(coach, '教練')">
 	</div>
 	<div class="form-group">
 	    <label for="manager" class="control-label">球隊經理</label>
-	    <input type="text" ng-model="formData.manager.name" placeholder="請輸入球隊經理姓名" class="form-control" ng-blur="addMember(formData.manager.name, '球隊經理')">
+	    <input type="text" ng-model="manager" placeholder="請輸入球隊經理姓名" class="form-control" ng-blur="addMember(manager, '球隊經理')">
 	</div>
 </div>
 <div class="form-inline text-center">

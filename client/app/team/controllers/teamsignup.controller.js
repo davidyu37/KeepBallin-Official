@@ -14,35 +14,45 @@ angular.module('keepballin')
         }
 
  		if(form.$valid && state === 'member') {
-            $scope.formData.contactperson.number = $scope.formData.contact;
  			$state.go('teamsignup.member');
             $scope.memberState = true;
             $scope.representState = false;
-             $scope.infoState = false;
+            $scope.infoState = false;
  		}
         if(form.$valid && state === 'represent') {
-            $scope.formData.contactperson.number = $scope.formData.contact;
             $state.go('teamsignup.represent');
             $scope.memberState = false;
             $scope.representState = true;
             $scope.infoState = false;
         }  
  	};
+    // we will store all of our form data in this object
+    $scope.formData = {};
+    $scope.formData.contactperson = {};
 
- 	$scope.User = Auth.getCurrentUser();
+    $scope.User = Auth.getCurrentUser();
 
- 	$scope.changeToMe = function(me) {
- 		if(me === true) {
-            $scope.formData.contactperson = {};
+    $scope.changeToMe = function(me) {
+        if(me === true) {
  			$scope.formData.contactperson.name = $scope.User.name;
  			$scope.disableContactInput = true;
             $scope.formData.contactperson.account = $scope.User._id;
+            $scope.formData.contactperson.email = $scope.User.email;
             $scope.formData.contactperson.confirmed = true;
  		} else {
  			$scope.formData.contactperson = {};
  			$scope.disableContactInput = false;
  		}
- 	}
+ 	};
+    //Change phone number display to public
+    $scope.givePermission = function(yes) {
+        if(yes === true) {
+            $scope.formData.contactperson.show = true;
+        } else {
+            $scope.formData.contactperson.show = false;
+        }
+    };
+
 
  	//Open datepicker
    	$scope.open = function(e) {
@@ -50,9 +60,6 @@ angular.module('keepballin')
 		e.stopPropagation();
 		$scope.opened = true;
    	};
-
-    // we will store all of our form data in this object
-    $scope.formData = {};
     
     // $scope.availablePeople = User.searchParams();
     
@@ -63,22 +70,23 @@ angular.module('keepballin')
 
     // function to process the form
     $scope.processForm = function() {
-
-        locationMatch($scope.formData.location.name, $scope.selectedCourt);
-
+        
+        if($scope.formData.location || $scope.selectedCourt) {
+            locationMatch($scope.formData.location.name, $scope.selectedCourt);
+        }
         $scope.sending = true;
         var saved = Team.save($scope.formData).$promise;
         saved.then(function(d) {
             $scope.sending = false;
             $scope.formData = {};
-            console.log(d._id);
+            
             $state.go('thisteam', {team: d._id});   
         });
     };
 
     //Check if current location value match an existing court's name or address, if not remove the court id
     var locationMatch = function(current, selected) {
-        console.log(selected);
+        
         if(selected) {
             if(current === selected.court || current === selected.address) {
                 return;
@@ -126,12 +134,16 @@ angular.module('keepballin')
 
 	//Add member to members and send with form data    
     $scope.addMember = function(member, pos) {
-        var person = {
-            name: member,
-            position: pos
-        };
+        if(member) {
+            var person = {
+                name: member,
+                position: pos
+            };       
+            $scope.formData.members.push(person);
 
-        $scope.formData.members.push(person);
+        } else {
+            return;
+        }   
     };
 
     $scope.removeMember = function(index) {

@@ -22,6 +22,23 @@ exports.create = function(req, res) {
   });
 };
 
+exports.invite = function(req, res) {
+  Contact.create(req.body, function(err, contact) {
+    if(err) { return handleError(res, err); }
+    sendgrid.send({
+      to:       req.body.to,
+      from:     req.body.from,
+      fromname: 'Keepballin',
+      subject:  '約戰函 - ' + req.body.name,
+      text:     req.body.message
+    }, function(err, json) {
+      if (err) { return console.error(err); }
+      console.log(json);
+      return res.status(201).json(contact);
+    });
+  });
+};
+
 // // Get list of contacts
 // exports.index = function(req, res) {
 //   Contact.find(function (err, contacts) {

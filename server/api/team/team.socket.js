@@ -15,8 +15,10 @@ exports.register = function(socket) {
   });
 }
 
-function onSave(socket, doc, cb) {
-  socket.emit('team:save', doc);
+function onSave(socket, doc, cb) {  
+	doc.deepPopulate('members.account.avatar members.account members teampic', function(err, _doc) {
+		socket.emit('team:save', _doc);
+	});
 }
 
 function onRemove(socket, doc, cb) {

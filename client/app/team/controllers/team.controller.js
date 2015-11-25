@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeamCtrl', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', function ($scope, $timeout, Auth, User, Team, $state) {
+  .controller('TeamCtrl', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', 'socket', '$modal', function ($scope, $timeout, Auth, User, Team, $state, socket, $modal) {
   	$scope.createTeam = function() {
       if(Auth.isLoggedIn()) {
         $state.go('teamsignup.info');
@@ -12,9 +12,27 @@ angular.module('keepballin')
 
     var allTeams = Team.query().$promise;
     allTeams.then(function(d) {
-      console.log(d);
       $scope.teams = d;
+      console.log(d);
+      //socket.io instant updates
+      socket.syncUpdates('team', $scope.teams, function(event, item , arr) {
+
+      });
+      $scope.$on('$destroy', function () {
+            socket.unsyncUpdates('team');
+        });
     });
+
+    //Open modal to invite the team to play bball
+    $scope.invite = function(index) {
+      $scope.team = $scope.teams[index];
+      $modal.open({
+        templateUrl: 'app/team/temp/invite.html',
+        controller: 'InviteCtrl',
+        size: 'lg',
+        scope: $scope
+      });
+    };
 
     // $scope.hasTeam = false;
   	// $scope.team = [];

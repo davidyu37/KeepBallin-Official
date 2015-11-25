@@ -16,7 +16,7 @@ angular.module('keepballin')
     {
       'title': '球隊',
       'link': 'team',
-      'icon': 'glyphicon-users'
+      'icon': 'glyphicon-user'
     },
     {
       'title': '聯絡',

@@ -7,7 +7,7 @@
 		<p style="margin-bottom: 20px;">這會直接寄到這球隊聯絡者的email裡，Be Nice</p>
 		<form name="invite" ng-submit="sendMail(invite)" novalidate>
 			<div class="form-group">
-				<label for="name" class="col-sm-2 control-label">姓名</label>
+				<label for="name" class="col-sm-2 control-label">我是</label>
 				<div class="col-sm-10">
 					<input name="name" type="text" class="feedback-input" ng-model="name" placeholder="請輸入你的名字" 
 					ng-disabled="sending" required>
@@ -28,10 +28,7 @@
 					請輸入有效的Email</div>
 				</div>
 			</div>
-			<textarea name="comment" class="feedback-input" rows="3" placeholder="我想跟{{team.name}}說..." ng-model="comment" ng-disabled="sending" required></textarea>
-			<div class="col-sm-5 alert alert-danger" role="alert" ng-show="invite.comment.$error.required && submitted">
-			<i class="fa fa-warning"></i>
-			不要害羞，請打出你想說的</div>
+			<textarea name="comment" class="feedback-input" rows="3" placeholder="我想跟{{team.name}}說..." ng-model="message" ng-disabled="sending" required></textarea>
 			<button class="submitBtn" type="submit" ng-disabled="sending">
 			<span ng-hide="sending">送出</span>
 			<span ng-show="sending">送出中</span>

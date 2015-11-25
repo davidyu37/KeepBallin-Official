@@ -13,7 +13,7 @@
 </div>
 <div class="container" style="margin-bottom: 60px; background-color: white; padding-bottom: 40px; padding-top: 40px;">
 	<div class="row">
-		<div class="col-sm-4" ng-repeat="team in teams">
+		<div class="col-sm-4" ng-repeat="team in teams track by $index">
 			<div class="thumbnail">
 			  <div class="caption">
 			    <a ui-sref="thisteam({team: team._id})">
@@ -21,10 +21,11 @@
 			    </a>	
 			    <p>{{team.represent}}</p>
 			  </div>
-			  <img src="/assets/images/teamPic.jpg" alt="...">
+			  <img ng-hide="team.teampic[0]" src="/assets/images/teamPic.jpg" alt="...">
+			  <img ng-show="team.teampic[0]" ng-src="{{team.teampic[0].url}}" alt="...">
 			  <div class="caption">
 			    <p>{{team.intro}}</p>
-			    <p><a href="#" class="btn btn-primary" role="button">約戰</a></p>
+			    <p><a ng-click="invite($index)" class="btn btn-primary" role="button">約戰</a></p>
 			  </div>
 			</div>
 		</div>	

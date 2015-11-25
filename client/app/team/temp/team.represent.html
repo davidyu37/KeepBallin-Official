@@ -4,7 +4,7 @@
 	    <input type="text" class="form-control" name="manager" ng-model="formData.represent" placeholder="代表球隊的一句話">
 	</div>
 	<div class="form-group">
-	    <label for="location" class="control-label">常出沒地點</label>
+	    <label for="location" class="control-label">常出沒地點/主場</label>
 	    <input type="text" class="form-control" name="manager" ng-model="formData.location.name" placeholder="輸入球場" typeahead="(court.court || court.address) for court in courts | filter:$viewValue | limitTo:8" typeahead-on-select="selected($item)">
 	</div>
 	<h5>球隊附屬於</h5>
@@ -72,5 +72,7 @@
 	</div>
 </div>
 <div class="col-xs-6 col-xs-offset-3">
-    <button type="submit" class="btn btn-block btn-primary">送出</button>
+    <button type="submit" class="btn btn-block btn-primary">送出
+	<i ng-show="sending" class="fa fa-spinner fa-pulse"></i>
+    </button>
 </div>
