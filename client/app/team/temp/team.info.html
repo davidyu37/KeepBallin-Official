@@ -1,9 +1,8 @@
 <div class="form-inline text-center">
 	<div class="form-group">
 	    <label for="teamname" class="control-label">球隊名稱</label>
-	    <input type="text" class="form-control" name="teamname" ng-model="formData.name" placeholder="*必要" autofocus required>
+	    <input type="text" class="form-control" name="teamname" ng-model="formData.name" placeholder="*必要" autofocus tooltip="獨一無二的隊名"required>
 	</div>
-    <span >請輸入名字</span>
 	<div class="form-group">
 	    <label for="founded" class="control-label">成立日期</label>
 	    <div class="input-group">
@@ -33,12 +32,12 @@
 			<input type="checkbox" ng-model="me" ng-click="changeToMe(me)">
 		    我就是聯絡人
 		</span>
-	    <input type="text" name="contactperson" ng-model="formData.contactperson.name" placeholder="*必要" class="form-control" ng-disabled="disableContactInput" required>
+	    <input type="text" name="contactperson" ng-model="formData.contactperson.name" placeholder="*必要" class="form-control" ng-disabled="disableContactInput" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectPerson($item)" tooltip="打字後出現在下面的名字是已註冊的用戶" required>
     </div>
 </div>
 <div class="form-group text-center">
     <label for="email">聯絡Email</label>
-    <input type="email" name="contactemail" class="form-control" ng-model="formData.contactperson.email" placeholder="*必要" required/>	 
+    <input type="email" name="contactemail" class="form-control" ng-model="formData.contactperson.email" placeholder="*必要" tooltip="Email不會公開顯示，球友透過約戰功能寄到這個信箱" required/>	 
 </div>
 <div class="form-group text-center">
     <label for="number">聯絡電話</label>
@@ -53,13 +52,18 @@
 </div>
 <div class="form-group text-center">
     <label for="line">Line ID</label>
-	<input type="text" name="line" class="form-control" ng-model="formData.contactperson.line"/>
+	<input type="text" name="line" class="form-control" ng-model="formData.contactperson.line" tooltip="方便球友聯絡的Line ID"/>
 </div>
 <div class="form-group text-center">
     <label for="intro">球隊簡介</label>
     <textarea type="text" class="form-control" name="intro" ng-model="formData.intro"></textarea>
 </div>
-<div ng-show="myForm.$error.required && toMember" class="alert alert-warning">必要資訊未輸入</div>
+<div ng-show="myForm.$error.required && toMember" class="alert alert-warning">必要資訊未輸入
+	<span ng-show="myForm.teamname.$error.required">＊隊名</span>
+	<span ng-show="myForm.contactperson.$error.required">＊聯絡人</span>
+	<span ng-show="myForm.contactemail.$error.required">＊聯絡Email</span>
+	<span ng-show="myForm.contactnumber.$error.required">＊聯絡電話</span>
+</div>
 <div class="form-group row">
 <div class="col-xs-6 col-xs-offset-3">
     <a ng-click="moveTo(myForm, 'member')" class="btn btn-block btn-primary">

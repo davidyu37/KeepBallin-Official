@@ -2,22 +2,43 @@
 <div class="form-inline text-center">
 	<div class="form-group">
 	    <label for="captain" class="control-label">隊長</label>
-	    <input type="text" ng-model="captain" placeholder="請輸入隊長姓名" class="form-control" ng-blur="addMember(captain, '隊長')">
+	    <div class="input-group">
+		    <input type="text" ng-model="captain" placeholder="請輸入隊長姓名" class="form-control" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)" tooltip="打字後出現在下面的名字是已註冊的用戶">
+		    <span class="input-group-btn">
+				<button type="button" class="btn" ng-click="addMember(captain, '隊長')">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+			</span>	
+	    </div>
 	</div>
 	<div class="form-group">
 	    <label for="coach" class="control-label">教練</label>
-	    <input type="text" ng-model="coach" placeholder="請輸入教練姓名" class="form-control" ng-blur="addMember(coach, '教練')">
+	    <div class="input-group">
+		    <input type="text" ng-model="coach" placeholder="請輸入教練姓名" class="form-control" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)" tooltip="打字後出現在下面的名字是已註冊的用戶">
+		    <span class="input-group-btn">
+				<button type="button" class="btn" ng-click="addMember(coach, '教練')">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+			</span> 	
+	    </div>
 	</div>
 	<div class="form-group">
 	    <label for="manager" class="control-label">球隊經理</label>
-	    <input type="text" ng-model="manager" placeholder="請輸入球隊經理姓名" class="form-control" ng-blur="addMember(manager, '球隊經理')">
+	    <div class="input-group">
+		    <input type="text" ng-model="manager" placeholder="請輸入球隊經理姓名" class="form-control" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)" tooltip="打字後出現在下面的名字是已註冊的用戶">
+		    <span class="input-group-btn">
+				<button type="button" class="btn" ng-click="addMember(manager, '球隊經理')">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+			</span>  	
+	    </div>
 	</div>
 </div>
 <div class="form-inline text-center">
 	<div class="form-group">
 	    <label for="intro" class="control-label">其他球員</label>
 	    <div class="input-group">
-	    	<input type="text" ng-model="person" placeholder="隊友姓名"class="form-control">
+	    	<input type="text" ng-model="person" placeholder="隊友姓名"class="form-control" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)" tooltip="打字後出現在下面的名字是已註冊的用戶">
 	    	<select ng-options="position for position in positions" ng-model="position" class="form-control">
 	    		 <option value="">-- 擔任的角色 --</option>
 	    	</select>

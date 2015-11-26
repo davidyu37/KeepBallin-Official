@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeamSignUpCtrl', ['$scope', '$timeout' ,'Auth', 'User', 'Team', 'Upload', '$state', 'Court', function ($scope, $timeout, Auth, User, Team, Upload, $state, Court) {
+  .controller('TeamSignUpCtrl', ['$scope', '$timeout' ,'Auth', 'User', 'Team', 'Upload', '$state', 'Court', 'SweetAlert', function ($scope, $timeout, Auth, User, Team, Upload, $state, Court, SweetAlert) {
  	//Check if the required fields are filled before moving to next page
  	$scope.moveTo = function(form, state) {
 
@@ -32,16 +32,34 @@ angular.module('keepballin')
 
     $scope.User = Auth.getCurrentUser();
 
+    var users = User.query().$promise;
+
+    users.then(function(d) {
+        $scope.users = d;
+    });
+
+    $scope.selectPerson = function(item) {
+      $scope.formData.contactperson.account = item._id;
+      $scope.selectedUser = item;
+    };
+
+    $scope.selectMember = function(item) {
+      $scope.chosenMember = item;
+    };
+
+
     $scope.changeToMe = function(me) {
         if(me === true) {
  			$scope.formData.contactperson.name = $scope.User.name;
  			$scope.disableContactInput = true;
+            $scope.selectedUser = $scope.User;
             $scope.formData.contactperson.account = $scope.User._id;
             $scope.formData.contactperson.email = $scope.User.email;
             $scope.formData.contactperson.confirmed = true;
  		} else {
  			$scope.formData.contactperson = {};
  			$scope.disableContactInput = false;
+            $scope.selectedUser = {};
  		}
  	};
     //Change phone number display to public
@@ -74,6 +92,9 @@ angular.module('keepballin')
         if($scope.formData.location || $scope.selectedCourt) {
             locationMatch($scope.formData.location.name, $scope.selectedCourt);
         }
+        if($scope.formData.contactperson) {
+          contactMatch($scope.formData.contactperson.name, $scope.selectedUser);
+        }
         $scope.sending = true;
         var saved = Team.save($scope.formData).$promise;
         saved.then(function(d) {
@@ -82,6 +103,21 @@ angular.module('keepballin')
             
             $state.go('thisteam', {team: d._id});   
         });
+    };
+
+    //Check if contact match the selected person
+    var contactMatch = function(current, selected) { 
+        if(selected) {
+            if(current === selected.name) {
+                return;
+            } else {
+                if($scope.formData.contactperson.account) {
+                    delete $scope.formData.contactperson.account;
+                }
+            }
+        } else {
+            return;
+        }
     };
 
     //Check if current location value match an existing court's name or address, if not remove the court id
@@ -132,15 +168,47 @@ angular.module('keepballin')
       'C-中鋒'
     ];
 
+    var memberExist = function(name, pos) {
+      var members = $scope.formData.members;
+      for(var i=0; i < members.length; i++) {
+        if(members[i].name === name && members[i].position === pos) {
+          return true;
+        } 
+      }
+      return false;
+    };
+
 	//Add member to members and send with form data    
     $scope.addMember = function(member, pos) {
+        var person = {};
         if(member) {
-            var person = {
-                name: member,
-                position: pos
-            };       
-            $scope.formData.members.push(person);
+            if(memberExist(member, pos)) {
+              SweetAlert.swal('已有'+ pos + '姓名為' + member, '無法重複', 
+                  'warning');
+              return;
+            }
+            if($scope.chosenMember) {
+                if(member === $scope.chosenMember.name) {
+                  person = {
+                    name: member,
+                    position: pos,
+                    account: $scope.chosenMember._id,
+                    confirmed: true
+                  };
+                } else {
+                    person = {
+                        name: member,
+                        position: pos
+                    };       
+                }
+            } else {
+                person = {
+                    name: member,
+                    position: pos
+                };
+            }
 
+            $scope.formData.members.push(person);
         } else {
             return;
         }   

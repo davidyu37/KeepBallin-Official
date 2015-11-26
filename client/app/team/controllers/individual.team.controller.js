@@ -95,10 +95,12 @@ angular.module('keepballin')
               $scope.disableContactInput = true;
               $scope.team.contactperson.account = $scope.User._id;
               $scope.team.contactperson.email = $scope.User.email;
+              $scope.selectedUser = $scope.User;
               $scope.team.contactperson.confirmed = true;
             } else {
               $scope.team.contactperson = {};
               $scope.disableContactInput = false;
+              $scope.selectedUser = {};
             }
             break;
           case 'member':
@@ -107,10 +109,12 @@ angular.module('keepballin')
               $scope.person = $scope.User.name;
               $scope.disablePersonInput = true;
               $scope.memberIsMe = true;
+              $scope.chosenMember = $scope.User;
             } else {
               $scope.person = '';
               $scope.disablePersonInput = false;
               $scope.memberIsMe = false;
+              $scope.chosenMember = {};
             }
             break;
           default: 
@@ -162,7 +166,7 @@ angular.module('keepballin')
         } 
       }
       return false;
-    }
+    };
 
     //Add member to members and send with form data    
     $scope.addMember = function(name, pos) {
@@ -179,6 +183,20 @@ angular.module('keepballin')
                 position: pos,
                 account: $scope.User._id,
                 confirmed: true
+              };
+            } else if($scope.chosenMember) {
+              if(name === $scope.chosenMember.name) {
+                person = {
+                  name: name,
+                  position: pos,
+                  account: $scope.chosenMember._id,
+                  confirmed: true
+                };
+              } else {
+                person = {
+                  name: name,
+                  position: pos
+                };  
               }
             } else {
               person = {
@@ -227,10 +245,15 @@ angular.module('keepballin')
         $scope.selectedCourt = $item;
         $scope.team.location.court = $item._id;
     };
-
+    //When user select an existing user for contactperson
     $scope.selectPerson = function(item) {
       $scope.team.contactperson.account = item._id;
       $scope.selectedUser = item;
+    };
+    //When user select an existing user for the member
+    $scope.selectMember = function(item) {
+      $scope.chosenMember = item;
+      $scope.person = item.name;
     };
 
     //Check if current location value match an existing court's name or address, if not remove the court id
@@ -269,15 +292,11 @@ angular.module('keepballin')
           locationMatch($scope.team.location.name, $scope.selectedCourt);
         }
         if($scope.team.contactperson) {
-          console.log('it got contactperson')
           contactMatch($scope.team.contactperson.name, $scope.selectedUser);
         }
-        console.log('before update', $scope.team);
         var update = Team.update({id: $scope.team._id}, $scope.team).$promise;
         update.then(function(d) {
           $scope.edit = false;
-          console.log('sent', $scope.team);
-          console.log('sent back', d);
         });
       }
     };

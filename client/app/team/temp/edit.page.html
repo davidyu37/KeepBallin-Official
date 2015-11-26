@@ -85,10 +85,11 @@
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">
-                        <input type="checkbox" ng-model="me2" ng-click="changeToMe(me2, 'member')">
+                        <input type="checkbox" ng-model="me2" ng-click="changeToMe(me2, 'member')" tooltip="如果要加入的成員是你的話，請打勾">
                         我
                     </span>
-                    <input type="text" ng-model="person" placeholder="成員姓名" class="form-control" ng-disabled="disablePersonInput">
+                    <input type="text" ng-model="person" placeholder="成員姓名" class="form-control" ng-disabled="disablePersonInput" typeahead="user.name for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)"
+                    tooltip="打字後出現在下面的名字是已註冊的用戶">
                     <select ng-options="position for position in positions" ng-model="position" class="form-control">
                          <option value="">-- 擔任的角色 --</option>
                     </select>
