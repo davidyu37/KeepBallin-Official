@@ -71,6 +71,7 @@ angular.module('keepballin')
 				if(Auth.getCurrentUser().name) {
 					$scope.edit = !($scope.edit);
 		    		if(court) {
+		    			console.log(court);
 		    			Court.update({ id: court._id }, court);
 		    		}
 				} else {

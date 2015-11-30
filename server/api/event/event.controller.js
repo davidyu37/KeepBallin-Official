@@ -20,6 +20,14 @@ exports.show = function(req, res) {
   });
 };
 
+exports.getByTeam = function(req, res) {
+  Event.findByTeam(req.params.team, function (err, event) {
+    if(err) { return handleError(res, err); }
+    if(!event) { return res.status(404).send('Not Found'); }
+    return res.json(event);
+  });
+};
+
 // Creates a new event in the DB.
 exports.create = function(req, res) {
   var participants = [];
@@ -29,7 +37,6 @@ exports.create = function(req, res) {
     participants: participants
   };
   var newEvent = _.merge(req.body, userRelated);
-  console.log(newEvent);
   Event.create(newEvent, function(err, event) {
     if(err) { return handleError(res, err); }
     return res.status(201).json(event);

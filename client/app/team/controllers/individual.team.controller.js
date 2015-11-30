@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('IndividualTeam', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', 'thisTeam', '$modal', 'socket', 'SweetAlert', '$animate', 'Court', 'Download', function ($scope, $timeout, Auth, User, Team, $state, thisTeam, $modal, socket, SweetAlert, $animate, Court, Download) {
+  .controller('IndividualTeam', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', 'thisTeam', '$modal', 'socket', 'SweetAlert', '$animate', 'Court', 'Download', 'Event', 'moment', 'uiCalendarConfig', function ($scope, $timeout, Auth, User, Team, $state, thisTeam, $modal, socket, SweetAlert, $animate, Court, Download, Event, moment, uiCalendarConfig) {
   	//async grab data
     thisTeam.$promise.then(function(d) {
   		$scope.team = d;
@@ -24,7 +24,36 @@ angular.module('keepballin')
         $scope.me = true;
         $scope.disableContactInput = true;
       }
+      //Get team's events
+      var teamEvent = Event.getByTeam({team: $scope.team._id}).$promise;
+      teamEvent.then(function(d) {
+        $scope.events = d;
+        if(d.length) {
+          $scope.eventSources.push($scope.events);
+        }
+
+        //socket.io instant updates 
+        socket.syncUpdates('event', $scope.events, function(event, item , arr) {
+          if(arr.length <= 1) {
+            $scope.eventSources.push($scope.events);
+          }
+
+        });
+        $scope.$on('$destroy', function () {
+              socket.unsyncUpdates('event');
+          });  
+        
+      });
+
+      // var dateChange = function(events) {
+      //   for(var i=0; i < events.length; i++) {
+      //     events
+      //   }
+      // };
+
   	});
+
+    $scope.eventSources = [];
 
     var courts = Court.query().$promise;
 
@@ -288,7 +317,6 @@ angular.module('keepballin')
     $scope.submitEdit = function(form) {
       if(form.$valid) {
         if($scope.team.location) {
-          console.log('it got location');
           locationMatch($scope.team.location.name, $scope.selectedCourt);
         }
         if($scope.team.contactperson) {
@@ -329,6 +357,121 @@ angular.module('keepballin')
 
     //Edit mode stuff ends-----------------------
 
+    //Stuff for calendar begins---------------------------------------------
+
+    //toggle add event
+    $scope.addEvent = false;
+
+    $scope.toggleAdd = function() {
+      $scope.addEvent = !($scope.addEvent);
+    };
+
+    var date = new Date();
+    
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+
+    $scope.today = date;
+    $scope.start = date;
+
+    $scope.$watch('start', function(newValue, oldValue) {
+      $scope.end = newValue;
+    });
+
+    /* alert on eventClick */
+    $scope.onDayClick = function( date, jsEvent, view){
+        console.log('day was clicked');
+        console.log(uiCalendarConfig);
+        //open day view
+        uiCalendarConfig.calendars.eventCal.fullCalendar('gotoDate', date);
+        uiCalendarConfig.calendars.eventCal.fullCalendar('changeView', 'agendaDay');
+
+    };
+    /* alert on Drop */
+    $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
+      var newStuff = {
+        start: event.start,
+        end: event.end
+      };
+      $scope.updating = true;
+      var update = Event.update({id: event._id}, newStuff).$promise;
+      update.then(function(d) {
+        $scope.updating = false;
+      });
+        
+    };
+    /* alert on Resize */
+    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
+       console.log('Event Resized to make dayDelta ' + delta);
+    };
+
+    $scope.onEventClick = function(calEvent, jsEvent, view) {
+      console.log('event clicked');
+    };
+
+    $scope.uiConfig = {
+      calendar:{
+        height: 450,
+        editable: true,
+        header:{
+          left: 'agendaDay agendaWeek month',
+          center: 'title',
+          right: 'today prev,next'
+        },
+        timezone: 'local',
+        dayClick: $scope.onDayClick,
+        eventClick: $scope.onEventClick,
+        eventDrop: $scope.alertOnDrop,
+        eventResize: $scope.alertOnResize
+      }
+    };
+
+    //Open datepicker
+    $scope.openCal1 = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $scope.opened1 = true;
+    };
+    $scope.openCal2 = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $scope.opened2 = true;
+    };
+
+    $scope.gotCourt = function(item) {
+      $scope.eventCourt = item._id;
+    };
+
+    //Submitting new event
+    $scope.submitEvent = function(form) {
+      if($scope.eventTitle && form.$valid) { 
+        $scope.updating = true;
+        var data = {
+          title: $scope.eventTitle,
+          start: $scope.start,
+          end: $scope.end,
+          court: $scope.eventCourt,
+          location: $scope.eventLocation,
+          team: $scope.team._id
+        };
+        
+        var saved = Event.save(data); 
+        saved.$promise.then(function(d) {
+          $scope.updating = false;
+        });
+      }
+    };
+
+    $scope.removeEvent = function(e) {
+      console.log(e);
+      var remove = Event.remove({id: e._id}).$promise;
+      remove.then(function(d) {
+        console.log('removed', d);
+      });
+    };
+
+    //Stuff for calendar ends---------------------------------------------
 
     //loop through the pictures to provide variety
   	$scope.picPlaceholder = function(index) {

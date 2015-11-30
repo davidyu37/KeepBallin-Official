@@ -28,7 +28,10 @@
     "clipboard": "~1.5.1",
     "mobile-angular-ui": "~1.2.0-rc.3",
     "angular-socialshare": "~1.4.4",
-    "angular-easyfb": "~1.4.1"
+    "angular-easyfb": "~1.4.1",
+    "angular-ui-calendar": "~1.0.1",
+    "angular-moment": "~0.10.3",
+    "moment": "~2.10.6"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

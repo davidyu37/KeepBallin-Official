@@ -200,6 +200,9 @@ angular.module('keepballin')
 	    if(screen.width < 480) {
             var searchBox = document.getElementById('searchbox');
 		    map.controls[google.maps.ControlPosition.TOP].push(searchBox);
+		    
+		    var questionBtn = document.getElementById('questionBtn');
+		    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(questionBtn);
 	    }
 	    
 		$scope.goToLocation = function(selected) {

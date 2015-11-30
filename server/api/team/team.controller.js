@@ -20,6 +20,20 @@ exports.show = function(req, res) {
   });
 };
 
+//Check if the team name already exist, if exist return true, else false
+exports.checkName = function(req, res) {
+  var send = {};
+  Team.findOne({'name': req.params.name}, function (err, team) {
+    if(err) { return handleError(res, err); }
+    if(!team) { 
+      send.exist = false;
+      return res.status(201).json(send); 
+    }
+    send.exist = true;
+    return res.status(201).json(send);
+  });
+};
+
 // Creates a new team in the DB.
 exports.create = function(req, res) {
   var team = new Team(_.merge({ owner: req.user._id }, req.body));
@@ -31,7 +45,6 @@ exports.create = function(req, res) {
 
 // Updates an existing team in the DB.
 exports.update = function(req, res) {
-  console.log('body', req.body);
   if(req.body._id) { delete req.body._id; }
   Team.findById(req.params.id, function (err, team) {
     if (err) { return handleError(res, err); }

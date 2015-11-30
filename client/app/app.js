@@ -15,7 +15,9 @@ angular.module('keepballin', [
   'relativeDate',
   'mobile-angular-ui.gestures',
   'mobile-angular-ui.core',
-  'ezfb'
+  'ezfb',
+  'ui.calendar',
+  'angularMoment'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

@@ -24,8 +24,8 @@ angular.module('keepballin')
     });
 
     //Open modal to invite the team to play bball
-    $scope.invite = function(index) {
-      $scope.team = $scope.teams[index];
+    $scope.invite = function(team) {
+      $scope.team = team;
       $modal.open({
         templateUrl: 'app/team/temp/invite.html',
         controller: 'InviteCtrl',
@@ -34,16 +34,13 @@ angular.module('keepballin')
       });
     };
 
-    // $scope.hasTeam = false;
-  	// $scope.team = [];
-  	// if(Auth.hasTeam()) {
-  	// 	$scope.hasTeam = true;
-  	// 	var teamId = Auth.hasTeam();
-  	// 	var team = Team.get({id: teamId});
-  	// 	team.$promise.then(function(data) {
-  	// 		console.log(data);
-  	// 		$scope.team = data;
-  	// 	});
-  	// }
+    $scope.methods = [
+      {ch: '最近註冊', value: '-date'},
+      {ch: '隊名-A~Z 英到中', value: 'name'},
+      {ch: '隊名-Z~A 中到英', value: '-name'},
+      {ch: '創始日-最年輕', value: '-founded'},
+      {ch: '創始日-最老', value: 'founded'},
+      {ch: '成員數-最多', value: '-members.length'}
+    ];
 
   }]);

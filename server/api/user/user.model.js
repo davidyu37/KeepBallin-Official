@@ -14,7 +14,11 @@ var UserSchema = new Schema({
     type: String,
     default: 'user'
   },
-  team: {
+  team: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Team'
+  }],
+  memberOf: {
     type: Schema.Types.ObjectId,
     ref: 'Team'
   },

@@ -97,17 +97,19 @@
 			<div class="page-header" style="border-bottom: 1px solid black;">
 				<h2>{{team.name}}成員</h2>
 			</div>
-			<div>
-				<p>邀請隊友來確認身份</p>
-				<div class="fbContainer">
-			        <div class="fb-send" onrender="fbSendRendered()"
-					  data-href="https://keepballin.com/thisteam/{{team._id}}" 
-					  data-layout="button_count" 
-					  data-action="send"
-					  data-image="http://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/preview.png" 
-					  data-show-faces="true" 
-					  data-share="true"></div>
-		        </div>	
+			<div style="text-align: center; margin-bottom: 20px;" ng-show="team.members[0]">
+				<h4>
+					<i class="fa fa-facebook-square"></i>
+					透過FB傳送功能邀請隊友來確認身份
+				</h4>
+		        <div class="fb-send" onrender="fbSendRendered()"
+				  data-href="https://keepballin.com/thisteam/{{team._id}}" 
+				  data-layout="button_count" 
+				  data-action="send"
+				  data-image="http://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/preview.png" 
+				  data-show-faces="true" 
+				  data-share="true"></div>
+		        	
 			</div>
 			<div class="col-sm-3" ng-repeat="m in team.members track by $index">
 				<div class="thumbnail">
@@ -162,6 +164,75 @@
 				<p style="font-size: 130%;">{{team.location.name}}</p>	
 			</a>
 			<p style="font-size: 130%;" ng-hide="team.location.court">{{team.location.name}}</p>	
+		</div>
+		<!-- Calendar from here -->
+		<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>行事曆</h2>
+		</div>
+		<div class="col-sm-4" style="border: 1px black solid; padding: 20px">
+			<form name="eventCreation" id="addEvent" ng-show="addEvent">
+				<div class="form-group">
+					<label for="eventName" class="control-label">活動標題</label>
+					<input type="text" class="form-control event-input" style="color: black" ng-model="eventTitle" placeholder="*必要">
+				</div>
+				<div class="form-group">
+					<label for="eventLocation" class="control-label">活動地點</label>
+					<input type="text" class="form-control event-input" style="color: black" ng-model="eventLocation" typeahead="(court.court || court.address) for court in courts | filter:$viewValue | limitTo:8" typeahead-on-select="gotCourt($item)">
+				</div>
+				<div class="form-group">
+					<label for="startDate" class="control-label">開始日期:</label>
+					<div class="input-group">
+						<input type="date" class="form-control event-input" datepicker-popup is-open="opened1" show-button-bar="false" min-date="today" ng-model="start" ng-disabled="sending" style=" height: 35px; color: black; font-size: 12px;"/>
+						<span class="input-group-btn">
+				          <button type="button" class="btn btn-default custom-addon" ng-click="openCal1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				        </span>
+					</div>
+					<label for="startTime" class="control-label">開始時間:</label>
+					<timepicker ng-model="start" show-meridian="true"></timepicker>
+				</div>
+				<div class="form-group" style="margin-bottom: 20px">
+					<label for="endTime" class="control-label">結束時間:</label>
+					<timepicker ng-model="end" show-meridian="true"></timepicker>
+					<label for="endDate" class="control-label">結束日期:</label>
+					<div class="input-group">
+						<input type="date" class="form-control event-input" datepicker-popup is-open="opened2" show-button-bar="false" min-date="start" ng-model="end" ng-disabled="sending" style=" height: 35px; color: black; font-size: 12px;"/>
+						<span class="input-group-btn">
+				          <button type="button" class="btn btn-default custom-addon" ng-click="openCal2($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+				        </span>
+					</div>
+					
+				</div>
+				<a class="btn btn-primary" ng-click="toggleAdd()">
+					回到活動清單
+				</a>	
+				<button class="pull-right addEventBtn" ng-click="submitEvent(eventCreation)" ng-disabled="updating">
+					<i ng-hide="updating" class="fa fa-plus"></i>
+					<i ng-show="updating" class="fa fa-spinner fa-pulse"></i>
+				</button> 
+			</form>
+			<ul class="list-group" ng-hide="addEvent">
+				<li class="list-group-item pointer active" ng-click="toggleAdd()" style="text-align: center">新增活動
+					<i class="fa fa-plus"></i>
+				</li>
+			</ul>
+			<ul class="list-group" ng-hide="addEvent">
+				<li class="list-group-item" ng-repeat="e in events">{{e.title}}
+				{{e.start | date: 'M/d'}}
+				{{e.end | date: 'M/d'}}
+					<i class="fa fa-remove pull-right pointer" ng-click="removeEvent(e)"></i>
+				</li>
+			</ul>
+		</div>
+		<div class="col-sm-8">
+			<div style="margin:20px">
+				<div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="eventCal"></div>
+				<span ng-show="updating">更新中
+					<i class="fa fa-spinner fa-pulse"></i>
+				</span>
+				<span ng-hide="updating">已更新
+					<i class="fa fa-check-circle" style="color: green"></i>
+				</span>
+			</div>
 		</div>
 		<div class="col-sm-12" style="text-align: center">
 			<div class="page-header" style="border-bottom: 1px solid black;">

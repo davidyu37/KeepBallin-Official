@@ -22,7 +22,8 @@ var TeamSchema = new Schema({
   contactperson: {
     account: {
       type: Schema.Types.ObjectId, 
-      ref: 'User'
+      ref: 'User',
+      childPath: 'memberOf'
     },
     name: String,
     confirmed: {
@@ -56,6 +57,10 @@ var TeamSchema = new Schema({
   club: {
     name: String
   },
+  event: [{
+    type: Schema.Types.ObjectId, 
+    ref: 'Event'
+  }],
   private: Boolean,
   other: String,
   win: Number,

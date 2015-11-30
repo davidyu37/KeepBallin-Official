@@ -6,6 +6,9 @@
             <a ng-click="QandA()" style="font-size: 80%">
                 有疑問<i class="fa fa-question-circle"></i>
             </a>
+        </span>
+        <span ng-show="enable" id="questionBtn" class="btn btn-primary">
+            <i ng-click="QandA()" class="fa fa-question-circle"></i>
         </span>     
         <div id="map" marker></div>
         <drag-me class="mobileDrag" ng-show="currentcourt"></drag-me> 

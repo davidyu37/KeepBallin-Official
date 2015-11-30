@@ -12,8 +12,16 @@
 	</div>
 </div>
 <div class="container" style="margin-bottom: 60px; background-color: white; padding-bottom: 40px; padding-top: 40px;">
+	<form class="form-inline">
+	  <div class="form-group">
+	    <label for="sort">排序方式:</label>
+	    <select ng-options="method.ch for method in methods" ng-model="method" class="form-control">
+    		 <option value="">-- 請選擇 --</option>
+    	</select>
+	  </div>
+	</form>
 	<div class="row">
-		<div class="col-sm-4" ng-repeat="team in teams track by $index">
+		<div class="col-sm-4" ng-repeat="team in teams | orderBy: method.value track by $index">
 			<div class="thumbnail">
 			  <div class="caption">
 			    <a ui-sref="thisteam({team: team._id})">
@@ -25,7 +33,7 @@
 			  <img ng-show="team.teampic[0]" ng-src="{{team.teampic[0].url}}" alt="...">
 			  <div class="caption">
 			    <p>{{team.intro}}</p>
-			    <p><a ng-click="invite($index)" class="btn btn-primary" role="button">約戰</a></p>
+			    <p><a ng-click="invite(team)" class="btn btn-primary" role="button">約戰</a></p>
 			  </div>
 			</div>
 		</div>	

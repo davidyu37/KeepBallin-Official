@@ -6,15 +6,24 @@ var mongoose = require('mongoose'),
     deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var EventSchema = new Schema({
-  name: String,
+  title: String,
   type: [String],
   info: String,
-  begin: Date,
+  start: Date,
   end: Date,
+  allDay: {
+    type: Boolean,
+    default: false
+  },  
   location: String,
   court: {
   	type: Schema.ObjectId,
     ref: 'Court'
+  },
+  team: {
+    type: Schema.ObjectId,
+    ref: 'Team', 
+    childPath: 'event'
   },
   //Picture of the event
   pics: [{
@@ -38,7 +47,7 @@ var EventSchema = new Schema({
 
 });
 
-EventSchema.plugin(relationship, { relationshipPathName:'participants' });
+EventSchema.plugin(relationship, { relationshipPathName: ['participants', 'team']});
 
 EventSchema.plugin(deepPopulate, {
   populate: {
@@ -73,7 +82,13 @@ EventSchema.statics = {
   findAndSort: function(cb) {
     this.find()
     .deepPopulate('creator.avatar creator participants pics')
-    .sort('-begin')
+    .sort('-start')
+    .exec(cb);
+  },
+  findByTeam: function(id, cb) {
+    this.find({'team': id})
+    .deepPopulate('creator.avatar creator participants pics')
+    .sort('-start')
     .exec(cb);
   }
 };

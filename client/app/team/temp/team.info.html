@@ -1,7 +1,8 @@
 <div class="form-inline text-center">
 	<div class="form-group">
 	    <label for="teamname" class="control-label">球隊名稱</label>
-	    <input type="text" class="form-control" name="teamname" ng-model="formData.name" placeholder="*必要" autofocus tooltip="獨一無二的隊名"required>
+	    <input type="text" class="form-control" name="teamname" ng-model="formData.name" placeholder="*必要" autofocus tooltip="獨一無二的隊名" ng-blur="checkName(formData.name)" ng-keydown="clearError()" required>
+	    <div ng-show="sameName" class="alert alert-warning">已經有這個隊名</div>
 	</div>
 	<div class="form-group">
 	    <label for="founded" class="control-label">成立日期</label>

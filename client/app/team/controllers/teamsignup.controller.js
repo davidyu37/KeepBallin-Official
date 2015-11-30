@@ -13,13 +13,13 @@ angular.module('keepballin')
             $scope.infoState = true;
         }
 
- 		if(form.$valid && state === 'member') {
+ 		if(!($scope.sameName) && form.$valid && state === 'member') {
  			$state.go('teamsignup.member');
             $scope.memberState = true;
             $scope.representState = false;
             $scope.infoState = false;
  		}
-        if(form.$valid && state === 'represent') {
+        if(!($scope.sameName) && form.$valid && state === 'represent') {
             $state.go('teamsignup.represent');
             $scope.memberState = false;
             $scope.representState = true;
@@ -37,6 +37,28 @@ angular.module('keepballin')
     users.then(function(d) {
         $scope.users = d;
     });
+
+    $scope.sameName = false;
+    //Team name checking
+    $scope.checkName = function(name) {
+        if(name) {
+          var check = Team.nameExist({name: name}).$promise;
+          check.then(function(d) {
+            console.log(d);
+            $scope.sameName = d.exist;
+            
+          });    
+        }
+    };
+
+    //Set sameName to false if it's set to true
+    $scope.clearError = function() {
+        if($scope.sameName === true) {
+            $scope.sameName = false;
+        } else {
+            return;
+        }
+    }; 
 
     $scope.selectPerson = function(item) {
       $scope.formData.contactperson.account = item._id;

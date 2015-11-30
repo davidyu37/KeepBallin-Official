@@ -26,16 +26,17 @@
 					請輸入有效的Email</div>
 				</div>
 			</div>
-			<textarea name="comment" class="feedback-input" rows="3" placeholder="我想跟KeepBallin說..." ng-model="comment" ng-disabled="sending" required></textarea>
-			<div class="col-sm-5 alert alert-danger" role="alert" ng-show="advice.comment.$error.required && submitted">
-			<i class="fa fa-warning"></i>
-			不要害羞，請打出你想說的</div>
-			<button class="submitBtn" type="submit" ng-disabled="sending">
-			<span ng-hide="sending">送出</span>
-			<span ng-show="sending">送出中</span>
-			<i ng-show="sending" class="fa fa-spinner fa-pulse"></i> 
-			</button>
-
+			<div style="padding-left: 15px; padding-right: 15px;">
+				<textarea name="comment" class="feedback-input" rows="3" placeholder="我想跟KeepBallin說..." ng-model="comment" ng-disabled="sending" required></textarea>
+				<div class="col-sm-5 alert alert-danger" role="alert" ng-show="advice.comment.$error.required && submitted">
+				<i class="fa fa-warning"></i>
+				不要害羞，請打出你想說的</div>
+				<button class="submitBtn" type="submit" ng-disabled="sending" >
+				<span ng-hide="sending">送出</span>
+				<span ng-show="sending">送出中</span>
+				<i ng-show="sending" class="fa fa-spinner fa-pulse"></i> 
+				</button>	
+			</div>
 		</form>
 	</div>
 </div>
