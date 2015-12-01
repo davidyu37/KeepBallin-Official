@@ -33,6 +33,11 @@ angular.module('keepballin')
         scope: $scope
       });
     };
+    //Default sorting method
+    $scope.method = {
+      ch: '最近註冊', 
+      value: '-date'
+    };
 
     $scope.methods = [
       {ch: '最近註冊', value: '-date'},

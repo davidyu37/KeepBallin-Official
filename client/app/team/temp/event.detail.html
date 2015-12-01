@@ -1,0 +1,55 @@
+<a ng-click="share()" class="pointer" style="position: absolute; left: 0; top: 0;">
+	<div class="fb-send" onrender="fbSendRendered()"
+	  data-href="https://keepballin.com/thisteam/{{team._id}}" 
+	  data-layout="button_count" 
+	  data-action="send"
+	  data-image="http://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/preview.png" 
+	  data-show-faces="true" 
+	  data-share="true"></div>
+</a>
+<span style="margin: 15px" class="pull-right pointer"
+ng-click="close()"><i class="fa fa-2x fa-remove"></i></span>
+<div style="padding: 10px;">
+	<div class="page-header" style="border-bottom: 1px solid black;">
+		<h1>
+			{{selectedEvent.title}}
+		</h1>
+	</div>
+	<div class="row">
+		<div class="col-sm-6" style="font-size: 150%;">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>
+					<i class="fa fa-clock-o"></i>
+					活動時段
+				</h2>
+			</div>
+			<p>開始時間:
+				<span style="margin-left: 5px;">{{selectedEvent.start | date: 'medium'}}</span>
+			</p>
+			<p>結束時間:
+				<span style="margin-left: 5px;">{{selectedEvent.end | date: 'medium'}}</span>
+			</p>
+		</div>
+		<div class="col-sm-6">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>
+					<i class="fa fa-map-pin"></i>
+					地點: 
+				</h2>
+			</div>
+			<p ng-hide="selectedEvent.court">{{selectedEvent.location}}</p>
+			<p ng-show="selectedEvent.court">
+				<a ui-sref="thiscourt({id: selectedEvent.court})">
+					{{selectedEvent.location}}
+				</a>
+			</p>
+		</div>
+		<!-- <div class="col-sm-12">
+			<div class="page-header" style="border-bottom: 1px solid black;">
+				<h2>有關{{selectedEvent.title}}</h2>
+			</div>
+			<p style="font-size: 130%;">{{selectedEvent.info}}</p>	
+		</div> -->
+	</div>
+	
+</div>

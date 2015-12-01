@@ -89,7 +89,7 @@ TeamSchema.plugin(deepPopulate, {
       select: 'url'
     },
     'members.account': {
-      select: 'name avater'
+      select: 'name avatar'
     },
     'members': {
       select: 'account position name confirmed'

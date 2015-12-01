@@ -97,7 +97,7 @@
 			<div class="page-header" style="border-bottom: 1px solid black;">
 				<h2>{{team.name}}成員</h2>
 			</div>
-			<div style="text-align: center; margin-bottom: 20px;" ng-show="team.members[0]">
+			<div style="text-align: left; margin-bottom: 20px;" ng-show="team.members[0]">
 				<h4>
 					<i class="fa fa-facebook-square"></i>
 					透過FB傳送功能邀請隊友來確認身份
@@ -111,34 +111,36 @@
 				  data-share="true"></div>
 		        	
 			</div>
-			<div class="col-sm-3" ng-repeat="m in team.members track by $index">
-				<div class="thumbnail">
-				  <div class="caption">
-				    <h3 ng-hide="m.account.name">{{m.name}}</h3>
-				    <h3 ng-show="m.account.name">
-				    	<a ui-sref="profile({id: m.account._id})">{{m.name}}</a>
-				    </h3>
-				    <p>{{m.position}}</p>
-				    <div class="text-muted">
-						<p ng-show="!m.account">等待{{m.name}}確認</p>
-						<p ng-show="m.account && !m.confirmed">等待球隊管理員確認</p>
-						<p ng-show="m.confirmed">已確認</p>
-				    </div>
-				    
-				    <hr>
-				  </div>
-				
-				  <img ng-hide="m.account.avatar.url" ng-src="{{picPlaceholder($index)}}" alt="basketball player picture placeholder" style="height: 100px;">
-				  <div class="caption">
-				  <img ng-show="m.account.avatar.url" ng-src="{{m.account.avatar.url}}" alt="basketball player picture placeholder" style="height: 100px;">
-				  <div class="caption">
-				  	<p>
-				  		<a class="btn btn-primary" role="button" ng-click="isMe($index)" ng-hide="m.account">我就是{{m.name}}</a>
-				  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && !isOwner">等待確認中</a>
-				  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && isOwner" ng-click="confirmId($index)">確認隊友身份</a>
+			<div class="col-sm-12">
+				<div class="col-sm-3" ng-repeat="m in team.members track by $index">
+					<div class="thumbnail">
+					  <div class="caption">
+					    <h3 ng-hide="m.account.name">{{m.name}}</h3>
+					    <h3 ng-show="m.account.name">
+					    	<a ui-sref="profile({id: m.account._id})">{{m.name}}</a>
+					    </h3>
+					    <p>{{m.position}}</p>
+					    <div class="text-muted">
+							<p ng-show="!m.account">等待{{m.name}}確認</p>
+							<p ng-show="m.account && !m.confirmed">等待球隊管理員確認</p>
+							<p ng-show="m.confirmed">已確認</p>
+					    </div>
+					    
+					    <hr>
+					  </div>
+					
+					  <img ng-hide="m.account.avatar.url" ng-src="{{picPlaceholder($index)}}" alt="basketball player picture placeholder" style="height: 100px;">
+					  <div class="caption">
+					  <img ng-show="m.account.avatar.url" ng-src="{{m.account.avatar.url}}" alt="basketball player picture placeholder" style="height: 100px;">
+					  <div class="caption">
+					  	<p>
+					  		<a class="btn btn-primary" role="button" ng-click="isMe($index)" ng-hide="m.account">我就是{{m.name}}</a>
+					  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && !isOwner">等待確認中</a>
+					  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && isOwner" ng-click="confirmId($index)">確認隊友身份</a>
 
-				  	</p>
-				  </div>
+					  	</p>
+					  </div>
+					</div>
 				</div>
 			</div>
 			
@@ -187,12 +189,19 @@
 				          <button type="button" class="btn btn-default custom-addon" ng-click="openCal1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 				        </span>
 					</div>
+					<div class="checkbox">
+						<label for="allDay">
+							<input type="checkbox" ng-model="allDay">一整天
+						</label>
+					</div>
+				</div>
+				<div class="form-group" ng-hide="allDay">
 					<label for="startTime" class="control-label">開始時間:</label>
 					<timepicker ng-model="start" show-meridian="true"></timepicker>
-				</div>
-				<div class="form-group" style="margin-bottom: 20px">
 					<label for="endTime" class="control-label">結束時間:</label>
 					<timepicker ng-model="end" show-meridian="true"></timepicker>
+				</div>
+				<div class="form-group" style="margin-bottom: 20px">
 					<label for="endDate" class="control-label">結束日期:</label>
 					<div class="input-group">
 						<input type="date" class="form-control event-input" datepicker-popup is-open="opened2" show-button-bar="false" min-date="start" ng-model="end" ng-disabled="sending" style=" height: 35px; color: black; font-size: 12px;"/>
@@ -211,15 +220,21 @@
 				</button> 
 			</form>
 			<ul class="list-group" ng-hide="addEvent">
-				<li class="list-group-item pointer active" ng-click="toggleAdd()" style="text-align: center">新增活動
+				<li class="list-group-item pointer active" ng-click="toggleAdd()" style="text-align: center" ng-show="checkUser()">新增活動
 					<i class="fa fa-plus"></i>
 				</li>
 			</ul>
-			<ul class="list-group" ng-hide="addEvent">
-				<li class="list-group-item" ng-repeat="e in events">{{e.title}}
+			<ul class="list-group" ng-hide="addEvent" style="height: 450px; overflow-y: scroll">
+				<li ng-show="!events[0]">目前還沒有活動</li>
+				<li class="list-group-item" ng-repeat="e in events | orderBy: 'start' track by e._id" ng-class="{active: e.active}">
+				<i class="fa fa-folder-open-o fa-2x pointer" ng-click="openEventModal(e._id)"></i>
+				{{e.title}}
+				<i class="fa fa-remove pull-right pointer" ng-click="removeEvent(e)"></i>
 				{{e.start | date: 'M/d'}}
-				{{e.end | date: 'M/d'}}
-					<i class="fa fa-remove pull-right pointer" ng-click="removeEvent(e)"></i>
+				<span ng-hide="e.start == e.end">~ {{e.end | date: 'dd'}}</span>
+				<div>
+					<p>{{e.location}}</p>
+				</div>
 				</li>
 			</ul>
 		</div>

@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('IndividualTeam', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', 'thisTeam', '$modal', 'socket', 'SweetAlert', '$animate', 'Court', 'Download', 'Event', 'moment', 'uiCalendarConfig', function ($scope, $timeout, Auth, User, Team, $state, thisTeam, $modal, socket, SweetAlert, $animate, Court, Download, Event, moment, uiCalendarConfig) {
+  .controller('IndividualTeam', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', 'thisTeam', '$modal', 'socket', 'SweetAlert', '$animate', 'Court', 'Download', 'Event', 'moment', 'uiCalendarConfig', '$compile', function ($scope, $timeout, Auth, User, Team, $state, thisTeam, $modal, socket, SweetAlert, $animate, Court, Download, Event, moment, uiCalendarConfig, $compile) {
   	//async grab data
     thisTeam.$promise.then(function(d) {
   		$scope.team = d;
-      
+      console.log(d);
       if(d.owner === Auth.getCurrentUser()._id) {
         $scope.isOwner = true;
       } 
@@ -34,23 +34,16 @@ angular.module('keepballin')
 
         //socket.io instant updates 
         socket.syncUpdates('event', $scope.events, function(event, item , arr) {
+          $scope.events = arr; 
           if(arr.length <= 1) {
             $scope.eventSources.push($scope.events);
           }
-
         });
         $scope.$on('$destroy', function () {
               socket.unsyncUpdates('event');
           });  
         
       });
-
-      // var dateChange = function(events) {
-      //   for(var i=0; i < events.length; i++) {
-      //     events
-      //   }
-      // };
-
   	});
 
     $scope.eventSources = [];
@@ -403,11 +396,45 @@ angular.module('keepballin')
     };
     /* alert on Resize */
     $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
-       console.log('Event Resized to make dayDelta ' + delta);
+       var newStuff = {
+        start: event.start,
+        end: event.end
+      };
+      $scope.updating = true;
+      var update = Event.update({id: event._id}, newStuff).$promise;
+      update.then(function(d) {
+        $scope.updating = false;
+      });
     };
 
     $scope.onEventClick = function(calEvent, jsEvent, view) {
-      console.log('event clicked');
+      $scope.events.forEach(function(element, index, array) {
+        if(element._id === calEvent._id) {
+          element.active = true;
+        } else {
+          element.active = false;
+        }
+      });
+    };
+
+    $scope.openEventModal = function(id) {
+      $scope.events.forEach(function(e) {
+        if(e._id === id) {
+          $scope.selectedEvent = e;
+        }
+      });
+      $modal.open({
+        templateUrl: 'app/team/temp/event.detail.html',
+        controller: 'EventDetailCtrl',
+        size: 'lg',
+        scope: $scope
+      });
+    };
+    //Render tooltip for calednar
+    $scope.eventRender = function( event, element, view ) { 
+        element.attr({'tooltip': event.title,
+                     'tooltip-append-to-body': true});
+        $compile(element)($scope);
     };
 
     $scope.uiConfig = {
@@ -423,7 +450,8 @@ angular.module('keepballin')
         dayClick: $scope.onDayClick,
         eventClick: $scope.onEventClick,
         eventDrop: $scope.alertOnDrop,
-        eventResize: $scope.alertOnResize
+        eventResize: $scope.alertOnResize,
+        eventRender: $scope.eventRender
       }
     };
 
@@ -440,27 +468,97 @@ angular.module('keepballin')
     };
 
     $scope.gotCourt = function(item) {
-      $scope.eventCourt = item._id;
+      $scope.eventCourt = item;
+    };
+
+    var isMember = function() {
+      if($scope.team) {
+        var user = Auth.getCurrentUser()._id;
+        var last = false;
+        if($scope.team.members[0]) {
+            $scope.team.members.forEach(function(e) {
+              if(e.account._id === user) {
+                last = true;
+              }
+            });
+          return last;
+        } 
+      }
+    }
+
+    $scope.checkUser = function() {
+      if($scope.team) {
+        
+        var user = Auth.getCurrentUser()._id;
+      
+        if($scope.team.owner === user) {
+          return true;
+        }
+        if(isMember()) {
+          return true;
+        } 
+        return false; 
+      }
     };
 
     //Submitting new event
     $scope.submitEvent = function(form) {
+      console.log('executed');
       if($scope.eventTitle && form.$valid) { 
         $scope.updating = true;
-        var data = {
-          title: $scope.eventTitle,
-          start: $scope.start,
-          end: $scope.end,
-          court: $scope.eventCourt,
-          location: $scope.eventLocation,
-          team: $scope.team._id
-        };
+        var data;
+        if($scope.eventCourt) {
+          if($scope.eventLocation === $scope.eventCourt.court) {
+            data = {
+              title: $scope.eventTitle,
+              start: $scope.start,
+              end: $scope.end,
+              court: $scope.eventCourt._id,
+              location: $scope.eventLocation,
+              team: $scope.team._id,
+              allDay: $scope.allDay
+            };
+          } else {
+            data = {
+              title: $scope.eventTitle,
+              start: $scope.start,
+              end: $scope.end,
+              location: $scope.eventLocation,
+              team: $scope.team._id,
+              allDay: $scope.allDay
+            };
+          }
+        } else {
+          data = {
+            title: $scope.eventTitle,
+            start: $scope.start,
+            end: $scope.end,
+            location: $scope.eventLocation,
+            team: $scope.team._id,
+            allDay: $scope.allDay
+          };
+        }
+
         
         var saved = Event.save(data); 
         saved.$promise.then(function(d) {
           $scope.updating = false;
         });
       }
+    };
+
+    var locationMatch = function(current, selected) {   
+        if(selected) {
+            if(current === selected.court || current === selected.address) {
+                return;
+            } else {
+                if($scope.team.location.court) {
+                    delete $scope.team.location.court;
+                }
+            }
+        } else {
+            return;
+        }
     };
 
     $scope.removeEvent = function(e) {
