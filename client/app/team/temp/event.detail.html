@@ -37,12 +37,14 @@ ng-click="close()"><i class="fa fa-2x fa-remove"></i></span>
 					地點: 
 				</h2>
 			</div>
-			<p ng-hide="selectedEvent.court">{{selectedEvent.location}}</p>
-			<p ng-show="selectedEvent.court">
-				<a ui-sref="thiscourt({id: selectedEvent.court})">
-					{{selectedEvent.location}}
-				</a>
-			</p>
+			<div style="font-size: 150%">
+				<p ng-hide="selectedEvent.court">{{selectedEvent.location}}</p>
+				<p ng-show="selectedEvent.court">
+					<a ui-sref="thiscourt({id: selectedEvent.court})">
+						{{selectedEvent.location}}
+					</a>
+				</p>
+			</div>
 		</div>
 		<!-- <div class="col-sm-12">
 			<div class="page-header" style="border-bottom: 1px solid black;">

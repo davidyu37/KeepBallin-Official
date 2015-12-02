@@ -19,11 +19,15 @@ var TeamSchema = new Schema({
       default: false
     }
   }],
+  membersID: [{
+    type: Schema.Types.ObjectId, 
+    ref: 'User',
+    childPath: 'memberOf'
+  }],
   contactperson: {
     account: {
       type: Schema.Types.ObjectId, 
-      ref: 'User',
-      childPath: 'memberOf'
+      ref: 'User'
     },
     name: String,
     confirmed: {
@@ -81,7 +85,7 @@ var TeamSchema = new Schema({
 });
 
 // Add relationship plugin
-TeamSchema.plugin(relationship, { relationshipPathName: 'owner'});
+TeamSchema.plugin(relationship, { relationshipPathName: ['owner', 'membersID']});
 
 TeamSchema.plugin(deepPopulate, {
   populate: {
@@ -96,6 +100,12 @@ TeamSchema.plugin(deepPopulate, {
     },
     'teampic': {
       select: 'url'
+    },
+    'owner': {
+      select: 'name avatar'
+    },
+    'owner.avatar': {
+      select: 'url'
     }
   }
 });
@@ -103,7 +113,7 @@ TeamSchema.plugin(deepPopulate, {
 TeamSchema.statics = {
   findByIdAndPopulate: function(id, cb) {
     this.findOne({'_id': id})
-      .deepPopulate('members.account.avatar members.account members teampic')
+      .deepPopulate('members.account.avatar members.account members teampic owner owner.avatar')
       .exec(cb);
   },
   findAndPopulate: function(cb) {

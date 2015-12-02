@@ -5,8 +5,7 @@ angular.module('keepballin')
   	//async grab data
     thisTeam.$promise.then(function(d) {
   		$scope.team = d;
-      console.log(d);
-      if(d.owner === Auth.getCurrentUser()._id) {
+      if(d.owner._id === Auth.getCurrentUser()._id) {
         $scope.isOwner = true;
       } 
       //socket.io instant updates   
@@ -34,8 +33,8 @@ angular.module('keepballin')
 
         //socket.io instant updates 
         socket.syncUpdates('event', $scope.events, function(event, item , arr) {
-          $scope.events = arr; 
           if(arr.length <= 1) {
+            $scope.eventSources = [];
             $scope.eventSources.push($scope.events);
           }
         });
@@ -206,6 +205,7 @@ angular.module('keepballin')
                 account: $scope.User._id,
                 confirmed: true
               };
+              $scope.team.membersID.push($scope.User._id);
             } else if($scope.chosenMember) {
               if(name === $scope.chosenMember.name) {
                 person = {
@@ -214,6 +214,8 @@ angular.module('keepballin')
                   account: $scope.chosenMember._id,
                   confirmed: true
                 };
+                console.log($scope.team.membersID);
+                $scope.team.membersID.push($scope.chosenMember._id);
               } else {
                 person = {
                   name: name,
@@ -226,7 +228,6 @@ angular.module('keepballin')
                 position: pos
               };   
             }
-
             $scope.team.members.push(person);
 
         } else {
@@ -249,6 +250,16 @@ angular.module('keepballin')
           showLoaderOnConfirm: true,   
           closeOnConfirm: false }, function(confirmed){
             if(confirmed) {
+              if($scope.team.members[index].account) {
+                  $scope.team.membersID.forEach(function(e, i) {
+                      //Delete the member ID that matches the account id
+                      console.log('account', $scope.team.members[index].account._id);
+                      if(e === $scope.team.members[index].account._id || e === $scope.team.members[index].account) {
+                          console.log('inside if statement');
+                          $scope.team.membersID.splice(i, 1);
+                      }
+                  });
+              }
               $scope.team.members.splice(index, 1);
                 SweetAlert.swal('已開除'+ member.name, '儲存以後就回不去囉',  
                   'success');
@@ -315,6 +326,7 @@ angular.module('keepballin')
         if($scope.team.contactperson) {
           contactMatch($scope.team.contactperson.name, $scope.selectedUser);
         }
+        console.log('$scope.team', $scope.team);
         var update = Team.update({id: $scope.team._id}, $scope.team).$promise;
         update.then(function(d) {
           $scope.edit = false;
@@ -374,8 +386,6 @@ angular.module('keepballin')
 
     /* alert on eventClick */
     $scope.onDayClick = function( date, jsEvent, view){
-        console.log('day was clicked');
-        console.log(uiCalendarConfig);
         //open day view
         uiCalendarConfig.calendars.eventCal.fullCalendar('gotoDate', date);
         uiCalendarConfig.calendars.eventCal.fullCalendar('changeView', 'agendaDay');
@@ -437,10 +447,27 @@ angular.module('keepballin')
         $compile(element)($scope);
     };
 
+    //Logic for owner and member checking
+
+    $scope.checkUser = function() {
+      if($scope.team) {
+        
+        var user = Auth.getCurrentUser()._id;
+      
+        if($scope.team.owner._id === user) {
+          return true;
+        }
+        if(isMember()) {
+          return true;
+        } 
+        return false; 
+      }
+    };
+
     $scope.uiConfig = {
       calendar:{
         height: 450,
-        editable: true,
+        editable: $scope.checkUser,
         header:{
           left: 'agendaDay agendaWeek month',
           center: 'title',
@@ -473,12 +500,17 @@ angular.module('keepballin')
 
     var isMember = function() {
       if($scope.team) {
-        var user = Auth.getCurrentUser()._id;
+        var user = Auth.getCurrentUser();
         var last = false;
+
         if($scope.team.members[0]) {
             $scope.team.members.forEach(function(e) {
-              if(e.account._id === user) {
-                last = true;
+              if(user._id) {
+                if(e.account) {
+                  if(e.account._id === user._id) {
+                    last = true;
+                  }
+                }
               }
             });
           return last;
@@ -486,24 +518,8 @@ angular.module('keepballin')
       }
     }
 
-    $scope.checkUser = function() {
-      if($scope.team) {
-        
-        var user = Auth.getCurrentUser()._id;
-      
-        if($scope.team.owner === user) {
-          return true;
-        }
-        if(isMember()) {
-          return true;
-        } 
-        return false; 
-      }
-    };
-
     //Submitting new event
     $scope.submitEvent = function(form) {
-      console.log('executed');
       if($scope.eventTitle && form.$valid) { 
         $scope.updating = true;
         var data;
@@ -562,10 +578,8 @@ angular.module('keepballin')
     };
 
     $scope.removeEvent = function(e) {
-      console.log(e);
       var remove = Event.remove({id: e._id}).$promise;
       remove.then(function(d) {
-        console.log('removed', d);
       });
     };
 
@@ -608,7 +622,8 @@ angular.module('keepballin')
     $scope.isMe = function(index) {
       var member = $scope.team.members[index];
       var newInfo = {
-        account: $scope.User._id
+        account: $scope.User._id,
+        membersID: $scope.team.membersID
       };
 
       Team.update({id: $scope.team._id, memberId: member._id}, newInfo);
@@ -638,8 +653,10 @@ angular.module('keepballin')
           closeOnConfirm: false,
           closeOnCancel: false }, function(confirmed){
             if(confirmed) {
+              $scope.team.membersID.push(member._id);
               var newInfo = {
-                confirmed: true
+                confirmed: true,
+                membersID: $scope.team.membersID
               };
               var update = Team.update({id: $scope.team._id, memberId: member._id}, newInfo).$promise;
               update.then(function() {
@@ -657,6 +674,17 @@ angular.module('keepballin')
               });
             }
           });
+    };
+
+    $scope.waiting = function(index) {
+      SweetAlert.swal({   
+        title: '請等待' + $scope.team.owner.name + '確認',
+        type: 'info',
+        showCancelButton: false,   
+        confirmButtonColor: '#DD6B55',   
+        confirmButtonText: '好'
+      });
+
     };
 
     $scope.openGallery = function() {

@@ -18,10 +18,10 @@ var UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Team'
   }],
-  memberOf: {
+  memberOf: [{
     type: Schema.Types.ObjectId,
     ref: 'Team'
-  },
+  }],
   intro: String,
   profession: [String],
   open: {type: Boolean, default: false},

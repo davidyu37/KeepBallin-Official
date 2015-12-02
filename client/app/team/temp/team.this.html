@@ -135,7 +135,7 @@
 					  <div class="caption">
 					  	<p>
 					  		<a class="btn btn-primary" role="button" ng-click="isMe($index)" ng-hide="m.account">我就是{{m.name}}</a>
-					  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && !isOwner">等待確認中</a>
+					  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && !isOwner" ng-click="waiting($index)">等待確認中</a>
 					  		<a class="btn btn-primary" role="button" ng-show="m.account && !m.confirmed && isOwner" ng-click="confirmId($index)">確認隊友身份</a>
 
 					  	</p>
@@ -229,7 +229,7 @@
 				<li class="list-group-item" ng-repeat="e in events | orderBy: 'start' track by e._id" ng-class="{active: e.active}">
 				<i class="fa fa-folder-open-o fa-2x pointer" ng-click="openEventModal(e._id)"></i>
 				{{e.title}}
-				<i class="fa fa-remove pull-right pointer" ng-click="removeEvent(e)"></i>
+				<i class="fa fa-remove pull-right pointer" ng-click="removeEvent(e)" ng-show="checkUser()"></i>
 				{{e.start | date: 'M/d'}}
 				<span ng-hide="e.start == e.end">~ {{e.end | date: 'dd'}}</span>
 				<div>

@@ -45,13 +45,16 @@ exports.create = function(req, res) {
 
 // Updates an existing team in the DB.
 exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
+
   Team.findById(req.params.id, function (err, team) {
     if (err) { return handleError(res, err); }
     if(!team) { return res.status(404).send('Not Found'); }
     var updated = _.merge(team, req.body);
+    updated.membersID = req.body.membersID;
     updated.members = req.body.members;
-    
+
+    console.log(updated);
+
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(team);
@@ -76,6 +79,8 @@ exports.updateInside = function(req, res) {
     }, function (err, team) {
       if (err) { return handleError(res, err); }
       if(!team) { return res.status(404).send('Not Found'); }
+      console.log(req.body.membersID);
+      team.membersID = req.body.membersID;
       team.save(function (err) {
       if (err) { return handleError(res, err); }
         return res.status(200).json(team);
@@ -96,5 +101,6 @@ exports.destroy = function(req, res) {
 };
 
 function handleError(res, err) {
+  console.log(err);
   return res.status(500).send(err);
 }

@@ -21,6 +21,9 @@
 	  </div>
 	</form>
 	<div class="row">
+		<div style="text-align: center" ng-hide="teams[0]">
+			<i class="fa fa-4x fa-spinner fa-pulse"></i>
+		</div>
 		<div class="col-sm-4" ng-repeat="team in teams | orderBy: method.value track by $index">
 			<div class="thumbnail">
 			  <div class="caption">

@@ -28,9 +28,7 @@ angular.module('keepballin')
     $scope.showSignup = false;
 
     $scope.showToggle = function() {
-
-        $scope.showSignup = !($scope.showSignup);
-        console.log($scope.showSignup);    
+        $scope.showSignup = !($scope.showSignup);    
     };
     
     $scope.stopPropagate = function(event) {

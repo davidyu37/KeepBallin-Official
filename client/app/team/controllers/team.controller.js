@@ -13,7 +13,6 @@ angular.module('keepballin')
     var allTeams = Team.query().$promise;
     allTeams.then(function(d) {
       $scope.teams = d;
-      console.log(d);
       //socket.io instant updates
       socket.syncUpdates('team', $scope.teams, function(event, item , arr) {
 

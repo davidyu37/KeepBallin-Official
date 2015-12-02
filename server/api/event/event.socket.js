@@ -23,5 +23,7 @@ function onSave(socket, doc, cb) {
 }
 
 function onRemove(socket, doc, cb) {
-  socket.emit('event:remove', doc);
+  doc.deepPopulate('creator.avatar creator court participants participants.avatar pics', function(err, _doc) {
+    socket.emit('event:remove', _doc);
+  });
 }

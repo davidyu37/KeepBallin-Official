@@ -44,7 +44,6 @@ angular.module('keepballin')
         if(name) {
           var check = Team.nameExist({name: name}).$promise;
           check.then(function(d) {
-            console.log(d);
             $scope.sameName = d.exist;
             
           });    
@@ -181,6 +180,7 @@ angular.module('keepballin')
     };
     //Empty object for a new member
     $scope.formData.members = [];
+    $scope.formData.membersID = [];
 
     $scope.positions = [
       'PG-控球後衛',
@@ -217,6 +217,7 @@ angular.module('keepballin')
                     account: $scope.chosenMember._id,
                     confirmed: true
                   };
+                  $scope.formData.membersID.push($scope.chosenMember._id);
                 } else {
                     person = {
                         name: member,
@@ -237,6 +238,15 @@ angular.module('keepballin')
     };
 
     $scope.removeMember = function(index) {
+
+        if($scope.formData.members[index].account) {
+            $scope.formData.membersID.forEach(function(e, i) {
+                //Delete the member ID that matches the account id
+                if(e === $scope.formData.members[index].account) {
+                    $scope.formData.membersID.splice(i, 1);
+                }
+            });
+        }
         $scope.formData.members.splice(index, 1);
     };
 
