@@ -303,6 +303,7 @@ angular.module('keepballin')
             return;
         }
     };
+    
     //Check if contact match the selected person
     var contactMatch = function(current, selected) { 
         if(selected) {
@@ -563,19 +564,7 @@ angular.module('keepballin')
       }
     };
 
-    var locationMatch = function(current, selected) {   
-        if(selected) {
-            if(current === selected.court || current === selected.address) {
-                return;
-            } else {
-                if($scope.team.location.court) {
-                    delete $scope.team.location.court;
-                }
-            }
-        } else {
-            return;
-        }
-    };
+    
 
     $scope.removeEvent = function(e) {
       var remove = Event.remove({id: e._id}).$promise;
