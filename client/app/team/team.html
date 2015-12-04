@@ -32,8 +32,10 @@
 			    </a>	
 			    <p>{{team.represent}}</p>
 			  </div>
-			  <img ng-hide="team.teampic[0]" src="/assets/images/teamPic.jpg" alt="...">
-			  <img ng-show="team.teampic[0]" ng-src="{{team.teampic[0].url}}" alt="...">
+			  <a ui-sref="thisteam({team: team._id})">
+				  <img ng-hide="team.teampic[0]" src="/assets/images/teamPic.jpg" alt="...">
+				  <img ng-show="team.teampic[0]" ng-src="{{team.teampic[0].url}}" alt="...">
+			  </a>
 			  <div class="caption">
 			    <p>{{team.intro}}</p>
 			    <p><a ng-click="invite(team)" class="btn btn-primary" role="button">約戰</a></p>

@@ -65,6 +65,13 @@ angular.module('keepballin')
         params: {
           controller: 'search'
         }
+      },
+      adminGet: {
+        method: 'GET',
+        isArray: true,
+        params: {
+          controller: 'admin'
+        }
       }
 	  });
   });

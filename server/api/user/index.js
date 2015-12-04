@@ -12,6 +12,7 @@ router.get('/', auth.hasRole('vip'), controller.index);
 router.get('/search', auth.hasRole('manager'), controller.search);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.get('/:id/who', auth.isAuthenticated(), controller.show);
+router.get('/admin', auth.hasRole('admin'), controller.adminSearch);
 router.get('/mycourt', auth.isAuthenticated(), controller.getMyCourt);
 
 router.put('/:id/changerole', auth.hasRole('manager'), controller.changeRole);

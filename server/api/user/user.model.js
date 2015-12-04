@@ -218,6 +218,12 @@ UserSchema.statics = {
       .deepPopulate('courtRatings courtRatings.court courtRatings.court.pictures courtCreated courtCreated.pictures')
       .select('name courtRatings courtCreated')
       .exec(cb);
+  },
+  adminSearch: function(cb) {
+    this.find()
+    .deepPopulate('courtRatings courtRatings.court courtCreated')
+    .select('-salt -hashedPassword')
+    .exec(cb);
   }
 };
 

@@ -10,11 +10,12 @@
             <th>權限</th>
             <th>Email</th>
             <th>加入日期</th>
+            <th>球場建立數量</th>
             <th>刪除</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="user in users">
+          <tr ng-repeat="user in users track by $index">
             <td><strong>
               <a ui-sref="profile({id: user._id})">{{user.name}}</a>
             </strong></td>
@@ -35,6 +36,7 @@
             </td>
             <td><span class="text-muted">{{user.email}}</span></td>
             <td>{{user.createdOn | date}}</td>
+            <td ng-click="showCourts($index)">{{user.courtCreated.length}}</td>
             <td><a ng-click="delete(user)" class="pointer trash"><span class="glyphicon glyphicon-trash pull-right"></span></a></td>
           </tr>
           

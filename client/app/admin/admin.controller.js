@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('AdminCtrl', ['$scope', '$window', '$http', 'Auth', 'User', function ($scope, $window, $http, Auth, User) {
+  .controller('AdminCtrl', ['$scope', '$window', '$http', 'Auth', 'User', '$modal', function ($scope, $window, $http, Auth, User, $modal) {
 
     // Use the User $resource to fetch all users
-    $scope.users = User.query();
-
+    $scope.users = User.adminGet();
+    console.log($scope.users);
     $scope.open = false;
 
     $scope.delete = function(user) {
@@ -30,6 +30,14 @@ angular.module('keepballin')
     $scope.send = function(user) {
       user.open = !(user.open);
       User.changeRole({id: user._id}, {role: user.role});
+    };
+
+    $scope.showCourts = function(index) {
+      $scope.userNow = $scope.users[index];
+      $modal.open({
+        templateUrl: 'app/admin/court.created.html',
+        scope: $scope
+      });
     };
 
   }]);

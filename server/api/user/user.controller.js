@@ -28,7 +28,14 @@ var validationError = function(res, err) {
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-  User.find({}, '-salt -hashedPassword', function (err, users) {
+  User.find({}, 'name', function (err, users) {
+    if(err) return res.status(500).send(err);
+    res.status(200).json(users);
+  });
+};
+
+exports.adminSearch = function(req, res) {
+  User.adminSearch(function (err, users) {
     if(err) return res.status(500).send(err);
     res.status(200).json(users);
   });
