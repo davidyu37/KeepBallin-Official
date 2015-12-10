@@ -74,6 +74,8 @@ var TeamSchema = new Schema({
     ref: 'User',
     childPath: 'team'
   },
+  district: String,
+  city: String,
   location: {
     court: {
       type: Schema.Types.ObjectId, 

@@ -36,7 +36,7 @@
             </td>
             <td><span class="text-muted">{{user.email}}</span></td>
             <td>{{user.createdOn | date}}</td>
-            <td ng-click="showCourts($index)">{{user.courtCreated.length}}</td>
+            <td ng-click="showCourts($index)" class="pointer">{{user.courtCreated.length}}</td>
             <td><a ng-click="delete(user)" class="pointer trash"><span class="glyphicon glyphicon-trash pull-right"></span></a></td>
           </tr>
           

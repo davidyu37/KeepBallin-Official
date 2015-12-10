@@ -45,6 +45,8 @@ angular.module('keepballin')
       });
   	});
 
+    $scope.isAdmin = Auth.isAdmin();
+
     $scope.eventSources = [];
 
     var courts = Court.query().$promise;

@@ -19,12 +19,24 @@
     		 <option value="">-- 請選擇 --</option>
     	</select>
 	  </div>
+	  <div class="form-group">
+	    <label for="filter">篩選條件:</label>
+	    <select ng-options="district for district in districts" ng-model="search.district" class="form-control" ng-change="getCities(search.district)">
+    		 <option value="">-- 請選區域 --</option>
+    	</select>
+	  </div>
+	  <div class="form-group" ng-show="cities[0]">
+	    <!-- <label for="filter">篩選條件:</label> -->
+	    <select ng-options="city for city in cities" ng-model="search.city" class="form-control">
+    		 <option value="">-- 請選城市 --</option>
+    	</select>
+	  </div>
 	</form>
 	<div class="row">
 		<div style="text-align: center" ng-hide="teams[0]">
 			<i class="fa fa-4x fa-spinner fa-pulse"></i>
 		</div>
-		<div class="col-sm-4" ng-repeat="team in teams | orderBy: method.value track by $index">
+		<div class="col-sm-4" ng-repeat="team in teams | orderBy: method.value | filter: search track by $index">
 			<div class="thumbnail">
 			  <div class="caption">
 			    <a ui-sref="thisteam({team: team._id})">

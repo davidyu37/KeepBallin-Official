@@ -3,7 +3,12 @@
 var _ = require('lodash');
 var Contact = require('./contact.model');
 var config = require('../../config/environment');
+var fs = require('fs');
 var sendgrid  = require('sendgrid')(config.sendgrid.apiKey);
+//load email tempalte
+var hogan = require('hogan.js');
+var template = fs.readFileSync('server/api/contact/invite.hjs', 'utf-8');
+var compiledTemplate = hogan.compile(template);
 
 // Creates a new contact in the DB.
 exports.create = function(req, res) {
@@ -13,7 +18,8 @@ exports.create = function(req, res) {
       to:       config.email.me,
       from:     req.body.email,
       subject:  req.body.name,
-      text:     req.body.comment
+      text:     req.body.comment,
+      html: compiledTemplate.render({from: req.body.name, message: req.body.comment})
     }, function(err, json) {
       if (err) { return console.error(err); }
       console.log(json);
@@ -30,7 +36,8 @@ exports.invite = function(req, res) {
       from:     req.body.from,
       fromname: 'Keepballin',
       subject:  '約戰函 - ' + req.body.name,
-      text:     req.body.message
+      text:     req.body.message,
+      html: compiledTemplate.render({from: req.body.name, message: req.body.message})
     }, function(err, json) {
       if (err) { return console.error(err); }
       console.log(json);

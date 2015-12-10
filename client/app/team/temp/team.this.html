@@ -5,6 +5,7 @@
 	<!-- /assets/images/pic4.jpg -->
 		<h1>{{team.name}}</h1>
 		<p>~since {{team.founded | date: short}}~</p>
+		<h2 class="primary-background"><span class="label">{{team.city}}</span></h2>	
 		<p>{{team.represent}}</p>
 		<div style="text-align: center">
 			<!-- <div ng-controller="ratingCtrl">
@@ -46,7 +47,7 @@
 	            <button class="mobileEditButton"
 	            ng-click="editmode()"
 	            ng-init="isOwner=false"
-	            ng-show="isOwner"
+	            ng-show="isOwner || isAdmin"
 	            tooltip="編輯球隊資訊"
 	            tooltip-trigger="mouseenter"
 	            tooltip-placement="right">
