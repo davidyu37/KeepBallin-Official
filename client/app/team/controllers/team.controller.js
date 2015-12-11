@@ -14,7 +14,7 @@ angular.module('keepballin')
     allTeams.then(function(d) {
       $scope.teams = d;
       //socket.io instant updates
-      socket.syncUpdates('team', $scope.teams, function(event, item , arr) {
+      socket.syncUpdates('team', $scope.teams, function() {
 
       });
       $scope.$on('$destroy', function () {
@@ -118,7 +118,7 @@ angular.module('keepballin')
 
             default:
                 $scope.cities = [];
-                return
+                return;
 
         }
 

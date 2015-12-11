@@ -24,9 +24,8 @@
         <button class="btn"
         ng-class="{'btn-primary': !enable, 'btn-success': enable}"
         id="addMarker" 
-        ng-init="enable=false" 
-        ng-show="isAdmin || isManager || isVip" 
-        ng-click="enable = !enable; enableAddMarker(enable)"
+        ng-init="enable=false"
+        ng-click="enableAddMarker()"
         popover="{{popMess}}" 
         popover-trigger="mouseenter"
         popover-placement="bottom">

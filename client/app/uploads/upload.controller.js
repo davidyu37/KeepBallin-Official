@@ -120,7 +120,7 @@ angular.module('keepballin')
                 $scope.$emit('teamPicUploaded');
             });
           }        
-        }
+        };
 
         $scope.uploading = true;
         if (files && files.length) {

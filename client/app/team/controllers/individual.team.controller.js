@@ -519,7 +519,7 @@ angular.module('keepballin')
           return last;
         } 
       }
-    }
+    };
 
     //Submitting new event
     $scope.submitEvent = function(form) {

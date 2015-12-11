@@ -172,7 +172,7 @@ angular.module('keepballin')
                 break;
             default:
                 $scope.cities = [];
-                return
+                return;
 
         }
 
@@ -239,7 +239,7 @@ angular.module('keepballin')
 	            file: file
 	        }).progress(function () {
 	            
-	        }).success(function (data, status, headers, config) {
+	        }).success(function (data) {
 	            $timeout(function() {
 	               
 	               $scope.formData.teampic = data._id;

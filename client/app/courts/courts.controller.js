@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('keepballin')
-	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', '$modal', 'SweetAlert', 
-		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, $modal, SweetAlert) {
+	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', '$modal', 'SweetAlert', '$state', 
+		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, $modal, SweetAlert, $state) {
 	    
 		//Initialize map
 	    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -253,15 +253,21 @@ angular.module('keepballin')
 	    $scope.popMess = '增加球場';
 	    //Add Marker begins here
 	    //Enable add marker mode
-	    $scope.enableAddMarker = function(state) {
-	    	AddMarker.addMode(state, $scope, map, function(newMarker) {
-	    		// $scope.courts.push(newMarker);
-	    	});
-	    	if(state) {
-	    		$scope.popMess = '離開編輯';
-	    	} else {
-	    		$scope.popMess = '增加球場';
-	    	}
+	    $scope.enableAddMarker = function() {
+			if(Auth.isLoggedIn()) {
+		    	$scope.enable = !($scope.enable);
+		    	AddMarker.addMode($scope.enable, $scope, map, function(newMarker) {
+		    		// $scope.courts.push(newMarker);
+		    	});
+		    	if($scope.enable) {
+		    		$scope.popMess = '離開編輯';
+		    	} else {
+		    		$scope.popMess = '增加球場';
+		    	}
+			} else {
+				$state.go('login');
+			}
+
 
 
     	};
