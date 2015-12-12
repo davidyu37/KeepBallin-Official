@@ -34,104 +34,62 @@
         </button>
     </div>
     <div class="col-sm-7 courtDisplay">
-        <div class="page-header" style="margin-top: 9px">
-        <!-- Searchbox for mobile -->
-            <div id="searchbox">
-                <div ng-hide="enable" style="color: black">
-                    <!-- <form name="search" ng-submit="goToLocation(Selected)">
-                        <div class="input-group input-group-lg court-input-group">
-                          <input type="text" ng-model="Selected" placeholder="尋找球場" typeahead="court for court in getLocation($viewValue)" typeahead-loading="loadingLocations" class="court-input form-control">
-                          <span class="input-group-btn">
-                            <button class="btn btn-primary" type="submit" style="height: 47px;">
-                                <i ng-hide="loadingLocations" class="fa fa-search"></i>
-                                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                            </button>
-                          </span>
-                        </div>         
-                    </form> -->
-                    <form name="search" ng-submit="goToLocation(searchText)">
-                        <div class="input-group input-group-lg court-input-group">
-                          <input type="text" ng-model="searchText" placeholder="尋找球場" typeahead="(court.court || court.address) for court in courtsCached | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" class="court-input form-control">
-                          <span class="input-group-btn">
-                            <button class="btn btn-primary" type="submit" style="height: 47px;">
-                                <i ng-hide="loadingLocations" class="fa fa-search"></i>
-                                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                            </button>
-                          </span>
-                        </div>         
+        <div style="height: 30vh; padding-top: 30px;">
+            <div class="page-header" style="padding-bottom: 0px; margin-bottom: 0px;">
+            <!-- Searchbox for mobile -->
+                <div id="searchbox">
+                    <div ng-hide="enable" style="color: black">
+                        <form name="search" ng-submit="goToLocation(searchText)">
+                            <div class="input-group input-group-lg court-input-group">
+                              <input type="text" ng-model="searchText" placeholder="尋找球場" typeahead="(court.court || court.address) for court in courtsCached | filter:$viewValue | limitTo:8" typeahead-loading="loadingLocations" class="court-input form-control">
+                              <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit" style="height: 47px;">
+                                    <i ng-hide="loadingLocations" class="fa fa-search"></i>
+                                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                                </button>
+                              </span>
+                            </div>         
+                        </form>
+                        <div ng-show="noResult" class="alert alert-warning" style="width: 80%; margin: 1% auto">
+                            目前還沒有{{searchText}}球場,
+                            馬上
+                            <a ng-hide="isLoggedIn" ui-sref="signup">註冊</a>
+                            加自己的球場
+                            <a ng-show="isLoggedIn" ng-click="QandA()">怎麼加？</a>
+                        </div>
+                    </div>
+                    <div ng-show="enable">
+                        <form>
+                            <div class="input-group input-group-lg court-input-group">
+                              <input id="mobileSearch" type="text" placeholder="找球場附近的地點" class="court-input form-control">
+                              <span class="input-group-addon">
+                                <i class="fa fa-search"></i>       
+                              </span>
+                            </div>         
+                        </form>
+                    </div>
+                    <!-- Filter and Order -->
+                    <form class="form-inline mobile-select">
+                        <div class="form-group">
+                            <select ng-options="city for city in cities" ng-model="city" class="form-control court-input court-select" ng-change="filter(city, 'city')">
+                                 <option value="">-- 請選城市 --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select ng-options="district for district in districts" ng-model="district" class="form-control court-input court-select" ng-change="filter(district, 'district')">
+                                 <option value="">-- 請選區域 --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select ng-options="m.ch for m in sortMethods" ng-model="methods" class="form-control court-input court-select" ng-change="filter(methods, 'order')">
+                                 <option value="">-- 排列方式 --</option>
+                            </select>
+                        </div>
                     </form>
-                    <div ng-show="noResult" class="alert alert-warning" style="width: 80%; margin: 1% auto">
-                        目前還沒有{{searchText}}球場,
-                        馬上
-                        <a ng-hide="isLoggedIn" ui-sref="signup">註冊</a>
-                        加自己的球場
-                        <a ng-show="isLoggedIn" ng-click="QandA()">怎麼加？</a>
-                    </div>
                 </div>
-                <div ng-show="enable">
-                    <form>
-                        <div class="input-group input-group-lg court-input-group">
-                          <input id="mobileSearch" type="text" placeholder="找球場附近的地點" class="court-input form-control">
-                          <span class="input-group-addon">
-                            <i class="fa fa-search"></i>       
-                          </span>
-                        </div>         
-                    </form>
-                </div>
-                <!-- city labels -->
-                <!-- <div ng-repeat="city in cities" style="display: inline-block" class="pointer" ng-click="goToLocation(city)">
-                    <h4 style="padding-left: 5px">
-                    <span class="label label-primary">{{city}}</span>
-                    </h4>
-                </div> -->
-                <form class="form-inline mobile-select">
-                    <div class="form-group">
-                        <select ng-options="city for city in cities" ng-model="city" class="form-control court-input court-select" ng-change="filter(city, 'city')">
-                             <option value="">-- 請選城市 --</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <select ng-options="district for district in districts" ng-model="district" class="form-control court-input court-select" ng-change="filter(district, 'district')">
-                             <option value="">-- 請選區域 --</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <select ng-options="m.ch for m in sortMethods" ng-model="methods" class="form-control court-input court-select" ng-change="filter(methods, 'order')">
-                             <option value="">-- 排列方式 --</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <!-- <div ng-hide="enable">
-                <form name="search" ng-submit="goToLocation(Selected)">
-                    <div class="input-group input-group-lg court-input-group">
-                      <input type="text" ng-model="Selected" placeholder="尋找球場" typeahead="court for court in getLocation($viewValue)" typeahead-loading="loadingLocations" class="court-input form-control">
-                      <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit" style="height: 47px;">
-                            <i ng-hide="loadingLocations" class="fa fa-search"></i>
-                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                        </button>
-                      </span>
-                    </div>         
-                </form>
-            </div> -->
-            <!-- <div ng-show="enable">
-                <form>
-                    <div class="input-group input-group-lg court-input-group">
-                      <input id="placeSearch" type="text" placeholder="找球場附近的地點" class="court-input form-control">
-                      <span class="input-group-addon">
-                        <i class="fa fa-search"></i>       
-                      </span>
-                    </div>         
-                </form>
-            </div> -->
-           <!--  <div ng-repeat="city in cities" style="display: inline-block" class="pointer" ng-click="goToLocation(city)">
-                <h4 style="padding-left: 5px">
-                <span class="label label-primary">{{city}}</span>
-                </h4>
-            </div> -->
+            </div>   
         </div>
-        <div style="height: 75vh; width: 95%; margin: 0 auto; overflow-y: scroll;">
+        <div style="height: 70vh; width: 95%; margin: 0 auto; overflow-y: scroll;">
             <div ng-hide="courtList" style="width: 100%; text-align: center;">
                 <img class="bounceBall faa-spin faa-bounce animated" src="assets/images/ball.png" alt="basketball">
             </div>

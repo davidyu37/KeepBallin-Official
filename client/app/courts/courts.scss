@@ -29,16 +29,20 @@
             float: left;
         }
     }
-
+    @media(min-width: $screen-sm-min) {
+        width: 80%;
+        margin: 0 auto;
+        .form-control{
+            margin-right: 5px;
+        } 
+    }
 }
 
 
 
 .courtDisplay {
     @media(min-width: $screen-sm-min) {
-        padding-top: 60px; 
         background-color: black; 
-        height: 100vh; 
         color: white;
         padding-left: 20px;
         padding-right: 30px;
