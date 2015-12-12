@@ -78,11 +78,29 @@
                         </div>         
                     </form>
                 </div>
-                <div ng-repeat="city in cities" style="display: inline-block" class="pointer" ng-click="goToLocation(city)">
+                <!-- city labels -->
+                <!-- <div ng-repeat="city in cities" style="display: inline-block" class="pointer" ng-click="goToLocation(city)">
                     <h4 style="padding-left: 5px">
                     <span class="label label-primary">{{city}}</span>
                     </h4>
-                </div>
+                </div> -->
+                <form class="form-inline mobile-select">
+                    <div class="form-group">
+                        <select ng-options="city for city in cities" ng-model="city" class="form-control court-input court-select" ng-change="filter(city, 'city')">
+                             <option value="">-- 請選城市 --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select ng-options="district for district in districts" ng-model="district" class="form-control court-input court-select" ng-change="filter(district, 'district')">
+                             <option value="">-- 請選區域 --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select ng-options="m.ch for m in sortMethods" ng-model="methods" class="form-control court-input court-select" ng-change="filter(methods, 'order')">
+                             <option value="">-- 排列方式 --</option>
+                        </select>
+                    </div>
+                </form>
             </div>
             <!-- <div ng-hide="enable">
                 <form name="search" ng-submit="goToLocation(Selected)">

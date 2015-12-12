@@ -17,6 +17,21 @@
     }
 }
 
+.mobile-select {
+    @media(max-width: $screen-sm-min) {
+        width: 100%;
+        margin: 0 auto;
+        .form-group {
+            display: inline;
+        }
+        .form-control{
+            width: 33%;
+            float: left;
+        }
+    }
+
+}
+
 
 
 .courtDisplay {
@@ -78,6 +93,12 @@
         font-weight:500;
         font-size: 18px;
         line-height: 22px;
+    }
+}
+
+.court-select {
+    @media(min-width: $screen-sm-min) {
+        border:2px solid  $brand-primary;
     }
 }
 

@@ -19,7 +19,6 @@ angular.module('keepballin')
 						var address = coordinatesToAddress(lat, long);
 						address.then(function(result){
 							var addressFormatted = result.formatted_address;
-							console.log(addressFormatted);
 							var indexTW = addressFormatted.indexOf('台灣');
 							var city = addressFormatted.slice((indexTW + 2), (indexTW + 5));
 							var district = addressFormatted.slice((indexTW + 5), (indexTW + 8));

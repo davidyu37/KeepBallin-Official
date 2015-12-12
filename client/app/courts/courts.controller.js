@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('keepballin')
-	.controller('CourtsCtrl', ['$scope', '$http', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', '$modal', 'SweetAlert', '$state', 
-		function ($scope, $http, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, $modal, SweetAlert, $state) {
+	.controller('CourtsCtrl', ['$scope', '$filter', '$window', '$animate', '$timeout', '$compile', 'socket', 'Panorama', 'mapOptions', 'Geolocate', 'AddMarker', 'Court', 'Auth', 'Lightbox', '$modal', 'SweetAlert', '$state', 
+		function ($scope, $filter, $window, $animate, $timeout, $compile, socket, Panorama, mapOptions, Geolocate, AddMarker, Court, Auth, Lightbox, $modal, SweetAlert, $state) {
 	    
 		//Initialize map
 	    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -21,7 +21,8 @@ angular.module('keepballin')
 	    	$scope.courtList = data;
     		//socket.io instant updates
 		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
-
+		    	$scope.courts = arr;
+		    	sortOutCities(arr);
 		    });
 			$scope.$on('$destroy', function () {
 	      		socket.unsyncUpdates('court');
@@ -41,7 +42,10 @@ angular.module('keepballin')
 						if(map.getBounds().contains(latlng)) {
 							courts.push(court);
 						}
-					});	
+					});
+					if ($scope.currentOrder) {
+						courts = $filter('orderBy')(courts, $scope.currentOrder, false);
+					}	
 					$scope.courtList = courts;
 					$scope.$apply();
 				}
@@ -205,34 +209,106 @@ angular.module('keepballin')
 		    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(questionBtn);
 	    }
 	    
-		$scope.goToLocation = function(selected) {
+		// $scope.goToLocation = function(selected) {
 			
-			if(selected) {
-				var params = {
-					query: selected
-				};
-				Court.search(params, function(data) {
-					if(data.length === 0) {
-						$scope.noResult = true;
-						$timeout(function() {
-							$scope.noResult = false;
-						}, 10000);
-					} else {
-						$scope.noResult = false;
-						$scope.searching = true;
-						$scope.courts = data;
-						$scope.courtList = data;
-						$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
-						$scope.map.setZoom(15);
-						$scope.gotResult = true;
-						$timeout(function() {
-							$scope.gotResult = false;
-						}, 1000);
-					}
-				});
+		// 	if(selected) {
+		// 		var params = {
+		// 			query: selected
+		// 		};
+		// 		Court.search(params, function(data) {
+		// 			if(data.length === 0) {
+		// 				$scope.noResult = true;
+		// 				$timeout(function() {
+		// 					$scope.noResult = false;
+		// 				}, 10000);
+		// 			} else {
+		// 				$scope.noResult = false;
+		// 				$scope.searching = true;
+		// 				$scope.courts = data;
+		// 				$scope.courtList = data;
+		// 				$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
+		// 				$scope.map.setZoom(15);
+		// 				$scope.gotResult = true;
+		// 				$timeout(function() {
+		// 					$scope.gotResult = false;
+		// 				}, 1000);
+		// 			}
+		// 		});
 				
+		// 	}
+		// };
+
+		$scope.sortMethods = [
+			{
+				ch: '評分高到低',
+				method: 'averagedRating'			
+			},
+			{
+				ch: '最新球場',
+				method: '-dateCreated'			
+			}
+		];
+
+		$scope.filter = function(value, property) {
+
+			if (property === 'city') {
+				if(value === null) {
+					return;
+				}
+				var filterBy = {};
+				filterBy[property] = value;
+
+				var filteredData = $filter('filter')($scope.courtsCached, filterBy, false);
+				if ($scope.currentOrder) {
+					filteredData = $filter('orderBy')(filteredData, $scope.currentOrder, false);
+				}
+				$scope.courts = filteredData;
+				$scope.courtList = filteredData;
+				$scope.courtsInCity = filteredData;
+				$scope.map.panTo({lat: filteredData[0].lat, lng: filteredData[0].long});
+				$scope.districts = [];
+				$scope.courts.forEach(function(e) {
+					$scope.districts.push(e.district);
+				});
+				var noDupe = ArrNoDupe($scope.districts);
+				$scope.districts = noDupe;
+			}
+			if (property === 'district') {
+				if(value === null) {
+					return;
+				}
+				var filterBy = {};
+				filterBy[property] = value;
+				var filteredData = $filter('filter')($scope.courtsInCity, filterBy, false);
+				if ($scope.currentOrder) {
+					filteredData = $filter('orderBy')(filteredData, $scope.currentOrder, false);
+				}
+				$scope.courts = filteredData;
+				$scope.courtList = filteredData;
+				$scope.map.panTo({lat: filteredData[0].lat, lng: filteredData[0].long});
+			}
+			if (property === 'order') {
+				if(value === null) {
+					return;
+				}
+				$scope.currentOrder = value.method;
+				var filteredData = $filter('orderBy')($scope.courts, value.method, false);
+				$scope.courts = filteredData;
+				$scope.courtList = filteredData;
+				$scope.map.panTo({lat: filteredData[0].lat, lng: filteredData[0].long});
 			}
 		};
+
+		//Create a new array with duplicated value
+		function ArrNoDupe(a) {
+		    var temp = {};
+		    for (var i = 0; i < a.length; i++)
+		        temp[a[i]] = true;
+		    var r = [];
+		    for (var k in temp)
+		        r.push(k);
+		    return r;
+		}
 
 	    //Empty markers
 	    $scope.markers = [];
