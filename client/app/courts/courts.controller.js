@@ -45,6 +45,10 @@ angular.module('keepballin')
 					});
 					if ($scope.currentOrder) {
 						courts = $filter('orderBy')(courts, $scope.currentOrder, false);
+						if ($scope.currentOrder === '-averagedRating') {
+							//If the court doesn't have any ratings, it goes to the end
+							courts = $filter('emptyToEnd')(courts, 'averagedRating');
+						}
 					}	
 					$scope.courtList = courts;
 					$scope.$apply();
@@ -241,7 +245,7 @@ angular.module('keepballin')
 		$scope.sortMethods = [
 			{
 				ch: '評分高到低',
-				method: 'averagedRating'			
+				method: '-averagedRating'			
 			},
 			{
 				ch: '最新球場',
@@ -261,6 +265,10 @@ angular.module('keepballin')
 				var filteredData = $filter('filter')($scope.courtsCached, filterBy, false);
 				if ($scope.currentOrder) {
 					filteredData = $filter('orderBy')(filteredData, $scope.currentOrder, false);
+					if ($scope.currentOrder === '-averagedRating') {
+						//If the court doesn't have any ratings, it goes to the end
+						filteredData = $filter('emptyToEnd')(filteredData, 'averagedRating');
+					}
 				}
 				$scope.courts = filteredData;
 				$scope.courtList = filteredData;
@@ -282,6 +290,10 @@ angular.module('keepballin')
 				var filteredData = $filter('filter')($scope.courtsInCity, filterBy, false);
 				if ($scope.currentOrder) {
 					filteredData = $filter('orderBy')(filteredData, $scope.currentOrder, false);
+					if ($scope.currentOrder === '-averagedRating') {
+						//If the court doesn't have any ratings, it goes to the end
+						filteredData = $filter('emptyToEnd')(filteredData, 'averagedRating');
+					}
 				}
 				$scope.courts = filteredData;
 				$scope.courtList = filteredData;
@@ -293,6 +305,10 @@ angular.module('keepballin')
 				}
 				$scope.currentOrder = value.method;
 				var filteredData = $filter('orderBy')($scope.courts, value.method, false);
+				if (value.method === '-averagedRating') {
+					filteredData = $filter('emptyToEnd')(filteredData, 'averagedRating');
+					console.log(filteredData);
+				}
 				$scope.courts = filteredData;
 				$scope.courtList = filteredData;
 				$scope.map.panTo({lat: filteredData[0].lat, lng: filteredData[0].long});
