@@ -31,6 +31,8 @@ module.exports = function(app) {
   app.use(cookieParser());
   app.use(passport.initialize());
 
+  app.use(require('prerender-node'));
+
 
   if ('production' === env) {
     app.use(require('../urlredirects'));
