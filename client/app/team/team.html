@@ -15,7 +15,7 @@
 	<form class="form-inline">
 	  <div class="form-group">
 	    <label for="sort">排序方式:</label>
-	    <select ng-options="method.ch for method in methods" ng-model="method" class="form-control">
+	    <select ng-options="method.ch for method in methods" ng-model="method" class="form-control" ng-change="orderTeam()">
     		 <option value="">-- 請選擇 --</option>
     	</select>
 	  </div>
@@ -32,28 +32,36 @@
     	</select>
 	  </div>
 	</form>
-	<div class="row">
-		<div style="text-align: center" ng-hide="teams[0]">
-			<i class="fa fa-4x fa-spinner fa-pulse"></i>
-		</div>
-		<div class="col-sm-4" ng-repeat="team in teams | orderBy: method.value | filter: search track by $index">
+	<div style="text-align: center" ng-hide="teams[0]">
+		<i class="fa fa-4x fa-spinner fa-pulse"></i>
+	</div>
+	<!-- <div class="row" ng-repeat="team in teams | orderBy: method.value | filter: search track by $index"> -->
+	<div class="row" ng-repeat="team in teams | orderBy: method.value | filter: search track by $index" ng-if="$index % 4 == 0">
+		<div class="col-sm-3" 
+		   ng-repeat="i in [$index, $index + 1, $index + 2, $index + 3]" 
+		   ng-if="teams[i] != null">
 			<div class="thumbnail">
 			  <div class="caption">
-			    <a ui-sref="thisteam({team: team._id})">
-			    	<h3>{{team.name}}</h3>
+			    <a ui-sref="thisteam({team: teams[i]._id})">
+			    	<h3>{{teams[i].name}}</h3>
 			    </a>	
-			    <p>{{team.represent}}</p>
+			    <p>{{teams[i].represent}}</p>
 			  </div>
-			  <a ui-sref="thisteam({team: team._id})">
-				  <img ng-hide="team.teampic[0]" src="/assets/images/teamPic.jpg" alt="...">
-				  <img ng-show="team.teampic[0]" ng-src="{{team.teampic[0].url}}" alt="...">
+			  <a ui-sref="thisteam({team: teams[i]._id})">
+				  <img ng-hide="teams[i].teampic[0]" src="/assets/images/teamPic.jpg" alt="...">
+				  <img ng-show="teams[i].teampic[0]" ng-src="{{teams[i].teampic[0].url}}" alt="...">
 			  </a>
 			  <div class="caption">
-			    <p>{{team.intro}}</p>
-			    <p><a ng-click="invite(team)" class="btn btn-primary" role="button">約戰</a></p>
+			    <p>{{teams[i].intro}}</p>
+			    <p><a ng-click="invite(teams[i])" class="btn btn-primary" role="button">約戰</a></p>
 			  </div>
 			</div>
-		</div>	
+		</div>
+		<!-- <p>{{team}}</p>
+		<div class="col-sm-4" ng-repeat="t in team">
+			<p>test{{$index}}</p>
+			
+		</div>	 -->
 	</div>
 	<hr>
 	

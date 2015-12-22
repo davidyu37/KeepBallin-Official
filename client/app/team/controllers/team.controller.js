@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeamCtrl', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', 'socket', '$modal', function ($scope, $timeout, Auth, User, Team, $state, socket, $modal) {
+  .controller('TeamCtrl', ['$scope','$timeout' ,'Auth', 'User', 'Team', '$state', 'socket', '$modal', '$filter', function ($scope, $timeout, Auth, User, Team, $state, socket, $modal, $filter) {
   	$scope.createTeam = function() {
       if(Auth.isLoggedIn()) {
         $state.go('teamsignup.info');
@@ -13,6 +13,7 @@ angular.module('keepballin')
     var allTeams = Team.query().$promise;
     allTeams.then(function(d) {
       $scope.teams = d;
+      $scope.originalTeams = d;
       //socket.io instant updates
       socket.syncUpdates('team', $scope.teams, function() {
 
@@ -36,6 +37,15 @@ angular.module('keepballin')
     $scope.method = {
       ch: '最近註冊', 
       value: '-date'
+    };
+
+    $scope.orderTeam = function() {
+      if($scope.method === null) {
+        return;
+      }
+      // $scope.currentOrder = value.method;
+      var filteredData = $filter('orderBy')($scope.originalTeams, $scope.method.value, false);
+      $scope.teams = filteredData;
     };
 
     $scope.methods = [

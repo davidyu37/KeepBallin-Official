@@ -26,17 +26,17 @@ Event.find({}).remove(function() {
 
 Team.find({}).remove(function() {
   console.log('teams cleared');
-  // for(var i=0; i < 30; i++) {
-  //   Team.create({
-  //     name: 'Trailblazer',
-  //     contactperson: {
-  //       name: 'David',
-  //       number: 2039482837,
-  //       show: true,
-  //       email: 'ddd@gmail.com'
-  //     }
-  //   }); 
-  // }
+  for(var i=0; i < 30; i++) {
+    Team.create({
+      name: 'Trailblazer',
+      contactperson: {
+        name: 'David',
+        number: 2039482837,
+        show: true,
+        email: 'ddd@gmail.com'
+      }
+    }); 
+  }
 });
 
 
