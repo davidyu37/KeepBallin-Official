@@ -18,11 +18,11 @@ angular.module('keepballin')
       'link': 'team',
       'icon': 'glyphicon-user'
     },
-    {
-      'title': '球友',
-      'link': 'teammate',
-      'icon': 'glyphicon-user'
-    },
+    // {
+    //   'title': '球友',
+    //   'link': 'teammate',
+    //   'icon': 'glyphicon-user'
+    // },
     {
       'title': '聯絡',
       'link': 'contact',
