@@ -28,12 +28,6 @@
             width: 33%;
             float: left;
         }
-        .court-select {
-            option {
-                background-color: black;
-                color: white;
-            }
-        }
     }
     @media(min-width: $screen-sm-min) {
         width: 80%;
@@ -103,6 +97,10 @@
         font-weight:500;
         font-size: 18px;
         line-height: 22px;
+        option {
+            background-color: black;
+            color: white;
+        }
     }
 }
 

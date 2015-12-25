@@ -1,1 +1,23 @@
-<div>This is the teammate view.</div>
+<div class="container" style="background-color: black; margin-top: 60px; height: 100vh;">
+	<div style="margin: 20% 25%; border: 5px solid red; padding: 20px; background-color: white;">
+		<div class="page-header">
+			<h1>找哪裡的球友？</h1>
+		</div>
+		<div class="form-inline text-center">
+			<div class="form-group">
+			    <label for="district" class="control-label">區域</label>
+			   	<select ng-options="district for district in districts" ng-model="formData.district" class="form-control" ng-change="getCities(formData.district)">
+		    		 <option value="">-- 選擇區域 --</option>
+		    	</select>
+			</div>
+			<div class="form-group" ng-show="cities[0]">
+			    <label for="city" class="control-label">城市</label>
+			   	<select ng-options="city for city in cities" ng-model="formData.city" class="form-control">
+		    		 <option value="">-- 選擇城市 --</option>
+		    	</select>
+			</div>
+			<button class="form-control">進入群組</button>
+		</div>
+	</div>
+	
+</div>
