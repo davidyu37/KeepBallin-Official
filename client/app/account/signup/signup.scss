@@ -1,9 +1,27 @@
-.recaptcha {
-	width: 304px;
-	height: auto;
-	margin: 0 auto;
+.desktopMessage {
+	display: none;
+	@media (min-width: 768px) {
+		display: block;
+	}
 }
 
-.policyPop {
-	padding: 20px;
+.mobileMessage {
+	display: block;
+	@media (min-width: 768px) {
+		display: none;
+	}
+}
+
+.signupContainer {
+	@media (max-width: 768px) {
+		hr {
+			margin: 5px 0;
+		}
+		.form-group {
+			margin: 0px;
+		}
+		.btn {
+			margin-top: 5px;
+		}
+	}
 }

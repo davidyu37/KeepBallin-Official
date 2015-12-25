@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert) {
+  .controller('LoginMobileCtrl', ['$scope', '$state', 'Auth', '$location', '$window', 'SweetAlert', function ($scope, $state, Auth, $location, $window, SweetAlert) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -15,25 +15,13 @@ angular.module('keepballin')
         })
         .then( function() {
           // Logged in, redirect to home
-          $modalInstance.close();
+          $state.go('main');
         })
         .catch( function(err) {
           console.log(err);
           $scope.errors.other = err.message;
-          $modalInstance.close();
-          SweetAlert.swal({
-            title: err.message,
-            type: 'warning',
-            confirmButtonColor: '#DD6B55',   
-            confirmButtonText: '再試一次',
-            timer: 2000
-          });
         });
       }
-    };
-
-    $scope.closeModal = function() {
-      $modalInstance.close();
     };
 
     $scope.loginOauth = function(provider) {

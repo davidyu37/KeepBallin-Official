@@ -1,20 +1,31 @@
 <div class="insideModal">
   <span class="glyphicon glyphicon-remove pull-right pointer" ng-click="closeModal()"></span>
   <div class="row">
-    <div class="col-sm-12">
-      <h1>籃球等著被你打</h1>
-      <div class="faa-bounce animated" style="margin-top: 5px;">
-        <span class="faa-spin animated">
-          <img src="/assets/images/basketball.icon.png" 
-          alt="basketball" 
-          style="width: 50px; height: 50px; background: none;">
-        </span>
+    <div class="col-sm-12 signupContainer">
+      <div class="desktopMessage">
+        <h1>籃球等著被你打</h1>
+        <div class="faa-bounce animated" style="margin-top: 5px;">
+          <span class="faa-spin animated">
+            <img src="/assets/images/basketball.icon.png" 
+            alt="basketball" 
+            style="width: 50px; height: 50px; background: none;">
+          </span>
+        </div>
+      </div>
+      <div class="mobileMessage">
+        <h1>
+          走啊，打
+          <div class="faa-bounce animated pull-right" style="margin-left: 10px; margin-top: -10px;">
+            <span class="faa-spin animated">
+              <img src="/assets/images/basketball.icon.png" 
+              alt="basketball" 
+              style="width: 50px; height: 50px; background: none;">
+            </span>
+          </div>
+        </h1>
       </div>
       <hr>
-    </div>
-    <div class="col-sm-12">
       <form class="form" name="form" ng-submit="register(form)" novalidate>
-
         <div class="form-group" ng-class="{ 'has-success': form.name.$valid && submitted,
         'has-error': form.name.$invalid && submitted }">
           <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2">
@@ -91,7 +102,7 @@
         <a class="btn btn-default btn-lg btn-register" 
         ng-click="closeModal()"
         href="/login">
-          登入
+          去登入
         </a>
         
         <div style="height: 1px; background-color: #efefef; 
@@ -109,7 +120,6 @@
           </a>
         </div>
       </form>
-    </div>
   </div>
   <hr>
 </div>

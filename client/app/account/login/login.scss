@@ -31,6 +31,19 @@ $btnGithubBackgroundHighlight:      #ccc;
 	height: auto;
 	padding: 20px;
 	text-align: center;
+	@media (max-width: 768px) {
+		background-color: white;
+		padding-top: 60px;
+		.glyphicon-remove {
+			display: none;
+		}
+		h1 {
+			display: inline-block;
+		}
+		.jumpingMan {
+			display: inline-block;		
+		}
+	}
 }
 
 .fa-icon-addon {

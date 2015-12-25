@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-12">
       <h1>給熱血的你</h1>
-      <span>
+      <span class="jumpingMan">
         <i class="fa fa-3x fa-child faa-bounce animated"></i>
       </span>
       <hr>
@@ -12,7 +12,7 @@
       <form class="form" name="form" ng-submit="login(form)" novalidate>
 
         <div class="form-group" 
-        ng-class="{'has-error': form.email.$invalid && submitted, 
+        ng-class="{'has-error': form.email.$invalid || errors.other && submitted, 
         'has-success': form.email.$valid && submitted}">
           <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2 spacer-10">
             <span class="input-group-addon fa-icon-addon"><i class="fa fa-envelope fa-fw"></i></span>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="form-group"
-        ng-class="{'has-error': form.password.$invalid && submitted, 
+        ng-class="{'has-error': form.password.$invalid || errors.other && submitted, 
         'has-success': form.password.$valid && submitted}">
           <div class="input-group col-xs-10 col-sm-8 col-xs-offset-1 col-sm-offset-2 spacer-10">
             <span class="input-group-addon fa-icon-addon"><i class="fa fa-lock fa-fw"></i></span>
@@ -33,7 +33,7 @@
           </div>           
         </div>
 
-        <div class="form-group has-error">
+        <!-- <div class="form-group has-error"> -->
           <p class="help-block" ng-show="form.email.$error.required && form.password.$error.required && submitted">
              請輸入Email跟密碼
           </p>
@@ -42,7 +42,7 @@
           </p>
 
           <p class="help-block">{{ errors.other }}</p>
-        </div>
+        <!-- </div> -->
 
         <div>
           <button class="btn btn-primary btn-lg btn-login" type="submit">
@@ -51,7 +51,7 @@
           <a class="btn btn-default btn-lg btn-register" 
           ng-click="closeModal()"
           href="/signup">
-            註冊
+            去註冊
           </a>
         </div>
 
