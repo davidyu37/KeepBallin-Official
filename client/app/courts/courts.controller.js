@@ -210,37 +210,37 @@ angular.module('keepballin')
 		    map.controls[google.maps.ControlPosition.TOP].push(searchBox);
 		    
 		    var questionBtn = document.getElementById('questionBtn');
-		    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(questionBtn);
+		    map.controls[google.maps.ControlPosition.LEFT_CENTER].push(questionBtn);
 	    }
 	    
-		// $scope.goToLocation = function(selected) {
+		$scope.goToLocation = function(selected) {
 			
-		// 	if(selected) {
-		// 		var params = {
-		// 			query: selected
-		// 		};
-		// 		Court.search(params, function(data) {
-		// 			if(data.length === 0) {
-		// 				$scope.noResult = true;
-		// 				$timeout(function() {
-		// 					$scope.noResult = false;
-		// 				}, 10000);
-		// 			} else {
-		// 				$scope.noResult = false;
-		// 				$scope.searching = true;
-		// 				$scope.courts = data;
-		// 				$scope.courtList = data;
-		// 				$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
-		// 				$scope.map.setZoom(15);
-		// 				$scope.gotResult = true;
-		// 				$timeout(function() {
-		// 					$scope.gotResult = false;
-		// 				}, 1000);
-		// 			}
-		// 		});
+			if(selected) {
+				var params = {
+					query: selected
+				};
+				Court.search(params, function(data) {
+					if(data.length === 0) {
+						$scope.noResult = true;
+						$timeout(function() {
+							$scope.noResult = false;
+						}, 10000);
+					} else {
+						$scope.noResult = false;
+						$scope.searching = true;
+						$scope.courts = data;
+						$scope.courtList = data;
+						$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
+						$scope.map.setZoom(15);
+						$scope.gotResult = true;
+						$timeout(function() {
+							$scope.gotResult = false;
+						}, 1000);
+					}
+				});
 				
-		// 	}
-		// };
+			}
+		};
 
 		$scope.sortMethods = [
 			{

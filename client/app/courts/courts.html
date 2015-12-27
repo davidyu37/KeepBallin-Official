@@ -19,6 +19,10 @@
         popover-is-open="gotErr">
             <span class="fa fa-3x fa-spinner faa-spin animated" ng-hide="!locating"></span>
             <span class="glyphicon glyphicon-screenshot" ng-hide="locating" popover="尋找鄰近球場" popover-trigger="mouseenter"></span>
+            <div class="mobileTooltip">
+                <span style="color: white; font-size: 16px;">定位</span>
+                <span class="arrow-down"></span>
+            </div>
         </button>
         <!-- Make a button that let user select the courts to appear -->
         <button class="btn"
@@ -31,6 +35,10 @@
         popover-placement="bottom">
             <span class="glyphicon" 
             ng-class="{'glyphicon-map-marker': !enable, 'glyphicon-ok': enable}"></span>
+            <div class="mobileTooltip" style="top: 77px; right: 1px;">
+                <span style="color: white; font-size: 16px;">加球場</span>
+                <span class="arrow-up"></span>
+            </div>
         </button>
     </div>
     <div class="col-sm-7 courtDisplay">
@@ -80,16 +88,18 @@
                                  <option value="" style="background-color: black">-- 請選區域 --</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <select ng-options="m.ch for m in sortMethods" ng-model="methods" class="form-control court-input court-select" ng-change="filter(methods, 'order')">
-                                 <option value="">-- 排列方式 --</option>
-                            </select>
+                        <div class="sortingSelect">
+                            <div class="form-group">
+                                <select ng-options="m.ch for m in sortMethods" ng-model="methods" class="form-control court-input court-select" ng-change="filter(methods, 'order')">
+                                     <option value="">-- 排列方式 --</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>   
         </div>
-        <div style="height: 70vh; width: 95%; margin: 0 auto; overflow-y: scroll;">
+        <div class="courtList">
             <div ng-hide="courtList" style="width: 100%; text-align: center;">
                 <img class="bounceBall faa-spin faa-bounce animated" src="assets/images/ball.png" alt="basketball">
             </div>
