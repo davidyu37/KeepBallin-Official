@@ -3,6 +3,7 @@
 		<li ng-repeat="court in userNow.courtCreated" class="list-group-item" ui-sref="thiscourt({id: court._id})">
 			<p>{{court.court}}</p>
 			<p>{{court.address}}</p>
+			<p>{{court.pictures.length}}張照片</p>
 		</li>
 	</ul>
 	
