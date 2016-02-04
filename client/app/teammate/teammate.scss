@@ -1,0 +1,36 @@
+.chatBox {
+	color: black;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight:500;
+	font-size: 18px;
+	border-radius: 5px;
+	line-height: 22px;
+	background-color: transparent;
+	border: 1px solid  $brand-primary;
+	transition: all 0.3s;
+	padding: 13px;
+	margin-bottom: 15px;
+	box-sizing: border-box;
+	outline:0;
+}
+
+.chatBox:focus { 
+	border:2px solid lighten($brand-primary, 10%); 
+}
+
+.chatGroupContainer {
+	height: 100vh; 
+	background-color: white
+}
+
+.chatThreads {
+	height: 70vh; 
+	margin-top: 10px; 
+	overflow: scroll;
+}
+
+.loading {
+	text-align: center; 
+	padding: 20px; 
+	color: $brand-primary;
+}

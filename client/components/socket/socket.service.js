@@ -2,12 +2,12 @@
 'use strict';
 
 angular.module('keepballin')
-  .factory('socket', function(socketFactory) {
+  .factory('socket', function(socketFactory, Auth, Chat) {
 
     // socket.io now auto-configures its connection when we ommit a connection url
     var ioSocket = io('', {
       // Send auth token on connection, you will need to DI the Auth service above
-      // 'query': 'token=' + Auth.getToken()
+      query: 'token=' + Auth.getToken(),
       path: '/socket.io-client'
     });
 
@@ -70,6 +70,59 @@ angular.module('keepballin')
       unsyncUpdates: function (modelName) {
         socket.removeAllListeners(modelName + ':save');
         socket.removeAllListeners(modelName + ':remove');
+      },
+      //Get number of users online
+      getUsersOnline: function (users, cb) {
+        socket.on('user connects', function(data) {
+            console.log('user joined', data.users);
+            users = data.users;
+
+            cb(users);
+        });
+      },
+      //Let the server know when the user logout
+      logout: function(user, cb) {
+        cb = cb || angular.noop;
+        socket.emit('logout', {userId: user._id, userName: user.name});
+        cb(user);
+      },
+      //Emitting leave room to server
+      leaveRoom: function(roomId, cb) {
+        cb = cb || angular.noop;
+        var user = Auth.getCurrentUser();
+        socket.emit('leave room', {roomId: roomId, userId: user._id});
+      },
+      enterRoom: function(roomId, cb) {
+        cb = cb || angular.noop;
+        var user = Auth.getCurrentUser();
+        console.log('enter room');
+        socket.emit('enter room', {roomId: roomId, userId: user._id});
+        cb();
+      },
+      sendMessage: function(room, message, cb) {
+        cb = cb || angular.noop;
+        var user = Auth.getCurrentUser();
+        console.log('meesage sent');
+        var userPic;
+        if(user.avatar || user.fbprofilepic) {
+          userPic = user.avatar.url || user.fbprofilepic;
+        }
+        var thingsSendToServer = {
+          room: room, 
+          user: user, 
+          message: message
+        };
+        socket.emit('send message', thingsSendToServer);
+        cb();
+      },
+      //Listen for new message
+      onNewMessage: function(room, cb) {
+        cb = cb || angular.noop;
+        socket.on('new message', function(data) {
+          room.messages.unshift(data.messages[0]);
+          cb(room);
+        });
       }
+
     };
   });

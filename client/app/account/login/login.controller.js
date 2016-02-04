@@ -1,9 +1,10 @@
-'use strict';
+
 
 angular.module('keepballin')
-  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert) {
+  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', 'socket', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert, socket) {
     $scope.user = {};
     $scope.errors = {};
+    var socket = socket.socket;
 
     $scope.login = function(form) {
       $scope.submitted = true;
@@ -13,8 +14,12 @@ angular.module('keepballin')
           email: $scope.user.email,
           password: $scope.user.password
         })
-        .then( function() {
-          // Logged in, redirect to home
+        .then( function(data) {
+          // Logged in, tell server that user has login
+          var userNow = Auth.getCurrentUser().$promise;
+          userNow.then(function(user) {
+            socket.emit('login', {userId: user._id, userName: user.name});
+          });
           $modalInstance.close();
         })
         .catch( function(err) {

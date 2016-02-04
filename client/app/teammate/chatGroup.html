@@ -1,0 +1,42 @@
+<div class="container chatGroupContainer">	
+	<div class="col-sm-12">
+		<!-- calendar of events -->
+	</div>
+	<div class="col-sm-6" style="padding-top: 60px;">
+		<h1>{{room.city}}</h1>
+		<ul id="chatThread" class="list-group chatThreads">
+			<div id="chatContent">
+				<div class="loading" ng-show="loading">
+					<i class="fa fa-2x fa-spinner fa-pulse"></i>
+				</div>
+				<li class="list-group-item" ng-repeat="m in room.messages | orderBy: 'date'">
+					<h4 class="list-group-heading">
+						{{m.by.name}}
+						<small>{{m.date | relativeDate}}</small>
+					</h4>
+					<p class="list-group-item-text">
+						{{m.message}}
+					</p>
+				</li>
+			</div>
+		</ul>
+		<form ng-submit="sendMessage()">
+			<div class="input-group">
+				<input class="chatBox form-control" type="text" name="message" placeholder="我想跟{{to.name}}說..." ng-model="message" autofocus required id="talkBox">
+				<div class="input-group-btn">
+					<input ng-disabled="!message || sending" class="btn btn-primary" type="submit" value="送出" />
+						<i ng-show="sending" class="fa fa-spinner fa-pulse"></i> 
+				</div>
+			</div>
+		</form>
+		
+	</div>
+	<div class="col-sm-6">
+		{{scrollTop}}
+	</div>
+	<div class="col-sm-12">
+		<div class="input-group">
+			
+		</div>	
+	</div>
+</div>

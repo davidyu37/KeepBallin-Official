@@ -1,14 +1,58 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeammateCtrl', ['$scope', function ($scope) {
+  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'rooms', '$state', function ($scope, socket, Auth, Chat, rooms, $state) {
+
+    //When a user joins the global chat room
+    // Object.keys(data.users).length;
+    socket.getUsersOnline($scope.usersOnline, function(users) {
+        $scope.usersOnline = users;
+        $scope.numberOfUsers = Object.keys(users).length;
+    });
+
+    //Get current user
+    var user = Auth.getCurrentUser;
+
+    $scope.rooms = rooms;
+
+    socket.syncUpdates('chat', $scope.rooms, function(event, item , arr) {
+        $scope.rooms = arr;
+    });
+    $scope.$on('$destroy', function () {
+        socket.unsyncUpdates('chat');
+    });
+
+    //Users' function
+    $scope.enterRoom = function(room) {
+        $state.go('chat', {id: room._id});
+    };
+
+    //Admin creates the chat room
+    $scope.isAdmin = Auth.isAdmin;
+
+    $scope.newInfo = {};
+
+    $scope.addRoom = function() {
+        
+        $scope.newInfo.country = 'Taiwan';
+
+        var newChatRoom = new Chat($scope.newInfo);
+        newChatRoom.$save(function(d){
+            console.log(d);
+        });
+    };
+
+    $scope.removeRoom = function(room) {
+        console.log('delete', room);
+        Chat.remove({chatRoomId: room._id});
+    };
+    
     $scope.districts = [
       '北部',
       '中部',
       '南部',
       '東部',
-      '外島',
-      '顯示全部'
+      '外島'
     ];
 
     $scope.getCities = function(district) {
@@ -76,6 +120,7 @@ angular.module('keepballin')
                 return;
 
         }
-
     };
+    //Things for admin ends here
+
   }]);

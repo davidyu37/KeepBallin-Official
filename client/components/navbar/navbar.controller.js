@@ -2,10 +2,6 @@
 
 angular.module('keepballin')
   .controller('NavbarCtrl', ['$rootScope', '$scope', '$location', '$window', '$state', 'Auth', 'Scroll', 'socket', '$timeout', function ($rootScope, $scope, $location, $window, $state, Auth, Scroll, socket, $timeout) {
-    
-    // if(screen.width > 480) {
-    //   Scroll.scrollInit();
-    // }
 
     $scope.menu = [
     {
@@ -18,11 +14,11 @@ angular.module('keepballin')
       'link': 'team',
       'icon': 'glyphicon-user'
     },
-    // {
-    //   'title': '球友',
-    //   'link': 'teammate',
-    //   'icon': 'glyphicon-user'
-    // },
+    {
+      'title': '球友',
+      'link': 'teammate',
+      'icon': 'glyphicon-user'
+    },
     {
       'title': '聯絡',
       'link': 'contact',
@@ -58,16 +54,16 @@ angular.module('keepballin')
     });
 
     $scope.logout = function() {
-      Auth.logout();
-      $state.go('main');
+      var userNow = Auth.getCurrentUser().$promise;
+      userNow.then(function(user) {
+        socket.logout(user);
+        Auth.logout();
+        $state.go('main');
+      });
     };
 
     $scope.isActive = function(route) {
       return route === $state.current.name;
-    };
-
-    $scope.openLogin = function() {
-     
     };
 
     $scope.close = function() {
