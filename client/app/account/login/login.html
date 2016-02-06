@@ -32,8 +32,6 @@
             <input type="password" name="password" class="form-control" ng-model="user.password" required placeholder="請輸入密碼">
           </div>           
         </div>
-
-        <!-- <div class="form-group has-error"> -->
           <p class="help-block" ng-show="form.email.$error.required && form.password.$error.required && submitted">
              請輸入Email跟密碼
           </p>
@@ -50,7 +48,7 @@
           </button>
           <a class="btn btn-default btn-lg btn-register" 
           ng-click="closeModal()"
-          href="/signup">
+          ui-sref="signup">
             去註冊
           </a>
         </div>

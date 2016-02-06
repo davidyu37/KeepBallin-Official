@@ -24,7 +24,15 @@ angular.module('keepballin')
 
     //Users' function
     $scope.enterRoom = function(room) {
-        $state.go('chat', {id: room._id});
+        //If there's a user, go ahead and go in
+        if(user()._id) {
+            $state.go('chat', {id: room._id});
+        } else {
+            var sendToLogin = {
+                'roomId': room._id
+            };
+            $state.go('login', sendToLogin);
+        }
     };
 
     //Admin creates the chat room

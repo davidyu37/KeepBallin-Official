@@ -74,22 +74,6 @@ exports.leaveRoom = function(req, res) {
     });
 };
 
-//Send message
-// exports.saveMessage = function(req, res) {
-// 	console.log('req of save message', req);
-// 	Chat.findById(req.body.chatRoomId, function (err, chat) {
-//     	if(err) { return handleError(res, err); }
-//     	if(!chat) { return res.status(404).send('Not Found'); }
-//     	// Push message object into array
- 
-//     	// chat.usersOnline.push(req.user._id);
-//     	chat.save(function (err) {
-// 	      if (err) { return handleError(res, err); }
-// 	    	console.log('chat info', chat);
-// 	      return res.status(200).json(chat);
-// 	    });
-//     });
-// };
 
 function handleError(res, err) {
   return res.status(500).send(err);

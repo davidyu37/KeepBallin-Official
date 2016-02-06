@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('LoginMobileCtrl', ['$scope', '$state', 'Auth', '$location', '$window', 'SweetAlert', function ($scope, $state, Auth, $location, $window, SweetAlert) {
+  .controller('LoginMobileCtrl', ['$scope', '$state', 'Auth', '$location', '$window', 'SweetAlert', 'roomId', function ($scope, $state, Auth, $location, $window, SweetAlert, roomId) {
     $scope.user = {};
     $scope.errors = {};
+
+    console.log(typeof roomId);
 
     $scope.login = function(form) {
       $scope.submitted = true;
@@ -14,8 +16,13 @@ angular.module('keepballin')
           password: $scope.user.password
         })
         .then( function() {
-          // Logged in, redirect to home
-          $state.go('main');
+          if(roomId) {
+            // If user previously clicked on chat room, then enter
+            $state.go('chat', {id: roomId});
+          } else {
+            // Logged in, redirect to home
+            $state.go('main');
+          }
         })
         .catch( function(err) {
           console.log(err);

@@ -1,5 +1,5 @@
-<div class="container" style="background-color: black; margin-top: 60px; height: auto;">
-	<div style="margin: 8% 25%; padding: 20px; background-color: white;">
+<div class="container teammateBg">
+	<div class="teammateBox">
 		<!-- Only for admdin -->
 		<div ng-show="isAdmin()">
 			<div class="page-header">
@@ -53,7 +53,7 @@
 				ng-click="enterRoom(room)">
 					<span class="badge">{{room.usersOnline.length}}人</span>
 					<h4>{{room.city}}</h4>
-					<span ng-show="isAdmin">
+					<span ng-show="isAdmin()">
 						<i class="fa fa-trash pointer" ng-click="removeRoom(room)"></i>
 					</span>
 				</li>

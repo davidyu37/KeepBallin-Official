@@ -51,6 +51,14 @@ ChatSchema.plugin(deepPopulate, {
 ChatSchema.statics = {
   loadInitialRoom: function(roomId, userId, cb) {
     this.findById(roomId, function(err, room) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      if(!room) {
+        console.log('room doesn\'t exist', room);
+        return;
+      }
       //First update the online user number
       console.log('user doesnt exist in the room yet', room.usersOnline.indexOf(userId) < 0);
       if(room.usersOnline.indexOf(userId) < 0) {

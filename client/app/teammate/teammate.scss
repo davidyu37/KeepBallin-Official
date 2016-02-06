@@ -1,3 +1,18 @@
+.teammateBg {
+	background-color: black; 
+	margin-top: 60px; 
+	height: auto;
+}
+
+.teammateBox {
+	@media(min-width: $screen-sm-min) {
+		margin: 8% 25%; 
+	}
+	padding: 20px; 
+	background-color: 
+	white;
+}
+
 .chatBox {
 	color: black;
 	font-family: Helvetica, Arial, sans-serif;

@@ -21,7 +21,7 @@ if(screen.width > 480) {
   app.config(function ($stateProvider) {
   $stateProvider
     .state('login', {
-      url: '/login'
+      url: '/login/:roomId'
     })
     .state('signup', {
       url: '/signup' 
@@ -33,9 +33,15 @@ if(screen.width < 480) {
   app.config(function ($stateProvider) {
   $stateProvider
     .state('login', {
-      url: '/login',
+      url: '/login/:roomId',
       templateUrl: 'app/account/login/login.html',
-      controller: 'LoginMobileCtrl'
+      controller: 'LoginMobileCtrl',
+      resolve: {
+        roomId: ['$stateParams', function($stateParams) {
+          var roomId = $stateParams.roomId;
+          return roomId;
+        }]
+      }
     })
     .state('signup', {
       url: '/signup',
@@ -54,7 +60,7 @@ app.run(function ($rootScope, $modal) {
    * Listen to the `$stateChangeStart` event
    */
   if(screen.width > 480) {
-    $rootScope.$on('$stateChangeStart', function (event, toState) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
       //Define available modal state
       var login = toState.name === 'login';
       var signup = toState.name === 'signup';
@@ -65,7 +71,13 @@ app.run(function ($rootScope, $modal) {
       if(login) {
         $modal.open({
           templateUrl: 'app/account/login/login.html',
-          controller: 'LoginCtrl'
+          controller: 'LoginCtrl',
+          resolve: {
+            roomId: ['$stateParams', function($stateParams) {
+              var roomId = toParams;
+              return roomId;
+            }]
+          }
         });   
       }
       if(signup) {

@@ -22,7 +22,7 @@
 		</ul>
 		<form ng-submit="sendMessage()">
 			<div class="input-group">
-				<input class="chatBox form-control" type="text" name="message" placeholder="我想跟{{to.name}}說..." ng-model="message" autofocus required id="talkBox">
+				<input id="chatBox" class="chatBox form-control" type="text" name="message" placeholder="我想說..." ng-model="message" autofocus required id="talkBox">
 				<div class="input-group-btn">
 					<input ng-disabled="!message || sending" class="btn btn-primary" type="submit" value="送出" />
 						<i ng-show="sending" class="fa fa-spinner fa-pulse"></i> 

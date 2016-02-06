@@ -3,9 +3,11 @@
 angular.module('keepballin')
   .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', function ($scope, socket, Chat, room, Auth, $timeout) {
   	
-  	$scope.room = room;
+    //Focus on the input box when entering the chat
+    var chatBox = angular.element(document.getElementById('chatBox'));
+    chatBox.focus();
 
-  	console.log(room);
+  	$scope.room = room;
 
   	$scope.user = Auth.getCurrentUser();
 

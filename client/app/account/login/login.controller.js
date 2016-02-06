@@ -1,7 +1,7 @@
 
 
 angular.module('keepballin')
-  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', 'socket', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert, socket) {
+  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', 'socket', 'roomId', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert, socket, roomId) {
     $scope.user = {};
     $scope.errors = {};
     var socket = socket.socket;
@@ -19,6 +19,10 @@ angular.module('keepballin')
           var userNow = Auth.getCurrentUser().$promise;
           userNow.then(function(user) {
             socket.emit('login', {userId: user._id, userName: user.name});
+            if(roomId.roomId) {
+              // If user previously clicked on chat room, then enter
+              $state.go('chat', {id: roomId.roomId});
+            }
           });
           $modalInstance.close();
         })
