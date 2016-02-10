@@ -1,7 +1,7 @@
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 
-exports.setup = function (User, config, socket) {
+exports.setup = function (User, config) {
   passport.use(new FacebookStrategy({
       clientID: config.facebook.clientID,
       clientSecret: config.facebook.clientSecret,
@@ -24,7 +24,7 @@ exports.setup = function (User, config, socket) {
             user.facebook = profile._json;
             user.save(function(err) {
               if (err) return done(err);
-              console.log('attached facebook account', socket);
+              console.log('attached facebook account');
               done(err, user);
             });
           } else {
@@ -45,11 +45,11 @@ exports.setup = function (User, config, socket) {
                 });
                 user.save(function(err) {
                   if (err) return done(err);
-                  console.log('created new user', socket);
+                  console.log('created new user');
                   done(err, user);
                 });
               } else {
-                console.log('login with old fb account', socket);
+                console.log('login with old fb account');
                 return done(err, user);
               }
             })
@@ -79,7 +79,7 @@ exports.setup = function (User, config, socket) {
               done(err, user);
             });
           } else {
-            console.log('log in to old fb account', socket);
+            console.log('log in to old fb account');
             return done(err, user);
           }
         })

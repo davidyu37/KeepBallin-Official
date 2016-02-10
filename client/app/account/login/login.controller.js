@@ -1,7 +1,7 @@
 
 
 angular.module('keepballin')
-  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', 'socket', 'roomId', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert, socket, roomId) {
+  .controller('LoginCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', 'socket', 'roomId', '$http', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert, socket, roomId, $http) {
     $scope.user = {};
     $scope.errors = {};
     var socket = socket.socket;
@@ -18,6 +18,7 @@ angular.module('keepballin')
           // Logged in, tell server that user has login
           var userNow = Auth.getCurrentUser().$promise;
           userNow.then(function(user) {
+            socket.connect();
             socket.emit('login', {userId: user._id, userName: user.name});
             if(roomId.roomId) {
               // If user previously clicked on chat room, then enter
@@ -46,6 +47,12 @@ angular.module('keepballin')
     };
 
     $scope.loginOauth = function(provider) {
+      // var url = '/auth/' + provider;
+      // $http.jsonp(url).then(function(res) {
+      //   console.log(res);
+      // }, function(res) {
+
+      // });
       $window.location.href = '/auth/' + provider;
     };
   }]);

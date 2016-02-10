@@ -9,6 +9,7 @@ var compose = require('composable-middleware');
 var User = require('../api/user/user.model');
 var validateJwt = expressJwt({ secret: config.secrets.session });
 var _ = require('lodash');
+var app = require('../app');
 
 /**
  * Attaches the user object to the request if authenticated
@@ -128,6 +129,10 @@ function signToken(id) {
 function setTokenCookie(req, res) {
   if (!req.user) return res.status(404).json({ message: 'Something went wrong, please try again.'});
   var token = signToken(req.user._id, req.user.role);
+  // console.log('app poo', app);
+  // app.socketio.sockets.emit('login', {userName: req.user.name, userId: req.user._id });
+  // console.log('socket poo', app.socketio);
+  // res.redirect('/').status(200).jsonp(req.user);
   res.cookie('token', JSON.stringify(token));
   res.redirect('/');
 }

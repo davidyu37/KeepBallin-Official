@@ -13,12 +13,17 @@ var Rating = require('../api/rating/rating.model');
 var Conversation = require('../api/conversation/conversation.model');
 var Event = require('../api/event/event.model');
 var Team = require('../api/team/team.model');
+var Lobby = require('../api/lobby/lobby.model');
 
 function randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
 var random = randomDate(new Date(1950, 0, 1), new Date());
+
+Lobby.find({}).remove(function() {
+
+});
 
 Event.find({}).remove(function() {
   console.log('events cleared');

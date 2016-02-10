@@ -71,15 +71,22 @@ angular.module('keepballin')
         socket.removeAllListeners(modelName + ':save');
         socket.removeAllListeners(modelName + ':remove');
       },
+
       //Get number of users online
       getUsersOnline: function (users, cb) {
-        socket.on('user connects', function(data) {
-            console.log('user joined', data.users);
-            users = data.users;
-
-            cb(users);
+        socket.on('user online', function(data) {
+          users = data.users;
+          cb(users);
         });
       },
+
+      //Check users
+      checkUsers: function(user, cb) {
+        cb = cb || angular.noop;
+        socket.emit('check user', {userId: user._id});
+        cb();
+      },
+
       //Let the server know when the user logout
       logout: function(user, cb) {
         cb = cb || angular.noop;
