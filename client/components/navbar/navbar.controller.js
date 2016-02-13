@@ -17,7 +17,7 @@ angular.module('keepballin')
     {
       'title': '球友',
       'link': 'teammate',
-      'icon': 'glyphicon-user'
+      'icon': 'glyphicon-fire'
     },
     {
       'title': '聯絡',

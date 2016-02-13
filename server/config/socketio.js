@@ -8,6 +8,7 @@ var config = require('./environment');
 var User = require('../api/user/user.model');
 var Chat = require('../api/chat/chat.model');
 var Lobby = require('../api/lobby/lobby.model');
+var jwtDecode = require('jwt-decode');
 
 var users = {};
 
@@ -23,9 +24,7 @@ var onlineManager = function(socket, data) {
       //if it doesn't exist create one
       var lobby = new Lobby();
       lobby.userOnline.push(data.userId);
-      lobby.save(function(err, saved) {
-        console.log('saved', saved);
-      });
+      lobby.save(function(err, saved) {});
     } else {
       //If the tracker exist, check if the user exist in the array
       if( found[0].userOnline.indexOf(data.userId) < 0 ) {
@@ -33,7 +32,7 @@ var onlineManager = function(socket, data) {
         found[0].userOnline.push(data.userId);
 
         found[0].save(function(err, saved) {
-          console.log('saved', saved);
+          console.log('Number of users online: ', saved.userOnline.length);
           socket.emit('user online', {users: found[0].userOnline});
         });
       }
@@ -246,19 +245,32 @@ module.exports = function (socketio) {
   //
   // 2. Require authentication here:
   
-  socketio.use(require('socketio-jwt').authorize({
-    secret: config.secrets.session,
-    handshake: true
-  }));
+  // socketio.use(require('socketio-jwt').authorize({
+  //   secret: config.secrets.session,
+  //   handshake: true
+  // }));
 
   socketio.on('connection', function (socket) {
-    console.log('there\'s connection');
+    
     socket.address = socket.handshake.address !== null ?
             socket.handshake.address :
             process.env.DOMAIN;
 
     socket.connectedAt = new Date();
 
+    //If there's a token, decode it and attach it to socket
+    if(socket.handshake.query.token !== 'undefined') {
+      var token = socket.handshake.query.token;
+      var decoded = jwtDecode(token);
+      //Check token expiration
+      var now = (new Date().getTime())/ 1000;
+      //If token hasnt expired, decoded.exp should be greater than unix time of now
+      if(decoded.exp >= now) {
+        socket.decoded_token = decoded;
+      } else {
+        console.log('token expired, did not attach decoded token');
+      }
+    }
 
     // Call onDisconnect.
     socket.on('disconnect', function () {

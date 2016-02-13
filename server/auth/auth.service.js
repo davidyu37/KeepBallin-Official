@@ -128,13 +128,10 @@ function signToken(id) {
  */
 function setTokenCookie(req, res) {
   if (!req.user) return res.status(404).json({ message: 'Something went wrong, please try again.'});
+  console.log('setting cookie req', req);
   var token = signToken(req.user._id, req.user.role);
-  // console.log('app poo', app);
-  // app.socketio.sockets.emit('login', {userName: req.user.name, userId: req.user._id });
-  // console.log('socket poo', app.socketio);
-  // res.redirect('/').status(200).jsonp(req.user);
   res.cookie('token', JSON.stringify(token));
-  res.redirect('/');
+  res.redirect('back');
 }
 
 exports.isAuthenticated = isAuthenticated;

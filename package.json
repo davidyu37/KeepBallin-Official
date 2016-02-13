@@ -16,6 +16,7 @@
     "express-session": "~1.0.2",
     "hogan.js": "^3.0.2",
     "jsonwebtoken": "^5.0.0",
+    "jwt-decode": "^1.5.1",
     "lodash": "~2.4.1",
     "method-override": "~1.0.0",
     "mongoosastic": "^3.3.2",

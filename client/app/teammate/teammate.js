@@ -9,7 +9,14 @@ angular.module('keepballin')
         controller: 'TeammateCtrl',
         resolve: {
          rooms: ['Chat', function(Chat) {
-           return Chat.query();
+          return Chat.query();
+         }],
+         lobby: ['$q', 'Lobby', function($q, Lobby) {
+          var deferred = $q.defer();
+          Lobby.query(function(data){
+            deferred.resolve(data);
+          });
+          return deferred.promise;
          }]
         }
       })
