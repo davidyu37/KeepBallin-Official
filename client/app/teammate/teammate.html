@@ -43,22 +43,28 @@
 			<button class="form-control" ng-click="enterRoom(city)">進入群組</button>
 		</div>
 		<div style="height: 500px; overflow: scroll;">
-			<ul class="list-group" ng-repeat="(key, value) in rooms | groupBy: 'district'">
-				{{key}}
+			<ul class="list-group" ng-repeat="room in rooms | groupBy: 'district' | toArray:true">
+				{{room.$key}}
 				<li class="list-group-item pointer"
 				ng-class="{active: hover}"
 				ng-mouseenter="hover = true"
 				ng-mouseleave="hover = false" 
-				ng-repeat="room in value | orderBy: 'userOnline.length'" 
-				ng-click="enterRoom(room)">
-					<span class="badge">{{room.usersOnline.length}}人</span>
-					<h4>{{room.city}}</h4>
+				ng-repeat="r in room | orderBy: '-usersOnline.length'"
+				ng-click="enterRoom(r)">
+					<span class="badge" ng-class="{'greenBg': r.usersOnline.length > 0}">{{r.usersOnline.length}}人</span>
+					<h4>{{r.city}}</h4>
 					<span ng-show="isAdmin()">
-						<i class="fa fa-trash pointer" ng-click="removeRoom(room)"></i>
+						<i class="fa fa-trash pointer" ng-click="removeRoom(r); $event.stopPropagation();"></i>
+						<i class="fa fa-pencil pointer pull-right" ng-click="editRoom(r); $event.stopPropagation();"></i>
 					</span>
 				</li>
 			</ul>
 		</div>
+	</div>
+	<div class="editRoomBox" ng-show="isAdmin()">
+		<!-- <code>{{roomBeingEdited}}</code> -->
+		<textarea class="form-control" name="editingSpace" cols="30" rows="10" ng-model="roomBeingEdited"></textarea>
+		<button class="btn btn-primary" ng-click="saveRoom(roomBeingEdited)">儲存</button>
 	</div>
 	
 </div>

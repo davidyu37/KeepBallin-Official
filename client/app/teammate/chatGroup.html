@@ -1,9 +1,14 @@
 <div class="container chatGroupContainer">	
-	<div class="col-sm-12">
-		<!-- calendar of events -->
+	<!-- <div class="col-sm-12">
+		calendar of events
+	</div> -->
+	<div class="page-header" style="padding-top: 60px;">
+		<h1 style="margin-bottom: 10px;">{{room.city}}
+			<span class="label label-success">{{room.usersOnline.length}}人在線上</span>
+			<span ng-show="courts[0]" class="label label-primary">{{courts.length}}個球場</span>
+		</h1>
 	</div>
-	<div class="col-sm-6" style="padding-top: 60px;">
-		<h1>{{room.city}}</h1>
+	<div class="col-sm-6">
 		<ul id="chatThread" class="list-group chatThreads">
 			<div id="chatContent">
 				<div class="loading" ng-show="loading">
@@ -11,7 +16,9 @@
 				</div>
 				<li class="list-group-item" ng-repeat="m in room.messages | orderBy: 'date'">
 					<h4 class="list-group-heading">
-						{{m.by.name}}
+						<a ui-sref="profile({id: m.by._id})">
+							{{m.by.name}}
+						</a>
 						<small>{{m.date | relativeDate}}</small>
 					</h4>
 					<p class="list-group-item-text">
@@ -32,7 +39,57 @@
 		
 	</div>
 	<div class="col-sm-6">
-		{{scrollTop}}
+		<h2>快速約戰</h2>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label for="court" class="control-label col-sm-2">地點:</label>
+				<div class="col-sm-9">
+					<input class="form-control" type="text" ng-model="court" placeholder="哪裡" typeahead="court.court for court in courts | filter:$viewValue | limitTo:8">
+				</div>
+			</div>
+			<div class="form-group" ng-hide="allDay">
+				<div class="col-sm-6">
+					<label for="startTime" class="control-label">開始時間:</label>
+					<timepicker ng-model="start" show-meridian="true"></timepicker>
+				</div>
+				<div class="col-sm-6">
+					<label for="endTime" class="control-label">結束時間:</label>
+					<timepicker ng-model="end" show-meridian="true"></timepicker>
+				</div>
+			</div>
+			<!-- <div class="form-group">
+				<input type="checkbox">
+				今天
+			</div> -->
+			<div class="btn-group">
+		        <label class="btn btn-primary" ng-model="checkModel.left" btn-checkbox>今天</label>
+		        <label class="btn btn-primary" ng-model="checkModel.middle" btn-checkbox>明天</label>
+		        <label class="btn btn-primary" ng-model="checkModel.right" btn-checkbox>後天</label>
+				<button type="button" class="btn btn-primary" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+		    </div>
+			<!-- <div class="form-group">
+				<label for="startDate" class="control-label col-sm-2">開始日期:</label>
+				<div class="input-group col-sm-9">
+					<input class="form-control" type="date" placeholder="哪時開始">
+					<span class="input-group-btn">
+			          <button type="button" class="btn btn-default custom-addon" ng-click="openCal1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			        </span>
+				</div>
+			</div>
+			<label for="endDate" class="control-label">結束日期:</label>
+			<div class="input-group">
+				<input class="form-control event-input" type="date" placeholder="哪時結束">
+				<span class="input-group-btn">
+		          <button type="button" class="btn btn-default custom-addon" ng-click="openCal1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+		        </span>
+			</div> -->
+			<div class="form-group">
+				<label for="people" class="control-label col-sm-3">需要人數:</label>
+				<div class="col-sm-9">
+					<input class="form-control" type="number" placeholder="缺幾人">				
+				</div>
+			</div>
+		</form>
 	</div>
 	<div class="col-sm-12">
 		<div class="input-group">

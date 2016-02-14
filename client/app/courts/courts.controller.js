@@ -214,7 +214,6 @@ angular.module('keepballin')
 	    }
 	    
 		$scope.goToLocation = function(selected) {
-			
 			if(selected) {
 				var params = {
 					query: selected

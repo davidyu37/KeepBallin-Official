@@ -80,13 +80,6 @@ angular.module('keepballin')
         });
       },
 
-      //Check users
-      checkUsers: function(user, cb) {
-        cb = cb || angular.noop;
-        socket.emit('check user', {userId: user._id});
-        cb();
-      },
-
       //Let the server know when the user logout
       logout: function(user, cb) {
         cb = cb || angular.noop;

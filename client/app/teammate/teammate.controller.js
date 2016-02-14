@@ -3,7 +3,6 @@
 angular.module('keepballin')
   .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'rooms', '$state', 'lobby', function ($scope, socket, Auth, Chat, rooms, $state, lobby) {
 
-    console.log(lobby[0]);
     if(lobby[0]) {
         $scope.numberOfUsers = lobby[0].userOnline.length;
     }
@@ -21,6 +20,7 @@ angular.module('keepballin')
 
     socket.syncUpdates('chat', $scope.rooms, function(event, item , arr) {
         $scope.rooms = arr;
+        console.log('room change', $scope.rooms);
     });
     $scope.$on('$destroy', function () {
         socket.unsyncUpdates('chat');
@@ -57,6 +57,17 @@ angular.module('keepballin')
     $scope.removeRoom = function(room) {
         console.log('delete', room);
         Chat.remove({chatRoomId: room._id});
+    };
+
+    $scope.editRoom = function(room) {
+        console.log('edit room', room);
+        $scope.roomBeingEdited = JSON.stringify(room);
+    };
+
+    $scope.saveRoom = function(room) {
+        var sendToServer = JSON.parse(room);
+        console.log('should be sent to server', sendToServer)
+        Chat.update({chatRoomId: sendToServer._id}, sendToServer);
     };
     
     $scope.districts = [

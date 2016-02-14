@@ -74,6 +74,21 @@ exports.leaveRoom = function(req, res) {
     });
 };
 
+//Update room
+exports.update = function(req, res) {
+    if(req.body._id) { delete req.body._id; }
+  Chat.findById(req.params.chatRoomId, function (err, chat) {
+    if (err) { return handleError(res, err); }
+    if(!chat) { return res.status(404).send('Not Found'); }
+    chat.usersOnline = req.body.usersOnline;
+    chat = _.merge(req.body, chat);
+    chat.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.status(200).json(chat);
+    });
+  });
+};
+
 
 function handleError(res, err) {
   return res.status(500).send(err);

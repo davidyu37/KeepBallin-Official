@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', function ($scope, socket, Chat, room, Auth, $timeout) {
+  .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', 'Court', function ($scope, socket, Chat, room, Auth, $timeout, Court) {
   	
     //Focus on the input box when entering the chat
     var chatBox = angular.element(document.getElementById('chatBox'));
@@ -41,21 +41,43 @@ angular.module('keepballin')
       });
     });
 
+    $scope.noMoreMessages = false;
+
     chatThread.on('scroll', function() {
-      $scope.loading = true;
       //When user scroll to the top load more messages
       if(chatThread.scrollTop() === 0) {
+        //If there's no more messages, return
+        if($scope.noMoreMessages) {
+          return;
+        }
+        $scope.loading = true;
         //If it's still loading don't load more
         if($scope.loading) {
           Chat.loadMessage({ room: $scope.room }, function(data) {
+            //Count the current number of message
+            var numberOfMessages = $scope.room.messages.length;
+            console.log(numberOfMessages);
             //Add messages loaded
             $scope.room.messages = $scope.room.messages.concat(data.messages);
             $scope.loading = false;
+            //If the number of messages doesn't increase, prevent the next load
+            if(numberOfMessages === $scope.room.messages.length) {
+              $scope.noMoreMessages = true;
+            }
           });
         }
       }
     });
-    
+    console.log('room city', $scope.room.city);
+
+    var findThis = {
+      query: $scope.room.city
+    };
+
+    Court.search(findThis, function(data) {
+      $scope.courts = data;
+      console.log($scope.courts);
+    }); 
 
     
   }]);//ChatCtrl ends

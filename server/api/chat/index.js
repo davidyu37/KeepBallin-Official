@@ -8,6 +8,8 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 router.post('/', auth.hasRole('admin'), controller.createRoom);
+//Update chat room
+router.put('/:chatRoomId', auth.hasRole('admin'), controller.update);
 //When user leave individual chat room
 router.post('/leave', controller.leaveRoom);
 router.post('/load', controller.loadMessage);

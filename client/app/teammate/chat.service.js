@@ -18,6 +18,9 @@ angular.module('keepballin')
         params: {
           controller: 'load'
         }
+      },
+      update: {
+        method: 'PUT'
       }
 	  });
   }]);

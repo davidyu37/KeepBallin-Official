@@ -36,20 +36,8 @@ var onlineManager = function(socket, data) {
           socket.emit('user online', {users: found[0].userOnline});
         });
       }
-      console.log('user: %s is already online', data.userId);
     }
-  });
-
-  // //When the same user open multiple tabs
-  // if (data.userId in users) {
-  //   users[data.userId].socketId.push(socket.id);
-  // } else {
-  //   //When user does not exist in the list of online users
-  //   users[data.userId] = {socketId: [socket.id], name: data.userName};
-  // }
-  
-  // console.log('users', users);
-  // console.log('Number of user online: %s', Object.keys(users).length);
+  });//Lobby tracker ends
 };
 
 var offlineManager = function(socket, data, logout) {
@@ -70,70 +58,34 @@ var offlineManager = function(socket, data, logout) {
       var userIndex = found[0].userOnline.indexOf(data.userId);
       found[0].userOnline.splice(userIndex, 1);
       found[0].save(function(err, saved) {
-        console.log('%s offline; user online: ', data.userId, saved.userOnline);
+        console.log('%s offline', data.userId);
         socket.broadcast.emit('user offline', data);
       });
     }
-
-
   });
-
-  // //If logout is true, remove the user from online users
-  // if(logout) {
-  //   // console.log('logout offline', data);
-  //   // delete users[data.userId];
-  //   //If the user is in a chat room
-  //   if(socket.roomId) {
-  //     console.log('socket has room id');
-  //     leaveRoom(data, socket);
-  //   }
-  //   socket.broadcast.emit('user offline', data);
-  // } else {
-
-  //   //If user is in a room
-  //   if(socket.roomId) {
-  //     console.log('socket has room id');
-  //     leaveRoom(data, socket);
-  //   }
-
-  //   // if(users[data.userId]) {
-  //   //   //If there's more than one socket for the user, remove that socket
-  //   //   var numberOfSockets = users[data.userId].socketId.length;
-  //   //   if (numberOfSockets > 1) {
-  //   //     var index = users[data.userId].socketId.indexOf(socket.id);
-  //   //     users[data.userId].socketId.splice(index, 1);
-  //   //   } else {
-  //   //     //Else remove the user from online users
-  //   //     console.log('offline', data);
-  //   //     delete users[data.userId];
-  //   //     socket.broadcast.emit('user offline', data);
-  //   //   }
-  //   // }
-  // }
 };
 
 // User disconnects update chat room server side
 var leaveRoom = function(data, socket) {
   console.log('leave room');
-  delete socket['roomId'];
-  socket.leave(data.roomId);
-  Chat.findById(data.roomId, function(err, chat) {
+  socket.leave(socket.roomId);
+  Chat.findById(socket.roomId, function(err, chat) {
     if(err) { console.error(err); return;}
     if(!chat) { console.log('chat room not found'); return;}
     //Find the user
     var index = chat.usersOnline.indexOf(data.userId);
     chat.usersOnline.splice(index, 1);
-    // chat.usersOnline.push(req.user._id);
     chat.save(function (err) {
       if (err) { console.error('error occured while trying to save the new chat room', err); return; }
       console.log('user left room: %s', chat.city);
+      console.log('%s has %s of users', chat.city, chat.usersOnline.length);
+      delete socket['roomId'];
     });
   });
 }
 
 // When the user disconnects.. perform this
 function onDisconnect(socket) {
-  console.log('user id', socket.userId);
   if(socket.userId) {
     User.findById(socket.userId, function (err, user) {
       if(user) {
@@ -141,6 +93,7 @@ function onDisconnect(socket) {
           userId: user._id,
           userName: user.name
         };
+        console.log('%s is offline', user.name);
         offlineManager(socket, data);
       }
       
@@ -178,11 +131,6 @@ function onConnect(socket, socketio) {
     offlineManager(socket, data, logout);
   });
 
-  // On check user
-  socket.on('check user', function(data) {
-    console.log('check user',  users);
-  });
-
   // Join individual room
   socket.on('enter room', function(data) {
     //if there's no user id, attach it
@@ -205,7 +153,6 @@ function onConnect(socket, socketio) {
 
   // Leave individual room - client side
   socket.on('leave room', function(data) {
-    console.log('leave room');
     delete socket['roomId'];
     socket.leave(data.roomId);
     Chat.findById(data.roomId, function(err, chat) {
