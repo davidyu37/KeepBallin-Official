@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('NavbarCtrl', ['$rootScope', '$scope', '$location', '$window', '$state', 'Auth', 'Scroll', 'socket', '$timeout', function ($rootScope, $scope, $location, $window, $state, Auth, Scroll, socket, $timeout) {
+  .controller('NavbarCtrl', ['$rootScope', '$scope', '$location', '$window', '$state', 'Auth', 'socket', '$timeout', function ($rootScope, $scope, $location, $window, $state, Auth, socket, $timeout) {
 
     $scope.menu = [
     {
@@ -14,11 +14,11 @@ angular.module('keepballin')
       'link': 'team',
       'icon': 'glyphicon-user'
     },
-    {
-      'title': '球友',
-      'link': 'teammate',
-      'icon': 'glyphicon-fire'
-    },
+    // {
+    //   'title': '球友',
+    //   'link': 'teammate',
+    //   'icon': 'glyphicon-fire'
+    // },
     {
       'title': '聯絡',
       'link': 'contact',

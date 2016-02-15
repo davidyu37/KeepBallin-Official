@@ -20,7 +20,8 @@ angular.module('keepballin', [
   'angularMoment',
   'angular.filter',
   'pascalprecht.translate',
-  'duScroll'
+  'duScroll',
+  'angular-google-adsense'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
