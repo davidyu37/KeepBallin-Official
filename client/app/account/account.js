@@ -60,7 +60,7 @@ app.run(function ($rootScope, $modal) {
    * Listen to the `$stateChangeStart` event
    */
   if(screen.width > 480) {
-    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
       //Define available modal state
       var login = toState.name === 'login';
       var signup = toState.name === 'signup';
@@ -73,10 +73,10 @@ app.run(function ($rootScope, $modal) {
           templateUrl: 'app/account/login/login.html',
           controller: 'LoginCtrl',
           resolve: {
-            roomId: ['$stateParams', function($stateParams) {
+            roomId: function() {
               var roomId = toParams;
               return roomId;
-            }]
+            }
           }
         });   
       }

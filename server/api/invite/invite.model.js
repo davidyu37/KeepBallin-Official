@@ -15,11 +15,13 @@ var InviteSchema = new Schema({
   },
   startTime: Date,
   endTime: Date,
+  startDate: String,
   repeat: Boolean,
   repeatDay: String,
   repeatEndDate: Date,
   info: String,
   location: String,
+  city: String,
   court: {
   	type: Schema.ObjectId,
     ref: 'Court'
@@ -43,22 +45,14 @@ var InviteSchema = new Schema({
 //   }
 // });
 
-// InviteSchema.statics = {
-//   loadNow: function(start, courtId, cb) {
-//     this.find({'courtId': courtId})
-//       // .populate({path:'author', select: 'name'})
-//       .deepPopulate('author.avatar')
-//       .sort('-date')
-//       .skip(start)
-//       .limit(10)
-//       .exec(cb);
-//   },
-//   loadByCourtId: function(courtId, cb) {
-//     this.find({'courtId': courtId})
-//       .sort('-date')
-//       .exec(cb);
-//   }
-// };
+InviteSchema.statics = {
+  findByCity: function(city, cb) {
+    var dateNow = new Date();
+    this.find({'city': city, 'startTime': {$gt: dateNow}})
+      .sort('startTime')
+      .exec(cb);
+  }
+};
 
 
 module.exports = mongoose.model('Invite', InviteSchema);

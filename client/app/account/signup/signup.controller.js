@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('SignupCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', 'SweetAlert', function ($scope, $state, Auth, $location, $window, $modalInstance, SweetAlert) {
+  .controller('SignupCtrl', ['$scope', '$state', 'Auth', '$location', '$window', '$modalInstance', function ($scope, $state, Auth, $location, $window, $modalInstance) {
     $scope.user = {};
     $scope.errors = {};
     // $scope.user.toVip = false;

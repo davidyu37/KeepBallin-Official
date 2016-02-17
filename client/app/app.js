@@ -46,30 +46,12 @@ angular.module('keepballin', [
       a_month_ago: '上個月',
       months_ago:  '{{time}} 個月前',
       a_year_ago: '一年前'
-      // years_ago {{time}} years ago
-      // over_a_year_ago over a year ago
-      // seconds_from_now  {{time}} seconds from now
-      // a_minute_from_now a minute from now
-      // minutes_from_now  {{time}} minutes from now
-      // an_hour_from_now  an hour from now
-      // hours_from_now  {{time}} hours from now
-      // a_day_from_now  tomorrow
-      // days_from_now {{time}} days from now
-      // a_week_from_now a week from now
-      // weeks_from_now  {{time}} weeks from now
-      // a_month_from_now  a month from now
-      // months_from_now {{time}} months from now
-      // a_year_from_now a year from now
-      // years_from_now  {{time}} years from now
-      // over_a_year_from_now  over a year from now
-    });
-   
-    $translateProvider.translations('de', {
-      'TITLE': 'Hallo',
-      'FOO': 'Dies ist ein Absatz'
     });
    
     $translateProvider.preferredLanguage('zh-tw');
+
+    // Enable escaping of HTML
+    $translateProvider.useSanitizeValueStrategy('escapeParameters');
   }])
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
     return {

@@ -10,7 +10,25 @@ var Chat = require('../api/chat/chat.model');
 var Lobby = require('../api/lobby/lobby.model');
 var jwtDecode = require('jwt-decode');
 
-var users = {};
+
+// User disconnects update chat room server side
+var leaveRoom = function(data, socket) {
+  console.log('leave room');
+  socket.leave(socket.roomId);
+  Chat.findById(socket.roomId, function(err, chat) {
+    if(err) { console.error(err); return;}
+    if(!chat) { console.log('chat room not found'); return;}
+    //Find the user
+    var index = chat.usersOnline.indexOf(data.userId);
+    chat.usersOnline.splice(index, 1);
+    chat.save(function (err) {
+      if (err) { console.error('error occured while trying to save the new chat room', err); return; }
+      console.log('user left room: %s', chat.city);
+      console.log('%s has %s of users', chat.city, chat.usersOnline.length);
+      delete socket.roomId;
+    });
+  });
+}
 
 //Login function, execute this on login and when there's token
 var onlineManager = function(socket, data) {
@@ -65,24 +83,7 @@ var offlineManager = function(socket, data, logout) {
   });
 };
 
-// User disconnects update chat room server side
-var leaveRoom = function(data, socket) {
-  console.log('leave room');
-  socket.leave(socket.roomId);
-  Chat.findById(socket.roomId, function(err, chat) {
-    if(err) { console.error(err); return;}
-    if(!chat) { console.log('chat room not found'); return;}
-    //Find the user
-    var index = chat.usersOnline.indexOf(data.userId);
-    chat.usersOnline.splice(index, 1);
-    chat.save(function (err) {
-      if (err) { console.error('error occured while trying to save the new chat room', err); return; }
-      console.log('user left room: %s', chat.city);
-      console.log('%s has %s of users', chat.city, chat.usersOnline.length);
-      delete socket['roomId'];
-    });
-  });
-}
+
 
 // When the user disconnects.. perform this
 function onDisconnect(socket) {
@@ -153,7 +154,7 @@ function onConnect(socket, socketio) {
 
   // Leave individual room - client side
   socket.on('leave room', function(data) {
-    delete socket['roomId'];
+    delete socket.roomId;
     socket.leave(data.roomId);
     Chat.findById(data.roomId, function(err, chat) {
       if(err) { console.error(err); return;}
@@ -170,6 +171,7 @@ function onConnect(socket, socketio) {
   });
 
   // Insert sockets below
+  require('../api/invite/invite.socket').register(socket);
   require('../api/chat/chat.socket').register(socket);
   require('../api/event/event.socket').register(socket);
   require('../api/conversation/conversation.socket').register(socket);
@@ -206,7 +208,7 @@ module.exports = function (socketio) {
     socket.connectedAt = new Date();
 
     //If there's a token, decode it and attach it to socket
-    if(socket.handshake.query.token !== 'undefined') {
+    if(socket.handshake.query.token !== 'undefined' && socket.handshake.query.token) {
       var token = socket.handshake.query.token;
       var decoded = jwtDecode(token);
       //Check token expiration

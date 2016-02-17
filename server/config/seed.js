@@ -14,6 +14,7 @@ var Conversation = require('../api/conversation/conversation.model');
 var Event = require('../api/event/event.model');
 var Team = require('../api/team/team.model');
 var Lobby = require('../api/lobby/lobby.model');
+var Invite = require('../api/invite/invite.model');
 
 function randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -21,8 +22,12 @@ function randomDate(start, end) {
 
 var random = randomDate(new Date(1950, 0, 1), new Date());
 
-Lobby.find({}).remove(function() {
+Invite.find({}).remove(function() {
+  console.log('Invites cleared');
+});
 
+Lobby.find({}).remove(function() {
+  console.log('Lobby cleared');
 });
 
 Event.find({}).remove(function() {

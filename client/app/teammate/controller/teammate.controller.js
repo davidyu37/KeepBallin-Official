@@ -20,7 +20,6 @@ angular.module('keepballin')
 
     socket.syncUpdates('chat', $scope.rooms, function(event, item , arr) {
         $scope.rooms = arr;
-        console.log('room change', $scope.rooms);
     });
     $scope.$on('$destroy', function () {
         socket.unsyncUpdates('chat');
@@ -49,9 +48,7 @@ angular.module('keepballin')
         $scope.newInfo.country = 'Taiwan';
 
         var newChatRoom = new Chat($scope.newInfo);
-        newChatRoom.$save(function(d){
-            console.log(d);
-        });
+        newChatRoom.$save();
     };
 
     $scope.removeRoom = function(room) {
@@ -66,7 +63,6 @@ angular.module('keepballin')
 
     $scope.saveRoom = function(room) {
         var sendToServer = JSON.parse(room);
-        console.log('should be sent to server', sendToServer)
         Chat.update({chatRoomId: sendToServer._id}, sendToServer);
     };
     

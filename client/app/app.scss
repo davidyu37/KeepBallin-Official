@@ -72,6 +72,10 @@ body {
     cursor: pointer;
 }
 
+.primaryColor {
+    color: $brand-primary;
+}
+
 input.ng-invalid, textarea.ng-invalid {
     border-color: $brand-primary;
 }
