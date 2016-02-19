@@ -48,7 +48,7 @@ var InviteSchema = new Schema({
 InviteSchema.statics = {
   findByCity: function(city, cb) {
     var dateNow = new Date();
-    this.find({'city': city, 'startTime': {$gt: dateNow}})
+    this.find({'city': city, 'endTime': {$gt: dateNow}})
       .sort('startTime')
       .exec(cb);
   }

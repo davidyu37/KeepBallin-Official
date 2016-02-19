@@ -14,11 +14,11 @@ angular.module('keepballin')
       'link': 'team',
       'icon': 'glyphicon-user'
     },
-    // {
-    //   'title': '球友',
-    //   'link': 'teammate',
-    //   'icon': 'glyphicon-fire'
-    // },
+    {
+      'title': '球友',
+      'link': 'teammate',
+      'icon': 'glyphicon-fire'
+    },
     {
       'title': '聯絡',
       'link': 'contact',

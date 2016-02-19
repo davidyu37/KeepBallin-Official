@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', 'Court', 'Invite', '$interval', function ($scope, socket, Chat, room, Auth, $timeout, Court, Invite, $interval) {
+  .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', 'Court', 'Invite', '$interval', 'SweetAlert', '$filter', function ($scope, socket, Chat, room, Auth, $timeout, Court, Invite, $interval, SweetAlert, $filter) {
   	
     //Focus on the input box when entering the chat
     var chatBox = angular.element(document.getElementById('chatBox'));
@@ -77,14 +77,104 @@ angular.module('keepballin')
       $scope.courts = data;
     });
 
+    //empty arrays for current and future invites
+    $scope.currentInvites = [];
+    $scope.futureInvites = [];
+
     Invite.findByCity({city: $scope.room.city}, function(data) {
+      getCurrentEvent(data);
       $scope.invites = data;
       socket.syncUpdates('invite', $scope.invites, function(event, item , arr) {
+        //Determine if the new item belongs to current invites or future invites
+        justOneNewItem(item);
         $scope.invites = arr;
       });
       $scope.$on('$destroy', function () {
           socket.unsyncUpdates('invite');
       });
+    });
+    //Function that gets the events occuring now
+    var getCurrentEvent = function(arr) {
+      if(arr[0]) {
+        arr.forEach(function(invite) {
+          var start = moment(invite.startTime);
+          var end = moment(invite.endTime);
+          //If the time now is in between start and finish
+          if(start < $scope.now && $scope.now < end) {
+            $scope.currentInvites.push(invite);
+          } else {
+            //When is not in between these time, 
+            //is future event because the events thats already over is filtered at server level
+            $scope.futureInvites.push(invite);
+          }
+        });
+      }
+    }
+    //Logic to determine is a item belongs to current or future invites
+    var justOneNewItem = function(item) {
+      if(item) {
+        var start = moment(item.startTime);
+        var end = moment(item.endTime);
+        if(start < $scope.now && $scope.now < end) {
+          $scope.currentInvites.push(item);
+        } else {
+          $scope.futureInvites.push(item);
+        }
+      }
+    }
+
+    //Check if events ended
+    var removeInviteEnded = function(arr) {
+      if(arr[0]) {
+        arr.forEach(function(invite) {
+          var end = moment(invite.endTime);
+          //If the end smaller then time now remove from current
+          if(end < $scope.now) {
+            var index = $scope.currentInvites.indexOf(invite);
+            $scope.currentInvites.splice(index, 1);
+          } else {
+            return;
+          }
+        });
+      } else {
+        return;
+      }
+    }
+    //Check if event started
+    var moveStartedToCurrent = function(arr) {
+      if(arr[0]) {
+        arr.forEach(function(invite) {
+          var start = moment(invite.startTime);
+          //If start is smaller then time now, remove from future to current events
+          if(start <= $scope.now) {
+            var index = $scope.futureInvites.indexOf(invite);
+            $scope.currentInvites.push(invite);
+            var spliced = $scope.futureInvites.splice(index, 1);
+            
+          } else {
+            return;
+          }
+        });
+      } else {
+        return;
+      }
+    }
+
+
+    //Defining today, NOW
+    $scope.now = moment();
+    $scope.tomorrow = moment($scope.now).add(1, 'days');
+    $scope.dayAfterTomorrow = moment($scope.now).add(2, 'days');
+    //Update now every second
+    $interval(function() {
+      $scope.now = moment();
+    }, 1000);
+
+    //Watch change of time now
+    $scope.$watch('now', function(newVal, oldVal) {
+      //Update UI for current and future invites
+      removeInviteEnded($scope.currentInvites);
+      moveStartedToCurrent($scope.futureInvites);
     });
 
     //Search and set court id if it exists
@@ -100,12 +190,6 @@ angular.module('keepballin')
         
       }
     };
-
-    //Defining today, NOW
-    $scope.now = moment();
-    $scope.tomorrow = moment($scope.now).add(1, 'days');
-    $scope.dayAfterTomorrow = moment($scope.now).add(2, 'days');
-
 
     //The start time is equal to time now when load
     $scope.start = $scope.now;
@@ -129,31 +213,34 @@ angular.module('keepballin')
     };
 
     $scope.$watch('chosenDate', function(newVal, oldVal) {
-      console.log('chosenDate changed', newVal);
       switch(newVal) {
         case 'Today':
           $scope.dt = undefined;
+          //Should calculate the duration of start to end
           var monthNow = moment().month();
           var dateNow = moment().date();
-          console.log(monthNow, dateNow);
+          var duration = moment.duration($scope.end.diff($scope.start));
           $scope.start.set({'month': monthNow, 'date': dateNow});
-          $scope.end.set({'month': monthNow, 'date': dateNow});
+          $scope.end = moment($scope.start).add(duration);
+          // $scope.end.set({'month': monthNow, 'date': dateNow});
           break;
         case 'Tomorrow':
           $scope.dt = undefined;
           var monthTmrw = $scope.tomorrow.month();
           var dateTmrw = $scope.tomorrow.date();
-          console.log(monthTmrw, dateTmrw);
+          var duration = moment.duration($scope.end.diff($scope.start));
           $scope.start.set({'month': monthTmrw, 'date': dateTmrw});
-          $scope.end.set({'month': monthTmrw, 'date': dateTmrw});
+          $scope.end = moment($scope.start).add(duration);
+          // $scope.end.set({'month': monthTmrw, 'date': dateTmrw});
           break;
         case 'dayAfterTomorrow':
           $scope.dt = undefined;
           var monthDAfterTmrw = $scope.dayAfterTomorrow.month();
           var dateDAfterTmrw = $scope.dayAfterTomorrow.date();
-          console.log(monthDAfterTmrw, dateDAfterTmrw);
+          var duration = moment.duration($scope.end.diff($scope.start));
           $scope.start.set({'month': monthDAfterTmrw, 'date': dateDAfterTmrw});
-          $scope.end.set({'month': monthDAfterTmrw, 'date': dateDAfterTmrw});
+          $scope.end = moment($scope.start).add(duration);
+          // $scope.end.set({'month': monthDAfterTmrw, 'date': dateDAfterTmrw});
           break;
       }
     });
@@ -174,6 +261,15 @@ angular.module('keepballin')
       $scope.opened = true;
     };
 
+    //default people number
+    $scope.people = 5;
+
+    //Open invite form
+    $scope.openInviter = function(open) {
+      $scope.openInvite = !open;
+      return;
+    };  
+
     //Sending invite to server
     $scope.sendInvite = function(invite) {
 
@@ -193,29 +289,71 @@ angular.module('keepballin')
         }
       }
 
-      if(invite.$valid && !($scope.dateNotChosen)) {
-        console.log('valid');
-        //start date for list grouping
-        var startDate = ($scope.start.month() + 1) + '/' + $scope.start.date();
-        
-        var objSendToServer = {
-          location: $scope.court,
-          court: $scope.courtId,
-          peopleNeed: $scope.people,
-          startTime: $scope.start,
-          endTime: $scope.end,
-          city: $scope.room.city,
-          startDate: startDate
-        };
-        console.log('obj', objSendToServer);
-        Invite.save(objSendToServer, function(data) {
-          $scope.submitted = false;
-          console.log('invite saved', data);
+      //Also check if the end time is larger than now
+      if($scope.end.unix() > $scope.now.unix()) {
+        if(invite.$valid && !($scope.dateNotChosen) && !($scope.sending)) {
+          //start date for list grouping
+          var startDate = ($scope.start.month() + 1) + '/' + $scope.start.date();
+          
+          var objSendToServer = {
+            location: $scope.court,
+            court: $scope.courtId,
+            peopleNeed: $scope.people,
+            startTime: $scope.start,
+            endTime: $scope.end,
+            city: $scope.room.city,
+            startDate: startDate
+          };
+          $scope.sending = true;
+          Invite.save(objSendToServer, function(data) {
+            $scope.submitted = false;
+            $scope.sending = false;
+            $scope.openInvite = false;
+
+            var startTime = $filter('date')(data.startTime, 'MM/dd hh:mm a');
+            var endTime = $filter('date')(data.endTime, 'hh:mm a');
+
+            SweetAlert.swal({
+              title: data.location,
+              text: startTime + ' ~ ' + endTime,
+              type: 'success',
+              confirmButtonColor: '#DD6B55',   
+              confirmButtonText: '好',
+              timer: 2000
+            });
+          });
+        }//If valid ends
+      } else {
+        var endTime = $filter('date')($scope.end._d, 'MM/dd hh:mm a');
+        var nowTime = $filter('date')($scope.now._d, 'MM/dd hh:mm a');
+        SweetAlert.swal({
+          title: '無法建立過去的活動',
+          text: '現在是' + nowTime + '\n已經過 ' + endTime,
+          type: 'warning',
+          confirmButtonColor: '#DD6B55',   
+          confirmButtonText: '好'
         });
-      }//If valid ends
+      }
+    };//Send invites ends
 
+    //Default to show current invites
+    $scope.nowOrFuture = 'now';
 
-    };
+    //Watch nowOrFuture
+    $scope.$watch('nowOrFuture', function(newVal, oldVal) {
+      if(newVal) {
+        switch(newVal) {
+          case 'now':
+            $scope.showCurrent = true;
+            $scope.showFuture = false;
+            break;
+          case 'future':
+            $scope.showCurrent = false;
+            $scope.showFuture = true;
+            break;
+        }
+      }
+    });
 
 
     

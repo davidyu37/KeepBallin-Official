@@ -1,15 +1,14 @@
-<div class="container chatGroupContainer">	
-	<!-- <div class="col-sm-12">
-		calendar of events
-	</div> -->
-	<div class="page-header" style="padding-top: 60px;">
-		<h1 style="margin-bottom: 10px;">{{room.city}}
-			<span class="label label-success">{{room.usersOnline.length}}人在線上</span>
-			<span ng-show="courts[0]" class="label label-primary">{{courts.length}}個球場</span>
-			<span counter="timeFormat"></span>
-		</h1>
+<div class="container chatGroupContainer">
+	<div class="page-header chat-header">
+		<h1 style="color: white">{{room.city}}
+			<span class="room-detail">
+				<span class="label label-success" style="font-size: 50%;">{{room.usersOnline.length}}人在線上</span>
+				<span ng-show="courts[0]" class="label label-primary" style="font-size: 50%;">{{courts.length}}個球場</span>
+				<small counter="timeFormat"></small>
+			</span>
+		</h1>	
 	</div>
-	<div class="col-sm-6">
+	<div class="col-sm-6" style="height: 70vh">
 		<ul id="chatThread" class="list-group chatThreads">
 			<div id="chatContent">
 				<div class="loading" ng-show="loading">
@@ -35,14 +34,14 @@
 					<input ng-disabled="!message" class="btn btn-primary" type="submit" value="送出" />
 				</div>
 			</div>
-		</form>
-		
+		</form>	
 	</div>
-	<div class="col-sm-6">
+	<div class="col-sm-6" style="height: 70vh; text-align: center;">
 		<h2>快速約戰
-			<i class="fa fa-plus primaryColor pointer"></i>
+			<i class="fa fa-plus primaryColor pointer" ng-click="openInviter(openInvite)" ng-hide="openInvite"></i>
+			<i class="fa fa-minus primaryColor pointer" ng-click="openInviter(openInvite)" ng-show="openInvite"></i>
 		</h2>
-		<form name="invite" class="form-horizontal" ng-submit="sendInvite(invite)" novalidate>
+		<form name="invite" class="form-horizontal" ng-submit="sendInvite(invite)" novalidate collapse="!openInvite">
 			<div class="form-group">
 				<label for="court" class="control-label col-sm-3">地點:</label>
 				<div class="col-sm-9">
@@ -79,28 +78,70 @@
 				<span style="margin-left: 2px;" ng-show="choseCustom">{{dt | date : 'MM/dd/yyyy'}}</span>
 				<span ng-show="dateNotChosen">請選擇日期</span>
 		    </div>
-			<button class="pull-right btn btn-primary" type="submit">揪人</button>
+			<button class="pull-right btn btn-primary" type="submit">
+				<p ng-hide="sending" style="margin: 0px">揪人</p>
+				<div class="spinner" style="margin: 0px; height: 20px; width: 30px;" ng-show="sending">
+				  <div class="rect1" style="background-color: white;"></div>
+				  <div class="rect2" style="background-color: white;"></div>
+				  <div class="rect3" style="background-color: white;"></div>
+				  <div class="rect4" style="background-color: white;"></div>
+				</div>
+			</button>
 		</form>
-	</div>
-	<div class="col-sm-12">
-		<div class="chatThreads">
-			<ul class="list-group" ng-repeat="invite in invites | groupBy: 'startDate' | toArray:true">
-				<strong>{{invite.$key}}</strong>
-				<li class="list-group-item" ng-repeat="i in invite | orderBy: 'startTime'">
-					<h4 class="list-group-heading" ng-show="i.court">
-						<a ui-sref="thiscourt({id: i.court})">
+		<div ng-hide="openInvite" style="height: 80%">
+			<div class="chatThreads" style="height: 100%" ng-show="showCurrent">
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="i in currentInvites | orderBy: 'endTime'">
+						<h4 class="list-group-heading" ng-show="i.court">
+							<a ui-sref="thiscourt({id: i.court})">
+								{{i.location}}
+							</a>
+							<small>{{i.dateCreated | relativeDate}}發佈</small>
+						</h4>
+						<h4 class="list-group-heading" ng-hide="i.court">
 							{{i.location}}
-						</a>
-						<small>{{i.dateCreated | relativeDate}}發佈</small>
-					</h4>
-					<h4 class="list-group-heading" ng-hide="i.court">
-						{{i.location}}
-						<small>{{i.dateCreated | relativeDate}}發佈</small>
-					</h4>
+							<small>{{i.dateCreated | relativeDate}}發佈</small>
+						</h4>
+						{{i.endTime | date: 'shortTime'}}結束
+					<!-- {{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}} -->
+					缺:{{i.peopleNeed}}人</li>
+				</ul>
+			</div>
+			<div class="chatThreads" style="height: 100%" ng-show="showFuture">
+				<ul class="list-group" ng-repeat="invite in futureInvites | orderBy: 'startTime' | groupBy: 'startDate' | toArray:true">
+					<strong>{{invite.$key}}</strong>
+					<li class="list-group-item" ng-repeat="i in invite | orderBy: 'startTime'">
+						<h4 class="list-group-heading" ng-show="i.court">
+							<a ui-sref="thiscourt({id: i.court})">
+								{{i.location}}
+							</a>
+							<small>{{i.dateCreated | relativeDate}}發佈</small>
+						</h4>
+						<h4 class="list-group-heading" ng-hide="i.court">
+							{{i.location}}
+							<small>{{i.dateCreated | relativeDate}}發佈</small>
+						</h4>
 
-				{{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}}
-				缺:{{i.peopleNeed}}人</li>
-			</ul>
+					{{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}}
+					缺:{{i.peopleNeed}}人</li>
+				</ul>
+			</div>
+			<!-- Choosing the present or future -->
+			<div class="btn-group" style="margin-top: 10px;">
+		        <label class="btn btn-primary" ng-model="nowOrFuture" btn-radio="'now'">現在</label>
+		        <label class="btn btn-primary" ng-model="nowOrFuture" btn-radio="'future'">未來</label>
+		    </div>
+		</div>
+	</div>
+	<div class="col-sm-12" ng-hide="true">
+		<div class="col-sm-6">
+			
+		</div>
+		<div class="col-sm-6">
+			<div class="page-header">
+				<h3>即將進行</h3>
+			</div>
+			
 		</div>
 	</div>
 </div>
