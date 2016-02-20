@@ -48,7 +48,8 @@ var UserSchema = new Schema({
   github: {},
   createdOn: { type: Date, default: Date.now },
   courtCreated: [{ type:Schema.ObjectId, ref:"Court" }],
-  eventsJoined: [{ type:Schema.ObjectId, ref:"Event" }]
+  eventsJoined: [{ type:Schema.ObjectId, ref:"Event" }],
+  invitesJoined: [{ type:Schema.ObjectId, ref:"Invite" }]
 });
 
 UserSchema.set('versionKey', false);

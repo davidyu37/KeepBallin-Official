@@ -60,6 +60,9 @@
 		padding-top: 30px;
 	}
 	margin-top: 60px;
+	h1 {
+		color: white;
+	}
 	.room-detail {
 		@media(min-width: $screen-sm-min) {
 			display: inline;
@@ -68,10 +71,31 @@
 	}
 }
 
+.currentInviteInstruction {
+	text-align: center; 
+	display: table; 
+	height: 100%; 
+	width: 100%; 
+	font-size: 150%;
+	div {
+		display: table-cell; 
+		vertical-align: middle
+	}
+
+}
+
 .chatThreads {
 	height: 80%; 
 	margin-top: 10px; 
 	overflow: scroll;
+	text-align: left;
+}
+
+.inviteThreads {
+	height: 100%; 
+	margin-top: 10px; 
+	overflow: scroll;
+	text-align: left;
 }
 
 .loading {

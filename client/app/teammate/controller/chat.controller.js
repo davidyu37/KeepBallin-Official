@@ -13,10 +13,6 @@ angular.module('keepballin')
 
   	socket.enterRoom(room._id);
 
-    $scope.$on('$destroy', function () {
-      socket.leaveRoom(room._id);
-    });
-
     $scope.sendMessage = function() {
       var message = {
         message: $scope.message,
@@ -86,11 +82,12 @@ angular.module('keepballin')
       $scope.invites = data;
       socket.syncUpdates('invite', $scope.invites, function(event, item , arr) {
         //Determine if the new item belongs to current invites or future invites
-        justOneNewItem(item);
+        justOneNewItem(item, event);
         $scope.invites = arr;
       });
       $scope.$on('$destroy', function () {
           socket.unsyncUpdates('invite');
+          socket.leaveRoom(room._id);
       });
     });
     //Function that gets the events occuring now
@@ -111,14 +108,30 @@ angular.module('keepballin')
       }
     }
     //Logic to determine is a item belongs to current or future invites
-    var justOneNewItem = function(item) {
+    var justOneNewItem = function(item, event) {
       if(item) {
         var start = moment(item.startTime);
         var end = moment(item.endTime);
         if(start < $scope.now && $scope.now < end) {
-          $scope.currentInvites.push(item);
+          //If it's a new item is created, just push
+          if(event == 'created') {
+            $scope.currentInvites.push(item);
+          } else {
+            //When it's not created, it should be updated, replace the old item
+            var oldItem = _.find($scope.currentInvites, {_id: item._id});
+            var index = $scope.currentInvites.indexOf(oldItem);
+            $scope.currentInvites.splice(index, 1, item);
+          }
         } else {
-          $scope.futureInvites.push(item);
+          //If it's a new item is created, just push
+          if(event == 'created') {
+            $scope.futureInvites.push(item);
+          } else {
+            //When it's not created, it should be updated, replace the old item
+            var oldItem = _.find($scope.futureInvites, {_id: item._id});
+            var index = $scope.futureInvites.indexOf(oldItem);
+            $scope.futureInvites.splice(index, 1, item);
+          }
         }
       }
     }
@@ -355,6 +368,31 @@ angular.module('keepballin')
       }
     });
 
+    //Adding participants
+    $scope.joinInvite = function(invite) {
+      Invite.addParticipant({id: invite._id}, function(data) {
+        $scope.switchMinus = true;
+      });
+    };
+
+    //Removing participants
+    $scope.leaveInvite = function(invite) {
+      Invite.minusParticipant({id: invite._id}, function(data) {
+        $scope.switchMinus = false;
+      });
+    };
+
+    //Checking if user is already a participant
+    $scope.isParticipant = function(invite) {
+      if(invite && $scope.user._id) {
+        var alreadyExist = invite.participants.indexOf($scope.user._id);
+        if(alreadyExist >= 0) {
+          return true;
+        } else {
+          return false;
+        } 
+      }
+    };
 
     
   }]);//ChatCtrl ends

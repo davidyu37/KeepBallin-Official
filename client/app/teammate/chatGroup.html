@@ -1,6 +1,6 @@
 <div class="container chatGroupContainer">
 	<div class="page-header chat-header">
-		<h1 style="color: white">{{room.city}}
+		<h1>{{room.city}}
 			<span class="room-detail">
 				<span class="label label-success" style="font-size: 50%;">{{room.usersOnline.length}}人在線上</span>
 				<span ng-show="courts[0]" class="label label-primary" style="font-size: 50%;">{{courts.length}}個球場</span>
@@ -37,9 +37,9 @@
 		</form>	
 	</div>
 	<div class="col-sm-6" style="height: 70vh; text-align: center;">
-		<h2>快速約戰
-			<i class="fa fa-plus primaryColor pointer" ng-click="openInviter(openInvite)" ng-hide="openInvite"></i>
-			<i class="fa fa-minus primaryColor pointer" ng-click="openInviter(openInvite)" ng-show="openInvite"></i>
+		<h2 class="pointer" ng-click="openInviter(openInvite)">快速約戰
+			<i class="fa fa-plus primaryColor" ng-hide="openInvite"></i>
+			<i class="fa fa-minus primaryColor" ng-show="openInvite"></i>
 		</h2>
 		<form name="invite" class="form-horizontal" ng-submit="sendInvite(invite)" novalidate collapse="!openInvite">
 			<div class="form-group">
@@ -89,9 +89,23 @@
 			</button>
 		</form>
 		<div ng-hide="openInvite" style="height: 80%">
-			<div class="chatThreads" style="height: 100%" ng-show="showCurrent">
+			<div class="inviteThreads" ng-show="showCurrent">
+				<div class="currentInviteInstruction" ng-hide="currentInvites[0]">
+					<div>
+						<p>
+							<i class="fa fa-arrow-circle-o-up faa-bounce animated"></i>
+							自己揪團
+						</p>
+						<p>或</p>
+						<p>
+							看未來的活動
+							<i class="fa fa-arrow-circle-o-down"></i>
+						</p>
+					</div>
+				</div>
 				<ul class="list-group">
 					<li class="list-group-item" ng-repeat="i in currentInvites | orderBy: 'endTime'">
+						<span class="label label-primary pull-right" style="font-size: 150%;">Primary</span>
 						<h4 class="list-group-heading" ng-show="i.court">
 							<a ui-sref="thiscourt({id: i.court})">
 								{{i.location}}
@@ -103,14 +117,40 @@
 							<small>{{i.dateCreated | relativeDate}}發佈</small>
 						</h4>
 						{{i.endTime | date: 'shortTime'}}結束
-					<!-- {{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}} -->
-					缺:{{i.peopleNeed}}人</li>
+						<p ng-hide="i.peopleNeed <= 0">缺:{{i.peopleNeed}}人</p>
+						<p ng-show="i.peopleNeed <= 0">{{i.participants.length}}人</p>
+					</li>
 				</ul>
 			</div>
-			<div class="chatThreads" style="height: 100%" ng-show="showFuture">
+			<div class="inviteThreads" ng-show="showFuture">
+				<div class="currentInviteInstruction" ng-hide="futureInvites[0]">
+					<div>
+						<p>
+							<i class="fa fa-arrow-circle-o-up faa-bounce animated"></i>
+							自己揪團
+						</p>
+						<p>或</p>
+						<p>
+							看現在的活動
+							<i class="fa fa-arrow-circle-o-down"></i>
+						</p>
+					</div>
+				</div>
 				<ul class="list-group" ng-repeat="invite in futureInvites | orderBy: 'startTime' | groupBy: 'startDate' | toArray:true">
 					<strong>{{invite.$key}}</strong>
 					<li class="list-group-item" ng-repeat="i in invite | orderBy: 'startTime'">
+						<button class="btn btn-success pull-right" style="font-size: 120%;" ng-click="joinInvite(i)" ng-hide="switchMinus || isParticipant(i)">
+							<i class="fa fa-plus"></i>
+							<span style="font-size: 120%">
+								<strong>1</strong>
+							</span>
+						</button>
+						<button class="btn btn-danger pull-right" style="font-size: 120%;" ng-click="leaveInvite(i)" ng-show="switchMinus || isParticipant(i)">
+							<i class="fa fa-minus"></i>
+							<span style="font-size: 120%">
+								<strong>1</strong>
+							</span>
+						</button>
 						<h4 class="list-group-heading" ng-show="i.court">
 							<a ui-sref="thiscourt({id: i.court})">
 								{{i.location}}
@@ -122,8 +162,10 @@
 							<small>{{i.dateCreated | relativeDate}}發佈</small>
 						</h4>
 
-					{{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}}
-					缺:{{i.peopleNeed}}人</li>
+						{{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}}
+						<p ng-hide="i.peopleNeed <= 0">缺:{{i.peopleNeed}}人</p>
+						<p ng-show="i.peopleNeed <= 0">{{i.participants.length}}人</p>
+					</li>
 				</ul>
 			</div>
 			<!-- Choosing the present or future -->
@@ -131,17 +173,6 @@
 		        <label class="btn btn-primary" ng-model="nowOrFuture" btn-radio="'now'">現在</label>
 		        <label class="btn btn-primary" ng-model="nowOrFuture" btn-radio="'future'">未來</label>
 		    </div>
-		</div>
-	</div>
-	<div class="col-sm-12" ng-hide="true">
-		<div class="col-sm-6">
-			
-		</div>
-		<div class="col-sm-6">
-			<div class="page-header">
-				<h3>即將進行</h3>
-			</div>
-			
 		</div>
 	</div>
 </div>

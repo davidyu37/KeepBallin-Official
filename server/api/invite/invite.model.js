@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
+    relationship = require("mongoose-relationship"),
     deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var InviteSchema = new Schema({
@@ -29,10 +30,12 @@ var InviteSchema = new Schema({
   participants: [{
   	type: Schema.ObjectId,
     ref: 'User',
-    childPath: 'eventsJoined'
+    childPath: 'invitesJoined'
   }],
   peopleNeed: Number
 });
+
+InviteSchema.plugin(relationship, { relationshipPathName: ['participants']});
 
 // InviteSchema.plugin(deepPopulate, {
 //   populate: {
