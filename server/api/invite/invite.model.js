@@ -37,22 +37,29 @@ var InviteSchema = new Schema({
 
 InviteSchema.plugin(relationship, { relationshipPathName: ['participants']});
 
-// InviteSchema.plugin(deepPopulate, {
-//   populate: {
-//     'author.avatar': {
-//       select: 'url'
-//     },
-//     'author': {
-//       select: 'fbprofilepic name avatar'
-//     }
-//   }
-// });
+InviteSchema.plugin(deepPopulate, {
+  populate: {
+    'creator.avatar': {
+      select: 'url'
+    },
+    'creator': {
+      select: 'fbprofilepic name avatar'
+    },
+    'participants.avatar': {
+      select: 'url'
+    },
+    'participants': {
+      select: 'fbprofilepic name avatar'
+    }
+  }
+});
 
 InviteSchema.statics = {
   findByCity: function(city, cb) {
     var dateNow = new Date();
     this.find({'city': city, 'endTime': {$gt: dateNow}})
       .sort('startTime')
+      .deepPopulate('creator.avatar creator participants.avatar participants')
       .exec(cb);
   }
 };

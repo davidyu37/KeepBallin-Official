@@ -50,8 +50,12 @@
 }
 
 .chatGroupContainer { 
+	margin-bottom: 60px;
 	.col-sm-6 {
 		background-color: white;
+	}
+	.alert {
+		margin: 0px;
 	}
 }
 
@@ -91,17 +95,42 @@
 	text-align: left;
 }
 
+.countDownLabel {
+	font-size:110%; 
+	position:absolute; 
+	bottom: 0; 
+	right: 0
+}
+
 .inviteThreads {
 	height: 100%; 
 	margin-top: 10px; 
 	overflow: scroll;
 	text-align: left;
+	.list-group-item {
+		opacity: 1;
+		transition: all linear 0.5s;
+	}
+	.list-group-item.animate-leave {
+		opacity: 0
+	}
 }
 
 .loading {
 	text-align: center; 
 	padding: 20px; 
 	color: $brand-primary;
+}
+
+.inviteBox {
+	height: 80%;
+	opacity: 1;
+	transition: all linear 0.5s;
+}
+
+.inviteBox.ng-hide {
+  height: 0%;
+  opacity: 0;
 }
 
 /* Animation for sending invite */

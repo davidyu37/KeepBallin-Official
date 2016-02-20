@@ -54,10 +54,14 @@
 			<div class="form-group">
 				<label for="people" class="control-label col-sm-3">需要人數:</label>
 				<div class="col-sm-9">
-					<input class="form-control" name="people" type="number" placeholder="缺幾人" ng-model="people" required>
+					<input class="form-control" name="people" type="number" placeholder="缺幾人" ng-model="people" min="1" required>
 					<div class="alert alert-danger" role="alert" ng-show="invite.people.$error.required && submitted">
 					<i class="fa fa-warning"></i>
-					請輸入人數</div>				
+					請輸入人數</div>	
+					<div class="alert alert-danger" role="alert" ng-show="invite.people.$error.min">
+						<i class="fa fa-warning"></i>
+						最小人數為:1
+				     </div>			
 				</div>
 			</div>
 			<div class="form-group" ng-hide="allDay">
@@ -88,7 +92,7 @@
 				</div>
 			</button>
 		</form>
-		<div ng-hide="openInvite" style="height: 80%">
+		<div class="inviteBox" ng-hide="openInvite">
 			<div class="inviteThreads" ng-show="showCurrent">
 				<div class="currentInviteInstruction" ng-hide="currentInvites[0]">
 					<div>
@@ -105,7 +109,7 @@
 				</div>
 				<ul class="list-group">
 					<li class="list-group-item" ng-repeat="i in currentInvites | orderBy: 'endTime'">
-						<span class="label label-primary pull-right" style="font-size: 150%;">Primary</span>
+						<a class="pull-right" ui-sref="profile({id: i.creator._id})">主辦人:{{i.creator.name}}</a>
 						<h4 class="list-group-heading" ng-show="i.court">
 							<a ui-sref="thiscourt({id: i.court})">
 								{{i.location}}
@@ -119,6 +123,10 @@
 						{{i.endTime | date: 'shortTime'}}結束
 						<p ng-hide="i.peopleNeed <= 0">缺:{{i.peopleNeed}}人</p>
 						<p ng-show="i.peopleNeed <= 0">{{i.participants.length}}人</p>
+						<span class="label label-primary pull-right countDownLabel">
+							<!-- count down -->
+							<timer end-time="i.endTime">{{days}} 天 {{hours}}小時 {{minutes}} 分鐘 {{seconds}}秒後結束</timer>
+						</span>
 					</li>
 				</ul>
 			</div>
@@ -139,6 +147,7 @@
 				<ul class="list-group" ng-repeat="invite in futureInvites | orderBy: 'startTime' | groupBy: 'startDate' | toArray:true">
 					<strong>{{invite.$key}}</strong>
 					<li class="list-group-item" ng-repeat="i in invite | orderBy: 'startTime'">
+						<a class="countDownLabel pull-right" ui-sref="profile({id: i.creator._id})" style="margin: 5px;">主辦人:{{i.creator.name}}</a>
 						<button class="btn btn-success pull-right" style="font-size: 120%;" ng-click="joinInvite(i)" ng-hide="switchMinus || isParticipant(i)">
 							<i class="fa fa-plus"></i>
 							<span style="font-size: 120%">
