@@ -64,7 +64,7 @@
 				     </div>			
 				</div>
 			</div>
-			<div class="form-group" ng-hide="allDay">
+			<div class="form-group">
 				<div class="col-sm-6">
 					<label for="startTime" class="control-label">開始時間:</label>
 					<timepicker ng-model="start" show-meridian="true" ng-change="convertToMoment('start')"></timepicker>
@@ -109,7 +109,9 @@
 				</div>
 				<ul class="list-group">
 					<li class="list-group-item" ng-repeat="i in currentInvites | orderBy: 'endTime'">
-						<a class="pull-right" ui-sref="profile({id: i.creator._id})">主辦人:{{i.creator.name}}</a>
+						<span class="pull-right">
+							<a ui-sref="profile({id: i.creator._id})">主辦人:{{i.creator.name}}</a>
+						</span>
 						<h4 class="list-group-heading" ng-show="i.court">
 							<a ui-sref="thiscourt({id: i.court})">
 								{{i.location}}
@@ -120,6 +122,24 @@
 							{{i.location}}
 							<small>{{i.dateCreated | relativeDate}}發佈</small>
 						</h4>
+						<span class="pull-left" style="margin-right: 5px">
+							<!-- Edit and Delete -->
+							<div class="btn-group" dropdown>
+						      <button type="button" class="btn btn-danger dropdown-toggle" dropdown-toggle>
+						      	<i class="fa fa-angle-down"></i>
+						        <!-- <span class="caret"></span> -->
+						        <span class="sr-only">Split button!</span>
+						      </button>
+						      <ul class="dropdown-menu" role="menu">
+						        <li ng-click="editInvite(i)">
+								<a href="#">編輯</a>
+						        </li>
+						        <li ng-click="deleteInvite(i)">
+								<a href="#"> 刪除</a>
+						       	</li>
+						      </ul>
+						    </div>
+						</span>
 						{{i.endTime | date: 'shortTime'}}結束
 						<p ng-hide="i.peopleNeed <= 0">缺:{{i.peopleNeed}}人</p>
 						<p ng-show="i.peopleNeed <= 0">{{i.participants.length}}人</p>
@@ -170,7 +190,24 @@
 							{{i.location}}
 							<small>{{i.dateCreated | relativeDate}}發佈</small>
 						</h4>
-
+						<span class="pull-left" style="margin-right: 5px">
+							<!-- Edit and Delete -->
+							<div class="btn-group" dropdown>
+						      <button type="button" class="btn btn-danger dropdown-toggle" dropdown-toggle>
+						      	<i class="fa fa-angle-down"></i>
+						        <!-- <span class="caret"></span> -->
+						        <span class="sr-only">Split button!</span>
+						      </button>
+						      <ul class="dropdown-menu" role="menu">
+						        <li ng-click="editInvite(i)">
+								<a href="#">編輯</a>
+						        </li>
+						        <li ng-click="deleteInvite(i)">
+								<a href="#"> 刪除</a>
+						       	</li>
+						      </ul>
+						    </div>
+						</span>
 						{{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}}
 						<p ng-hide="i.peopleNeed <= 0">缺:{{i.peopleNeed}}人</p>
 						<p ng-show="i.peopleNeed <= 0">{{i.participants.length}}人</p>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', 'Court', 'Invite', '$interval', 'SweetAlert', '$filter', function ($scope, socket, Chat, room, Auth, $timeout, Court, Invite, $interval, SweetAlert, $filter) {
+  .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', 'Court', 'Invite', '$interval', 'SweetAlert', '$filter', '$modal', function ($scope, socket, Chat, room, Auth, $timeout, Court, Invite, $interval, SweetAlert, $filter, $modal) {
   	
     //Focus on the input box when entering the chat
     var chatBox = angular.element(document.getElementById('chatBox'));
@@ -116,21 +116,45 @@ angular.module('keepballin')
           //If it's a new item is created, just push
           if(event == 'created') {
             $scope.currentInvites.push(item);
-          } else {
-            //When it's not created, it should be updated, replace the old item
+          } 
+          //When it's not created, it should be updated, replace the old item
+          if(event == 'updated') {
+            //Check if the item is in the future, if it is, remove it.
+            var futureItem = _.find($scope.futureInvites, {_id: item._id}); 
+            var futureIndex = $scope.futureInvites.indexOf(futureItem);
+            if(futureIndex >= 0) {
+              $scope.futureInvites.splice(futureIndex, 1);
+            }
             var oldItem = _.find($scope.currentInvites, {_id: item._id});
             var index = $scope.currentInvites.indexOf(oldItem);
             $scope.currentInvites.splice(index, 1, item);
+          }
+          if(event == 'deleted') {
+            var oldItem = _.find($scope.currentInvites, {_id: item._id});
+            var index = $scope.currentInvites.indexOf(oldItem);
+            $scope.currentInvites.splice(index, 1);
           }
         } else {
           //If it's a new item is created, just push
           if(event == 'created') {
             $scope.futureInvites.push(item);
-          } else {
-            //When it's not created, it should be updated, replace the old item
+          } 
+          //When it's not created, it should be updated, replace the old item
+          if(event == 'updated') {
+            //Check if the item is in the current, if it is, remove it.
+            var currentItem = _.find($scope.currentInvites, {_id: item._id}); 
+            var currentIndex = $scope.currentInvites.indexOf(currentItem);
+            if(currentIndex >= 0) {
+              $scope.currentInvites.splice(currentIndex, 1);
+            }
             var oldItem = _.find($scope.futureInvites, {_id: item._id});
             var index = $scope.futureInvites.indexOf(oldItem);
             $scope.futureInvites.splice(index, 1, item);
+          }
+          if(event == 'deleted') {
+            var oldItem = _.find($scope.futureInvites, {_id: item._id});
+            var index = $scope.futureInvites.indexOf(oldItem);
+            $scope.futureInvites.splice(index, 1);
           }
         }
       }
@@ -392,6 +416,54 @@ angular.module('keepballin')
           return false;
         } 
       }
+    };
+
+    //Edit invite
+    $scope.editInvite = function(invite) {
+      //Open modal for edit
+      var modalInstance = $modal.open({
+        animation: true,
+        templateUrl: 'app/teammate/editInvite.html',
+        controller: 'EditInviteCtrl',
+        size: 'lg',
+        resolve: {
+          invite: function () {
+            return invite;
+          },
+          court: function() {
+            return $scope.courts;
+          }
+        }
+      });
+
+      // modalInstance.result.then(function () {
+      //   $scope.test = true;
+      //   console.log($scope.test);
+      // });
+    };
+    
+
+    //Delete invite
+    $scope.deleteInvite = function(invite) {
+      SweetAlert.swal({   
+        title: "你確定要刪除?",   
+        text: "刪除後沒有備份喔",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "對, 刪除!",
+        cancelButtonText: "取消",   
+        closeOnConfirm: false }, 
+        function() {
+          Invite.delete({id: invite._id}, function() {
+            swal({
+              title: "已經刪除", 
+              text: invite.location + ' 的活動', 
+              type: "success",
+              timer: 2000
+            }); 
+          });   
+      });      
     };
 
     

@@ -13,8 +13,9 @@ router.post('/:id/addOne', auth.isAuthenticated(), controller.add);
 router.post('/:id/minusOne', auth.isAuthenticated(), controller.minus);
 //Get invite by city
 router.get('/:city', controller.show);
-// router.get('/', controller.index);
-// router.put('/:id', auth.hasRole('vip'), controller.update);
-// router.delete('/:id', controller.destroy);
+//Update invite
+router.put('/:id', auth.isAuthenticated(), controller.update);
+// Delete invite
+router.delete('/:id', controller.destroy);
 
 module.exports = router;

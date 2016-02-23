@@ -18,5 +18,5 @@ function onSave(socket, doc, cb) {
 }
 
 function onRemove(socket, doc, cb) {
-  socket.emit('court:remove', doc);
+  socket.emit('invite:remove', doc);
 }
