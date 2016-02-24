@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', 'Court', 'Invite', '$interval', 'SweetAlert', '$filter', '$modal', function ($scope, socket, Chat, room, Auth, $timeout, Court, Invite, $interval, SweetAlert, $filter, $modal) {
+  .controller('ChatCtrl', ['$scope', 'socket', 'Chat', 'room', 'Auth', '$timeout', 'Court', 'Invite', '$interval', 'SweetAlert', '$filter', '$modal', '$swipe', function ($scope, socket, Chat, room, Auth, $timeout, Court, Invite, $interval, SweetAlert, $filter, $modal, $swipe) {
   	
     //Focus on the input box when entering the chat
     var chatBox = angular.element(document.getElementById('chatBox'));
@@ -466,5 +466,37 @@ angular.module('keepballin')
       });      
     };
 
-    
+    //Check if user is the creator of the invite, to decide whether to show edit or delete button
+    $scope.isCreator = function(invite) {
+      if($scope.user._id === invite.creator._id) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    //Bind swipe when screen is smaller than 786
+    if(screen.width < 786) {
+      //Get quick invite element
+      var quickInviteBox = angular.element(document.getElementById('invitePage'));
+      //Get chat room page element
+      var chatRoomBox = angular.element(document.getElementById('chatRoomPage'));
+      //Bind swipe to quick invite box and chat room box
+      $swipe.bind(quickInviteBox, {
+        end: function(touch) { 
+          if(touch.direction == 'LEFT') {
+            angular.element('#chatRoomPage').css({'left': 0, 'right': 0});
+            chatBox.focus();
+          }
+        }
+      });
+      
+      $swipe.bind(chatRoomBox, {
+        end: function(touch) { 
+          if(touch.direction == 'RIGHT') {
+            angular.element('#chatRoomPage').css({'left': '100%' , 'right': '-100%'});
+          }
+        }
+      });
+    }
+
   }]);//ChatCtrl ends

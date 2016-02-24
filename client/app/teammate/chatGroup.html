@@ -1,14 +1,217 @@
 <div class="container chatGroupContainer">
-	<div class="page-header chat-header">
-		<h1>{{room.city}}
-			<span class="room-detail">
-				<span class="label label-success" style="font-size: 50%;">{{room.usersOnline.length}}人在線上</span>
-				<span ng-show="courts[0]" class="label label-primary" style="font-size: 50%;">{{courts.length}}個球場</span>
-				<small counter="timeFormat"></small>
-			</span>
-		</h1>	
+	<div id="invitePage">
+		<div class="page-header chat-header">
+			<h1>{{room.city}}
+				<span class="room-detail">
+					<span class="label label-success" style="font-size: 50%;">{{room.usersOnline.length}}人在線上</span>
+					<span ng-show="courts[0]" class="label label-primary" style="font-size: 50%;">{{courts.length}}個球場</span>
+					<span ng-show="invites[0]" class="label label-warning" style="font-size: 50%;">{{invites.length}}個活動</span>
+					<small counter="timeFormat"></small>
+				</span>
+				<span class="room-detail-mobile">
+					<span class="label label-success" style="font-size: 40%;">{{room.usersOnline.length}}
+						<i class="fa fa-user"></i>
+					</span>
+					<span ng-show="courts[0]" class="label label-primary" style="font-size: 40%;">{{courts.length}}
+						<i class="fa fa-map-pin"></i>
+					</span>
+					<span ng-show="invites[0]" class="label label-warning" style="font-size: 40%;">{{invites.length}}
+						<i class="fa fa-bell"></i>
+					</span>
+				</span>
+			</h1>	
+		</div>
+		<p class="slide-instruction" style="color: white;">
+			<i class="fa fa-hand-pointer-o"></i>
+			往左滑進入聊天室
+		</p>
+		<div id="quickInvitePage" class="col-sm-6">
+			<h2 class="pointer" ng-click="openInviter(openInvite)">快速約戰
+				<i class="fa fa-plus primaryColor" ng-hide="openInvite"></i>
+				<i class="fa fa-minus primaryColor" ng-show="openInvite"></i>
+			</h2>
+			<form name="invite" class="form-horizontal" ng-submit="sendInvite(invite)" novalidate collapse="!openInvite">
+				<div class="form-group">
+					<label for="court" class="control-label col-xs-3">地點:</label>
+					<div class="col-xs-9">
+						<input class="form-control" name="court" type="text" ng-model="court" placeholder="哪裡" typeahead="court.court for court in courts | filter:$viewValue | limitTo:8" ng-blur="findCourtId()" required>
+						<div class="alert alert-danger" role="alert" ng-show="invite.court.$error.required && submitted">
+						<i class="fa fa-warning"></i>
+						請輸入地點</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="people" class="control-label col-xs-3">需要人數:</label>
+					<div class="col-xs-9">
+						<input class="form-control" name="people" type="number" placeholder="缺幾人" ng-model="people" min="1" required>
+						<div class="alert alert-danger" role="alert" ng-show="invite.people.$error.required && submitted">
+						<i class="fa fa-warning"></i>
+						請輸入人數</div>	
+						<div class="alert alert-danger" role="alert" ng-show="invite.people.$error.min">
+							<i class="fa fa-warning"></i>
+							最小人數為:1
+					     </div>			
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-6">
+						<label for="startTime" class="control-label">開始時間:</label>
+						<timepicker ng-model="start" show-meridian="true" ng-change="convertToMoment('start')"></timepicker>
+					</div>
+					<div class="col-sm-6">
+						<label for="endTime" class="control-label">結束時間:</label>
+						<timepicker ng-model="end" show-meridian="true" ng-change="convertToMoment('end')"></timepicker>
+					</div>
+				</div>
+				<div class="btn-group">
+			        <label class="btn btn-primary" ng-model="chosenDate" btn-radio="'Today'">今天</label>
+			        <label class="btn btn-primary" ng-model="chosenDate" btn-radio="'Tomorrow'">明天</label>
+			        <label class="btn btn-primary" ng-model="chosenDate" btn-radio="'dayAfterTomorrow'">後天</label>
+					<button type="button" class="btn btn-primary" ng-click="open($event)" datepicker-popup ng-model="dt" is-open="opened" min-date="now"><i class="glyphicon glyphicon-calendar"></i></button>
+					<span style="margin-left: 2px;" ng-show="choseCustom">{{dt | date : 'MM/dd/yyyy'}}</span>
+					<span ng-show="dateNotChosen">請選擇日期</span>
+			    </div>
+				<button class="pull-right btn btn-primary" type="submit">
+					<p ng-hide="sending" style="margin: 0px">揪人</p>
+					<div class="spinner" style="margin: 0px; height: 20px; width: 30px;" ng-show="sending">
+					  <div class="rect1" style="background-color: white;"></div>
+					  <div class="rect2" style="background-color: white;"></div>
+					  <div class="rect3" style="background-color: white;"></div>
+					  <div class="rect4" style="background-color: white;"></div>
+					</div>
+				</button>
+			</form>
+			<div class="inviteBox" ng-hide="openInvite">
+				<div class="inviteThreads" ng-show="showCurrent">
+					<div class="currentInviteInstruction" ng-hide="currentInvites[0]">
+						<div>
+							<p>
+								<i class="fa fa-arrow-circle-o-up faa-bounce animated"></i>
+								自己揪團
+							</p>
+							<p>或</p>
+							<p>
+								看未來的活動
+								<i class="fa fa-arrow-circle-o-down"></i>
+							</p>
+						</div>
+					</div>
+					<ul class="list-group">
+						<li class="list-group-item" ng-repeat="i in currentInvites | orderBy: 'endTime'">
+							<span class="pull-right">
+								<a ui-sref="profile({id: i.creator._id})">主辦人:{{i.creator.name}}</a>
+							</span>
+							<h4 class="list-group-heading" ng-show="i.court">
+								<a ui-sref="thiscourt({id: i.court})">
+									{{i.location}}
+								</a>
+								<small>{{i.dateCreated | relativeDate}}發佈</small>
+							</h4>
+							<h4 class="list-group-heading" ng-hide="i.court">
+								{{i.location}}
+								<small>{{i.dateCreated | relativeDate}}發佈</small>
+							</h4>
+							<span class="pull-left" style="margin-right: 5px" ng-show="isCreator(i)">
+								<!-- Edit and Delete -->
+								<div class="btn-group" dropdown>
+							      <button type="button" class="btn btn-danger dropdown-toggle" dropdown-toggle>
+							      	<i class="fa fa-angle-down"></i>
+							        <!-- <span class="caret"></span> -->
+							        <span class="sr-only">Split button!</span>
+							      </button>
+							      <ul class="dropdown-menu" role="menu">
+							        <li ng-click="editInvite(i)">
+									<a href="#">編輯</a>
+							        </li>
+							        <li ng-click="deleteInvite(i)">
+									<a href="#"> 刪除</a>
+							       	</li>
+							      </ul>
+							    </div>
+							</span>
+							{{i.endTime | date: 'shortTime'}}結束
+							<p ng-hide="i.peopleNeed <= 0" style="margin-bottom: 15px;">缺:{{i.peopleNeed}}人</p>
+							<p ng-show="i.peopleNeed <= 0" style="margin-bottom: 15px;">{{i.participants.length}}人</p>
+							<span class="label label-primary pull-right countDownLabel">
+								<!-- count down -->
+								<timer end-time="i.endTime">{{days}} 天 {{hours}}時 {{minutes}} 分 {{seconds}}秒後結束</timer>
+							</span>
+						</li>
+					</ul>
+				</div>
+				<div class="inviteThreads" ng-show="showFuture">
+					<div class="currentInviteInstruction" ng-hide="futureInvites[0]">
+						<div>
+							<p>
+								<i class="fa fa-arrow-circle-o-up faa-bounce animated"></i>
+								自己揪團
+							</p>
+							<p>或</p>
+							<p>
+								看現在的活動
+								<i class="fa fa-arrow-circle-o-down"></i>
+							</p>
+						</div>
+					</div>
+					<ul class="list-group" ng-repeat="invite in futureInvites | orderBy: 'startTime' | groupBy: 'startDate' | toArray:true">
+						<strong>{{invite.$key}}</strong>
+						<li class="list-group-item" ng-repeat="i in invite | orderBy: 'startTime'">
+							<a class="countDownLabel pull-right" ui-sref="profile({id: i.creator._id})" style="margin: 5px;">主辦人:{{i.creator.name}}</a>
+							<button class="btn btn-success pull-right" style="font-size: 120%;" ng-click="joinInvite(i)" ng-hide="switchMinus || isParticipant(i)">
+								<i class="fa fa-plus"></i>
+								<span style="font-size: 120%">
+									<strong>1</strong>
+								</span>
+							</button>
+							<button class="btn btn-danger pull-right" style="font-size: 120%;" ng-click="leaveInvite(i)" ng-show="switchMinus || isParticipant(i)">
+								<i class="fa fa-minus"></i>
+								<span style="font-size: 120%">
+									<strong>1</strong>
+								</span>
+							</button>
+							<h4 class="list-group-heading" ng-show="i.court">
+								<a ui-sref="thiscourt({id: i.court})">
+									{{i.location}}
+								</a>
+								<small>{{i.dateCreated | relativeDate}}發佈</small>
+							</h4>
+							<h4 class="list-group-heading" ng-hide="i.court">
+								{{i.location}}
+								<small>{{i.dateCreated | relativeDate}}發佈</small>
+							</h4>
+							<span class="pull-left" style="margin-right: 5px" ng-show="isCreator(i)">
+								<!-- Edit and Delete -->
+								<div class="btn-group" dropdown>
+							      <button type="button" class="btn btn-danger dropdown-toggle" dropdown-toggle>
+							      	<i class="fa fa-angle-down"></i>
+							        <!-- <span class="caret"></span> -->
+							        <span class="sr-only">Split button!</span>
+							      </button>
+							      <ul class="dropdown-menu" role="menu">
+							        <li ng-click="editInvite(i)">
+									<a href="#">編輯</a>
+							        </li>
+							        <li ng-click="deleteInvite(i)">
+									<a href="#"> 刪除</a>
+							       	</li>
+							      </ul>
+							    </div>
+							</span>
+							{{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}}
+							<p ng-hide="i.peopleNeed <= 0">缺:{{i.peopleNeed}}人</p>
+							<p ng-show="i.peopleNeed <= 0">{{i.participants.length}}人</p>
+						</li>
+					</ul>
+				</div>
+				<!-- Choosing the present or future -->
+				<div class="btn-group nowOrFutureBtn">
+			        <label class="btn btn-primary" ng-model="nowOrFuture" btn-radio="'now'">現在</label>
+			        <label class="btn btn-primary" ng-model="nowOrFuture" btn-radio="'future'">未來</label>
+			    </div>
+			</div>
+		</div>	
 	</div>
-	<div class="col-sm-6" style="height: 70vh">
+	<div id="chatRoomPage" class="col-sm-6">
 		<ul id="chatThread" class="list-group chatThreads">
 			<div id="chatContent">
 				<div class="loading" ng-show="loading">
@@ -27,7 +230,7 @@
 				</li>
 			</div>
 		</ul>
-		<form ng-submit="sendMessage()">
+		<form class="sendMessage" ng-submit="sendMessage()">
 			<div class="input-group">
 				<input id="chatBox" class="chatBox form-control" type="text" name="message" placeholder="我想說..." ng-model="message" autofocus required id="talkBox">
 				<div class="input-group-btn">
@@ -36,189 +239,5 @@
 			</div>
 		</form>	
 	</div>
-	<div class="col-sm-6" style="height: 70vh; text-align: center;">
-		<h2 class="pointer" ng-click="openInviter(openInvite)">快速約戰
-			<i class="fa fa-plus primaryColor" ng-hide="openInvite"></i>
-			<i class="fa fa-minus primaryColor" ng-show="openInvite"></i>
-		</h2>
-		<form name="invite" class="form-horizontal" ng-submit="sendInvite(invite)" novalidate collapse="!openInvite">
-			<div class="form-group">
-				<label for="court" class="control-label col-sm-3">地點:</label>
-				<div class="col-sm-9">
-					<input class="form-control" name="court" type="text" ng-model="court" placeholder="哪裡" typeahead="court.court for court in courts | filter:$viewValue | limitTo:8" ng-blur="findCourtId()" required>
-					<div class="alert alert-danger" role="alert" ng-show="invite.court.$error.required && submitted">
-					<i class="fa fa-warning"></i>
-					請輸入地點</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="people" class="control-label col-sm-3">需要人數:</label>
-				<div class="col-sm-9">
-					<input class="form-control" name="people" type="number" placeholder="缺幾人" ng-model="people" min="1" required>
-					<div class="alert alert-danger" role="alert" ng-show="invite.people.$error.required && submitted">
-					<i class="fa fa-warning"></i>
-					請輸入人數</div>	
-					<div class="alert alert-danger" role="alert" ng-show="invite.people.$error.min">
-						<i class="fa fa-warning"></i>
-						最小人數為:1
-				     </div>			
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-6">
-					<label for="startTime" class="control-label">開始時間:</label>
-					<timepicker ng-model="start" show-meridian="true" ng-change="convertToMoment('start')"></timepicker>
-				</div>
-				<div class="col-sm-6">
-					<label for="endTime" class="control-label">結束時間:</label>
-					<timepicker ng-model="end" show-meridian="true" ng-change="convertToMoment('end')"></timepicker>
-				</div>
-			</div>
-			<div class="btn-group">
-		        <label class="btn btn-primary" ng-model="chosenDate" btn-radio="'Today'">今天</label>
-		        <label class="btn btn-primary" ng-model="chosenDate" btn-radio="'Tomorrow'">明天</label>
-		        <label class="btn btn-primary" ng-model="chosenDate" btn-radio="'dayAfterTomorrow'">後天</label>
-				<button type="button" class="btn btn-primary" ng-click="open($event)" datepicker-popup ng-model="dt" is-open="opened" min-date="now"><i class="glyphicon glyphicon-calendar"></i></button>
-				<span style="margin-left: 2px;" ng-show="choseCustom">{{dt | date : 'MM/dd/yyyy'}}</span>
-				<span ng-show="dateNotChosen">請選擇日期</span>
-		    </div>
-			<button class="pull-right btn btn-primary" type="submit">
-				<p ng-hide="sending" style="margin: 0px">揪人</p>
-				<div class="spinner" style="margin: 0px; height: 20px; width: 30px;" ng-show="sending">
-				  <div class="rect1" style="background-color: white;"></div>
-				  <div class="rect2" style="background-color: white;"></div>
-				  <div class="rect3" style="background-color: white;"></div>
-				  <div class="rect4" style="background-color: white;"></div>
-				</div>
-			</button>
-		</form>
-		<div class="inviteBox" ng-hide="openInvite">
-			<div class="inviteThreads" ng-show="showCurrent">
-				<div class="currentInviteInstruction" ng-hide="currentInvites[0]">
-					<div>
-						<p>
-							<i class="fa fa-arrow-circle-o-up faa-bounce animated"></i>
-							自己揪團
-						</p>
-						<p>或</p>
-						<p>
-							看未來的活動
-							<i class="fa fa-arrow-circle-o-down"></i>
-						</p>
-					</div>
-				</div>
-				<ul class="list-group">
-					<li class="list-group-item" ng-repeat="i in currentInvites | orderBy: 'endTime'">
-						<span class="pull-right">
-							<a ui-sref="profile({id: i.creator._id})">主辦人:{{i.creator.name}}</a>
-						</span>
-						<h4 class="list-group-heading" ng-show="i.court">
-							<a ui-sref="thiscourt({id: i.court})">
-								{{i.location}}
-							</a>
-							<small>{{i.dateCreated | relativeDate}}發佈</small>
-						</h4>
-						<h4 class="list-group-heading" ng-hide="i.court">
-							{{i.location}}
-							<small>{{i.dateCreated | relativeDate}}發佈</small>
-						</h4>
-						<span class="pull-left" style="margin-right: 5px">
-							<!-- Edit and Delete -->
-							<div class="btn-group" dropdown>
-						      <button type="button" class="btn btn-danger dropdown-toggle" dropdown-toggle>
-						      	<i class="fa fa-angle-down"></i>
-						        <!-- <span class="caret"></span> -->
-						        <span class="sr-only">Split button!</span>
-						      </button>
-						      <ul class="dropdown-menu" role="menu">
-						        <li ng-click="editInvite(i)">
-								<a href="#">編輯</a>
-						        </li>
-						        <li ng-click="deleteInvite(i)">
-								<a href="#"> 刪除</a>
-						       	</li>
-						      </ul>
-						    </div>
-						</span>
-						{{i.endTime | date: 'shortTime'}}結束
-						<p ng-hide="i.peopleNeed <= 0">缺:{{i.peopleNeed}}人</p>
-						<p ng-show="i.peopleNeed <= 0">{{i.participants.length}}人</p>
-						<span class="label label-primary pull-right countDownLabel">
-							<!-- count down -->
-							<timer end-time="i.endTime">{{days}} 天 {{hours}}小時 {{minutes}} 分鐘 {{seconds}}秒後結束</timer>
-						</span>
-					</li>
-				</ul>
-			</div>
-			<div class="inviteThreads" ng-show="showFuture">
-				<div class="currentInviteInstruction" ng-hide="futureInvites[0]">
-					<div>
-						<p>
-							<i class="fa fa-arrow-circle-o-up faa-bounce animated"></i>
-							自己揪團
-						</p>
-						<p>或</p>
-						<p>
-							看現在的活動
-							<i class="fa fa-arrow-circle-o-down"></i>
-						</p>
-					</div>
-				</div>
-				<ul class="list-group" ng-repeat="invite in futureInvites | orderBy: 'startTime' | groupBy: 'startDate' | toArray:true">
-					<strong>{{invite.$key}}</strong>
-					<li class="list-group-item" ng-repeat="i in invite | orderBy: 'startTime'">
-						<a class="countDownLabel pull-right" ui-sref="profile({id: i.creator._id})" style="margin: 5px;">主辦人:{{i.creator.name}}</a>
-						<button class="btn btn-success pull-right" style="font-size: 120%;" ng-click="joinInvite(i)" ng-hide="switchMinus || isParticipant(i)">
-							<i class="fa fa-plus"></i>
-							<span style="font-size: 120%">
-								<strong>1</strong>
-							</span>
-						</button>
-						<button class="btn btn-danger pull-right" style="font-size: 120%;" ng-click="leaveInvite(i)" ng-show="switchMinus || isParticipant(i)">
-							<i class="fa fa-minus"></i>
-							<span style="font-size: 120%">
-								<strong>1</strong>
-							</span>
-						</button>
-						<h4 class="list-group-heading" ng-show="i.court">
-							<a ui-sref="thiscourt({id: i.court})">
-								{{i.location}}
-							</a>
-							<small>{{i.dateCreated | relativeDate}}發佈</small>
-						</h4>
-						<h4 class="list-group-heading" ng-hide="i.court">
-							{{i.location}}
-							<small>{{i.dateCreated | relativeDate}}發佈</small>
-						</h4>
-						<span class="pull-left" style="margin-right: 5px">
-							<!-- Edit and Delete -->
-							<div class="btn-group" dropdown>
-						      <button type="button" class="btn btn-danger dropdown-toggle" dropdown-toggle>
-						      	<i class="fa fa-angle-down"></i>
-						        <!-- <span class="caret"></span> -->
-						        <span class="sr-only">Split button!</span>
-						      </button>
-						      <ul class="dropdown-menu" role="menu">
-						        <li ng-click="editInvite(i)">
-								<a href="#">編輯</a>
-						        </li>
-						        <li ng-click="deleteInvite(i)">
-								<a href="#"> 刪除</a>
-						       	</li>
-						      </ul>
-						    </div>
-						</span>
-						{{i.startTime | date: 'shortTime'}}~{{i.endTime | date: 'shortTime'}}
-						<p ng-hide="i.peopleNeed <= 0">缺:{{i.peopleNeed}}人</p>
-						<p ng-show="i.peopleNeed <= 0">{{i.participants.length}}人</p>
-					</li>
-				</ul>
-			</div>
-			<!-- Choosing the present or future -->
-			<div class="btn-group" style="margin-top: 10px;">
-		        <label class="btn btn-primary" ng-model="nowOrFuture" btn-radio="'now'">現在</label>
-		        <label class="btn btn-primary" ng-model="nowOrFuture" btn-radio="'future'">未來</label>
-		    </div>
-		</div>
-	</div>
+	
 </div>

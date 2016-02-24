@@ -95,14 +95,12 @@ angular.module('keepballin')
       enterRoom: function(roomId, cb) {
         cb = cb || angular.noop;
         var user = Auth.getCurrentUser();
-        console.log('enter room');
         socket.emit('enter room', {roomId: roomId, userId: user._id});
         cb();
       },
       sendMessage: function(room, message, cb) {
         cb = cb || angular.noop;
         var user = Auth.getCurrentUser();
-        console.log('meesage sent');
         var userPic;
         if(user.avatar || user.fbprofilepic) {
           userPic = user.avatar.url || user.fbprofilepic;

@@ -1,5 +1,5 @@
 .header {
-  @media(min-width: $screen-sm-min) {
+  @media(min-width: ($screen-sm-min + 1px)) {
     z-index: 1000;
     width: 100%;
     height: auto;
@@ -67,7 +67,7 @@
   }
 }
 .right-padding {
-  @media screen and (min-width: $screen-sm-min) {
+  @media screen and (min-width: ($screen-sm-min + 1px)) {
     padding-right: 30px;    
   }
 }
@@ -98,7 +98,7 @@
 }
 #mobileLogo {
   color: $brand-primary;
-  @media screen and (min-width: $screen-sm-min) {
+  @media screen and (min-width: ($screen-sm-min + 1px)) {
     display: none;
   }
 }

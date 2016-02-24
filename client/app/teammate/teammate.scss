@@ -49,8 +49,10 @@
 	border:2px solid lighten($brand-primary, 10%); 
 }
 
-.chatGroupContainer { 
-	margin-bottom: 60px;
+.chatGroupContainer {
+	@media(min-width: $screen-sm-min) {
+		margin-bottom: 60px;
+	}
 	.col-sm-6 {
 		background-color: white;
 	}
@@ -72,6 +74,12 @@
 			display: inline;
 		}
 		display: none;
+	}
+	.room-detail-mobile {
+		@media(min-width: $screen-sm-min) {
+			display: none;
+		}
+		display: inline;
 	}
 }
 
@@ -190,3 +198,132 @@
 
 /* Animation for chat room list in teammate html */
 
+/* Css for mobile */
+
+#quickInvitePage {
+	height: 70vh; 
+	text-align: center; 
+	padding-top: 3px;
+	@media(max-width: $screen-sm-min) {
+		width: 100%;
+	}
+}
+
+#chatRoomPage {
+	@media(max-width: $screen-sm-min) {
+		position: fixed;
+		left: 100%;
+		right: -100%;
+		top: 50px;
+		height: 100vh;
+		width: 100%;
+		transition: all linear 0.3s;
+		.list-group {
+			margin-bottom: 0px;
+		}
+
+	}
+	@media screen and (orientation:landscape) {
+		height: 90vh;
+	}
+	@media(min-width: ($screen-sm-min + 1)) {
+		position: relative;
+		height: 70vh;
+	}
+}
+
+.sendMessage {
+	margin-bottom: 10px;
+}
+
+.nowOrFutureBtn {
+	.btn.active {
+		z-index: 0;
+	}
+	@media(min-width: ($screen-sm-min)) {
+		margin-top: 10px;
+	}
+	@media screen and (orientation:landscape) {
+		position: relative;
+		top: -50px;
+	}
+}
+
+.slide-instruction {
+	@media(min-width: ($screen-sm-min)) {
+		display: none;
+	}
+	position: relative;
+	right: -100%;
+	display: block;
+	animation: animationFrames linear 3s;
+	animation-iteration-count: infinite;
+	transform-origin: 50% 50%;
+	-webkit-animation: animationFrames linear 3s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-transform-origin: 50% 50%;
+	-moz-animation: animationFrames linear 3s;
+	-moz-animation-iteration-count: infinite;
+	-moz-transform-origin: 50% 50%;
+	-o-animation: animationFrames linear 3s;
+	-o-animation-iteration-count: infinite;
+	-o-transform-origin: 50% 50%;
+	-ms-animation: animationFrames linear 3s;
+	-ms-animation-iteration-count: infinite;
+	-ms-transform-origin: 50% 50%;
+}
+
+@keyframes animationFrames{
+  0% {
+    opacity:1;
+    transform:  translate(0px,0px)  ;
+  }
+  100% {
+    opacity:0.1;
+    transform:  translate(-350px,0px)  ;
+  }
+}
+
+@-moz-keyframes animationFrames{
+  0% {
+    opacity:1;
+    -moz-transform:  translate(0px,0px)  ;
+  }
+  100% {
+    opacity:0.1;
+    -moz-transform:  translate(-350px,0px)  ;
+  }
+}
+
+@-webkit-keyframes animationFrames {
+  0% {
+    opacity:1;
+    -webkit-transform:  translate(0px,0px)  ;
+  }
+  100% {
+    opacity:0.1;
+    -webkit-transform:  translate(-350px,0px)  ;
+  }
+}
+
+@-o-keyframes animationFrames {
+  0% {
+    opacity:1;
+    -o-transform:  translate(0px,0px)  ;
+  }
+  100% {
+    opacity:0.1;
+    -o-transform:  translate(-350px,0px)  ;
+  }
+}
+
+@-ms-keyframes animationFrames {
+  0% {
+    opacity:1;
+    -ms-transform:  translate(0px,0px)  ;
+  }
+  100% {
+    opacity:0.1;
+    -ms-transform:  translate(-350px,0px)  ;
+  }
+}
