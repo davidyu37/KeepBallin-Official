@@ -327,3 +327,17 @@
     -ms-transform:  translate(-350px,0px)  ;
   }
 }
+
+.desktop {
+	@media(min-width: $screen-sm-min) {
+		display: inherit;
+	}
+	display: none;
+}
+
+.mobile {
+	@media(min-width: $screen-sm-min) {
+		display: none;
+	}
+	display: inherit;
+}

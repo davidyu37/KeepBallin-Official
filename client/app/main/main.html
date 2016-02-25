@@ -4,8 +4,15 @@
       <div class="messageContent">
         <h1>籃球夢永不終止</h1>
         <p>一人籃球夢，大家一起達成</p>
+        <button class="mainBtn" ui-sref="teammate">找球友</button>
         <button class="mainBtn" ui-sref="courts">找球場</button>
         <button class="mainBtn" ui-sref="team">找球隊</button>
+        <p style="margin-top: 10px">
+          <span class="label label-success" ng-show="numberOfUsers">{{numberOfUsers}}
+            <span class="desktop">人在線上</span>
+            <span class="mobile"><i class="fa fa-user"></i></span>
+          </span>
+        </p>
       </div>  
     </div>
   </div>

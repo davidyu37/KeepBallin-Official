@@ -12,14 +12,17 @@ $blurred-img: '/assets/images/blurredbg.jpg';
 }
 
 .mainBtn {
-  border: 2px solid $brand-primary;
+  text-shadow: 0 2px 0 black, 0 0 10px black;
   padding: 10px;
   border-radius:5px;
   background: transparent;
-  font-size:24px;
   cursor:pointer;
+  border: 1px solid $brand-primary;
+  font-size: 12px;
   transition: all 0.3s;
   @media(min-width: $screen-sm-min) {
+    border: 2px solid $brand-primary;
+    font-size:24px;
     width: 15%;   
   }
 }
@@ -31,14 +34,14 @@ $blurred-img: '/assets/images/blurredbg.jpg';
 
 .courtBG {
   background-image: url('/assets/images/courtpicplaceholder.png');
-  background-size: cover;
-  background-repeat: no-repeat; 
-  background-position: center;
-  background-attachment: fixed;       
-  webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   @media (min-width: $screen-sm-min) {
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position: center;
+    background-attachment: fixed;       
+    webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     height: 110vh;
   }
 }

@@ -5,8 +5,6 @@ angular.module('keepballin')
     $scope.user = {};
     $scope.errors = {};
 
-    console.log(typeof roomId);
-
     $scope.login = function(form) {
       $scope.submitted = true;
 
@@ -28,6 +26,20 @@ angular.module('keepballin')
           console.log(err);
           $scope.errors.other = err.message;
         });
+      }
+    };
+
+    //Mobile doesnt close modal, but change state to sign up
+    $scope.closeModal = function(condition) {
+      if(condition == 'toSignUp') {
+        if(roomId) {
+          var sendToSignUp = {
+            roomId: roomId
+          };
+          $state.go('signup', sendToSignUp);
+        } else {
+          $state.go('signup')
+        }
       }
     };
 

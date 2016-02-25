@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('SignupMobileCtrl', ['$scope', '$state', 'Auth', '$location', '$window', function ($scope, $state, Auth, $location, $window) {
+  .controller('SignupMobileCtrl', ['$scope', '$state', 'Auth', '$location', '$window', 'socket', 'roomId', function ($scope, $state, Auth, $location, $window, socket, roomId) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -15,10 +15,17 @@ angular.module('keepballin')
           password: $scope.user.password
         })
         .then( function() {
-          // Account created, redirect to home
-          // $location.path('/');
-          
-          $state.go('main');
+          // Logged in, tell server that user has login
+          var userNow = Auth.getCurrentUser().$promise;
+          userNow.then(function(user) {
+            socket.socket.emit('login', {userId: user._id, userName: user.name});
+            if(roomId) {
+              // If user previously clicked on chat room, then enter
+              $state.go('chat', {id: roomId});
+            } else {
+              $state.go('main');
+            }
+          });
         })
         .catch( function(err) {
           err = err.data;

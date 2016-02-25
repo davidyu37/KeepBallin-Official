@@ -18,12 +18,12 @@ angular.module('keepballin')
       'title': '球友',
       'link': 'teammate',
       'icon': 'glyphicon-fire'
-    },
-    {
-      'title': '聯絡',
-      'link': 'contact',
-      'icon': 'glyphicon-envelope'
     }
+    // {
+    //   'title': '聯絡',
+    //   'link': 'contact',
+    //   'icon': 'glyphicon-envelope'
+    // }
     ];
 
     $scope.isCollapsed = true;
@@ -34,24 +34,24 @@ angular.module('keepballin')
 
     $scope.showAlert = false;
 
-    socket.socket.on('conversation:save', function(convo) {
+    // socket.socket.on('conversation:save', function(convo) {
       
-      var messages = convo.messages;//array of messages
+    //   var messages = convo.messages;//array of messages
 
-      //If the new message is from self, don't do anything
-      if(messages[messages.length-1].from._id === $scope.getCurrentUser()._id) {
-        return;
-      } else {
-        var message = messages[messages.length-1];
-        $scope.from = message.from.name;
-        $scope.words = message.message;
-        $scope.showAlert = true;
-        $timeout(function(){ 
-          $scope.showAlert = false;
-        }, 3000);
-      }
+    //   //If the new message is from self, don't do anything
+    //   if(messages[messages.length-1].from._id === $scope.getCurrentUser()._id) {
+    //     return;
+    //   } else {
+    //     var message = messages[messages.length-1];
+    //     $scope.from = message.from.name;
+    //     $scope.words = message.message;
+    //     $scope.showAlert = true;
+    //     $timeout(function(){ 
+    //       $scope.showAlert = false;
+    //     }, 3000);
+    //   }
       
-    });
+    // });
 
     $scope.logout = function() {
       var userNow = Auth.getCurrentUser().$promise;

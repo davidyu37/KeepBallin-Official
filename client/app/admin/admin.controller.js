@@ -5,7 +5,6 @@ angular.module('keepballin')
 
     // Use the User $resource to fetch all users
     $scope.users = User.adminGet();
-    console.log($scope.users);
     $scope.open = false;
 
     $scope.delete = function(user) {
@@ -39,5 +38,12 @@ angular.module('keepballin')
         scope: $scope
       });
     };
+
+    $scope.getEmail = function() {
+      $modal.open({
+        templateUrl: 'app/admin/email.html',
+        scope: $scope
+      });
+    }
 
   }]);

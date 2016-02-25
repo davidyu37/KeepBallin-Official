@@ -7,7 +7,16 @@ angular.module('keepballin')
       .state('main', {
         url: '/',
         templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
+        controller: 'MainCtrl',
+        resolve: {
+        	lobby: ['$q', 'Lobby', function($q, Lobby) {
+	          var deferred = $q.defer();
+	          Lobby.query(function(data){
+	            deferred.resolve(data);
+	          });
+	          return deferred.promise;
+	        }]
+        }
       });
     $urlRouterProvider.otherwise('/');
 });//config ends

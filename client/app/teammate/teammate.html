@@ -23,7 +23,10 @@
 		</div>
 		<div class="page-header">
 			<h2>找哪裡的球友？
-				<span class="label label-success" ng-show="numberOfUsers">{{numberOfUsers}}人在線上</span>
+				<span class="label label-success" ng-show="numberOfUsers">{{numberOfUsers}}
+					<span class="desktop">人在線上</span>
+					<span class="mobile"><i class="fa fa-user"></i></span>
+				</span>
 			</h2>
 		</div>
 		<div class="form-inline text-center">
@@ -40,7 +43,7 @@
 		    		 <option value="">-- 選擇城市 --</option>
 		    	</select>
 			</div>
-			<button class="form-control" ng-click="enterRoom(city)">進入群組</button>
+			<button class="form-control" style="margin-bottom: 10px" ng-click="enterRoom(city)">進入群組</button>
 		</div>
 		<div style="height: 500px; overflow: scroll;">
 			<ul class="list-group" ng-repeat="room in rooms | groupBy: 'district' | toArray:true">

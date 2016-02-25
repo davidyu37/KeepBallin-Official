@@ -44,13 +44,20 @@ if(screen.width < 480) {
       }
     })
     .state('signup', {
-      url: '/signup',
+      url: '/signup/:roomId',
       templateUrl: 'app/account/signup/signup.html',
-      controller: 'SignupMobileCtrl' 
+      controller: 'SignupMobileCtrl',
+      resolve: {
+        roomId: ['$stateParams', function($stateParams) {
+          var roomId = $stateParams.roomId;
+          return roomId;
+        }]
+      } 
     });
   });
 }
 
+var roomNow;
 
 /**
  * Use a run block to ensure the uibModal will open from anywhere in the app.
@@ -60,7 +67,7 @@ app.run(function ($rootScope, $modal) {
    * Listen to the `$stateChangeStart` event
    */
   if(screen.width > 480) {
-    $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams,  fromState, fromParams) {
       //Define available modal state
       var login = toState.name === 'login';
       var signup = toState.name === 'signup';
@@ -74,16 +81,24 @@ app.run(function ($rootScope, $modal) {
           controller: 'LoginCtrl',
           resolve: {
             roomId: function() {
+              roomNow = toParams;
               var roomId = toParams;
               return roomId;
             }
           }
         });   
       }
+      
       if(signup) {
         $modal.open({
           templateUrl: 'app/account/signup/signup.html',
-          controller: 'SignupCtrl'
+          controller: 'SignupCtrl',
+          resolve: {
+            roomId: function() {
+              var roomId = roomNow;
+              return roomId;
+            }
+          }
         });   
       }
       

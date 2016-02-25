@@ -42,7 +42,17 @@ angular.module('keepballin')
       }
     };
 
-    $scope.closeModal = function() {
+    $scope.closeModal = function(condition) {
+      if(condition == 'toSignUp') {
+        if(roomId.roomId) {
+          var sendToSignUp = {
+            'roomId': roomId.roomId
+          };
+          $state.go('signup', sendToSignUp);
+        } else {
+          $state.go('signup')
+        }
+      }
       $modalInstance.close();
     };
 
