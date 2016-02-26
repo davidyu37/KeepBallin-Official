@@ -1,0 +1,27 @@
+<div class="spaceFromTop container">
+	<div class="forgotMessageContainer">
+		<div>
+			<h1>忘記密碼</h1>
+			<form name="form" ng-submit="sendMail(form)" novalidate>
+				<label for="email">Email</label>
+				<div class="input-group">
+					<input name="email" class="form-control" type="email" ng-model="email" placeholder="請輸入Email"autofocus required>
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="submit" ng-disabled="sending">
+							<p ng-hide="sending" style="margin: 0px">寄出</p>
+							<div class="spinner" style="margin: 0px; height: 20px; width: 30px;" ng-show="sending">
+							  <div class="rect1" style="background-color: white;"></div>
+							  <div class="rect2" style="background-color: white;"></div>
+							  <div class="rect3" style="background-color: white;"></div>
+							  <div class="rect4" style="background-color: white;"></div>
+							</div>
+						</button>
+					</span>
+				</div>
+				<div ng-show="form.email.$invalid && submitted">
+		        	請輸入有效的Email
+		        </div>
+			</form>
+		</div>
+	</div>
+</div>

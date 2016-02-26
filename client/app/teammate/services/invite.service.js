@@ -11,6 +11,13 @@ angular.module('keepballin')
       	method: 'GET',
       	isArray: true
       },
+      findAll: {
+        method: 'GET',
+        isArray: true,
+        params: {
+          controller: 'findAll'
+        }
+      },
       addParticipant: {
         method: 'POST',
         params: {

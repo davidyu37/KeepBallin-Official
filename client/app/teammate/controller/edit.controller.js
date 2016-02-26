@@ -43,7 +43,7 @@ angular.module('keepballin')
   		if(endMoment.unix() > $scope.now.unix()) {
         	if(edited.$valid && !($scope.sending)) {
         		$scope.sending = true;
-		  		Invite.update({ id: $scope.invite._id}, $scope.invite, function(data) {
+		  		Invite.update({ id: $scope.invite._id}, $scope.invite, function() {
 		  			$scope.sending = false;
 		  			$scope.submitted = false;
 		  			$modalInstance.close();

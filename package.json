@@ -29,7 +29,7 @@
     "passport-facebook": "latest",
     "passport-google-oauth": "latest",
     "passport-local": "~0.1.6",
-    "prerender-node": "^2.1.0",
+    "prerender-node": "^2.2.0",
     "s3": "^4.4.0",
     "sendgrid": "^1.9.2",
     "serve-favicon": "~2.0.1",

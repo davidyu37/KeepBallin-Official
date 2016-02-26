@@ -76,6 +76,10 @@ body {
     color: $brand-primary;
 }
 
+.primaryBg {
+    background-color: $brand-primary;
+}
+
 input.ng-invalid, textarea.ng-invalid {
     border-color: $brand-primary;
 }
@@ -109,6 +113,7 @@ button:focus {outline:0 !important;}
 @import 'courts/temp/lightbox.scss';
 @import 'events/events.scss';
 @import 'faq/faq.scss';
+@import 'forgot/forgot.scss';
 @import 'loader/_loader.scss';
 @import 'main/main.scss';
 @import 'main/temp/_weatherIcon.scss';

@@ -5,19 +5,63 @@ var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var _ = require('lodash');
-// var sendgrid  = require('sendgrid')(config.sendgrid.apiKey);
+var crypto = require('crypto');
+var async = require('async');
+var fs = require('fs');
+//load email tempalte
+var hogan = require('hogan.js');
+var template = fs.readFileSync('server/api/contact/invite.hjs', 'utf-8');
+var compiledTemplate = hogan.compile(template);
+var sendgrid  = require('sendgrid')(config.sendgrid.apiKey);
 
 // console.log(config.sendgrid.apiKey);
 
-// sendgrid.send({
-//   to:       'example@example.com',
-//   from:     'other@example.com',
-//   subject:  'Hello World',
-//   text:     'My first email through SendGrid.'
-// }, function(err, json) {
-//   if (err) { return console.error(err); }
-//   console.log(json);
-// });
+//Send user the email of pw reset token
+exports.sendMail = function(req, res) {
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      User.findOne({ email: req.body.email }, 'name', function (err, user) {
+        if(err) return res.status(500).send(err);
+        if(!user) {
+          return res.status(200).json({nonExist: true});
+        }
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function(err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function(token, user, done) {
+      var message = '您會收到這封信是因為您(或其他人)要求密碼重設.\n\n' +
+        '請點以下的連結或複製貼上至瀏覽器網頁框裡:\n\n' +
+        'https://' + req.headers.host + '/reset/' + token + '\n\n' +
+        '如果您沒有要求密碼重設, 請不要理會此Email, 您的密碼將不會改變.\n';
+      console.log(user);
+      sendgrid.send({
+          to:       req.body.email,
+          from:     config.email.me,
+          subject:  '密碼重設',
+          text:     message,
+          html: compiledTemplate.render({to: user.name, message: message})
+        }, function(err, json) {
+          if (err) { return console.error(err); }
+          return res.status(200).json(user);
+      });
+    }
+  ], function(err) {
+    if (err) return next(err);
+    res.redirect('/forgot');
+  });
+};//End of send mail
+
 
 var validationError = function(res, err) {
   return res.status(422).json(err);
@@ -196,18 +240,6 @@ exports.me = function(req, res, next) {
     res.json(user);
   });
 };
-
-/* Get user by id */
-// exports.getUser = function(req, res, next) {
-//   var userId = req.params.id;
-//   User.findOne({
-//     _id: userId
-//   }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
-//     if (err) return next(err);
-//     if (!user) return res.status(401).send('Unauthorized');
-//     res.json(user);
-//   });
-// };
 
 /**
  * Authentication callback

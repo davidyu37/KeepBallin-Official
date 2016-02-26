@@ -1,0 +1,12 @@
+.forgotMessageContainer {
+	width: 100%;
+	color: $brand-primary;
+	@media(min-width: $screen-sm-min) {
+		height: auto;
+		width: 80%;
+		padding: 10%;
+		border-radius: 25px;
+		margin: 0 auto;
+	}
+
+}

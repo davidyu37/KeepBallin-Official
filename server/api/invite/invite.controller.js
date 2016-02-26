@@ -23,6 +23,22 @@ exports.show = function(req, res) {
   });
 };
 
+// Get list of invites
+exports.index = function(req, res) {
+  Invite.find({}, 'city', function (err, invites) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(invites);
+  });
+};
+
+// Group and count the invites by city
+exports.getAll = function(req, res) {
+  Invite.findAll(function (err, invites) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(invites);
+  });
+};
+
 // Add participant
 exports.add = function(req, res) {
   Invite.findById(req.params.id, function(err, invite) {

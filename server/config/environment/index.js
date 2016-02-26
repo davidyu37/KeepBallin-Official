@@ -67,6 +67,10 @@ var all = {
 
   email: {
     me: process.env.COMPANY_EMAIL || 'email'
+  },
+
+  prerender: {
+    token: process.env.PRERENDER_TOKEN || 'token'
   }
 
 

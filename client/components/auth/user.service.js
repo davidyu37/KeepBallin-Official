@@ -72,6 +72,12 @@ angular.module('keepballin')
         params: {
           controller: 'admin'
         }
+      },
+      forgot: {
+        method: 'POST',
+        params: {
+          controller: 'forgot'
+        }
       }
 	  });
   });

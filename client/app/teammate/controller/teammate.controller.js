@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'rooms', '$state', 'lobby', function ($scope, socket, Auth, Chat, rooms, $state, lobby) {
+  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'rooms', '$state', 'lobby', 'Invite', function ($scope, socket, Auth, Chat, rooms, $state, lobby, Invite) {
 
     if(lobby[0]) {
         $scope.numberOfUsers = lobby[0].userOnline.length;
@@ -17,6 +17,43 @@ angular.module('keepballin')
     var user = Auth.getCurrentUser;
 
     $scope.rooms = rooms;
+
+    //Group and count by city
+    var groupAndCount = function() {
+        Invite.findAll(function(data) {
+            $scope.invites = data;
+            var count = 0;
+            $scope.invites.forEach(function(invite) {
+                count += invite.count;
+            });
+
+            $scope.totalInvites = count;
+        });
+    };  
+
+    groupAndCount();
+
+    //Get all invite and sync
+    
+    Invite.query(function(data) {
+        $scope.cachedInvites = data;
+        socket.syncUpdates('invite', $scope.cachedInvites, function(event, item , arr) { 
+            if(event === 'created') {
+                groupAndCount();
+            } else if (event === 'deleted') {
+                groupAndCount();
+            } else {
+                return;
+            }
+        });
+
+        $scope.$on('$destroy', function () {
+            socket.unsyncUpdates('invite');
+        });
+
+    });  
+    
+
 
     socket.syncUpdates('chat', $scope.rooms, function(event, item , arr) {
         $scope.rooms = arr;

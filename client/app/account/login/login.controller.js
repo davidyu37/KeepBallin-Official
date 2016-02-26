@@ -59,4 +59,10 @@ angular.module('keepballin')
     $scope.loginOauth = function(provider) {
       $window.location.href = '/auth/' + provider;
     };
+
+    $scope.forgotPw = function() {
+      $modalInstance.close();
+      $state.go('forgot');
+    };
+
   }]);

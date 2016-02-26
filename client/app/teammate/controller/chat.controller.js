@@ -106,7 +106,7 @@ angular.module('keepballin')
           }
         });
       }
-    }
+    };
     //Logic to determine is a item belongs to current or future invites
     var justOneNewItem = function(item, event) {
       if(item) {
@@ -158,7 +158,7 @@ angular.module('keepballin')
           }
         }
       }
-    }
+    };
 
     //Check if events ended
     var removeInviteEnded = function(arr) {
@@ -176,7 +176,7 @@ angular.module('keepballin')
       } else {
         return;
       }
-    }
+    };
     //Check if event started
     var moveStartedToCurrent = function(arr) {
       if(arr[0]) {
@@ -195,7 +195,7 @@ angular.module('keepballin')
       } else {
         return;
       }
-    }
+    };
 
 
     //Defining today, NOW
@@ -394,14 +394,18 @@ angular.module('keepballin')
 
     //Adding participants
     $scope.joinInvite = function(invite) {
+      $scope.adding = true;
       Invite.addParticipant({id: invite._id}, function(data) {
+        $scope.adding = false;
         $scope.switchMinus = true;
       });
     };
 
     //Removing participants
     $scope.leaveInvite = function(invite) {
+      $scope.leaving = true;
       Invite.minusParticipant({id: invite._id}, function(data) {
+        $scope.leaving = false;
         $scope.switchMinus = false;
       });
     };
@@ -435,11 +439,6 @@ angular.module('keepballin')
           }
         }
       });
-
-      // modalInstance.result.then(function () {
-      //   $scope.test = true;
-      //   console.log($scope.test);
-      // });
     };
     
 
@@ -484,7 +483,7 @@ angular.module('keepballin')
       $swipe.bind(quickInviteBox, {
         end: function(touch) { 
           if(touch.direction == 'LEFT') {
-            angular.element('#chatRoomPage').css({'left': 0, 'right': 0});
+            angular.element('#chatRoomPage').css({'left': 0, 'right': 0, 'display': 'block'});
             chatBox.focus();
           }
         }
@@ -493,10 +492,24 @@ angular.module('keepballin')
       $swipe.bind(chatRoomBox, {
         end: function(touch) { 
           if(touch.direction == 'RIGHT') {
-            angular.element('#chatRoomPage').css({'left': '100%' , 'right': '-100%'});
+            angular.element('#chatRoomPage').css({'left': '100%' , 'right': '-100%', 'display': 'none'});
           }
         }
       });
     }
+
+    $scope.currentOpen = false;
+    $scope.futureOpen = false;
+
+    $scope.toggleDropdown = function($event, condition) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      if(condition == 'future') {
+        $scope.futureOpen = !$scope.futureOpen;
+      }
+      if(condition == 'current') {
+        $scope.currentOpen = !$scope.currentOpen;
+      }
+    };
 
   }]);//ChatCtrl ends

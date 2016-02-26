@@ -25,5 +25,5 @@ angular.module('keepballin')
       element.on('$destroy', function() {
         $interval.cancel(stopTime);
       });
-    }
+    };
   }]);

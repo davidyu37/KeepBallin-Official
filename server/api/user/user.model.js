@@ -36,6 +36,8 @@ var UserSchema = new Schema({
     ref: 'Upload'
   },
   hashedPassword: String,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   provider: String,
   salt: String,
   courtRatings: [{

@@ -113,8 +113,8 @@
 							</h4>
 							<span class="pull-left" style="margin-right: 5px" ng-show="isCreator(i)">
 								<!-- Edit and Delete -->
-								<div class="btn-group" dropdown>
-							      <button type="button" class="btn btn-danger dropdown-toggle" dropdown-toggle>
+								<div class="btn-group" dropdown is-open="currentOpen">
+							      <button type="button" class="btn btn-danger dropdown-toggle" ng-click="toggleDropdown($event, 'current')" dropdown-toggle>
 							      	<i class="fa fa-angle-down"></i>
 							        <!-- <span class="caret"></span> -->
 							        <span class="sr-only">Split button!</span>
@@ -158,16 +158,32 @@
 						<li class="list-group-item" ng-repeat="i in invite | orderBy: 'startTime'">
 							<a class="countDownLabel pull-right" ui-sref="profile({id: i.creator._id})" style="margin: 5px;">主辦人:{{i.creator.name}}</a>
 							<button class="btn btn-success pull-right" style="font-size: 120%;" ng-click="joinInvite(i)" ng-hide="switchMinus || isParticipant(i)">
-								<i class="fa fa-plus"></i>
-								<span style="font-size: 120%">
-									<strong>1</strong>
+								<span ng-hide="adding">
+									<i class="fa fa-plus"></i>
+									<span style="font-size: 120%">
+										<strong>1</strong>
+									</span>
 								</span>
+								<div class="spinner" style="margin: 0px; height: 20px; width: 30px;" ng-show="adding">
+								  <div class="rect1" style="background-color: white;"></div>
+								  <div class="rect2" style="background-color: white;"></div>
+								  <div class="rect3" style="background-color: white;"></div>
+								  <div class="rect4" style="background-color: white;"></div>
+								</div>
 							</button>
 							<button class="btn btn-danger pull-right" style="font-size: 120%;" ng-click="leaveInvite(i)" ng-show="switchMinus || isParticipant(i)">
-								<i class="fa fa-minus"></i>
-								<span style="font-size: 120%">
-									<strong>1</strong>
+								<span ng-hide="leaving">
+									<i class="fa fa-minus"></i>
+									<span style="font-size: 120%">
+										<strong>1</strong>
+									</span>
 								</span>
+								<div class="spinner" style="margin: 0px; height: 20px; width: 30px;" ng-show="leaving">
+								  <div class="rect1" style="background-color: white;"></div>
+								  <div class="rect2" style="background-color: white;"></div>
+								  <div class="rect3" style="background-color: white;"></div>
+								  <div class="rect4" style="background-color: white;"></div>
+								</div>
 							</button>
 							<h4 class="list-group-heading" ng-show="i.court">
 								<a ui-sref="thiscourt({id: i.court})">
@@ -181,8 +197,8 @@
 							</h4>
 							<span class="pull-left" style="margin-right: 5px" ng-show="isCreator(i)">
 								<!-- Edit and Delete -->
-								<div class="btn-group" dropdown>
-							      <button type="button" class="btn btn-danger dropdown-toggle" dropdown-toggle>
+								<div class="btn-group" dropdown is-open="futureOpen">
+							      <button type="button" class="btn btn-danger dropdown-toggle" ng-click="toggleDropdown($event, 'future')" dropdown-toggle>
 							      	<i class="fa fa-angle-down"></i>
 							        <!-- <span class="caret"></span> -->
 							        <span class="sr-only">Split button!</span>
@@ -232,7 +248,7 @@
 		</ul>
 		<form class="sendMessage" ng-submit="sendMessage()">
 			<div class="input-group">
-				<input id="chatBox" class="chatBox form-control" type="text" name="message" placeholder="我想說..." ng-model="message" autofocus required id="talkBox">
+				<input id="chatBox" class="chatBox form-control" type="text" name="message" placeholder="我想說..." ng-model="message" required id="talkBox">
 				<div class="input-group-btn">
 					<input ng-disabled="!message" class="btn btn-primary" type="submit" value="送出" />
 				</div>

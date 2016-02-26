@@ -5,7 +5,11 @@ var controller = require('./invite.controller');
 var auth = require('../../auth/auth.service');
 
 var router = express.Router();
-
+//Get all the invites
+router.get('/', controller.index);
+//Group and count by city
+router.get('/findAll', controller.getAll);
+//Create invite
 router.post('/', auth.isAuthenticated(), controller.create);
 //Adding user to the invite
 router.post('/:id/addOne', auth.isAuthenticated(), controller.add);

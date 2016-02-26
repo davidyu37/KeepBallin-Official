@@ -61,6 +61,20 @@ InviteSchema.statics = {
       .sort('startTime')
       .deepPopulate('creator.avatar creator participants.avatar participants')
       .exec(cb);
+  },
+  findAll: function(cb) {
+    var dateNow = new Date();
+    this.aggregate([
+        { '$match': {'endTime': {$gt: dateNow}} },
+
+        { '$group': {
+            _id: { city: '$city' },
+            'count': { '$sum': 1 }
+          }
+        }
+      ], function(err,result) {
+        cb(err, result);
+      });
   }
 };
 
