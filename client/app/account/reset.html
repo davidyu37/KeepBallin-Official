@@ -1,0 +1,49 @@
+<div class="spaceFromTop container">
+	<div class="forgotMessageContainer">
+		<div>
+				<div class="col-sm-12" ng-hide="expired">
+				<h1>重設密碼</h1>
+					<p>{{user.name}}您好，此連結在
+						<timer end-time="user.resetPasswordExpires">{{hours}}時 {{minutes}} 分 {{seconds}}秒後失效</timer>
+					</p>
+				  <form class="form" name="form" ng-submit="changePassword(form)" novalidate>
+				    <div class="form-group">
+				      <label>新密碼</label>
+
+				      <input type="password" name="password" class="form-control" ng-model="password" ng-minlength="8" required/>
+				      <div class="alert alert-warning" ng-show="(form.password.$error.minlength || form.password.$error.required) && submitted" style="margin: 0px">
+				        密碼最少八個字				      	
+				      </div>
+				    </div>
+
+				    <div class="form-group">
+				      <label>確認密碼</label>
+
+				      <input type="password" name="confirmPassword" class="form-control" ng-model="confirmPassword" ng-minlength="8" required/>
+				      <div class="alert alert-warning" ng-show="notSame">
+				        新密碼與確認密碼不同			      	
+				      </div>
+				    </div>
+				    <button class="pull-right btn btn-sm btn-primary" type="submit" ng-disabled="sending">
+					    <p ng-hide="sending" style="margin: 0px">更新</p>
+						<div class="spinner" style="margin: 0px; height: 20px; width: 30px;" ng-show="sending">
+						  <div class="rect1" style="background-color: white;"></div>
+						  <div class="rect2" style="background-color: white;"></div>
+						  <div class="rect3" style="background-color: white;"></div>
+						  <div class="rect4" style="background-color: white;"></div>
+						</div>
+				    </button>
+				  </form>
+
+				</div>
+				<div class="col-sm-12" ng-show="expired">
+					<h1>密碼重設期限過期</h1>
+					<div style="color: white;">
+						<h4>為什麼？</h4>
+						<p>為了確保您的帳號安全性，當您申請密碼重設的一個小時後，此連結就失效，以防阿貓阿狗來改您的帳號．</p>
+						<button class="btn btn-primary" ui-sref="forgot">再申請一次</button>
+					</div>
+				</div>
+		</div>
+	</div>
+</div>

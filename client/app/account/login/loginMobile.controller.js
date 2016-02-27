@@ -25,6 +25,7 @@ angular.module('keepballin')
         .catch( function(err) {
           console.log(err);
           $scope.errors.other = err.message;
+          $state.go('login');
         });
       }
     };

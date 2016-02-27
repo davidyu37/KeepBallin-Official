@@ -28,9 +28,7 @@ angular.module('keepballin')
           $modalInstance.close();
         })
         .catch( function(err) {
-          console.log(err);
           $scope.errors.other = err.message;
-          $modalInstance.close();
           SweetAlert.swal({
             title: err.message,
             type: 'warning',

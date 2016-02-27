@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'rooms', '$state', 'lobby', 'Invite', function ($scope, socket, Auth, Chat, rooms, $state, lobby, Invite) {
+  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'rooms', '$state', 'Lobby', 'Invite', function ($scope, socket, Auth, Chat, rooms, $state, Lobby, Invite) {
 
-    if(lobby[0]) {
-        $scope.numberOfUsers = lobby[0].userOnline.length;
-    }
+    Lobby.query(function(data) {
+        if(data[0]) {
+            $scope.numberOfUsers = data[0].userOnline.length;
+        }
+    });
 
     //When a user joins the global chat room
     // Object.keys(data.users).length;

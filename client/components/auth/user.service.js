@@ -2,7 +2,7 @@
 
 angular.module('keepballin')
   .factory('User', function ($resource) {
-    return $resource('/api/users/:id/:controller', {
+    return $resource('/api/users/:id/:controller/:token', {
       id: '@_id'
     },
     {
@@ -73,10 +73,24 @@ angular.module('keepballin')
           controller: 'admin'
         }
       },
+      //Send email for forgot pw
       forgot: {
         method: 'POST',
         params: {
           controller: 'forgot'
+        }
+      },
+      //Check if token is valid
+      checkToken: {
+        method: 'GET',
+        params: {
+          controller: 'token'
+        }
+      },
+      resetPw: {
+        method: 'POST',
+        params: {
+          controller: 'token'
         }
       }
 	  });

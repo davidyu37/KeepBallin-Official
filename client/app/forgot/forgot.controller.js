@@ -3,12 +3,13 @@
 angular.module('keepballin')
   .controller('ForgotCtrl', ['$scope', '$state', 'Auth', 'SweetAlert', 'User', function ($scope, $state, Auth, SweetAlert, User) {
    
+    angular.element('#pwEmail').focus();
+
     $scope.sendMail = function(form) {
       $scope.submitted = true;
       if(form.$valid) {
         $scope.sending = true;
         User.forgot({email: $scope.email}, function(data) {
-          console.log('data', data);
           if(data.nonExist) {
             SweetAlert.swal({
               title: '還沒有這個Email',

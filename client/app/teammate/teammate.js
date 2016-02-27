@@ -10,13 +10,6 @@ angular.module('keepballin')
         resolve: {
          rooms: ['Chat', function(Chat) {
           return Chat.query();
-         }],
-         lobby: ['$q', 'Lobby', function($q, Lobby) {
-          var deferred = $q.defer();
-          Lobby.query(function(data){
-            deferred.resolve(data);
-          });
-          return deferred.promise;
          }]
         }
       })

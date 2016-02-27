@@ -8,8 +8,13 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 router.post('/', controller.create);
+//Send email for forgot pw
 router.post('/forgot', controller.sendMail);
+//Token pw reset
+router.post('/token/:token', controller.resetPassword);
 router.get('/', auth.hasRole('vip'), controller.index);
+//Check if token is valid for forgot pw
+router.get('/token/:token', controller.checkToken);
 router.get('/search', auth.hasRole('manager'), controller.search);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.get('/:id/who', auth.isAuthenticated(), controller.show);

@@ -5,7 +5,7 @@
 			<form name="form" ng-submit="sendMail(form)" novalidate>
 				<label for="email">Email</label>
 				<div class="input-group">
-					<input name="email" class="form-control" type="email" ng-model="email" placeholder="請輸入Email"autofocus required>
+					<input id="pwEmail" name="email" class="form-control" type="email" ng-model="email" placeholder="請輸入Email"autofocus required>
 					<span class="input-group-btn">
 						<button class="btn btn-primary" type="submit" ng-disabled="sending">
 							<p ng-hide="sending" style="margin: 0px">寄出</p>

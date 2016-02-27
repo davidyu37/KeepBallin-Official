@@ -13,7 +13,24 @@ app.config(function ($stateProvider) {
           authenticate: true
         }
       }
-    });
+    })
+    .state('reset', {
+      url: '/reset/:token',
+      templateUrl: 'app/account/reset.html',
+      resolve: {
+        tokenUser: ['$stateParams', 'User', '$q', function($stateParams, User, $q) {
+          var deferred = $q.defer();
+          User.checkToken({token: $stateParams.token}, function(data) {
+            deferred.resolve(data);
+          });
+          return deferred.promise;
+        }],
+        token: ['$stateParams', function($stateParams) {
+          return $stateParams.token;
+        }]
+      },
+      controller: 'ResetCtrl'
+    })
 });
 
 //when it's desktop

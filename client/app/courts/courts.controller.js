@@ -135,8 +135,12 @@ angular.module('keepballin')
 
 		//Check if user is the creator of the marker
 		$scope.isCreator = function() {
-			if(Auth.getCurrentUser()._id === $scope.currentcourt.creator._id) {
-				return true;
+			if(Auth.getCurrentUser && $scope.currentcourt.creator) {
+				if(Auth.getCurrentUser()._id === $scope.currentcourt.creator._id) {
+					return true;
+				} else {
+					return false;
+				}
 			} else {
 				return false;
 			}
