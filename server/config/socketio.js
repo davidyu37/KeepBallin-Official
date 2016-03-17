@@ -42,16 +42,19 @@ var onlineManager = function(socket, data) {
       //if it doesn't exist create one
       var lobby = new Lobby();
       lobby.userOnline.push(data.userId);
-      lobby.save(function(err, saved) {});
+      lobby.save(function(err, saved) {
+        console.log('new lobby created');
+      });
     } else {
       //If the tracker exist, check if the user exist in the array
+      console.log('lobby', found[0], data.userId);
       if( found[0].userOnline.indexOf(data.userId) < 0 ) {
         //If user doesn't exist, add to list
         found[0].userOnline.push(data.userId);
 
         found[0].save(function(err, saved) {
           console.log('Number of users online: ', saved.userOnline.length);
-          socket.emit('user online', {users: found[0].userOnline});
+          // socket.emit('user online', {users: found[0].userOnline});
         });
       }
     }
@@ -77,7 +80,7 @@ var offlineManager = function(socket, data, logout) {
       found[0].userOnline.splice(userIndex, 1);
       found[0].save(function(err, saved) {
         console.log('%s offline', data.userId);
-        socket.broadcast.emit('user offline', data);
+        socket.emit('user offline', {users: found[0].userOnline});
       });
     }
   });
@@ -180,6 +183,7 @@ function onConnect(socket, socketio) {
   require('../api/comment/comment.socket').register(socket);
   require('../api/upload/upload.socket').register(socket);
   require('../api/court/court.socket').register(socket);
+  require('../api/lobby/lobby.socket').register(socket);
 }
 
 module.exports = function (socketio) {

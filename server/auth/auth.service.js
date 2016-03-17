@@ -9,7 +9,7 @@ var compose = require('composable-middleware');
 var User = require('../api/user/user.model');
 var validateJwt = expressJwt({ secret: config.secrets.session });
 var _ = require('lodash');
-var app = require('../app');
+var Lobby = require('../api/lobby/lobby.model');
 
 /**
  * Attaches the user object to the request if authenticated
@@ -88,17 +88,6 @@ function appendUser() {
   });
 }
 
-// function applyVip() {
-//     return compose()
-//       .use(function(req, res, next) {
-//           if(req.query) {
-//             req.vip = req.query.Vip;
-//             next();
-//           }
-//       });
-// }
-
-
 /**
  * Takes the token cookie and adds the header
  * for it on the request
@@ -120,7 +109,7 @@ function addAuthHeaderFromCookie() {
  * Returns a jwt token signed by the app secret
  */
 function signToken(id) {
-  return jwt.sign({ _id: id }, config.secrets.session, { expiresInMinutes: 60*5 });
+  return jwt.sign({ _id: id }, config.secrets.session, { expiresInMinutes: 60*12 });
 }
 
 /**
@@ -128,9 +117,27 @@ function signToken(id) {
  */
 function setTokenCookie(req, res) {
   if (!req.user) return res.status(404).json({ message: 'Something went wrong, please try again.'});
-  console.log('setting cookie req', req);
   var token = signToken(req.user._id, req.user.role);
   res.cookie('token', JSON.stringify(token));
+  Lobby.find({}, function(err, found) {
+    //If there's no lobby
+    if(found.length <= 0) {
+      //if it doesn't exist create one
+      var lobby = new Lobby();
+      lobby.userOnline.push(req.user._id);
+      lobby.save(function(err, saved) {});
+    } else {
+      //If the tracker exist, check if the user exist in the array
+      if( found[0].userOnline.indexOf(req.user._id) < 0 ) {
+        //If user doesn't exist, add to list
+        found[0].userOnline.push(req.user._id);
+
+        found[0].save(function(err, newLobby) {
+          console.log('Number of users online: ', newLobby.userOnline.length);
+        });
+      }
+    }
+  });//Lobby tracker ends
   res.redirect('/');
 }
 

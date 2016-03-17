@@ -19,11 +19,6 @@ angular.module('keepballin')
       'link': 'teammate',
       'icon': 'glyphicon-fire'
     }
-    // {
-    //   'title': '聯絡',
-    //   'link': 'contact',
-    //   'icon': 'glyphicon-envelope'
-    // }
     ];
 
     $scope.isCollapsed = true;
@@ -61,6 +56,8 @@ angular.module('keepballin')
         $state.go('main');
       });
     };
+
+    socket.checkLogout();
 
     $scope.isActive = function(route) {
       return route === $state.current.name;

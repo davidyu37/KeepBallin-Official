@@ -74,8 +74,8 @@ angular.module('keepballin')
 
       //Get number of users online
       getUsersOnline: function (users, cb) {
-        socket.on('user online', function(data) {
-          users = data.users;
+        socket.on('lobby:save', function(data) {
+          users = data.userOnline;
           cb(users);
         });
       },
@@ -85,6 +85,15 @@ angular.module('keepballin')
         cb = cb || angular.noop;
         socket.emit('logout', {userId: user._id, userName: user.name});
         cb(user);
+      },
+      //If token expire or login to other user, logout the user
+      checkLogout: function(cb) {
+        cb = cb || angular.noop;
+        socket.on('user offline', function(users) {
+          Auth.logout();
+          $state.go('main');
+          cb(users);
+        });
       },
       //Emitting leave room to server
       leaveRoom: function(roomId, cb) {
@@ -102,9 +111,9 @@ angular.module('keepballin')
         cb = cb || angular.noop;
         var user = Auth.getCurrentUser();
         var userPic;
-        if(user.avatar || user.fbprofilepic) {
-          userPic = user.avatar.url || user.fbprofilepic;
-        }
+        // if(user.avatar || user.fbprofilepic) {
+        //   userPic = user.avatar.url || user.fbprofilepic;
+        // }
         var thingsSendToServer = {
           room: room, 
           user: user, 

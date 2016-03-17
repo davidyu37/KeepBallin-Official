@@ -11,4 +11,5 @@ angular.module('keepballin')
     socket.getUsersOnline($scope.usersOnline, function(users) {
         $scope.numberOfUsers = users.length;
     });
+
   }]);
