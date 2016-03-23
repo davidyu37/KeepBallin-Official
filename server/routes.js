@@ -10,6 +10,7 @@ var path = require('path');
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/globals', require('./api/global'));
   app.use('/api/invite', require('./api/invite'));
   app.use('/api/lobby', require('./api/lobby'));
   app.use('/api/chats', require('./api/chat'));

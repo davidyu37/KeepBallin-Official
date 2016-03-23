@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .factory('socket', function(socketFactory, Auth) {
+  .factory('socket', function(socketFactory, Auth, $state) {
 
     // socket.io now auto-configures its connection when we ommit a connection url
     var ioSocket = io.connect('', {
@@ -71,7 +71,6 @@ angular.module('keepballin')
         socket.removeAllListeners(modelName + ':save');
         socket.removeAllListeners(modelName + ':remove');
       },
-
       //Get number of users online
       getUsersOnline: function (users, cb) {
         socket.on('lobby:save', function(data) {
@@ -79,7 +78,16 @@ angular.module('keepballin')
           cb(users);
         });
       },
-
+      //Remove Listener to lobby update
+      stopGetUsersOnline: function(cb) {
+        socket.removeAllListeners('lobby:save');
+      },
+      //User login
+      login: function(data, cb) {
+        cb = cb || angular.noop;
+        socket.emit('login', data);
+        cb(data);
+      },
       //Let the server know when the user logout
       logout: function(user, cb) {
         cb = cb || angular.noop;
@@ -89,7 +97,8 @@ angular.module('keepballin')
       //If token expire or login to other user, logout the user
       checkLogout: function(cb) {
         cb = cb || angular.noop;
-        socket.on('user offline', function(users) {
+        var user = Auth.getCurrentUser();
+        socket.on('user offline' + user._id, function(users) {
           Auth.logout();
           $state.go('main');
           cb(users);
@@ -107,13 +116,27 @@ angular.module('keepballin')
         socket.emit('enter room', {roomId: roomId, userId: user._id});
         cb();
       },
+      roomManager: function(room, cb) {
+        cb = cb || angular.noop;
+        //Update users online when user enter room
+        socket.on('user enter room', function(data) {
+          room.usersOnline.push(data.userId);
+        });
+        //Update users online when user leave room
+        socket.on('user left room', function(data) {
+          var index = room.usersOnline.indexOf(data.userId);
+          room.usersOnline.splice(index, 1);
+        });
+      },
+      stopManaging: function(cb) {
+        cb = cb || angular.noop;
+        socket.removeAllListeners('user enter room');
+        socket.removeAllListeners('user left room');
+      },
       sendMessage: function(room, message, cb) {
         cb = cb || angular.noop;
         var user = Auth.getCurrentUser();
         var userPic;
-        // if(user.avatar || user.fbprofilepic) {
-        //   userPic = user.avatar.url || user.fbprofilepic;
-        // }
         var thingsSendToServer = {
           room: room, 
           user: user, 
@@ -128,6 +151,61 @@ angular.module('keepballin')
         socket.on('new message', function(data) {
           room.messages.unshift(data.messages[0]);
           cb(room);
+        });
+      },
+      //When user joins the global chat room
+      joinGlobal: function(username, cb) {
+        cb = cb || angular.noop;
+        socket.emit('user join', username);
+      },
+      //leave global
+      leaveGlobal: function(username, cb) {
+        cb = cb || angular.noop;
+        socket.emit('user leave', username);
+      },
+      //Send message
+      globalMessage: function(message, cb) {
+        cb = cb || angular.noop;
+        socket.emit('send global message', message);
+        cb();
+      },
+      //On global message
+      onGlobalMessage: function(global, cb) {
+        cb = cb || angular.noop;
+        socket.on('global message received', function(data) {
+          global.messages.unshift(data.messages[0]);
+          cb(global);
+        });
+      },
+      //Update ui as user get online and offline
+      globalManager: function(global, cb) {
+        cb = cb || angular.noop;
+        socket.on('user joined', function(data) {
+          global.usersOnline.push(data.username);
+          global.messages.push({
+            by: data.username,
+            message: '上線',
+            date: (new Date()).toISOString()
+          });
+          cb(global);
+        });
+        socket.on('user left', function(data) {
+          var index =  global.usersOnline.indexOf(data.username);
+          global.usersOnline.splice(index, 1);
+          global.messages.push({
+            by: data.username,
+            message: '下線',
+            date: (new Date()).toISOString()
+          });
+          cb(global);
+        });
+      },
+
+      checkForUsername: function(cb) {
+        cb = cb || angular.noop;
+        socket.emit('check username');
+        socket.on('got username', function(data) {
+          cb(data);
         });
       }
 

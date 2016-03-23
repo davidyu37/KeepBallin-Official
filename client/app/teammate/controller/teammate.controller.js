@@ -1,19 +1,136 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'rooms', '$state', 'Lobby', 'Invite', function ($scope, socket, Auth, Chat, rooms, $state, Lobby, Invite) {
+  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'Global', 'rooms', '$state', 'Lobby', 'Invite', '$timeout', function ($scope, socket, Auth, Chat, Global, rooms, $state, Lobby, Invite, $timeout) {
 
-    Lobby.query(function(data) {
-        if(data[0]) {
-            $scope.numberOfUsers = data[0].userOnline.length;
+    // Lobby.query(function(data) {
+    //     if(data[0]) {
+    //         $scope.numberOfUsers = data[0].userOnline.length;
+    //     }
+    // });
+
+    // socket.getUsersOnline($scope.usersOnline, function(users) {
+    //     $scope.numberOfUsers = users.length;
+    // });
+
+    //Global chat begins
+
+
+    var userName = angular.element('#userName');
+    userName.focus();
+
+    socket.checkForUsername(function(data) {
+        if(data.name) {
+            $scope.name = data.name;
+            $scope.joinGlobal($scope.name);
         }
     });
 
-    //When a user joins the global chat room
-    // Object.keys(data.users).length;
-    socket.getUsersOnline($scope.usersOnline, function(users) {
-        $scope.numberOfUsers = users.length;
+    //Get the element for chat thread container and its height
+    var globalThread = angular.element(document.getElementById('globalThread'));
+    var globalContent = angular.element(document.getElementById('globalContent'));
+
+    //Scroll to the newest message on load
+    $timeout(function() {
+      globalThread.scrollTo(0, globalContent[0].clientHeight);
+
     });
+
+    Global.load(function(data) {
+        $scope.global = data;
+        //Handling online and offline users
+        socket.globalManager($scope.global, function(data) {
+            $timeout(function() {
+                globalThread.scrollTo(0, globalContent[0].clientHeight);
+            });
+        });
+        //Listen for new messages
+        socket.onGlobalMessage($scope.global, function() {
+            console.log('got new message');
+            $timeout(function() {
+                globalThread.scrollTo(0, globalContent[0].clientHeight);
+            });
+        });
+    });
+
+    var messageBox = angular.element('#messageBox');
+
+    //Enter global chat room
+    $scope.joinGlobal = function(name) {
+        //Show message box
+        $scope.hasName = true;
+        //Append welcome message to the end of current messages
+        $scope.global.messages.push({
+            by: 'Keepballin',
+            message: name + ', 歡迎來到屬於籃球人的空間',
+            date: (new Date()).toISOString()
+        });
+        //Focus on message box
+        $timeout(function() {
+            messageBox.focus();
+            //Scroll to the welcome message
+            globalThread.scrollTo(0, globalContent[0].clientHeight);
+        });
+        //Emit socket that user joined
+        socket.joinGlobal(name);
+
+        //Update backend
+        Global.enter({
+            id: $scope.global._id,
+            name: name
+        });
+    };
+
+
+    //Send message
+    $scope.sendMessage = function() {
+        $scope.timeNow = new Date();
+      var message = {
+        room: $scope.global,
+        message: $scope.message,
+        by: $scope.name
+      };
+      socket.globalMessage(message);
+      // Global.send(message, function(data) {
+      //   $scope.global = data;
+      //   $timeout(function() {
+      //       globalThread.scrollTo(0, globalContent[0].clientHeight);
+      //   });
+      //   socket.globalMessage(data.messages[0]);
+      // });
+      $scope.message = '';
+    };
+
+    $scope.noMoreMessages = false;
+
+    globalThread.on('scroll', function() {
+      //When user scroll to the top load more messages
+      if(globalThread.scrollTop() === 0) {
+        //If there's no more messages, return
+        if($scope.noMoreMessages) {
+          return;
+        }
+        $scope.loading = true;
+        //If it's still loading don't load more
+        if($scope.loading) {
+          Global.loadMessage({ room: $scope.global }, function(data) {
+            //Count the current number of message
+            var numberOfMessages = $scope.global.messages.length;
+            //Add messages loaded
+            $scope.global.messages = $scope.global.messages.concat(data.messages);
+            $scope.loading = false;
+            //If the number of messages doesn't increase, prevent the next load
+            if(numberOfMessages === $scope.global.messages.length) {
+              $scope.noMoreMessages = true;
+            }
+          });
+        }
+      }
+    });
+
+
+    //Global chat ends
+
 
     //Get current user
     var user = Auth.getCurrentUser;
@@ -62,6 +179,7 @@ angular.module('keepballin')
     });
     $scope.$on('$destroy', function () {
         socket.unsyncUpdates('chat');
+        socket.leaveGlobal($scope.name);
     });
 
     //Users' function

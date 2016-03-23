@@ -13,6 +13,8 @@ angular.module('keepballin')
 
   	socket.enterRoom(room._id);
 
+    socket.roomManager($scope.room);
+
     $scope.sendMessage = function() {
       var message = {
         message: $scope.message,
@@ -87,6 +89,7 @@ angular.module('keepballin')
       });
       $scope.$on('$destroy', function () {
           socket.unsyncUpdates('invite');
+          socket.stopManaging();
           socket.leaveRoom(room._id);
       });
     });

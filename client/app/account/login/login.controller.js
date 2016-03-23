@@ -19,7 +19,7 @@ angular.module('keepballin')
           var userNow = Auth.getCurrentUser().$promise;
           userNow.then(function(user) {
             // socket.reconnect();
-            socket.socket.emit('login', {userId: user._id, userName: user.name});
+            socket.login({userId: user._id, userName: user.name});
             if(roomId.roomId) {
               // If user previously clicked on chat room, then enter
               $state.go('chat', {id: roomId.roomId});
