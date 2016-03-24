@@ -16,7 +16,6 @@ var GlobalSchema = new Schema({
   messages: [MessageSchema]
 });
 
-
 GlobalSchema.statics = {
   //Find or create a global chat room
   loadInitialRoom: function(cb) {
@@ -27,11 +26,12 @@ GlobalSchema.statics = {
       }
       if(!room[0]) {
         console.log('global doesn\'t exist, create global...');
-        var global = new Global();
-        global.country = 'Taiwan';
-        global.save(function(err, saved) {
-          console.log('new global created');
-        });
+        cb({nonexist: true});
+        // var global = new this();
+        // global.country = 'Taiwan';
+        // global.save(function(err, saved) {
+        //   console.log('new global created');
+        // });
       } else {
         //Global already exist load the messages
         //Sort the messages based on date

@@ -1,4 +1,23 @@
 /*Global chat room style starts*/
+.district-options {
+	.form-group {
+		margin: 0;
+	}
+	select {
+		text-align: center;
+	}
+	@media(min-width: $screen-sm-min) {
+		display: none;
+	}
+}
+
+.district-options-btn {
+	text-align: center;
+	@media(min-width: $screen-sm-min) {
+		display: none;
+	}
+}
+
 .sendPublic {
 	position: fixed;
 	top: 0;
@@ -57,10 +76,14 @@
 }
 
 .list-of-rooms {
-	color: white;
-	.list-group-item {
-		color: $brand-primary;
-		text-align: center;
+	display: none;
+	@media(min-width: $screen-sm-min) {
+		color: white;
+		.list-group-item {
+			color: $brand-primary;
+			text-align: center;
+		}
+		display: inherit;
 	}
 }
 
@@ -72,7 +95,7 @@
 .globalContainer {
 	padding: 15px 0;
 	@media(min-width: $screen-sm-min) {
-		margin: 10% 0; 
+		margin: 5% 0; 
 	}
 }
 

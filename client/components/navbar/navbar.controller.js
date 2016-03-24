@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('NavbarCtrl', ['$rootScope', '$scope', '$location', '$window', '$state', 'Auth', 'socket', '$timeout', function ($rootScope, $scope, $location, $window, $state, Auth, socket, $timeout) {
+  .controller('NavbarCtrl', ['$rootScope', '$scope', '$location', '$window', '$state', 'Auth', 'socket', function ($rootScope, $scope, $location, $window, $state, Auth, socket) {
 
     $scope.menu = [
     {

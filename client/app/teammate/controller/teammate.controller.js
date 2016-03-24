@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'Global', 'rooms', '$state', 'Lobby', 'Invite', '$timeout', function ($scope, socket, Auth, Chat, Global, rooms, $state, Lobby, Invite, $timeout) {
+  .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'Global', 'rooms', '$state', 'Lobby', 'Invite', '$timeout', 'User', function ($scope, socket, Auth, Chat, Global, rooms, $state, Lobby, Invite, $timeout, User) {
 
     // Lobby.query(function(data) {
     //     if(data[0]) {
@@ -14,7 +14,9 @@ angular.module('keepballin')
     // });
 
     //Global chat begins
-
+    User.getUserName(function(names) {
+        $scope.takenNames = names;
+    });
 
     var userName = angular.element('#userName');
     userName.focus();
@@ -39,14 +41,13 @@ angular.module('keepballin')
     Global.load(function(data) {
         $scope.global = data;
         //Handling online and offline users
-        socket.globalManager($scope.global, function(data) {
+        socket.globalManager($scope.global, function() {
             $timeout(function() {
                 globalThread.scrollTo(0, globalContent[0].clientHeight);
             });
         });
         //Listen for new messages
         socket.onGlobalMessage($scope.global, function() {
-            console.log('got new message');
             $timeout(function() {
                 globalThread.scrollTo(0, globalContent[0].clientHeight);
             });
@@ -55,16 +56,26 @@ angular.module('keepballin')
 
     var messageBox = angular.element('#messageBox');
 
-    //Enter global chat room
-    $scope.joinGlobal = function(name) {
+    var joinGlobalRoom = function(name) {
         //Show message box
         $scope.hasName = true;
         //Append welcome message to the end of current messages
-        $scope.global.messages.push({
-            by: 'Keepballin',
-            message: name + ', 歡迎來到屬於籃球人的空間',
-            date: (new Date()).toISOString()
-        });
+        //Check if there's already messages
+        if($scope.global.messages) {
+            $scope.global.messages.push({
+                by: 'Keepballin',
+                message: name + ', 歡迎來到屬於籃球人的空間, 這裡為大廳, 討論任何籃球大小事, 找人打球, 需要指定找某區域的球友, 請點擊聊天室上方的\'進入各區群組\'',
+                date: (new Date()).toISOString()
+            });
+        } else {
+            //Create an empty array if there's no messages
+            $scope.global.messages = [];
+            $scope.global.messages.push({
+                by: 'Keepballin',
+                message: name + ', 歡迎來到屬於籃球人的空間, 這裡為大廳, 討論任何籃球大小事, 找人打球, 需要指定找某區域的球友, 請點擊聊天室上方的\'進入各區群組\'',
+                date: (new Date()).toISOString()
+            });
+        }
         //Focus on message box
         $timeout(function() {
             messageBox.focus();
@@ -81,6 +92,40 @@ angular.module('keepballin')
         });
     };
 
+    //Enter global chat room
+    $scope.joinGlobal = function(name) {
+        //If user is login, go in immediately
+        if(Auth.isLoggedIn()) {
+            //Join global room
+            joinGlobalRoom(name);
+        } else {
+            //not login check names
+            //Set name taken to false before checking
+            $scope.nameTaken = false;
+            //Check if name is someone who signed up
+            $scope.takenNames.forEach(function(takenName) {
+                if(name.toLowerCase() == takenName.name.toLowerCase()) {
+                    $scope.nameTaken = true;
+                    return;
+                }
+                return;
+            });
+            //If nameTaken is false, join, else return
+            if($scope.nameTaken) {
+                return;
+            } else {
+                //Join global room
+                joinGlobalRoom(name);
+            }
+            
+        } 
+    };
+
+    //Toggle district options
+    $scope.showDistrict = false;
+    $scope.displayDistrict = function() {
+        $scope.showDistrict = !($scope.showDistrict);
+    };
 
     //Send message
     $scope.sendMessage = function() {
@@ -156,7 +201,7 @@ angular.module('keepballin')
     
     Invite.query(function(data) {
         $scope.cachedInvites = data;
-        socket.syncUpdates('invite', $scope.cachedInvites, function(event, item , arr) { 
+        socket.syncUpdates('invite', $scope.cachedInvites, function(event) { 
             if(event === 'created') {
                 groupAndCount();
             } else if (event === 'deleted') {

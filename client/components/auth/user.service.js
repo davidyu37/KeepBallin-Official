@@ -92,6 +92,13 @@ angular.module('keepballin')
         params: {
           controller: 'token'
         }
+      },
+      getUserName: {
+        method: 'GET',
+        isArray: true,
+        params: {
+          controller: 'getNameOnly'
+        }
       }
 	  });
   });

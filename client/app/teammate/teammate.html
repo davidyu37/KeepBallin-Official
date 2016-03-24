@@ -1,21 +1,33 @@
 <div class="container teammateBg">
 	<div class="col-sm-6" style="background-color: white">
 		<div class="globalContainer">
-		<!-- <div class="form-inline text-center">
+		<div class="form-control district-options-btn" ng-click="displayDistrict()" ng-class="{
+			'btn-primary': !showDistrict, 'btn-default': showDistrict
+		}">
+		<p ng-hide="showDistrict">
+			進入各區群組
+			<i class="fa fa-plus"></i>
+		</p>
+		<p ng-show="showDistrict">
+			縮小
+			<i class="fa fa-minus"></i>
+		</p>
+		</div>
+		<div class="form-inline text-center district-options" ng-show="showDistrict">
 			<div class="form-group">
-			    <label for="district" class="control-label">區域</label>
+			    <!-- <label for="district" class="control-label">區域</label> -->
 			   	<select ng-options="room.district for room in rooms | unique: 'district'" ng-model="room" class="form-control">
 		    		 <option value="">-- 選擇區域 --</option>
 		    	</select>
 			</div>
 			<div class="form-group" ng-show="room">
-			    <label for="city" class="control-label">城市</label>
+			    <!-- <label for="city" class="control-label">城市</label> -->
 			   	<select ng-options="room.city for room in rooms | filter: room.district" ng-model="city" class="form-control">
 		    		 <option value="">-- 選擇城市 --</option>
 		    	</select>
 			</div>
-			<button class="form-control" ng-click="enterRoom(city)">進入群組</button>
-		</div> -->
+			<button class="form-control btn-primary" ng-click="enterRoom(city)">進入群組</button>
+		</div>
 			<ul id="globalThread" class="list-group generalThreads">
 				<div id="globalContent">
 					<div class="loading" ng-show="loading">
@@ -100,10 +112,10 @@
 			<button class="form-control" ng-click="addRoom()">增加群組</button>
 		</div>
 	</div>
-	<div class="editRoomBox" ng-show="isAdmin()">
+	<!-- <div class="editRoomBox" ng-show="isAdmin()">
 		<textarea class="form-control" name="editingSpace" cols="30" rows="10" ng-model="roomBeingEdited"></textarea>
 		<button class="btn btn-primary" ng-click="saveRoom(roomBeingEdited)">儲存</button>
-	</div>
+	</div> -->
 	
 </div>
 <form class="sendPublic" ng-submit="joinGlobal(name)" ng-hide="hasName">
@@ -111,6 +123,20 @@
 		<h2>請輸入你的名字</h2>
 		<input id="userName" class="usernameInput" type="text" name="name" ng-model="name" required>
 		<br>
+		<p ng-show="nameTaken">已有使用者使用此名稱
+		<a ui-sref="login">登入?</a>
+		</p>
+		<br>
 		<input ng-disabled="!name" class="btn btn-primary" type="submit" value="進入" />
 	</div>
 </form>	
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- teammate page -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2566502239566951"
+     data-ad-slot="5063936427"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>

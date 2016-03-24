@@ -15,12 +15,17 @@ var Event = require('../api/event/event.model');
 var Team = require('../api/team/team.model');
 var Lobby = require('../api/lobby/lobby.model');
 var Invite = require('../api/invite/invite.model');
+var Global = require('../api/global/global.model');
 
 function randomDate(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
 var random = randomDate(new Date(1950, 0, 1), new Date());
+
+Global.find({}).remove(function() {
+  console.log('Global cleared');
+});
 
 Invite.find({}).remove(function() {
   console.log('Invites cleared');

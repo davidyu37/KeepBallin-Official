@@ -20,6 +20,7 @@ router.get('/me', auth.isAuthenticated(), controller.me);
 router.get('/:id/who', auth.isAuthenticated(), controller.show);
 router.get('/admin', auth.hasRole('admin'), controller.adminSearch);
 router.get('/mycourt', auth.isAuthenticated(), controller.getMyCourt);
+router.get('/getNameOnly', controller.getNameOnly);
 
 router.put('/:id/changerole', auth.hasRole('manager'), controller.changeRole);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);

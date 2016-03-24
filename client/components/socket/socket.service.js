@@ -81,6 +81,7 @@ angular.module('keepballin')
       //Remove Listener to lobby update
       stopGetUsersOnline: function(cb) {
         socket.removeAllListeners('lobby:save');
+        cb();
       },
       //User login
       login: function(data, cb) {
@@ -136,7 +137,6 @@ angular.module('keepballin')
       sendMessage: function(room, message, cb) {
         cb = cb || angular.noop;
         var user = Auth.getCurrentUser();
-        var userPic;
         var thingsSendToServer = {
           room: room, 
           user: user, 

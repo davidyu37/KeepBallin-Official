@@ -7,9 +7,12 @@ angular.module('keepballin')
     }
 
     //When a user joins the global chat room
-    // Object.keys(data.users).length;
     socket.getUsersOnline($scope.usersOnline, function(users) {
         $scope.numberOfUsers = users.length;
+    });
+
+    $scope.$on('$destroy', function () {
+        socket.stopGetUsersOnline();
     });
 
   }]);

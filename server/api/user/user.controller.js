@@ -136,6 +136,14 @@ exports.adminSearch = function(req, res) {
   });
 };
 
+//Get user name only
+exports.getNameOnly = function(req, res) {
+  User.find({}, 'name -_id', function (err, users) {
+    if(err) return res.status(500).send(err);
+    res.status(200).json(users);
+  });
+};
+
 //Get the courts related to the user
 exports.getMyCourt = function(req, res, next) {
   var userId = req.user._id;

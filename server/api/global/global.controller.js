@@ -15,6 +15,15 @@ exports.loadOrCreate = function(req, res) {
 	Global.loadInitialRoom(function (global) {
     	// if(err) { return handleError(res, err); }
     	if(!global) { return res.status(404).send('Not Found'); }
+        if(global.nonexist) {
+            //Create new global
+            var newGlobal = new Global();
+            newGlobal.country = 'Taiwan';
+            newGlobal.save(function(err, saved) {
+                if(err) { return handleError(res, err); }
+                console.log('new global created');
+            });
+        }
         //If there's no err, simply sends it to client
         return res.status(200).json(global);
     });
