@@ -123,7 +123,10 @@
                     style="position: absolute; font-size: 120%;" class="label" ng-class="{'label-danger': c.averagedRating<1, 'label-warning': c.averagedRating>=1 && c.averagedRating<3, 'label-success': c.averagedRating>=3}">{{c.averagedRating | number:0}}顆星</span>
                     <span ng-show="totalRating" style="position: absolute;" class="badge">總共{{c.ratings.length}}個評價</span>
                 </div>
-                <h4 class="list-group-item-heading">{{c.court}}</h4>
+                <h4 class="list-group-item-heading">{{c.court}}
+                    <span class="label label-success" ng-show="c.indoor">室內</span>
+                    <span class="label label-primary" ng-show="!c.indoor">室外</span>
+                </h4>
                 <p class="list-group-item-text">{{c.address}}</p>
                 
               </a>

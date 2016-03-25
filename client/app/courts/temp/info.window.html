@@ -10,6 +10,7 @@
 	titles="['不要去','有瑕疵','不錯', '很好打', '極品']"
 	ng-click="openRates()"></rating>
     <span ng-show="totalRating" style="position: absolute;" class="badge">總共{{currentcourt.ratings.length}}個評價</span>
+	<span ng-show="currentcourt.indoor" style="font-size: 120%; padding-bottom: 2px" class="label label-success">室內</span>
 </div>
 <div class="infoWindowContent">
 	<h5 ng-hide="showAddress">{{currentcourt.city}}

@@ -56,23 +56,6 @@
   margin-bottom: 15px;
   font-weight: 400;
   font-size: 150%;
-	::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-		color:    #000;
-	}
-	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-		color:    #000;
-		opacity:  1;
-	}
-	::-moz-placeholder { /* Mozilla Firefox 19+ */
-		color:    #000;
-		opacity:  1;
-	}
-	:-ms-input-placeholder { /* Internet Explorer 10-11 */
-		color:    #000;
-	}
-	:placeholder-shown { /* Standard (https://drafts.csswg.org/selectors-4/#placeholder) */
-		color:    #000;
-	}
 }
 
 .list-of-rooms {
@@ -359,6 +342,18 @@
 	@media(max-width: $screen-sm-min) {
 		position: fixed;
 		bottom: 5%;
+	}
+}
+
+#messageBox {
+	@media(max-width: $screen-sm-min) {
+		background-color: white;
+	}
+}
+
+#messageFunctionBox {
+	@media(max-width: $screen-sm-min) {
+		padding-right: 30px;
 	}
 }
 

@@ -5,24 +5,27 @@ angular.module('keepballin')
   	//async grab data
     thisTeam.$promise.then(function(d) {
   		$scope.team = d;
-      if(d.owner._id === Auth.getCurrentUser()._id) {
-        $scope.isOwner = true;
-      } 
+      if(Auth.isLoggedIn()) {
+
+        $scope.user = Auth.getCurrentUser();
+
+        if(d.owner._id === $scope.user._id) {
+          $scope.isOwner = true;
+        } 
+        //If the user is the contact person, me value is true so the checkbox is checked initially
+        if($scope.user._id === $scope.team.contactperson.account) {
+          $scope.me = true;
+          $scope.disableContactInput = true;
+        }
+      }
+      
       //socket.io instant updates   
       socket.socket.on('team:save', function(item) {
         $scope.team = item;
       });
-      $scope.$on('$destroy', function () {
-        socket.socket.removeAllListeners('team:save');      
-      });
       
       //For edit page
       $scope.editFounded = new Date($scope.team.founded);
-      //If the user is the contact person, me value is true so the checkbox is checked initially
-      if(Auth.getCurrentUser()._id === $scope.team.contactperson.account) {
-        $scope.me = true;
-        $scope.disableContactInput = true;
-      }
       //Get team's events
       var teamEvent = Event.getByTeam({team: $scope.team._id}).$promise;
       teamEvent.then(function(d) {
@@ -40,6 +43,7 @@ angular.module('keepballin')
         });
         $scope.$on('$destroy', function () {
               socket.unsyncUpdates('event');
+              socket.socket.removeAllListeners('team:save');  
           });  
         
       });
@@ -60,8 +64,6 @@ angular.module('keepballin')
     users.then(function(d) {
         $scope.users = d;
     });
-
-    $scope.User = Auth.getCurrentUser();
 
     $scope.$on('teamPicUploaded', function() {
       var team = Team.get({id: $scope.team._id}).$promise;
@@ -188,11 +190,11 @@ angular.module('keepballin')
         switch (type) {
           case 'contact': 
             if(me === true) {
-              $scope.team.contactperson.name = $scope.User.name;
+              $scope.team.contactperson.name = $scope.user.name;
               $scope.disableContactInput = true;
-              $scope.team.contactperson.account = $scope.User._id;
-              $scope.team.contactperson.email = $scope.User.email;
-              $scope.selectedUser = $scope.User;
+              $scope.team.contactperson.account = $scope.user._id;
+              $scope.team.contactperson.email = $scope.user.email;
+              $scope.selectedUser = $scope.user;
               $scope.team.contactperson.confirmed = true;
             } else {
               $scope.team.contactperson = {};
@@ -203,10 +205,10 @@ angular.module('keepballin')
           case 'member':
             if(me === true) {
               $scope.person = '';
-              $scope.person = $scope.User.name;
+              $scope.person = $scope.user.name;
               $scope.disablePersonInput = true;
               $scope.memberIsMe = true;
-              $scope.chosenMember = $scope.User;
+              $scope.chosenMember = $scope.user;
             } else {
               $scope.person = '';
               $scope.disablePersonInput = false;
@@ -278,10 +280,10 @@ angular.module('keepballin')
               person = {
                 name: name,
                 position: pos,
-                account: $scope.User._id,
+                account: $scope.user._id,
                 confirmed: true
               };
-              $scope.team.membersID.push($scope.User._id);
+              $scope.team.membersID.push($scope.user._id);
             } else if($scope.chosenMember) {
               if(name === $scope.chosenMember.name) {
                 person = {
@@ -528,15 +530,16 @@ angular.module('keepballin')
 
     $scope.checkUser = function() {
       if($scope.team) {
-        
-        var user = Auth.getCurrentUser()._id;
-      
-        if($scope.team.owner._id === user) {
-          return true;
+
+        if(Auth.isLoggedIn()) {
+          if($scope.team.owner._id === $scope.user._id) {
+            return true;
+          }
+          if(isMember()) {
+            return true;
+          } 
         }
-        if(isMember()) {
-          return true;
-        } 
+      
         return false; 
       }
     };
@@ -577,7 +580,7 @@ angular.module('keepballin')
 
     var isMember = function() {
       if($scope.team) {
-        var user = Auth.getCurrentUser();
+        var user = $scope.user;
         var last = false;
 
         if($scope.team.members[0]) {
@@ -687,7 +690,7 @@ angular.module('keepballin')
     $scope.isMe = function(index) {
       var member = $scope.team.members[index];
       var newInfo = {
-        account: $scope.User._id,
+        account: $scope.user._id,
         membersID: $scope.team.membersID
       };
 

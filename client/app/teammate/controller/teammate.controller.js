@@ -21,13 +21,6 @@ angular.module('keepballin')
     var userName = angular.element('#userName');
     userName.focus();
 
-    socket.checkForUsername(function(data) {
-        if(data.name) {
-            $scope.name = data.name;
-            $scope.joinGlobal($scope.name);
-        }
-    });
-
     //Get the element for chat thread container and its height
     var globalThread = angular.element(document.getElementById('globalThread'));
     var globalContent = angular.element(document.getElementById('globalContent'));
@@ -38,13 +31,22 @@ angular.module('keepballin')
 
     });
 
-    Global.load(function(data) {
-        $scope.global = data;
+    Global.load(function(global) {
+        $scope.global = global;
         //Handling online and offline users
         socket.globalManager($scope.global, function() {
             $timeout(function() {
                 globalThread.scrollTo(0, globalContent[0].clientHeight);
             });
+        });
+        //Check for user name
+        socket.checkForUsername(function(data) {
+            if(data.name) {
+                $scope.name = data.name;
+                $timeout(function() {
+                    $scope.joinGlobal($scope.name);
+                });
+            }
         });
         //Listen for new messages
         socket.onGlobalMessage($scope.global, function() {
@@ -56,25 +58,32 @@ angular.module('keepballin')
 
     var messageBox = angular.element('#messageBox');
 
+    var messageFunctionBox = angular.element('#messageFunctionBox');
+
     var joinGlobalRoom = function(name) {
         //Show message box
         $scope.hasName = true;
         //Append welcome message to the end of current messages
         //Check if there's already messages
-        if($scope.global.messages) {
-            $scope.global.messages.push({
-                by: 'Keepballin',
-                message: name + ', 歡迎來到屬於籃球人的空間, 這裡為大廳, 討論任何籃球大小事, 找人打球, 需要指定找某區域的球友, 請點擊聊天室上方的\'進入各區群組\'',
-                date: (new Date()).toISOString()
-            });
-        } else {
-            //Create an empty array if there's no messages
-            $scope.global.messages = [];
-            $scope.global.messages.push({
-                by: 'Keepballin',
-                message: name + ', 歡迎來到屬於籃球人的空間, 這裡為大廳, 討論任何籃球大小事, 找人打球, 需要指定找某區域的球友, 請點擊聊天室上方的\'進入各區群組\'',
-                date: (new Date()).toISOString()
-            });
+        if($scope.global) {
+            if($scope.global.messages) {
+                $scope.global.messages.push({
+                    by: 'Keepballin',
+                    message: name + ', 歡迎來到屬於籃球人的空間, 這裡為大廳, 討論任何籃球大小事, 找人打球, 需要指定找某區域的球友, 請點擊聊天室上方的\'進入各區群組\'',
+                    date: (new Date()).toISOString()
+                });
+            } else {
+                //Create an empty array if there's no messages
+                $scope.global.messages = [];
+                $scope.global.messages.push({
+                    by: 'Keepballin',
+                    message: name + ', 歡迎來到屬於籃球人的空間, 這裡為大廳, 討論任何籃球大小事, 找人打球, 需要指定找某區域的球友, 請點擊聊天室上方的\'進入各區群組\'',
+                    date: (new Date()).toISOString()
+                });
+            }    
+        }
+        if(screen.width < 786) {
+            messageFunctionBox.css({'position': 'fixed', 'bottom': '5%'});
         }
         //Focus on message box
         $timeout(function() {

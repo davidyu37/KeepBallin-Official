@@ -30,7 +30,7 @@ module.exports = function(app) {
   app.use(methodOverride());
   app.use(cookieParser());
   app.use(passport.initialize());
-  // app.use(require('prerender-node').set('prerenderToken', config.prerender.token));
+  app.use(require('prerender-node').set('prerenderToken', config.prerender.token));
 
   if ('production' === env) {
     app.use(require('../urlredirects'));

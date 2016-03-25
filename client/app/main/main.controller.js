@@ -11,8 +11,4 @@ angular.module('keepballin')
         $scope.numberOfUsers = users.length;
     });
 
-    $scope.$on('$destroy', function () {
-        socket.stopGetUsersOnline();
-    });
-
   }]);

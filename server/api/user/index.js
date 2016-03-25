@@ -12,7 +12,7 @@ router.post('/', controller.create);
 router.post('/forgot', controller.sendMail);
 //Token pw reset
 router.post('/token/:token', controller.resetPassword);
-router.get('/', auth.hasRole('vip'), controller.index);
+router.get('/', controller.index);
 //Check if token is valid for forgot pw
 router.get('/token/:token', controller.checkToken);
 router.get('/search', auth.hasRole('manager'), controller.search);
