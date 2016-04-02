@@ -63,6 +63,15 @@ angular.module('keepballin')
       return route === $state.current.name;
     };
 
+    //If user is login, go to rent page
+    $scope.goToRent = function() {
+      if(Auth.isLoggedIn()) {
+        $state.go('rent');
+      } else {
+        $state.go('login');
+      }
+    };
+
     $scope.close = function() {
       $scope.isCollapsed = true;
     };

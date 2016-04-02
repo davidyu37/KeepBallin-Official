@@ -44,7 +44,7 @@
     async defer></script> -->
     
     <!-- google map -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=&language=zh-TW&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?language=zh-TW&libraries=places"></script>
   </head>
   <body ng-app="keepballin" class="scrollable-content">
     <!--[if lt IE 7]>
@@ -55,15 +55,6 @@
     <div ng-include="'components/navbar/navbar.html'" class="scrollable-header"></div>
     <div class="wrap">
       <div ui-view=""></div>
-      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-      <!-- Basketball -->
-      <ins class="adsbygoogle"
-           style="display:inline-block;width:728px;height:90px"
-           data-ad-client="ca-pub-2566502239566951"
-           data-ad-slot="1790046020"></ins>
-      <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
     </div>
     <div ng-include="'components/footer/footer.html'"></div>
 
@@ -179,6 +170,9 @@
       <script src="app/filter/exist.js"></script>
       <script src="app/forgot/forgot.controller.js"></script>
       <script src="app/forgot/forgot.js"></script>
+      <script src="app/indoor/indoor.controller.js"></script>
+      <script src="app/indoor/indoor.js"></script>
+      <script src="app/indoor/service/indoor.service.js"></script>
       <script src="app/lobby/lobby.service.js"></script>
       <script src="app/main/main.controller.js"></script>
       <script src="app/main/main.js"></script>
@@ -190,6 +184,8 @@
       <script src="app/rating/ratings.controller.js"></script>
       <script src="app/rating/ratings.show.controller.js"></script>
       <script src="app/rating/ratings.submit.controller.js"></script>
+      <script src="app/rent/rent.controller.js"></script>
+      <script src="app/rent/rent.js"></script>
       <script src="app/sendmail/sendmail.controller.js"></script>
       <script src="app/sendmail/sendmail.js"></script>
       <script src="app/share/fb.service.js"></script>

@@ -250,6 +250,7 @@ function onConnect(socket, socketio) {
   //Global chat rooms ends
 
   // Insert sockets below
+  // require('../api/indoor/indoor.socket').register(socket);
   require('../api/global/global.socket').register(socket);
   require('../api/invite/invite.socket').register(socket);
   require('../api/chat/chat.socket').register(socket);

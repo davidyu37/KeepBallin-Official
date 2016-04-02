@@ -50,6 +50,7 @@ var UserSchema = new Schema({
   github: {},
   createdOn: { type: Date, default: Date.now },
   courtCreated: [{ type:Schema.ObjectId, ref:"Court" }],
+  courtManagerOf: [{ type:Schema.ObjectId, ref:"Indoor" }],
   eventsJoined: [{ type:Schema.ObjectId, ref:"Event" }],
   invitesJoined: [{ type:Schema.ObjectId, ref:"Invite" }]
 });

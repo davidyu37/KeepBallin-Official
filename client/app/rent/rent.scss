@@ -1,0 +1,98 @@
+.rentPageContainer {
+    margin-top: 65px;
+	@media(min-width: $screen-sm-min) {
+       margin-top: 0px;
+    }
+}
+
+/* Size of google map for when user create new court to rent */
+.rentCourtMap {
+	width: 100%; 
+	height: 400px;
+}
+
+/* Overlay to prevent user messing with map while it's still loading */
+.mapLoadingOverlay {
+	position: absolute; 
+	left: 0; 
+	bottom: 0; 
+	width: 100%; 
+	height: 400px; 
+	background-color: rgba(255,255,255,0.8);
+	display: table;
+}
+
+/* Keep shit in the center without fucking up the height of the spinner */
+.mapLoaderContainer {
+	display: table-cell; 
+	vertical-align: middle;
+}
+
+/* Changing the color of the animated bars */
+.mapLoader {
+	.rect1 {
+		background-color: $brand-primary;
+	}
+	.rect2 {
+		background-color: $brand-primary;
+	}
+	.rect3 {
+		background-color: $brand-primary;
+	}
+	.rect4 {
+		background-color: $brand-primary;
+	}
+}
+
+/* table cell and align middle vertically */
+.table-cell-align {
+	display: table-cell; 
+	vertical-align: middle;
+}
+
+.margin-middle {
+	margin: 0 auto;
+}
+
+.text-center {
+	text-align: center;
+}
+
+/* hours preview table styles */
+
+.flat-table {
+	margin: 0 auto;
+	border-collapse:collapse;
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+	border: 1px solid black;
+    border-radius: 3px;
+   -webkit-border-radius: 3px;
+   -moz-border-radius: 3px;
+}
+.flat-table th, .flat-table td {
+	box-shadow: inset 0 -1px rgba(0,0,0,0.25), 
+	inset 0 1px rgba(0,0,0,0.25);
+}
+.flat-table th {
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	padding: 1em;
+	color: #f7f7f7;
+	text-shadow: 0 0 1px rgba(0,0,0,0.1);
+	font-size: 1em;
+	background: $brand-primary;
+}
+.flat-table td {
+	color: black;
+	padding: 0.7em 1em 0.7em 1.15em;
+	text-shadow: 0 0 1px rgba(255,255,255,0.1);
+	font-size: 0.8em;
+}
+.flat-table tr {
+	-webkit-transition: background 0.3s, box-shadow 0.3s;
+	-moz-transition: background 0.3s, box-shadow 0.3s;
+	transition: background 0.3s, box-shadow 0.3s;
+}
+
+
+/* hours preview table styles end */
