@@ -10,10 +10,31 @@ exports.create = function(req, res) {
   //Attach user's id to Indoor's info
   var userId = { creator: req.user._id };
   var newIndoor = _.merge(req.body, userId);
-  console.log(newIndoor);
-  Indoor.create(newIndoor, function(err, Indoor) {
+  Indoor.create(newIndoor, function(err, indoor) {
     if(err) { return handleError(res, err); }
-    return res.status(201).json(Indoor);
+    return res.status(201).json(indoor);
+  });
+};
+
+// Get a single Indoor only for the creator or admin
+exports.show = function(req, res) {
+  Indoor.findById(req.params.id, function (err, indoor) {
+    if(err) { return handleError(res, err); }
+    if(!indoor) { return res.status(404).send('Not Found'); }
+    return res.json(indoor);
+  });
+};
+
+exports.update = function(req, res) {
+  if(req.body._id) { delete req.body._id; }
+  Indoor.findById(req.params.id, function (err, indoor) {
+    if (err) { return handleError(res, err); }
+    if(!indoor) { return res.status(404).send('Not Found'); }
+    var newIndoor = _.merge(indoor, req.body);
+    newIndoor.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.status(200).json(newIndoor);
+    });
   });
 };
 
@@ -25,14 +46,6 @@ exports.create = function(req, res) {
 //   });
 // };
 
-// // Get a single Indoor
-// exports.show = function(req, res) {
-//   Indoor.findOneAndPopulate(req.params.id, function (err, Indoor) {
-//     if(err) { return handleError(res, err); }
-//     if(!Indoor) { return res.status(404).send('Not Found'); }
-//     return res.json(Indoor);
-//   });
-// };
 
 // exports.chosenIndoor = function(req, res) {
 //   Indoor.findOneAndPopulate(req.params.id, function (err, Indoor) {

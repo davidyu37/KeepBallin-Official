@@ -1,11 +1,20 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('RentCtrl', ['$scope', 'Auth', '$timeout', 'Indoor', '$state', function ($scope, Auth, $timeout, Indoor, $state) {
-    
-  	//Initial map
+  .controller('RentEditCtrl', ['$scope', 'Auth', '$timeout', 'Indoor', 'thisCourt', '$animate', function ($scope, Auth, $timeout, Indoor, thisCourt, $animate) {
+
+  	$scope.currentcourt = thisCourt;
+
+  	//Prevent the upload overlay appearing in the beginning
+  	$animate.enabled(false);
+	$timeout(function () {
+    	$animate.enabled(true);
+	}, 1000);
+
+	//Edit map
+	//Initial map
   	var mapOptions = {
-  		center: new google.maps.LatLng(25.043204, 121.537544),
+  		center: new google.maps.LatLng($scope.currentcourt.lat, $scope.currentcourt.long),
 		zoom: 10,
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		disableDefaultUI: true,
@@ -26,29 +35,9 @@ angular.module('keepballin')
         }
   	};
 
-  	$scope.map = new google.maps.Map(document.getElementById('courtMap'), mapOptions);
+  	$scope.map = new google.maps.Map(document.getElementById('courtEditMap'), mapOptions);
   	
   	var geocoder = new google.maps.Geocoder();
-
-  	//Add city to address
-  	$scope.addCity = function() {
-  		if($scope.currentcourt && !($scope.editform.address.$dirty)) {
-  			if($scope.currentcourt.city) {
-			  	$scope.currentcourt.address = '';
-		  		$scope.currentcourt.address += $scope.currentcourt.city;
-  			}
-  		}
-  	};
-  	//Add district to address
-  	$scope.addDistrict = function() {
-  		if($scope.currentcourt && !($scope.editform.address.$dirty)) {
-  			//Only if there's already a city and district, add district
-  			if($scope.currentcourt.city && $scope.currentcourt.district) {
-		  		$scope.currentcourt.address += $scope.currentcourt.district;
-  			}
-  		}
-  	};
-
 	//When there's change in address, change map marker
   	$scope.$watch('currentcourt.address', function(newVal) {
   		if(newVal) {
@@ -89,29 +78,24 @@ angular.module('keepballin')
 				$scope.currentcourt.lat = lat;
 				$scope.currentcourt.long = lng;
 
-			}); 
+			});
 
 	    } else {
 	      return;
 	    }
 	  });
 	}
-	$scope.currentcourt = {
-		hours: {},
-		indoor: true
-	};
-	$scope.currentcourt.contactname = Auth.getCurrentUser().name;
-	$scope.currentcourt.contactemail = Auth.getCurrentUser().email;
 
+	//Set the default time for hours edit
 	var hoursbegin = moment(),
 	hoursend = moment();
 
 	$timeout(function() {
 		$scope.begin = hoursbegin.set({'hour': 9, 'minute': 0});
 		$scope.end = hoursend.set({'hour': 20, 'minute': 0});
+		//Display progress
+		calculateProgress();
 	});
-
-	$scope.checkModel = {};
 
 	//Set check model's days to all true
 	$scope.everyday = function() {
@@ -123,8 +107,6 @@ angular.module('keepballin')
 		$scope.checkModel.saturday = true;
 		$scope.checkModel.sunday = true;
 	};
-	//Set everyday as default
-	$scope.everyday();
 
 	//Helper function check if the day is selected and update the array
 	var checkDay = function(day) {
@@ -148,31 +130,8 @@ angular.module('keepballin')
 		}
 	};
 
-	var days = [
-		'monday',
-		'tuesday',
-		'wednesday',
-		'thursday',
-		'friday',
-		'saturday',
-		'sunday'
-	];
-
-	//Close the hours for the day
-	$scope.closeDay = function(day) {
-		if($scope.currentcourt.hours[day]) {
-			$scope.currentcourt.hours[day] = {
-				day: day,
-				begin: null,
-				end: null,
-				isOpen: false
-			};
-		}
-	};
-
 	//Add time frame to currentcourt.hours array
 	$scope.addNewTime = function() {
-		$scope.hourMessage = false;
 		$scope.showPreview = true;
 		$scope.begin = new Date($scope.begin);
 		$scope.end = new Date($scope.end);
@@ -181,31 +140,63 @@ angular.module('keepballin')
 		});
 	};
 
-	//Sending court information to backend
-	$scope.createRentCourt = function() {
-		var gotHour = false;
-		days.forEach(function(day) {
-			if(!($scope.currentcourt.hours[day])) {
-				return;
+	//Calculate progress
+	var fields = [
+		{ en: 'court', ch: '球場名'},
+		{ en: 'city', ch: '城市'},
+		{ en: 'address', ch: '地址'},
+		{ en: 'contactname', ch: '聯絡人'},
+		{ en: 'contactemail', ch: '聯絡Email'},
+		{ en: 'contactrelation', ch: '與球場關係'},
+		{ en: 'telnumber', ch: '聯絡電話'},
+		{ en: 'desc', ch: '簡介'},
+		{ en: 'hours', ch: '開放時間'},
+		{ en: 'basketnumber', ch: '籃框數'},
+		{ en: 'courtnumber', ch: '全場數'},
+		{ en: 'floor', ch: '地質'},
+		{ en: 'water', ch: '飲水機'},
+		{ en: 'toilet', ch: '廁所'},
+		{ en: 'lights', ch: '燈'},
+		{ en: 'indoor', ch: '室內'},
+		{ en: 'bench', ch: '觀眾座位'},
+		{ en: 'rentprice', ch: '平均租金'},
+		{ en: 'minCapacity', ch: '最少所需人數'},
+		{ en: 'maxCapacity', ch: '最多可容納人數'},
+		{ en: 'pictures', ch: '照片'},
+		{ en: 'rules', ch: '使用條款'}
+	];
+
+	$scope.toDos = [];
+
+	var calculateProgress = function() {
+		var counter = 0;
+		fields.forEach(function(field) {
+			if(field.en in $scope.currentcourt) {
+				if(field.en == 'pictures') {
+					if(!($scope.currentcourt[field.en][0])) {
+						//When there's no pictures
+						$scope.toDos.push(field);
+						return;
+					}	
+				}
+
+				counter += 1;
 			} else {
-				gotHour = true;
+				$scope.toDos.push(field);
 				return;
 			}
 		});
-		if(gotHour) {
-			//If there's hours, send data
-			$scope.sending = true;
-			Indoor.save($scope.currentcourt, function(data) {
-				$scope.sending = false;
-				//Go to court edit page
-				$state.go('rentedit', {id: data._id});
+		//Calculate the progress
+		$scope.progress = Math.round((counter / fields.length) * 100);
+		console.log($scope.toDos);
+	};
 
-			});
-		} else {
-			//Display message asking for hours
-			$scope.hourMessage = true;
-		}
-
+	//Send edited info to server
+	$scope.saveEdit = function() {
+		$scope.sending = true;
+		Indoor.update({ id: $scope.currentcourt._id }, $scope.currentcourt, function(data) {
+			$scope.sending = false;
+		});
 	};
 
 	//Caculate per person price estimate

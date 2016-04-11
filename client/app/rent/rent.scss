@@ -94,5 +94,183 @@
 	transition: background 0.3s, box-shadow 0.3s;
 }
 
+.court-info-progress {
+	h3 {
+		margin-top: 0;
+		color: white;
+	}
+}
+
+.control-bar {
+	height: auto; 
+	width: 100%; 
+	position: absolute; 
+	top: 60px; left: 0; 
+	background-color: #333; 
+	padding-top: 25px; 
+	padding-bottom: 5px;
+	z-index: 10;
+}
+
+.control-bar-btn {
+	padding-top: 1em;
+}
 
 /* hours preview table styles end */
+
+/* Animation for court's info progress bar */
+.courtInfoProgressBar {
+	-webkit-transition: width 1s;
+	-moz-transition: width 1s;
+	transition: width 1s;
+}
+
+/* Give spacing to the check boxes */
+.courtedit-checkboxes {
+	input {
+		margin-right: 2em;
+	}
+}
+
+/* Button style for add photo */
+.trans-btn {
+	border: 1px solid $brand-primary;
+	border-radius: 5px;
+	padding: 5px 10px;
+	background: none;
+	-webkit-transition: background 0.3s;
+	-moz-transition: background 0.3s;
+	transition: background 0.3s;
+
+}
+
+.trans-btn:hover {
+	color: white;
+	background-color: $brand-primary;
+}
+
+/* Return to edit btn */
+.return-btn {
+	color: white; 
+	border: 1px solid white; 
+	border-radius: 25px; 
+	width: 25px; 
+	height: 25px; 
+	text-align: center; 
+	margin-left: 20px; 
+	position: relative; 
+	top: -8px;
+	padding-top: 1px;
+}
+
+/* Transparent picture overlay */
+.pic-overlay {
+	width: 100%; 
+	height: 100vh; 
+	display: table; 
+	background: rgba(0,0,0,0.8);
+}
+
+/* jumbotron content container */
+.jumbotron-content-container {
+	display: table-cell; 
+	vertical-align: middle; 
+	color: white;
+}
+
+/* To do bubble */
+.toDo-bubble {
+	position: absolute;
+	right: 0;
+	width: 250px;
+	height: auto;
+	padding: 5px;
+	padding-left: 20px;
+	background: #FFFFFF;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: rgba(0, 0, 0, 0.2) solid 1px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.toDo-bubble:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 0 15px 20px;
+	border-color: #FFFFFF transparent;
+	display: block;
+	width: 0;
+	z-index: 1;
+	margin-left: -15px;
+	top: -20px;
+	right: 10%;
+}
+
+.toDo-bubble:before {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 0 15px 20px;
+	border-color: rgba(0, 0, 0, 0.2) transparent;
+	display: block;
+	width: 0;
+	z-index: 0;
+	margin-left: -15px;
+	top: -21px;
+	right: 10%;
+}
+
+/* Loading spinner for btn */
+.loading-btn {
+  width: 28px;
+  height: 19px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.loading-btn > div {
+  background-color: white;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.loading-btn .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.loading-btn .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.loading-btn .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.loading-btn .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}

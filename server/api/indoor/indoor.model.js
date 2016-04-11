@@ -15,23 +15,29 @@ var IndoorSchema = new Schema({
   lat: Number,
   long: Number,
   address: String,
+  contactname: String,
+  contactemail: String,
+  contactrelation: String,
+  telnumber: String,
   desc: String,
   isPublic: { type: Boolean, default: false },
-  hours: [{begin: {type: Date, default: Date.now}, end: {type: Date, default: Date.now}, day: String, isOpen: Boolean}],
-  peaktime: {begin: {type: Date, default: Date.now}, end: {type: Date, default: Date.now}},
-  net: Boolean,
-  nettype: String,
+  approved: { type: Boolean, default: false },
+  hours: Object,
   basketnumber: Number,
+  courtnumber: Number,
   floor: String,
-  water: {exist: Boolean, desc: String},
-  toilet: {exist: Boolean, desc: String},
-  ceiling: Boolean,
-  lights: Boolean,
+  water: { type: Boolean, default: false },
+  toilet: { type: Boolean, default: false },
+  lights: { type: Boolean, default: false },
   indoor: {type: Boolean, default: false},
+  bench: { type: Boolean, default: false },
   dateCreated: {type: Date, default: Date.now},
-  bench: Boolean,
-  rent: Boolean,
   rentprice: Number,
+  perPersonPrice: Number,
+  maxRevenue: Number,
+  minCapacity: Number,
+  maxCapacity: Number,
+  rules: String,
   averagedRating: Number,
   ratings: [{
     type: Schema.ObjectId, 
@@ -42,10 +48,6 @@ var IndoorSchema = new Schema({
     ref: 'User',
     childPath: 'courtManagerOf'
   },
-  lastEditedBy: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
   pictures: [{
     type: Schema.ObjectId,
     ref: 'Upload'
@@ -53,7 +55,7 @@ var IndoorSchema = new Schema({
 });
 
 // //Record the creator of the court
-// IndoorSchema.plugin(relationship, { relationshipPathName:'creator' });
+IndoorSchema.plugin(relationship, { relationshipPathName:'creator' });
 
 // IndoorSchema.plugin(deepPopulate, {
 //   populate: {
