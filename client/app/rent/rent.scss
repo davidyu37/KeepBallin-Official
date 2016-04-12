@@ -102,14 +102,24 @@
 }
 
 .control-bar {
+	@media(min-width: $screen-sm-min) {
+		top: 60px; left: 0; 
+		padding-top: 25px; 
+		padding-bottom: 5px;
+	}
 	height: auto; 
 	width: 100%; 
 	position: absolute; 
-	top: 60px; left: 0; 
-	background-color: #333; 
-	padding-top: 25px; 
-	padding-bottom: 5px;
+	top: 50px; left: 0; 
+	background-color: rgba(0 ,0 ,0 ,0.8); 
 	z-index: 10;
+	padding: 5px;
+	h3 {
+		font-size: 80%;
+		@media(min-width: $screen-sm-min) {
+			font-size: 125%;
+		}
+	}
 }
 
 .control-bar-btn {
@@ -151,6 +161,10 @@
 
 /* Return to edit btn */
 .return-btn {
+	@media(min-width: $screen-sm-min) {
+		top: -8px;
+	}
+	top: 0;
 	color: white; 
 	border: 1px solid white; 
 	border-radius: 25px; 
@@ -159,7 +173,6 @@
 	text-align: center; 
 	margin-left: 20px; 
 	position: relative; 
-	top: -8px;
 	padding-top: 1px;
 }
 
@@ -273,4 +286,23 @@
     transform: scaleY(1.0);
     -webkit-transform: scaleY(1.0);
   }
+}
+
+/* price tag */
+.price-tag {
+	font-size: 150%; 
+	border: 1px solid $brand-primary; 
+	border-radius: 5px; 
+	padding: 10px;
+}
+
+/* Black bottom border for page-header */
+.black-bottom-border {
+	border-bottom: 1px solid black;
+}
+
+/* Styles for rules html */
+.rules-html {
+	margin: 0 auto;
+	padding: 15px;
 }

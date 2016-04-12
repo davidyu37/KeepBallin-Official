@@ -86,6 +86,23 @@ angular.module('keepballin')
 	  });
 	}
 
+
+	//Showing preview
+
+	$scope.openPreview = function() {
+		$scope.showPreview = !($scope.showPreview);
+		//Map for preview
+		$timeout(function() {
+			$scope.previewMap = new google.maps.Map(document.getElementById('previewMap'), mapOptions);
+			$scope.previewMarker = new google.maps.Marker({
+				map: $scope.previewMap,
+				position: {lat: $scope.currentcourt.lat, lng: $scope.currentcourt.long}
+			});
+			$scope.previewMap.setZoom(16);
+		});
+	};
+
+
 	//Set the default time for hours edit
 	var hoursbegin = moment(),
 	hoursend = moment();
@@ -107,6 +124,8 @@ angular.module('keepballin')
 		$scope.checkModel.saturday = true;
 		$scope.checkModel.sunday = true;
 	};
+
+	$scope.checkModel = {};
 
 	//Helper function check if the day is selected and update the array
 	var checkDay = function(day) {
@@ -130,9 +149,18 @@ angular.module('keepballin')
 		}
 	};
 
+	var days = [
+		'monday',
+		'tuesday',
+		'wednesday',
+		'thursday',
+		'friday',
+		'saturday',
+		'sunday'
+	];
+
 	//Add time frame to currentcourt.hours array
 	$scope.addNewTime = function() {
-		$scope.showPreview = true;
 		$scope.begin = new Date($scope.begin);
 		$scope.end = new Date($scope.end);
 		days.forEach(function(day) {
@@ -217,6 +245,5 @@ angular.module('keepballin')
 			$scope.maxRev();
 		}
 	});
-
 
   }]);
