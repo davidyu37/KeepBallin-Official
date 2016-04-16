@@ -176,9 +176,13 @@ angular.module('keepballin')
         return currentUser.role === 'vip';
       },
 
-      // Check if user has a team
-      hasTeam: function() {
-        return currentUser.team;
+      // Check if user has created rental court
+      hasCourt: function() {
+        if(currentUser.courtManagerOf) {
+          return currentUser.courtManagerOf.length > 0;
+        } else {
+          return false;
+        }
       },
 
       /**

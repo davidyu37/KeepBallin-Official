@@ -58,6 +58,13 @@ angular.module('keepballin')
           controller: 'who'
         }
       },
+      //Get rental courts that user created
+      getRentals: {
+        method: 'GET',
+        params: {
+          controller: 'rentals'
+        }
+      },
       // Manager get only vip and users
       managerGet: {
         method: 'GET',

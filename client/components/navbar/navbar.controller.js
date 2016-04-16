@@ -18,6 +18,11 @@ angular.module('keepballin')
       'title': '球友',
       'link': 'teammate',
       'icon': 'glyphicon-fire'
+    },
+    {
+      'title': '租場',
+      'link': 'indoor',
+      'icon': 'glyphicon-home'
     }
     ];
 
@@ -28,6 +33,9 @@ angular.module('keepballin')
     $scope.getCurrentUser = Auth.getCurrentUser;
 
     $scope.showAlert = false;
+
+    // Check if user is created a rental court
+    $scope.hasCourt = Auth.hasCourt;
 
     // socket.socket.on('conversation:save', function(convo) {
       
@@ -70,6 +78,11 @@ angular.module('keepballin')
       } else {
         $state.go('login');
       }
+    };
+
+    //Manage rental court
+    $scope.manageCourt = function() {
+      $state.go('viewrent');
     };
 
     $scope.close = function() {

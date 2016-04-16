@@ -38,13 +38,21 @@ exports.update = function(req, res) {
   });
 };
 
-// // Get list of Indoors
-// exports.index = function(req, res) {
-//   Indoor.findAndPopulate(function (err, Indoors) {
-//     if(err) { return handleError(res, err); }
-//     return res.status(200).json(Indoors);
-//   });
-// };
+// Get list of Indoors
+exports.index = function(req, res) {
+  Indoor.find(function (err, Indoors) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(Indoors);
+  });
+};
+
+// Get individual rental court if it's public
+exports.getPublic = function(req, res) {
+  Indoor.getPublic(req.params.id, function(err, indoor) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(indoor);
+  })
+};
 
 
 // exports.chosenIndoor = function(req, res) {

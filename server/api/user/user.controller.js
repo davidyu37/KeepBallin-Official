@@ -151,7 +151,17 @@ exports.getMyCourt = function(req, res, next) {
     if (err) return next(err);
     if (!user) return res.status(401).send('Unauthorized');
     res.json(user);
-  })
+  });
+};
+
+//Get the rental courts related to the user
+exports.getRentals = function(req, res, next) {
+  var userId = req.user._id;
+  User.getRentals(userId, function(err, user) {
+    if (err) return next(err);
+    if (!user) return res.status(401).send('Unauthorized');
+    res.json(user);
+  });
 };
 
 //Search params

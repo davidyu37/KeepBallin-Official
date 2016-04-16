@@ -245,12 +245,6 @@
 					
 			</div>
 		</div>
-	    <!-- Pictures upload page -->
-	    <div class="editPage col-lg-12" 
-	    ng-include="'app/courts/temp/upload.page.html'" 
-	    ng-init="upload=false" ng-show="upload" 
-	    ng-click="uploadmode()"
-	    ></div>
 	</div>
 </div>
 <!-- Control bar -->
@@ -261,8 +255,9 @@
 		</div>
 		<div class="col-xs-6 court-info-progress">
 			<h3>球場資訊完整度
-				<span class="label label-warning">審核中</span>
-				<span class="label label-default">未公開</span>
+				<span class="label label-warning" ng-hide="currentcourt.approved">審核中</span>
+				<span class="label label-default" ng-hide="currentcourt.isPublic">未公開</span>
+				<span class="label label-success" ng-show="currentcourt.isPublic">已公開</span>
 			</h3>
 			<div class="progress" ng-mouseenter="showBubble=true" ng-mouseleave="showBubble=false">
 			  <div class="progress-bar courtInfoProgressBar" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{progress}}%;">
@@ -296,336 +291,351 @@
 </div>
 <!-- Editing page -->
 <div class="editPageBackground rentPageContainer" ng-click="stopPropagate($event)" style="margin-top: 100px;" ng-hide="showPreview">
-<div class="page-header">
-	<h3>照片</h3>
-</div>
-<div style="text-align: center">
-	<div class="text-muted">目前無照片</div>
-	<button class="trans-btn">新增照片
-		<i class="fa fa-camera"></i>
-	</button>
-</div>
-<form class="form-horizontal" name="editform" novalidate ng-submit="createRentCourt()">
 	<div class="page-header">
-		<h3>聯絡資訊</h3>
+		<h3>是否公開？</h3>
 	</div>
-	<div class="form-group">
-        <div class="col-sm-3">
-            <!-- Contact name -->
-            <label for="contactname" class="control-label">*聯絡人:</label>
-            <input type="text" ng-model="currentcourt.contactname" placeholder="姓名" class="form-control" required>
-        </div>
-        <div class="col-sm-3">
-            <!-- Relation -->
-            <label for="city" class="control-label">*與出租地的關係:</label>
-            <input type="text" ng-model="currentcourt.contactrelation" placeholder="場地擁有者？代理？" class="form-control" required>
-        </div>
-        <div class="col-sm-3">
-            <label for="email" class="control-label">*聯絡Email:</label>
-            <input type="email" ng-model="currentcourt.contactemail" placeholder="聯絡人的Email" class="form-control" required>
-        </div>
-        <div class="col-sm-3">
-            <label for="telephone" class="control-label">*聯絡電話:</label>
-            <input type="tel" ng-model="currentcourt.telnumber" placeholder="球場電話" class="form-control" required>
-        </div>
-    </div>
-    <div class="page-header">
-		<h3>地點</h3>
+	<div style="text-align: center">
+		<button class="trans-btn">
+			<div ng-hide="currentcourt.isPublic" ng-click="goPublic()">公開
+				<i class="fa fa-circle" style="color: green"></i>
+			</div>
+			<div ng-show="currentcourt.isPublic" ng-click="goPublic()">不公開
+				<i class="fa fa-circle" style="color: grey"></i>
+			</div>
+		</button>
 	</div>
-    <div class="form-group">
-        <div class="col-sm-4">
-            <!-- Court name -->
-            <label for="courtname" class="control-label">*球場名:</label>
-            <input type="text" ng-model="currentcourt.court" placeholder="簡潔明瞭的地名" class="form-control" required>
-        </div>
-        <div class="col-sm-4">
-            <!-- City -->
-            <label for="city" class="control-label">*城市:</label>
-            <input type="text" ng-model="currentcourt.city" placeholder="什麼市？" class="form-control" ng-blur="addCity()" required>
-        </div>
-        <div class="col-sm-4">
-            <label for="district" class="control-label">區域:</label>
-            <input type="text" ng-model="currentcourt.district" placeholder="什麼區？" class="form-control" ng-blur="addDistrict()">
-        </div>
-    </div>
-    <!-- Court address and map -->
-    <div class="form-group">
-        <div class="col-sm-12">
-            <!-- Court address -->
-            <label for="courtaddress" class="control-label">*球場地址:</label>
-            <input type="text" name="address" ng-model="currentcourt.address" placeholder="實際地址" class="form-control" required>
-        	<label for="courtmap" class="control-label">輸入地址後，直接拖曳標籤調整</label>
-        	<div class="rentCourtMap">
-	            <!-- Map -->
-	        	<div id="courtEditMap" class="rentCourtMap">
-	        	</div>
-	        	<div class="mapLoadingOverlay" ng-show="searchForPlace">
-		        	<div class="mapLoaderContainer">
-		        		<div class="spinner mapLoader">
-						  <div class="rect1"></div>
-						  <div class="rect2"></div>
-						  <div class="rect3"></div>
-						  <div class="rect4"></div>
-						</div>	
+	<div class="page-header">
+		<h3>照片</h3>
+	</div>
+	<div style="text-align: center">
+		<div class="text-muted">目前無照片</div>
+		<button class="trans-btn">新增照片
+			<i class="fa fa-camera"></i>
+		</button>
+	</div>
+	<form class="form-horizontal" name="editform" novalidate>
+		<div class="page-header">
+			<h3>聯絡資訊</h3>
+		</div>
+		<div class="form-group">
+	        <div class="col-sm-3">
+	            <!-- Contact name -->
+	            <label for="contactname" class="control-label">*聯絡人:</label>
+	            <input type="text" ng-model="currentcourt.contactname" placeholder="姓名" class="form-control" required>
+	        </div>
+	        <div class="col-sm-3">
+	            <!-- Relation -->
+	            <label for="city" class="control-label">*與出租地的關係:</label>
+	            <input type="text" ng-model="currentcourt.contactrelation" placeholder="場地擁有者？代理？" class="form-control" required>
+	        </div>
+	        <div class="col-sm-3">
+	            <label for="email" class="control-label">*聯絡Email:</label>
+	            <input type="email" ng-model="currentcourt.contactemail" placeholder="聯絡人的Email" class="form-control" required>
+	        </div>
+	        <div class="col-sm-3">
+	            <label for="telephone" class="control-label">*聯絡電話:</label>
+	            <input type="tel" ng-model="currentcourt.telnumber" placeholder="球場電話" class="form-control" required>
+	        </div>
+	    </div>
+	    <div class="page-header">
+			<h3>地點</h3>
+		</div>
+	    <div class="form-group">
+	        <div class="col-sm-4">
+	            <!-- Court name -->
+	            <label for="courtname" class="control-label">*球場名:</label>
+	            <input type="text" ng-model="currentcourt.court" placeholder="簡潔明瞭的地名" class="form-control" required>
+	        </div>
+	        <div class="col-sm-4">
+	            <!-- City -->
+	            <label for="city" class="control-label">*城市:</label>
+	            <input type="text" ng-model="currentcourt.city" placeholder="什麼市？" class="form-control" ng-blur="addCity()" required>
+	        </div>
+	        <div class="col-sm-4">
+	            <label for="district" class="control-label">區域:</label>
+	            <input type="text" ng-model="currentcourt.district" placeholder="什麼區？" class="form-control" ng-blur="addDistrict()">
+	        </div>
+	    </div>
+	    <!-- Court address and map -->
+	    <div class="form-group">
+	        <div class="col-sm-12">
+	            <!-- Court address -->
+	            <label for="courtaddress" class="control-label">*球場地址:</label>
+	            <input type="text" name="address" ng-model="currentcourt.address" placeholder="實際地址" class="form-control" required>
+	        	<label for="courtmap" class="control-label">輸入地址後，直接拖曳標籤調整</label>
+	        	<div class="rentCourtMap">
+		            <!-- Map -->
+		        	<div id="courtEditMap" class="rentCourtMap">
+		        	</div>
+		        	<div class="mapLoadingOverlay" ng-show="searchForPlace">
+			        	<div class="mapLoaderContainer">
+			        		<div class="spinner mapLoader">
+							  <div class="rect1"></div>
+							  <div class="rect2"></div>
+							  <div class="rect3"></div>
+							  <div class="rect4"></div>
+							</div>	
+			        	</div>
 		        	</div>
 	        	</div>
-        	</div>
-        </div>
-    </div>
-    <div class="form-group">
-        <!-- Hours -->
-        <div class="col-sm-12">
-        	<div class="page-header">
-        		<h3>開放時間</h3>
-        	</div>
-            <div class="form-group">
-                <div class="margin-middle" style="width: auto">
-	            	<div class="btn-group">
-				        <label class="btn btn-primary" ng-click="everyday()">每天</label>
-				        <label class="btn btn-primary" ng-model="checkModel.monday" btn-checkbox>禮拜一</label>
-				        <label class="btn btn-primary" ng-model="checkModel.tuesday" btn-checkbox>禮拜二</label>
-				        <label class="btn btn-primary" ng-model="checkModel.wednesday" btn-checkbox>禮拜三</label>
-				        <label class="btn btn-primary" ng-model="checkModel.thursday" btn-checkbox>禮拜四</label>
-				        <label class="btn btn-primary" ng-model="checkModel.friday" btn-checkbox>禮拜五</label>
-				        <label class="btn btn-primary" ng-model="checkModel.saturday" btn-checkbox>禮拜六</label>
-				        <label class="btn btn-primary" ng-model="checkModel.sunday" btn-checkbox>禮拜日</label>
-				    </div>
-                </div>
-                <div class="margin-middle" style="display: table;">
+	        </div>
+	    </div>
+	    <div class="form-group">
+	        <!-- Hours -->
+	        <div class="col-sm-12">
+	        	<div class="page-header">
+	        		<h3>開放時間</h3>
+	        	</div>
+	            <div class="form-group">
+	                <div class="margin-middle" style="width: auto">
+		            	<div class="btn-group">
+					        <label class="btn btn-primary" ng-click="everyday()">每天</label>
+					        <label class="btn btn-primary" ng-model="checkModel.monday" btn-checkbox>禮拜一</label>
+					        <label class="btn btn-primary" ng-model="checkModel.tuesday" btn-checkbox>禮拜二</label>
+					        <label class="btn btn-primary" ng-model="checkModel.wednesday" btn-checkbox>禮拜三</label>
+					        <label class="btn btn-primary" ng-model="checkModel.thursday" btn-checkbox>禮拜四</label>
+					        <label class="btn btn-primary" ng-model="checkModel.friday" btn-checkbox>禮拜五</label>
+					        <label class="btn btn-primary" ng-model="checkModel.saturday" btn-checkbox>禮拜六</label>
+					        <label class="btn btn-primary" ng-model="checkModel.sunday" btn-checkbox>禮拜日</label>
+					    </div>
+	                </div>
+	                <div class="margin-middle" style="display: table;">
 
-                    <span class="table-cell-align">
-	                    <timepicker ng-model="begin" minute-step="30" show-meridian="true"></timepicker>
-                    </span>
-                    <span class="table-cell-align" style="font-weight: bold;">
-                    	~
-                    </span>
-                    <span class="table-cell-align">
-	                    <timepicker ng-model="end" minute-step="30" show-meridian="true"></timepicker> 
-                    </span>
-                    <span class="table-cell-align">
-                    	<button type="button" class="btn btn-primary" ng-click="addNewTime();" tooltip-placement="right" tooltip="增加時段">
-	                    	<i class="fa fa-plus"></i>
-                    	</button>
-                    </span>
-                </div>
-            </div>
-            <div class="col-sm-12" style="overflow-x: scroll;">
-	            <table class="flat-table">
-	            	<thead>
-	            		<th>禮拜一</th>
-	            		<th>禮拜二</th>
-	            		<th>禮拜三</th>
-	            		<th>禮拜四</th>
-	            		<th>禮拜五</th>
-	            		<th>禮拜六</th>
-	            		<th>禮拜日</th>
-	            	</thead>
-	            	<tbody>
-	            		<tr>
-	            			<td class="text-center">
-	            				<span>{{ currentcourt.hours['monday'].begin | date: 'shortTime' }}</span>
-	            				<br/>
-	            				<span ng-show="currentcourt.hours['monday'].isOpen">
-	            					<i class="fa fa-long-arrow-down"></i>
-	            				</span>
-	            				<br/>
-	            				<span>{{ currentcourt.hours['monday'].end | date: 'shortTime' }}</span>
-	            				<span ng-hide="currentcourt.hours['monday'].isOpen">
-	            					不開放
-	            				</span>
-	            			</td>
-	            			<td class="text-center">
-	            				<span>{{ currentcourt.hours['tuesday'].begin | date: 'shortTime' }}</span>
-	            				<br/>
-	            				<span ng-show="currentcourt.hours['tuesday'].isOpen">
-	            					<i class="fa fa-long-arrow-down"></i>
-	            				</span>
-	            				<br/>
-	            				<span>{{ currentcourt.hours['tuesday'].end | date: 'shortTime' }}</span>
-	            				<span ng-hide="currentcourt.hours['tuesday'].isOpen">
-	            					不開放
-	            				</span>
-	            			</td>
-	            			<td class="text-center">
-	            				<span>{{ currentcourt.hours['wednesday'].begin | date: 'shortTime' }}</span>
-	            				<br/>
-	            				<span ng-show="currentcourt.hours['wednesday'].isOpen">
-	            					<i class="fa fa-long-arrow-down"></i>
-	            				</span>
-	            				<br/>
-	            				<span>{{ currentcourt.hours['wednesday'].end | date: 'shortTime' }}</span>
-	            				<span ng-hide="currentcourt.hours['wednesday'].isOpen">
-	            					不開放
-	            				</span>
-	            			</td>
-	            			<td class="text-center">
-	            				<span>{{ currentcourt.hours['thursday'].begin | date: 'shortTime' }}</span>
-	            				<br/>
-	            				<span ng-show="currentcourt.hours['thursday'].isOpen">
-	            					<i class="fa fa-long-arrow-down"></i>
-	            				</span>
-	            				<br/>
-	            				<span>{{ currentcourt.hours['thursday'].end | date: 'shortTime' }}</span>
-	            				<span ng-hide="currentcourt.hours['thursday'].isOpen">
-	            					不開放
-	            				</span>
-	            			</td>
-	            			<td class="text-center">
-	            				<span>{{ currentcourt.hours['friday'].begin | date: 'shortTime' }}</span>
-	            				<br/>
-	            				<span ng-show="currentcourt.hours['friday'].isOpen">
-	            					<i class="fa fa-long-arrow-down"></i>
-	            				</span>
-	            				<br/>
-	            				<span>{{ currentcourt.hours['friday'].end | date: 'shortTime' }}</span>
-	            				<span ng-hide="currentcourt.hours['friday'].isOpen">
-	            					不開放
-	            				</span>
-	            			</td>
-	            			<td class="text-center">
-	            				<span>{{ currentcourt.hours['saturday'].begin | date: 'shortTime' }}</span>
-	            				<br/>
-	            				<span ng-show="currentcourt.hours['saturday'].isOpen">
-	            					<i class="fa fa-long-arrow-down"></i>
-	            				</span>
-	            				<br/>
-	            				<span>{{ currentcourt.hours['saturday'].end | date: 'shortTime' }}</span>
-	            				<span ng-hide="currentcourt.hours['saturday'].isOpen">
-	            					不開放
-	            				</span>
-	            			</td>
-	            			<td class="text-center">
-	            				<span>{{ currentcourt.hours['sunday'].begin | date: 'shortTime' }}</span>
-	            				<br/>
-	            				<span ng-show="currentcourt.hours['sunday'].isOpen">
-	            					<i class="fa fa-long-arrow-down"></i>
-	            				</span>
-	            				<br/>
-	            				<span>{{ currentcourt.hours['sunday'].end | date: 'shortTime' }}</span>
-	            				<span ng-hide="currentcourt.hours['sunday'].isOpen">
-	            					不開放
-	            				</span>
-	            			</td>		
-	            		</tr>
-	            		<tr>
-	            			<td>
-	            				<button type="button" class="btn" ng-click="closeDay('monday')" ng-show="currentcourt.hours['monday'].isOpen">
-	            					不開放
-	            				</button>
-	            			</td>
-	            			<td>
-	            				<button type="button" class="btn" ng-click="closeDay('tuesday')" ng-show="currentcourt.hours['tuesday'].isOpen">
-	            					不開放
-	            				</button>
-	            			</td>
-	            			<td>
-	            				<button type="button" class="btn" ng-click="closeDay('wednesday')" ng-show="currentcourt.hours['wednesday'].isOpen">
-	            					不開放
-	            				</button>
-	            			</td>
-	            			<td>
-	            				<button type="button" class="btn" ng-click="closeDay('thursday')" ng-show="currentcourt.hours['thursday'].isOpen">
-	            					不開放
-	            				</button>
-	            			</td>
-	            			<td>
-	            				<button type="button" class="btn" ng-click="closeDay('friday')" ng-show="currentcourt.hours['friday'].isOpen">
-	            					不開放
-	            				</button>
-	            			</td>
-	            			<td>
-	            				<button type="button" class="btn" ng-click="closeDay('saturday')" ng-show="currentcourt.hours['saturday'].isOpen">
-	            					不開放
-	            				</button>
-	            			</td>
-	            			<td>
-	            				<button type="button" class="btn" ng-click="closeDay('sunday')" ng-show="currentcourt.hours['sunday'].isOpen">
-	            					不開放
-	            				</button>
-	            			</td>
-	            		</tr>
-	            	</tbody>
-	            </table>
-            </div>
-        </div>
-    </div>
-    <div class="page-header">
-    	<h3>租借資訊</h3>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-4">
-            <label for="rent" class="control-label">*平均租金:</label>
-            <div class="input-group">
-                <div class="input-group-addon">$</div>
-                <input type="number" min="0" class="form-control" ng-model="currentcourt.rentprice" ng-blur="perPerson()" required>
-                <div class="input-group-addon">/小時</div>
-                
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <label for="min-capacity" class="control-label">*一小時所需最少人數:</label>
-            <input type="number" min="0" ng-model="currentcourt.minCapacity" placeholder="阿拉伯數字" class="form-control" ng-blur="perPerson()" required>
-        </div>
-        <div class="col-sm-4">
-            <!-- Court number -->
-            <label for="max-capacity" class="control-label">*最多可容人數:</label>
-            <input type="number" min="0" ng-model="currentcourt.maxCapacity" placeholder="阿拉伯數字" class="form-control" ng-blur="maxRev()" required>
-        </div>
-        <div class="col-sm-6">
-            <label for="min-capacity" class="control-label">預計一位散客的費用:</label>
-            <input type="number" min="0" ng-model="currentcourt.perPersonPrice" class="form-control" ng-disabled="true">
-        </div>
-        <div class="col-sm-6">
-            <label for="min-capacity" class="control-label">每小時最大營業額:</label>
-            <input type="number" min="0" ng-model="currentcourt.maxRevenue" class="form-control" ng-disabled="true">
-        </div>
-    </div>
-    <div class="page-header">
-    	<h3>設備資訊</h3>
-    </div>
-    <div class="form-group">
-    	<div class="col-sm-4">
-            <!-- Court number -->
-            <label for="" class="control-label">*全場數:</label>
-            <input type="number" min="0" step="0.5" ng-model="currentcourt.courtnumber" placeholder="阿拉伯數字" class="form-control" required> 
-        </div>
-        <div class="col-sm-4">
-            <!-- Basket number -->
-            <label for="" class="control-label">籃框數:</label>
-            <input type="number" min="0" ng-model="currentcourt.basketnumber" placeholder="阿拉伯數字" class="form-control">        
-        </div>
-        <div class="col-sm-4">
-            <!-- Floor -->
-            <label for="" class="control-label">地質:</label>
-            <input type="text" ng-model="currentcourt.floor" placeholder="球場地板怎麼樣？" class="form-control">
-        </div>
-    </div>
-    <div class="courtedit-checkboxes">
-        <!-- Indoor -->
-        <label for="indoor" class="control-label">室內:</label>
-        <input type="checkbox" ng-model="currentcourt.indoor">
-        <!-- Light -->
-        <label for="lights" class="control-label">燈:</label>
-        <input type="checkbox" ng-model="currentcourt.lights">
-        <!-- Water -->
-        <label for="" class="control-label">飲水機:</label>
-        <input type="checkbox" ng-model="currentcourt.water">
-        <!-- Toilet -->
-        <label for="" class="control-label">廁所:</label>
-        <input type="checkbox" ng-model="currentcourt.toilet">
-        <label for="bench" class="control-label">觀眾座位:</label>
-        <input type="checkbox" ng-model="currentcourt.bench">
-    </div>
-    <!-- Manager Message -->
-    <div class="form-group">
-        <label for="" class="control-label">*簡介:</label>
-        <textarea class="form-control" rows="3" ng-model="currentcourt.desc" required></textarea>
-    </div>
-    <div class="form-group">
-        <!-- Rules -->
-        <label for="rules" class="control-label">使用條款</label>
-        <text-angular ng-model="currentcourt.rules"></text-angular>
-    </div>
-</form>
-
+	                    <span class="table-cell-align">
+		                    <timepicker ng-model="begin" minute-step="30" show-meridian="true"></timepicker>
+	                    </span>
+	                    <span class="table-cell-align" style="font-weight: bold;">
+	                    	~
+	                    </span>
+	                    <span class="table-cell-align">
+		                    <timepicker ng-model="end" minute-step="30" show-meridian="true"></timepicker> 
+	                    </span>
+	                    <span class="table-cell-align">
+	                    	<button type="button" class="btn btn-primary" ng-click="addNewTime();" tooltip-placement="right" tooltip="增加時段">
+		                    	<i class="fa fa-plus"></i>
+	                    	</button>
+	                    </span>
+	                </div>
+	            </div>
+	            <div class="col-sm-12" style="overflow-x: scroll;">
+		            <table class="flat-table">
+		            	<thead>
+		            		<th>禮拜一</th>
+		            		<th>禮拜二</th>
+		            		<th>禮拜三</th>
+		            		<th>禮拜四</th>
+		            		<th>禮拜五</th>
+		            		<th>禮拜六</th>
+		            		<th>禮拜日</th>
+		            	</thead>
+		            	<tbody>
+		            		<tr>
+		            			<td class="text-center">
+		            				<span>{{ currentcourt.hours['monday'].begin | date: 'shortTime' }}</span>
+		            				<br/>
+		            				<span ng-show="currentcourt.hours['monday'].isOpen">
+		            					<i class="fa fa-long-arrow-down"></i>
+		            				</span>
+		            				<br/>
+		            				<span>{{ currentcourt.hours['monday'].end | date: 'shortTime' }}</span>
+		            				<span ng-hide="currentcourt.hours['monday'].isOpen">
+		            					不開放
+		            				</span>
+		            			</td>
+		            			<td class="text-center">
+		            				<span>{{ currentcourt.hours['tuesday'].begin | date: 'shortTime' }}</span>
+		            				<br/>
+		            				<span ng-show="currentcourt.hours['tuesday'].isOpen">
+		            					<i class="fa fa-long-arrow-down"></i>
+		            				</span>
+		            				<br/>
+		            				<span>{{ currentcourt.hours['tuesday'].end | date: 'shortTime' }}</span>
+		            				<span ng-hide="currentcourt.hours['tuesday'].isOpen">
+		            					不開放
+		            				</span>
+		            			</td>
+		            			<td class="text-center">
+		            				<span>{{ currentcourt.hours['wednesday'].begin | date: 'shortTime' }}</span>
+		            				<br/>
+		            				<span ng-show="currentcourt.hours['wednesday'].isOpen">
+		            					<i class="fa fa-long-arrow-down"></i>
+		            				</span>
+		            				<br/>
+		            				<span>{{ currentcourt.hours['wednesday'].end | date: 'shortTime' }}</span>
+		            				<span ng-hide="currentcourt.hours['wednesday'].isOpen">
+		            					不開放
+		            				</span>
+		            			</td>
+		            			<td class="text-center">
+		            				<span>{{ currentcourt.hours['thursday'].begin | date: 'shortTime' }}</span>
+		            				<br/>
+		            				<span ng-show="currentcourt.hours['thursday'].isOpen">
+		            					<i class="fa fa-long-arrow-down"></i>
+		            				</span>
+		            				<br/>
+		            				<span>{{ currentcourt.hours['thursday'].end | date: 'shortTime' }}</span>
+		            				<span ng-hide="currentcourt.hours['thursday'].isOpen">
+		            					不開放
+		            				</span>
+		            			</td>
+		            			<td class="text-center">
+		            				<span>{{ currentcourt.hours['friday'].begin | date: 'shortTime' }}</span>
+		            				<br/>
+		            				<span ng-show="currentcourt.hours['friday'].isOpen">
+		            					<i class="fa fa-long-arrow-down"></i>
+		            				</span>
+		            				<br/>
+		            				<span>{{ currentcourt.hours['friday'].end | date: 'shortTime' }}</span>
+		            				<span ng-hide="currentcourt.hours['friday'].isOpen">
+		            					不開放
+		            				</span>
+		            			</td>
+		            			<td class="text-center">
+		            				<span>{{ currentcourt.hours['saturday'].begin | date: 'shortTime' }}</span>
+		            				<br/>
+		            				<span ng-show="currentcourt.hours['saturday'].isOpen">
+		            					<i class="fa fa-long-arrow-down"></i>
+		            				</span>
+		            				<br/>
+		            				<span>{{ currentcourt.hours['saturday'].end | date: 'shortTime' }}</span>
+		            				<span ng-hide="currentcourt.hours['saturday'].isOpen">
+		            					不開放
+		            				</span>
+		            			</td>
+		            			<td class="text-center">
+		            				<span>{{ currentcourt.hours['sunday'].begin | date: 'shortTime' }}</span>
+		            				<br/>
+		            				<span ng-show="currentcourt.hours['sunday'].isOpen">
+		            					<i class="fa fa-long-arrow-down"></i>
+		            				</span>
+		            				<br/>
+		            				<span>{{ currentcourt.hours['sunday'].end | date: 'shortTime' }}</span>
+		            				<span ng-hide="currentcourt.hours['sunday'].isOpen">
+		            					不開放
+		            				</span>
+		            			</td>		
+		            		</tr>
+		            		<tr>
+		            			<td>
+		            				<button type="button" class="btn" ng-click="closeDay('monday')" ng-show="currentcourt.hours['monday'].isOpen">
+		            					不開放
+		            				</button>
+		            			</td>
+		            			<td>
+		            				<button type="button" class="btn" ng-click="closeDay('tuesday')" ng-show="currentcourt.hours['tuesday'].isOpen">
+		            					不開放
+		            				</button>
+		            			</td>
+		            			<td>
+		            				<button type="button" class="btn" ng-click="closeDay('wednesday')" ng-show="currentcourt.hours['wednesday'].isOpen">
+		            					不開放
+		            				</button>
+		            			</td>
+		            			<td>
+		            				<button type="button" class="btn" ng-click="closeDay('thursday')" ng-show="currentcourt.hours['thursday'].isOpen">
+		            					不開放
+		            				</button>
+		            			</td>
+		            			<td>
+		            				<button type="button" class="btn" ng-click="closeDay('friday')" ng-show="currentcourt.hours['friday'].isOpen">
+		            					不開放
+		            				</button>
+		            			</td>
+		            			<td>
+		            				<button type="button" class="btn" ng-click="closeDay('saturday')" ng-show="currentcourt.hours['saturday'].isOpen">
+		            					不開放
+		            				</button>
+		            			</td>
+		            			<td>
+		            				<button type="button" class="btn" ng-click="closeDay('sunday')" ng-show="currentcourt.hours['sunday'].isOpen">
+		            					不開放
+		            				</button>
+		            			</td>
+		            		</tr>
+		            	</tbody>
+		            </table>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="page-header">
+	    	<h3>租借資訊</h3>
+	    </div>
+	    <div class="form-group">
+	        <div class="col-sm-4">
+	            <label for="rent" class="control-label">*平均租金:</label>
+	            <div class="input-group">
+	                <div class="input-group-addon">$</div>
+	                <input type="number" min="0" class="form-control" ng-model="currentcourt.rentprice" ng-blur="perPerson()" required>
+	                <div class="input-group-addon">/小時</div>
+	                
+	            </div>
+	        </div>
+	        <div class="col-sm-4">
+	            <label for="min-capacity" class="control-label">*一小時所需最少人數:</label>
+	            <input type="number" min="0" ng-model="currentcourt.minCapacity" placeholder="阿拉伯數字" class="form-control" ng-blur="perPerson()" required>
+	        </div>
+	        <div class="col-sm-4">
+	            <!-- Court number -->
+	            <label for="max-capacity" class="control-label">*最多可容人數:</label>
+	            <input type="number" min="0" ng-model="currentcourt.maxCapacity" placeholder="阿拉伯數字" class="form-control" ng-blur="maxRev()" required>
+	        </div>
+	        <div class="col-sm-6">
+	            <label for="min-capacity" class="control-label">預計一位散客的費用:</label>
+	            <input type="number" min="0" ng-model="currentcourt.perPersonPrice" class="form-control" ng-disabled="true">
+	        </div>
+	        <div class="col-sm-6">
+	            <label for="min-capacity" class="control-label">每小時最大營業額:</label>
+	            <input type="number" min="0" ng-model="currentcourt.maxRevenue" class="form-control" ng-disabled="true">
+	        </div>
+	    </div>
+	    <div class="page-header">
+	    	<h3>設備資訊</h3>
+	    </div>
+	    <div class="form-group">
+	    	<div class="col-sm-4">
+	            <!-- Court number -->
+	            <label for="" class="control-label">*全場數:</label>
+	            <input type="number" min="0" step="0.5" ng-model="currentcourt.courtnumber" placeholder="阿拉伯數字" class="form-control" required> 
+	        </div>
+	        <div class="col-sm-4">
+	            <!-- Basket number -->
+	            <label for="" class="control-label">籃框數:</label>
+	            <input type="number" min="0" ng-model="currentcourt.basketnumber" placeholder="阿拉伯數字" class="form-control">        
+	        </div>
+	        <div class="col-sm-4">
+	            <!-- Floor -->
+	            <label for="" class="control-label">地質:</label>
+	            <input type="text" ng-model="currentcourt.floor" placeholder="球場地板怎麼樣？" class="form-control">
+	        </div>
+	    </div>
+	    <div class="courtedit-checkboxes">
+	        <!-- Indoor -->
+	        <label for="indoor" class="control-label">室內:</label>
+	        <input type="checkbox" ng-model="currentcourt.indoor">
+	        <!-- Light -->
+	        <label for="lights" class="control-label">燈:</label>
+	        <input type="checkbox" ng-model="currentcourt.lights">
+	        <!-- Water -->
+	        <label for="" class="control-label">飲水機:</label>
+	        <input type="checkbox" ng-model="currentcourt.water">
+	        <!-- Toilet -->
+	        <label for="" class="control-label">廁所:</label>
+	        <input type="checkbox" ng-model="currentcourt.toilet">
+	        <label for="bench" class="control-label">觀眾座位:</label>
+	        <input type="checkbox" ng-model="currentcourt.bench">
+	    </div>
+	    <!-- Manager Message -->
+	    <div class="form-group">
+	        <label for="" class="control-label">*簡介:</label>
+	        <textarea class="form-control" rows="3" ng-model="currentcourt.desc" required></textarea>
+	    </div>
+	    <div class="form-group">
+	        <!-- Rules -->
+	        <label for="rules" class="control-label">使用條款</label>
+	        <text-angular ng-model="currentcourt.rules"></text-angular>
+	    </div>
+	</form>
+	<div class="col-sm-12">
+		<p class="btn btn-primary" ng-show="isAdmin()" ng-click="approve()">通過</p>
+	</div>
 </div>

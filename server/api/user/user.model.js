@@ -198,6 +198,9 @@ UserSchema.plugin(deepPopulate, {
     },
     'courtCreated': {
       select: 'court address averagedRating pictures'
+    },
+    'courtManagerOf': {
+      select: 'court isPublic approved dateCreated perPersonPrice'
     }
   }
 });
@@ -217,10 +220,14 @@ UserSchema.statics = {
   }, 
   getMyCourt: function(userId, cb) {
     this.findOne({_id: userId})
-      // .populate('courtCreated courtRatings')
-      // .select('name courtRatings courtCreated')
       .deepPopulate('courtRatings courtRatings.court courtRatings.court.pictures courtCreated courtCreated.pictures')
       .select('name courtRatings courtCreated')
+      .exec(cb);
+  },
+  getRentals: function(userId, cb) {
+    this.findOne({_id: userId})
+      .deepPopulate('courtManagerOf')
+      .select('courtManagerOf')
       .exec(cb);
   },
   adminSearch: function(cb) {

@@ -19,4 +19,15 @@ angular.module('keepballin')
         },
       	controller: 'RentEditCtrl'
       })
+      .state('viewrent', {
+        url: '/viewrent',
+        templateUrl: 'app/rent/view.rentals.html',
+        //Resolve rental court before entering
+        resolve: {
+          usersCourts: ['User', function(User) {
+            return User.getRentals();  
+          }]
+        },
+        controller: 'ViewRentalsCtrl'
+      })
   });

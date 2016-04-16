@@ -85,34 +85,41 @@ IndoorSchema.plugin(relationship, { relationshipPathName:'creator' });
 // //search plugin
 // IndoorSchema.plugin(mongoosastic);
 
-// IndoorSchema.statics = {
-//   getRatings: function(courtID, cb) {
-//     this.findOne({_id: courtID})
-//       // .populate({path:'ratings', select: 'rate'})
-//       .deepPopulate('ratings.user.avatar ratings.user ratings')
-//       .select('ratings')
-//       .exec(cb);
-//   },
-//   search: function(params, cb) {
-//     var query = {
-//       $text: { $search : params.query }
-//     };
-//     this.find(query)
-//       .deepPopulate('pictures.user pictures creator lastEditedBy')
-//       .exec(cb);
-//   },
-//   //Populate all but individual ratings
-//   findAndPopulate: function(cb) {
-//     this.find()
-//     .deepPopulate('pictures.user pictures creator lastEditedBy')
-//     .exec(cb);
-//   },
-//   findOneAndPopulate: function(courtId, cb) {
-//     this.findOne({_id: courtId})
-//     .deepPopulate('pictures.user pictures creator lastEditedBy')
-//     .exec(cb);
-//   }
-// };
+IndoorSchema.statics = {
+  getPublic: function(id, cb) {
+    this.find({$and: [
+       {_id: id}, {isPublic: true}
+      ]})
+      .exec(cb);
+
+  }
+  // getRatings: function(courtID, cb) {
+  //   this.findOne({_id: courtID})
+  //     // .populate({path:'ratings', select: 'rate'})
+  //     .deepPopulate('ratings.user.avatar ratings.user ratings')
+  //     .select('ratings')
+  //     .exec(cb);
+  // },
+  // search: function(params, cb) {
+  //   var query = {
+  //     $text: { $search : params.query }
+  //   };
+  //   this.find(query)
+  //     .deepPopulate('pictures.user pictures creator lastEditedBy')
+  //     .exec(cb);
+  // },
+  // //Populate all but individual ratings
+  // findAndPopulate: function(cb) {
+  //   this.find()
+  //   .deepPopulate('pictures.user pictures creator lastEditedBy')
+  //   .exec(cb);
+  // },
+  // findOneAndPopulate: function(courtId, cb) {
+  //   this.findOne({_id: courtId})
+  //   .deepPopulate('pictures.user pictures creator lastEditedBy')
+  //   .exec(cb);
+  // }
+};
 // // $** wildcard text search
 // // CourtSchema.index({ "$**": "text" });
 

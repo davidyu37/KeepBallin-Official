@@ -6,6 +6,13 @@ angular.module('keepballin')
     { id: '@id' }, {
       update: {
         method: 'PUT'
+      }, 
+      getPublic: {
+      	method: 'GET',
+      	isArray: true,
+      	params: {
+          controller: 'getPublic'
+        }
       }
 	  });
   }]);

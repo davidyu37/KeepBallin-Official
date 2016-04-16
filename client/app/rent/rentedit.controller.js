@@ -246,4 +246,26 @@ angular.module('keepballin')
 		}
 	});
 
+	//Approve rental court
+	$scope.approve = function() {
+		$scope.sending = true;
+		$scope.currentcourt.approved = true;
+		Indoor.update({ id: $scope.currentcourt._id }, $scope.currentcourt, function(data) {
+			$scope.sending = false;
+		});
+	};
+	//Check for admin
+	$scope.isAdmin = function() {
+		return Auth.isAdmin();
+	};
+
+	//Go Public
+	$scope.goPublic = function() {
+		$scope.currentcourt.isPublic = !($scope.currentcourt.isPublic);
+		$scope.sending = true;
+		Indoor.update({ id: $scope.currentcourt._id }, $scope.currentcourt, function(data) {
+			$scope.sending = false;
+		});
+	};
+
   }]);
