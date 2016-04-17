@@ -1,12 +1,12 @@
 <div class="jumbotron" style="width: 100%; height: 100vh; display: table; background: rgba(0,0,0,0.8)">
-	<img src="/assets/images/teamUSA.jpg" class="coverPic" ng-hide="event.pics[0].url">
+	<img src="/assets/images/indoor.jpg" class="coverPic" ng-hide="event.pics[0].url">
 	<div style="display: table-cell; vertical-align: middle; color: white;">
 	<!-- /assets/images/pic4.jpg -->
 		<h1>雨天.晴天.都是籃球天</h1>
 		<p>再也找不到不變強藉口</p>
 		<div style="text-align: center">
 	        <div style="margin-top: 20px;">
-	        	<button style="font-size:120%" class="eventBtn" ng-click="createTeam()">註冊球隊</button>
+	        	<button style="font-size:120%" class="eventBtn" ng-click="createTeam()">找球場</button>
 	        </div>
         </div>
 	</div>
@@ -36,7 +36,7 @@
 	</div>
 	<!-- <div class="row" ng-repeat="team in teams | orderBy: method.value | filter: search track by $index"> -->
 	<div class="row" ng-repeat="court in courts | orderBy: method.value | filter: search track by $index" ng-if="$index % 4 == 0">
-		<div class="col-sm-3" 
+		<div class="col-sm-6" 
 		   ng-repeat="i in [$index, $index + 1, $index + 2, $index + 3]" 
 		   ng-if="courts[i] != null">
 			<div class="thumbnail">
@@ -53,7 +53,7 @@
 			  <div class="caption">
 			    <p>${{courts[i].perPersonPrice}}/小時</p>
 			    <p>至少{{courts[i].minCapacity}}人開放</p>
-			    <p><a ng-click="invite(courts[i])" class="btn btn-primary" role="button">預約</a></p>
+			    <p class="pull-right"><a class="btn btn-primary" role="button">預約</a></p>
 			  </div>
 			</div>
 		</div>

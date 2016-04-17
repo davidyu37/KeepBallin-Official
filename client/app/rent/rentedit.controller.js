@@ -216,7 +216,6 @@ angular.module('keepballin')
 		});
 		//Calculate the progress
 		$scope.progress = Math.round((counter / fields.length) * 100);
-		console.log($scope.toDos);
 	};
 
 	//Send edited info to server
