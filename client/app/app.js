@@ -23,7 +23,8 @@ angular.module('keepballin', [
   'duScroll',
   'angular-google-adsense',
   'timer',
-  'textAngular'
+  'textAngular',
+  'ui.select'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

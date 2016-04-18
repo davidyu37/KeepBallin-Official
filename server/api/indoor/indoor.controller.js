@@ -50,9 +50,18 @@ exports.index = function(req, res) {
 exports.getPublic = function(req, res) {
   Indoor.getPublic(req.params.id, function(err, indoor) {
     if(err) { return handleError(res, err); }
+    if(!indoor) { console.log('theres no indoor', indoor) }
     return res.status(200).json(indoor);
   })
 };
+
+// Query rental courts that's approved and public
+exports.queryPublic = function(req, res) {
+  Indoor.queryPublic(function(err, indoor) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(indoor);
+  });
+}
 
 
 // exports.chosenIndoor = function(req, res) {

@@ -1,18 +1,47 @@
 <div style="margin: 20px;">
-	<form class="form-inline">
+	<div class="page-header">
+		<h1>預約時間</h1>
+	</div>
+	<form class="form-inline" ng-submit="reserveNow()">
 		<div class="form-group">
 			<div class="input-group">
-				<input type="date" class="form-control event-input" datepicker-popup is-open="opened1" show-button-bar="false" min-date="today" ng-model="start" ng-disabled="sending" style=" height: 35px; color: black; font-size: 12px;"/>
+				<input type="date" class="form-control event-input" datepicker-popup is-open="opened" show-button-bar="false" min-date="today" ng-model="date" ng-disabled="sending" style="height: 35px; color: black; font-size: 14px;" ng-click="openCal($event)"/>
 				<span class="input-group-btn">
-		          <button type="button" class="btn btn-default custom-addon" ng-click="openCal1($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+		          <button type="button" class="btn btn-default custom-addon" ng-click="openCal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 		        </span>
 			</div>
 		</div>
-		<input type="time" class="form-control event-input" style="margin: 0">
-        <input type="time" class="form-control event-input" style="margin: 0">
-		
+		<ui-select ng-model="start" theme="bootstrap" class="reserve-time-select" ng-show="timeSlot[0]">
+			<ui-select-match placeholder="開始時間">{{$select.selected}}</ui-select-match>
+			<ui-select-choices repeat="slot in timeSlot | filter: $select.search">
+			<div ng-bind-html="slot | highlight: $select.search"></div>
+			</ui-select-choices>
+		</ui-select>
+		<p style="display: inline-block" ng-show="timeSlot[0]">~</p>
+		<ui-select ng-model="end" theme="bootstrap" class="reserve-time-select" ng-show="timeSlot[0]">
+			<ui-select-match placeholder="結束時間">{{$select.selected}}</ui-select-match>
+			<ui-select-choices repeat="slot in timeSlot | filter: $select.search">
+			<div ng-bind-html="slot | highlight: $select.search"></div>
+			</ui-select-choices>
+		</ui-select>
+		<div class="form-group" ng-show="people[0]">
+			<div class="input-group">
+				<span class="input-group-btn">
+		          <button type="button" class="btn btn-default custom-addon" popover="一人${{currentcourt.perPersonPrice}} /小時" popover-placement="bottom" popover-append-to-body="true"><i class="glyphicon glyphicon-user"></i></button>
+		        </span>
+				<select class="form-control event-input" ng-model="numOfPeople" ng-options="p for p in people" style="height: 35px; color: black; font-size: 14px;">
+					<option value="">-- 幾位 --</option>
+				</select>
+			</div>
+		</div>
+		<button type="sumbit" class="btn btn-primary">
+			預約
+		</button>
 	</form>
 </div>
 <div style="margin: 10px">
+	<div class="page-header">
+		<h1>預約現況</h1>
+	</div>
 	<div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="eventCal"></div>
 </div>

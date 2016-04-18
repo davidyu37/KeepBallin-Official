@@ -9,9 +9,16 @@ angular.module('keepballin')
       }, 
       getPublic: {
       	method: 'GET',
-      	isArray: true,
       	params: {
           controller: 'getPublic'
+        }
+      },
+      queryPublic: {
+        method: 'GET',
+        isArray: true,
+        params: {
+          id: 'all',
+          controller: 'queryPublic'
         }
       }
 	  });

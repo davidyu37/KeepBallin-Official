@@ -46,7 +46,7 @@
 			    </a>	
 			    <p>{{courts[i].desc}}</p>
 			  </div>
-			  <a ui-sref="thisteam({team: courts[i]._id})">
+			  <a ui-sref="thisindoor({id: courts[i]._id})">
 				  <img ng-hide="courts[i].teampic[0]" src="/assets/images/teamPic.jpg" alt="...">
 				  <img ng-show="courts[i].teampic[0]" ng-src="{{courts[i].teampic[0].url}}" alt="...">
 			  </a>

@@ -87,11 +87,21 @@ IndoorSchema.plugin(relationship, { relationshipPathName:'creator' });
 
 IndoorSchema.statics = {
   getPublic: function(id, cb) {
-    this.find({$and: [
+    this.findOne({$and: [
        {_id: id}, {isPublic: true}
       ]})
       .exec(cb);
 
+  },
+  //Only return courts that public and approved
+  queryPublic: function(cb) {
+    this.find({
+      $and: [
+        {isPublic: true},
+        {approved: true}
+      ]
+    })
+    .exec(cb);
   }
   // getRatings: function(courtID, cb) {
   //   this.findOne({_id: courtID})

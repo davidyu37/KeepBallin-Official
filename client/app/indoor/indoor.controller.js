@@ -2,9 +2,8 @@
 
 angular.module('keepballin')
   .controller('IndoorCtrl', ['$scope', 'Indoor', function ($scope, Indoor) {
-    Indoor.query(function(data) {
+    Indoor.queryPublic(function(data) {
     	//Filter out courts that's not public or approved
     	$scope.courts = data;
-    	console.log($scope.courts);
     });
   }]);

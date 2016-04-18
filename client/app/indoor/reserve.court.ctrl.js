@@ -3,6 +3,86 @@
 angular.module('keepballin')
   .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', function ($scope, Indoor, $modalInstance, uiCalendarConfig) {
     
+    //Open datepicker
+    $scope.openCal = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $scope.opened = true;
+    };
+
+    //Initiate an empty timeSlot
+    $scope.timeSlot = [];
+
+    //When $scope.date changes, update hour selection for start and end time based on availabiility
+    $scope.$watch('date', function(val) {
+        //If there's a new date
+        if(val) {
+            var thisDay = checkAvailability(val);
+            $scope.timeSlot = generateTimeSelect(thisDay.begin, thisDay.end);
+            createPeople($scope.currentcourt.maxCapacity);
+        }
+    });
+
+    var days = [
+        'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday'
+    ];
+
+    //Check available time with current court's hours
+    var checkAvailability = function(val) {
+        var day = days[val.getDay()];
+        return $scope.currentcourt.hours[day];
+    };
+
+    //Generate array of time selection based on given start to end time
+    var generateTimeSelect = function(start, end) {
+        var s = moment(start).hours();
+        var e = moment(end).hours();
+        var count = s;
+        var selections = [];
+        var string;
+        //While the count is smaller than the end hour, continue
+        while(count <= e) {
+            //Add padding to number
+            if(count < 10) {
+                string = '0' + count + ':00';
+            } else {
+                string = count + ':00';
+            }
+            selections.push(string);
+            count++;
+        }
+        return selections;
+    };
+
+    //Define today so user cant reserve date before today
+    $scope.today = new Date();
+
+    //Define empty people arr
+    $scope.people = [];
+
+    //Provide the selections for number of people
+    var createPeople = function(max) {
+        var person = 1;
+        while(person <= max) {
+            $scope.people.push(person);
+            person++;
+        }
+    };
+
+    //Sending reservation
+    $scope.reserveNow = function() {
+        //Form validation
+        //Add reservation
+        //Proceed them to checkout
+    };
+
     //Calendar Stuff Begins
 
     $scope.eventSources = [];
@@ -105,10 +185,7 @@ angular.module('keepballin')
         eventRender: $scope.eventRender
       }
     };
-
-
     //Calendar Stuff Ends
-
 
 
   }]);
