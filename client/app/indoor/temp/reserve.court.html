@@ -5,7 +5,7 @@
 	<form class="form-inline" ng-submit="reserveNow()">
 		<div class="form-group">
 			<div class="input-group">
-				<input type="date" class="form-control event-input" datepicker-popup is-open="opened" show-button-bar="false" min-date="today" ng-model="date" ng-disabled="sending" style="height: 35px; color: black; font-size: 14px;" ng-click="openCal($event)"/>
+				<input type="date" class="form-control event-input" datepicker-popup is-open="opened" show-button-bar="false" min-date="minDate" ng-model="date" ng-disabled="sending" style="height: 35px; color: black; font-size: 14px;" ng-click="openCal($event)"/>
 				<span class="input-group-btn">
 		          <button type="button" class="btn btn-default custom-addon" ng-click="openCal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 		        </span>

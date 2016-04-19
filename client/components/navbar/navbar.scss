@@ -94,16 +94,16 @@
   color: white;
   margin: 0;
   font-size: 20pt;
-
 }
 #mobileLogo {
-  color: $brand-primary;
+  padding: 0px;
+  margin: 8px 15px;
   @media screen and (min-width: ($screen-sm-min + 1px)) {
     display: none;
   }
 }
 #desktopLogo {
-  padding-left: 0;
+  padding-left: 10px;
   @media screen and (max-width: $screen-sm-min) {
     display: none;
   }

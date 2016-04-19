@@ -11,10 +11,12 @@ angular.module('keepballin')
 		.state('thisindoor', {
 			url:'/indoor/:id',
 			resolve: {
-			thisIndoor: ['$stateParams', 'Indoor', function($stateParams, Indoor) {
-					return Indoor.getPublic({id: $stateParams.id}, function(data) {
-						return data;
+			thisIndoor: ['$stateParams', 'Indoor', '$q', function($stateParams, Indoor, $q) {
+					var defer = $q.defer();
+					Indoor.getPublic({id: $stateParams.id}, function(data) {
+						defer.resolve(data);
 					});  
+					return defer.promise;
 				}]
 			},
 			templateUrl: 'app/indoor/temp/individual.rental.html',

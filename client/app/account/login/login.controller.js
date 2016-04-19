@@ -10,6 +10,7 @@ angular.module('keepballin')
       $scope.submitted = true;
 
       if(form.$valid) {
+        $scope.sending = true;
         Auth.login({
           email: $scope.user.email,
           password: $scope.user.password
@@ -18,7 +19,7 @@ angular.module('keepballin')
           // Logged in, tell server that user has login
           var userNow = Auth.getCurrentUser().$promise;
           userNow.then(function(user) {
-            // socket.reconnect();
+            $scope.sending = false;
             socket.login({userId: user._id, userName: user.name});
             if(roomId.roomId) {
               // If user previously clicked on chat room, then enter
@@ -55,6 +56,7 @@ angular.module('keepballin')
     };
 
     $scope.loginOauth = function(provider) {
+      $scope.sending = true;
       $window.location.href = '/auth/' + provider;
     };
 

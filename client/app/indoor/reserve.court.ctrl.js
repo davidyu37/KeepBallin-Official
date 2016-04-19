@@ -61,8 +61,9 @@ angular.module('keepballin')
         return selections;
     };
 
-    //Define today so user cant reserve date before today
-    $scope.today = new Date();
+    //Define min date to start reserve
+
+    $scope.minDate = moment().add($scope.currentcourt.hoursBeforeReserve, 'h');
 
     //Define empty people arr
     $scope.people = [];

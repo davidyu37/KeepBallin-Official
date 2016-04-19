@@ -38,6 +38,7 @@ var IndoorSchema = new Schema({
   minCapacity: Number,
   maxCapacity: Number,
   rules: String,
+  hoursBeforeReserve: Number,
   averagedRating: Number,
   ratings: [{
     type: Schema.ObjectId, 

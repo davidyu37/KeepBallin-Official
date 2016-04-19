@@ -43,16 +43,22 @@
         <!-- </div> -->
 
         <div>
-          <button class="btn btn-primary btn-lg btn-login" type="submit">
-            登入
+          <button class="btn btn-primary btn-lg btn-login" type="submit" ng-disabled="sending">
+            <div ng-hide="sending">登入</div>
+            <div class="loading-btn" ng-show="sending">
+              <div class="rect1"></div>
+              <div class="rect2"></div>
+              <div class="rect3"></div>
+              <div class="rect4"></div>
+            </div>  
           </button>
           <a class="btn btn-default btn-lg btn-register" 
-          ng-click="closeModal('toSignUp')">
+          ng-click="closeModal('toSignUp')" ng-disabled="sending">
             去註冊
           </a>
         </div>
         <div class="forgotPw">
-          <a ng-click="forgotPw()">忘記密碼？</a>
+          <a ng-click="forgotPw()" ng-disabled="sending">忘記密碼？</a>
         </div>
         <div style="height: 1px; background-color: #efefef; 
           text-align: center; margin: 20px 0;">
@@ -62,11 +68,25 @@
         </div>
         
         <div>
-          <a class="btn btn-facebook" href="" ng-click="loginOauth('facebook')">
-            <i class="fa fa-facebook"></i> Facebook登入
+          <a class="btn btn-facebook" href="" ng-click="loginOauth('facebook')" ng-disabled="sending">
+            <i class="fa fa-facebook"></i> 
+            <div ng-hide="sending">Facebook登入</div>
+            <div class="loading-btn" ng-show="sending">
+              <div class="rect1"></div>
+              <div class="rect2"></div>
+              <div class="rect3"></div>
+              <div class="rect4"></div>
+            </div>  
           </a>
-          <a class="btn btn-google-plus" href="" ng-click="loginOauth('google')">
-            <i class="fa fa-google-plus"></i> Google+登入
+          <a class="btn btn-google-plus" href="" ng-click="loginOauth('google')" ng-disabled="sending">
+            <i class="fa fa-google-plus"></i>
+            <div ng-hide="sending">Google+登入</div>
+            <div class="loading-btn" ng-show="sending">
+              <div class="rect1"></div>
+              <div class="rect2"></div>
+              <div class="rect3"></div>
+              <div class="rect4"></div>
+            </div>  
           </a>
         </div>
       </form>

@@ -9,11 +9,13 @@ angular.module('keepballin')
       $scope.submitted = true;
 
       if(form.$valid) {
+        $scope.sending = true;
         Auth.login({
           email: $scope.user.email,
           password: $scope.user.password
         })
         .then( function() {
+          $scope.sending = false;
           if(roomId) {
             // If user previously clicked on chat room, then enter
             $state.go('chat', {id: roomId});
@@ -45,6 +47,7 @@ angular.module('keepballin')
     };
 
     $scope.loginOauth = function(provider) {
+      $scope.sending = true;
       $window.location.href = '/auth/' + provider;
     };
 

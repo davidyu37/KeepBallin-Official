@@ -4,7 +4,7 @@ angular.module('keepballin')
   .controller('IndividualIndoor', ['$scope', 'Indoor', 'thisIndoor', '$modal', '$timeout', function ($scope, Indoor, thisIndoor, $modal, $timeout) {
 
     $scope.currentcourt = thisIndoor;
-
+    
 
     //Open modal to reserve
     $scope.reserve = function() {
@@ -43,7 +43,8 @@ angular.module('keepballin')
 
     //Place marker of the court
     $timeout(function() {
-        $scope.map = new google.maps.Map(document.getElementById('indoorMap'), mapOptions);
+        var indoorMap = document.getElementById('indoorMap');
+        $scope.map = new google.maps.Map(indoorMap, mapOptions);
         $scope.marker = new google.maps.Marker({
             map: $scope.map,
             position: {lat: $scope.currentcourt.lat, lng: $scope.currentcourt.long}
