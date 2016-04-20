@@ -31,6 +31,7 @@ exports.update = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!indoor) { return res.status(404).send('Not Found'); }
     var newIndoor = _.merge(indoor, req.body);
+    newIndoor.markModified('hours');
     newIndoor.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.status(200).json(newIndoor);

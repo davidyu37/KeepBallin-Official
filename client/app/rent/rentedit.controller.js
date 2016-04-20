@@ -88,7 +88,6 @@ angular.module('keepballin')
 
 
 	//Showing preview
-
 	$scope.openPreview = function() {
 		$scope.showPreview = !($scope.showPreview);
 		//Map for preview
@@ -158,6 +157,18 @@ angular.module('keepballin')
 		'saturday',
 		'sunday'
 	];
+
+	//Close the hours for the day
+	$scope.closeDay = function(day) {
+		if($scope.currentcourt.hours[day]) {
+			$scope.currentcourt.hours[day] = {
+				day: day,
+				begin: null,
+				end: null,
+				isOpen: false
+			};
+		}
+	};
 
 	//Add time frame to currentcourt.hours array
 	$scope.addNewTime = function() {

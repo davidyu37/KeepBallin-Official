@@ -11,16 +11,16 @@
 		        </span>
 			</div>
 		</div>
-		<ui-select ng-model="start" theme="bootstrap" class="reserve-time-select" ng-show="timeSlot[0]">
+		<ui-select ng-model="timeSlot.selected" theme="bootstrap" class="reserve-time-select" ng-show="timeSlot[0]" on-select="changeEndTimeSlot($model)">
 			<ui-select-match placeholder="開始時間">{{$select.selected}}</ui-select-match>
 			<ui-select-choices repeat="slot in timeSlot | filter: $select.search">
 			<div ng-bind-html="slot | highlight: $select.search"></div>
 			</ui-select-choices>
 		</ui-select>
 		<p style="display: inline-block" ng-show="timeSlot[0]">~</p>
-		<ui-select ng-model="end" theme="bootstrap" class="reserve-time-select" ng-show="timeSlot[0]">
+		<ui-select ng-model="timeSlot2.selected" theme="bootstrap" class="reserve-time-select" ng-show="timeSlot2[0]">
 			<ui-select-match placeholder="結束時間">{{$select.selected}}</ui-select-match>
-			<ui-select-choices repeat="slot in timeSlot | filter: $select.search">
+			<ui-select-choices repeat="slot in timeSlot2 | filter: $select.search">
 			<div ng-bind-html="slot | highlight: $select.search"></div>
 			</ui-select-choices>
 		</ui-select>
@@ -34,12 +34,43 @@
 				</select>
 			</div>
 		</div>
-		<button type="sumbit" class="btn btn-primary">
+		<button type="sumbit" class="btn btn-primary" ng-disabled="notAvailable || invalidTime">
 			預約
 		</button>
+		<p class="text-muted" ng-show="notAvailable">此日期無開放時間可以預約</p>
 	</form>
+	<div class="row" ng-hide="notAvailable">
+		<div class="col-sm-6" ng-show="estHour">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default">
+			          <i class="fa fa-clock-o"></i>
+					</button>
+		        </span>
+		        <input type="number" class="form-control" disabled="true" ng-model="estHour"/>
+		        <span class="input-group-btn">
+					<button type="button" class="btn btn-default">
+			        	小時
+					</button>
+		        </span>
+			</div>
+			<p class="text-muted" ng-show="invalidTime">
+				結束時間必須大於開始時間
+			</p>
+		</div>
+		<div class="col-sm-6" ng-show="estPrice">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default">
+			          <i class="fa fa-dollar"></i>
+					</button>
+		        </span>
+		        <input type="number" class="form-control" disabled="true" ng-model="estPrice"/>
+			</div>
+		</div>
+	</div>
 </div>
-<div style="margin: 10px">
+<div style="margin: 20px">
 	<div class="page-header">
 		<h1>預約現況</h1>
 	</div>
