@@ -39,11 +39,17 @@
 			</div>
 		</div>
 		<button type="sumbit" class="btn btn-primary" ng-disabled="notAvailable || invalidTime">
-			預約
+			<div ng-hide="sending">預約</div>
+			<div class="loading-btn" ng-show="sending">
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			</div>	
 		</button>
 		<p class="text-muted" ng-show="notAvailable">此日期無開放時間可以預約</p>
 	</form>
-	<div class="alert alert-danger" role="alert" ng-show="(reserveForm.theDate.$error.required || reserveForm.start.$error.required || reserveForm.end.$error.required || reserveForm.people.$error.required) && submitted">
+	<div class="alert alert-danger" role="alert" ng-show="(reserveForm.theDate.$error.required || reserveForm.start.$error.required || reserveForm.end.$error.required || reserveForm.people.$error.required || minDateErr) && submitted">
 		<p ng-show="reserveForm.theDate.$error.required && submitted">
 			請選擇日期
 		</p>
@@ -56,6 +62,7 @@
 		<p ng-show="reserveForm.people.$error.required && submitted">
 			請選擇人數
 		</p>
+		<p ng-show="minDateErr && submitted">開始時間至少須在{{currentcourt.hoursBeforeReserve}}小時後</p>
 	</div>
 	<div class="row" ng-hide="notAvailable">
 		<div class="col-sm-6" ng-show="estHour">

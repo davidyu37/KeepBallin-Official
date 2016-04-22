@@ -15,3 +15,14 @@ exports.index = function(req, res) {
     return res.status(200).json(reservations);
   });
 };
+
+// Creates a new invite in the DB.
+exports.create = function(req, res) {
+  //Attach user's id to invite's info
+  var userId = { reserveBy: req.user._id };
+  var newReserve = _.merge(req.body, userId);
+  Reservation.create(newReserve, function(err, reserve) {
+    if(err) { return handleError(res, err); }
+    return res.status(201).json(reserve);
+  });
+};

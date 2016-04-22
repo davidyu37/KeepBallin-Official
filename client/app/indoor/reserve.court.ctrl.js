@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', function ($scope, Indoor, $modalInstance, uiCalendarConfig) {
+  .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', 'Reservation', function ($scope, Indoor, $modalInstance, uiCalendarConfig, Reservation) {
     
     //Open datepicker
     $scope.openCal = function(e) {
@@ -66,6 +66,8 @@ angular.module('keepballin')
             //Convert timeSlot.selected to valid date obj
             $scope.start = timeToDate($scope.timeSlot.selected);
             $scope.end = timeToDate($scope.timeSlot2.selected);
+            //Reset minDateErr, error that occurs when user selected a time that has already became too late to reserve
+            $scope.minDateErr = true;
         }
     });
 
@@ -218,6 +220,7 @@ angular.module('keepballin')
         $scope.submitted = true;
         //Form validation
         if(form.$valid) {
+            var hoursBeforeBegin = moment($scope.begin).subtract($scope.currentcourt.hoursBeforeReserve, 'h');
 
             var obj = {
                 dateReserved: $scope.date,
@@ -226,10 +229,31 @@ angular.module('keepballin')
                 beginTime: $scope.start,
                 endTime: $scope.end,
                 numOfPeople: $scope.numOfPeople,
+                minCapacity: $scope.currentcourt.minCapacity, 
+                maxCapacity: $scope.currentcourt.maxCapacity,
                 pricePaid: $scope.estPrice,
-                duration: $scope.estHour
+                duration: $scope.estHour,
+                timeForConfirmation: hoursBeforeBegin
             };
-            console.log(obj);
+
+            //If num of people reserved is larger than minCapacity, set to active
+            if($scope.numOfPeople >= $scope.currentcourt.minCapacity) {
+                obj.active = true;
+            }
+
+            //Check if time now is smaller than hoursBeforeBegin
+            if(moment() < hoursBeforeBegin) {
+                $scope.minDateErr = true;
+                return;
+            } else {
+                $scope.sending = true;
+                Reservation.save(obj, function(data) {
+                    console.log(data);
+                    $scope.submitted = false;
+                    $scope.sending = false;
+                });
+            }
+
         }
         //Add reservation
         //Proceed them to checkout

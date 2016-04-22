@@ -4,34 +4,31 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     relationship = require('mongoose-relationship');
 
-var ReservationSchema = new Schema({
-  dateReserved: Date,
-  beginString: String,
-  endString: String,
+var TimeslotSchema = new Schema({
   beginTime: Date,
   endTime: Date,
   numOfPeople: Number,
   minCapacity: Number, 
   maxCapacity: Number,
-  pricePaid: Number,
-  duration: Number,
+  revenue: Number,
   timeForConfirmation: Date,
   active: {
     type: Boolean,
     default: false
   },
-  reserveBy: {
+  reservation: {
     type: Schema.ObjectId,
-    ref: 'User',
-    childPath: 'reservation'
+    ref: 'Reservation',
+    childPath: 'timeslot'
   },
+  reserveBy: [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }],
   dateCreated: {
     type: Date,
     default: Date.now
   }
 });
 
-ReservationSchema.plugin(relationship, { relationshipPathName: 'reserveBy' });
-
-
-module.exports = mongoose.model('Reservation', ReservationSchema);
+module.exports = mongoose.model('Timeslot', TimeslotSchema);
