@@ -35,9 +35,10 @@ angular.module('keepballin')
                 $scope.estHour = 0;
                 $scope.estPrice = 0;
                 $scope.notAvailable = false;
-                var thisDay = checkAvailability(val);
-                $scope.timeSlot = generateTimeSelect(thisDay.begin, thisDay.end);
-                $scope.timeSlot2 = generateTimeSelect(thisDay.begin, thisDay.end);
+                $scope.chosenDate = checkAvailability(val);
+                $scope.timeSlot = generateTimeSelect($scope.chosenDate.begin, $scope.chosenDate.end);
+                $scope.timeSlot.pop(); 
+                $scope.timeSlot2 = generateTimeSelect($scope.chosenDate.begin, $scope.chosenDate.end);
                 if($scope.timeSlot[0]) {
                     //If there's time slot, set notAvailable to false
                     $scope.notAvailable = false;
@@ -62,15 +63,28 @@ angular.module('keepballin')
             $scope.estHour = calcTotalHours(vals[0], vals[1]);
             //Calculate total price
             $scope.estPrice = calcTotalPrice($scope.estHour);
-            
+            //Convert timeSlot.selected to valid date obj
+            $scope.start = timeToDate($scope.timeSlot.selected);
+            $scope.end = timeToDate($scope.timeSlot2.selected);
         }
     });
 
     //Change timeSlot2 so user doesnt choose time earlier than start
     $scope.changeEndTimeSlot = function($model) {
+        //Reset timeSlot2 to be like timeSlot
+        $scope.timeSlot2 = generateTimeSelect($scope.chosenDate.begin, $scope.chosenDate.end);
         //Add one to index so start and end will have at least 30mins gap
         var index = $scope.timeSlot2.indexOf($model) + 1;
         $scope.timeSlot2.splice(0, index);
+    };
+
+    //Convert time to date obj
+    var timeToDate = function(str) {
+        var reservedDate = moment($scope.date);
+        var hour = parseInt(str.slice(0, 2));
+        var min = parseInt(str.slice((str.length - 2), str.length));
+        reservedDate.set({'hour': hour, 'minute': min, 'second': 0, 'millisecond': 0});
+        return reservedDate;
     };
 
     //Calculate total hours help func
@@ -200,8 +214,23 @@ angular.module('keepballin')
     };
 
     //Sending reservation
-    $scope.reserveNow = function() {
+    $scope.reserveNow = function(form) {
+        $scope.submitted = true;
         //Form validation
+        if(form.$valid) {
+
+            var obj = {
+                dateReserved: $scope.date,
+                beginString: $scope.timeSlot.selected,
+                endString: $scope.timeSlot2.selected,
+                beginTime: $scope.start,
+                endTime: $scope.end,
+                numOfPeople: $scope.numOfPeople,
+                pricePaid: $scope.estPrice,
+                duration: $scope.estHour
+            };
+            console.log(obj);
+        }
         //Add reservation
         //Proceed them to checkout
     };
