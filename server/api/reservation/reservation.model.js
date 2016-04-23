@@ -14,6 +14,7 @@ var ReservationSchema = new Schema({
   minCapacity: Number, 
   maxCapacity: Number,
   pricePaid: Number,
+  perPersonPrice: Number,
   duration: Number,
   timeForConfirmation: Date,
   active: {
@@ -28,7 +29,8 @@ var ReservationSchema = new Schema({
   dateCreated: {
     type: Date,
     default: Date.now
-  }
+  },
+  timeslot: [{ type:Schema.ObjectId, ref:"Timeslot" }]
 });
 
 ReservationSchema.plugin(relationship, { relationshipPathName: 'reserveBy' });

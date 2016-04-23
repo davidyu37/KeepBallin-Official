@@ -52,7 +52,8 @@ var UserSchema = new Schema({
   courtCreated: [{ type:Schema.ObjectId, ref:"Court" }],
   courtManagerOf: [{ type:Schema.ObjectId, ref:"Indoor" }],
   eventsJoined: [{ type:Schema.ObjectId, ref:"Event" }],
-  invitesJoined: [{ type:Schema.ObjectId, ref:"Invite" }]
+  invitesJoined: [{ type:Schema.ObjectId, ref:"Invite" }],
+  reservation: [{ type:Schema.ObjectId, ref:"Reservation" }]
 });
 
 UserSchema.set('versionKey', false);

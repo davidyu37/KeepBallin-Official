@@ -67,7 +67,7 @@ angular.module('keepballin')
             $scope.start = timeToDate($scope.timeSlot.selected);
             $scope.end = timeToDate($scope.timeSlot2.selected);
             //Reset minDateErr, error that occurs when user selected a time that has already became too late to reserve
-            $scope.minDateErr = true;
+            $scope.minDateErr = false;
         }
     });
 
@@ -232,6 +232,7 @@ angular.module('keepballin')
                 minCapacity: $scope.currentcourt.minCapacity, 
                 maxCapacity: $scope.currentcourt.maxCapacity,
                 pricePaid: $scope.estPrice,
+                perPersonPrice: $scope.currentcourt.perPersonPrice,
                 duration: $scope.estHour,
                 timeForConfirmation: hoursBeforeBegin
             };
@@ -248,8 +249,6 @@ angular.module('keepballin')
             } else {
                 $scope.sending = true;
                 Reservation.save(obj, function(data) {
-                    console.log(data);
-                    $scope.submitted = false;
                     $scope.sending = false;
                 });
             }
