@@ -30,10 +30,15 @@ var ReservationSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  courtReserved: {
+    type: Schema.ObjectId,
+    ref: 'Indoor',
+    childPath: 'reservation'
+  },
   timeslot: [{ type:Schema.ObjectId, ref:"Timeslot" }]
 });
 
-ReservationSchema.plugin(relationship, { relationshipPathName: 'reserveBy' });
+ReservationSchema.plugin(relationship, { relationshipPathName: ['reserveBy', 'courtReserved'] });
 
 
 module.exports = mongoose.model('Reservation', ReservationSchema);

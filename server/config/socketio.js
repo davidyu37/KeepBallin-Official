@@ -251,7 +251,7 @@ function onConnect(socket, socketio) {
 
   // Insert sockets below
   require('../api/reservation/reservation.socket').register(socket);
-  // require('../api/indoor/indoor.socket').register(socket);
+  require('../api/timeslot/timeslot.socket').register(socket);
   require('../api/global/global.socket').register(socket);
   require('../api/invite/invite.socket').register(socket);
   require('../api/chat/chat.socket').register(socket);

@@ -1,8 +1,13 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', 'Reservation', function ($scope, Indoor, $modalInstance, uiCalendarConfig, Reservation) {
+  .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', 'Reservation', 'Timeslot', '$compile', 'socket', '$modal', function ($scope, Indoor, $modalInstance, uiCalendarConfig, Reservation, Timeslot, $compile, socket, $modal) {
     
+    //Close the modal
+    $scope.close = function() {
+        $modalInstance.close();
+    };
+
     //Open datepicker
     $scope.openCal = function(e) {
       e.preventDefault();
@@ -26,7 +31,7 @@ angular.module('keepballin')
     ];
 
     //When $scope.date changes, update hour selection for start and end time based on availabiility
-    $scope.$watch('date', function(val) {
+    var watchDate = $scope.$watch('date', function(val) {
         //If there's a new date
         if(val) {
             var d = days[val.getDay()];
@@ -39,6 +44,7 @@ angular.module('keepballin')
                 $scope.timeSlot = generateTimeSelect($scope.chosenDate.begin, $scope.chosenDate.end);
                 $scope.timeSlot.pop(); 
                 $scope.timeSlot2 = generateTimeSelect($scope.chosenDate.begin, $scope.chosenDate.end);
+
                 if($scope.timeSlot[0]) {
                     //If there's time slot, set notAvailable to false
                     $scope.notAvailable = false;
@@ -57,7 +63,7 @@ angular.module('keepballin')
     });
 
     //Watch start time and end time and change estHour and estPrice
-    $scope.$watchGroup(['timeSlot.selected', 'timeSlot2.selected', 'numOfPeople'], function(vals) {
+    var watchSelections = $scope.$watchGroup(['timeSlot.selected', 'timeSlot2.selected', 'numOfPeople'], function(vals) {
         if(vals[0] && vals[1]) {
             //vals[0] is start and vals[1] is end
             $scope.estHour = calcTotalHours(vals[0], vals[1]);
@@ -220,7 +226,12 @@ angular.module('keepballin')
         $scope.submitted = true;
         //Form validation
         if(form.$valid) {
-            var hoursBeforeBegin = moment($scope.begin).subtract($scope.currentcourt.hoursBeforeReserve, 'h');
+
+            //Timeslots checking
+            
+
+            
+            var hoursBeforeBegin = moment($scope.start).subtract($scope.currentcourt.hoursBeforeReserve, 'h');
 
             var obj = {
                 dateReserved: $scope.date,
@@ -234,7 +245,8 @@ angular.module('keepballin')
                 pricePaid: $scope.estPrice,
                 perPersonPrice: $scope.currentcourt.perPersonPrice,
                 duration: $scope.estHour,
-                timeForConfirmation: hoursBeforeBegin
+                timeForConfirmation: hoursBeforeBegin,
+                courtReserved: $scope.currentcourt._id
             };
 
             //If num of people reserved is larger than minCapacity, set to active
@@ -243,14 +255,15 @@ angular.module('keepballin')
             }
 
             //Check if time now is smaller than hoursBeforeBegin
-            if(moment() < hoursBeforeBegin) {
-                $scope.minDateErr = true;
-                return;
-            } else {
+            var now = moment();
+            if(now < hoursBeforeBegin) {
                 $scope.sending = true;
                 Reservation.save(obj, function(data) {
                     $scope.sending = false;
                 });
+            } else {
+                $scope.minDateErr = true;
+                return;
             }
 
         }
@@ -262,91 +275,111 @@ angular.module('keepballin')
 
     $scope.eventSources = [];
 
+    Timeslot.getByCourtId({ id: $scope.currentcourt._id }, function(data) {
+        $scope.events = data;
+        $scope.eventSources.push($scope.events);
+
+        //socket.io instant updates 
+        socket.syncUpdates('timeslot' + $scope.currentcourt._id, $scope.events);
+        $scope.$on('$destroy', function () {
+            socket.unsyncUpdates('timeslot');
+        });
+    });
+
+    //Cancel the watches when user leaves page
+    $scope.$on('$destroy', function () {
+        watchDate();
+        watchSelections();
+    });
+
     /* alert on eventClick */
     $scope.onDayClick = function( date, jsEvent, view){
         //open day view
-        uiCalendarConfig.calendars.eventCal.fullCalendar('gotoDate', date);
-        uiCalendarConfig.calendars.eventCal.fullCalendar('changeView', 'agendaDay');
+        uiCalendarConfig.calendars.reserveCal.fullCalendar('gotoDate', date);
+        uiCalendarConfig.calendars.reserveCal.fullCalendar('changeView', 'agendaDay');
 
     };
-    /* alert on Drop */
-    $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
-      var newStuff = {
-        start: event.start,
-        end: event.end
-      };
-      $scope.updating = true;
-      var update = Event.update({id: event._id}, newStuff).$promise;
-      update.then(function(d) {
-        $scope.updating = false;
-      });
+    // /* alert on Drop */
+    // $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
+    //   var newStuff = {
+    //     start: event.start,
+    //     end: event.end
+    //   };
+    //   $scope.updating = true;
+    //   var update = Event.update({id: event._id}, newStuff).$promise;
+    //   update.then(function(d) {
+    //     $scope.updating = false;
+    //   });
         
-    };
-    /* alert on Resize */
-    $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
-       var newStuff = {
-        start: event.start,
-        end: event.end
-      };
-      $scope.updating = true;
-      var update = Event.update({id: event._id}, newStuff).$promise;
-      update.then(function(d) {
-        $scope.updating = false;
-      });
-    };
+    // };
+    // /* alert on Resize */
+    // $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
+    //    var newStuff = {
+    //     start: event.start,
+    //     end: event.end
+    //   };
+    //   $scope.updating = true;
+    //   var update = Event.update({id: event._id}, newStuff).$promise;
+    //   update.then(function(d) {
+    //     $scope.updating = false;
+    //   });
+    // };
 
     $scope.onEventClick = function(calEvent, jsEvent, view) {
-      $scope.events.forEach(function(element, index, array) {
-        if(element._id === calEvent._id) {
-          element.active = true;
-        } else {
-          element.active = false;
-        }
-      });
+        $modal.open({
+            templateUrl: 'app/indoor/temp/timeslot.info.html',
+            scope: $scope,
+            size: 'md',
+            controller: 'TimeslotCtrl',
+            resolve: {
+                theEvent: function() {
+                    return calEvent;
+                }
+            }
+        });
     };
 
-    $scope.openEventModal = function(id) {
-      $scope.events.forEach(function(e) {
-        if(e._id === id) {
-          $scope.selectedEvent = e;
-        }
-      });
-      $modal.open({
-        templateUrl: 'app/team/temp/event.detail.html',
-        controller: 'EventDetailCtrl',
-        size: 'lg',
-        scope: $scope
-      });
-    };
-    //Render tooltip for calednar
+    //Render tooltip for calendar
     $scope.eventRender = function( event, element, view ) { 
-        element.attr({'tooltip': event.title,
+
+        var start = moment(event.start).format('h:mma');
+        var end =  moment(event.end).format('h:mma');
+        var message;
+
+        var text = start + '~' + end;
+
+        if(event.numOfPeople < event.minCapacity) {
+            var lacking = event.minCapacity - event.numOfPeople;
+            message = '還缺' + lacking + '人才開放';
+            text += ' ' + message;
+            element.css({'background-color': '#ffc019', 'color': 'black'});
+        } else if (event.numOfPeople >= event.minCapacity && event.numOfPeople < event.maxCapacity) {
+            var spotsLeft = event.maxCapacity - event.numOfPeople;
+            message = '還剩' + spotsLeft + '人就客滿';
+            text += ' ' + message;
+            element.css({'background-color': '#E6471C'});
+        } else {
+            message = '已客滿';
+            text += ' ' + message;
+            element.css({'background-color': '#502d17'});
+        }
+
+        element.text(text);
+        
+        element.attr({'tooltip': message,
                      'tooltip-append-to-body': true});
         $compile(element)($scope);
     };
 
-    //Logic for owner and member checking
-
-    $scope.checkUser = function() {
-      if($scope.team) {
-
-        if(Auth.isLoggedIn()) {
-          if($scope.team.owner._id === $scope.user._id) {
-            return true;
-          }
-          if(isMember()) {
-            return true;
-          } 
-        }
-      
-        return false; 
-      }
+    $scope.extraEventSignature = function(event) {
+       return "" + event.numOfPeople;
     };
+
 
     $scope.uiConfig = {
       calendar:{
         height: 450,
-        editable: $scope.checkUser,
+        editable: false,
         header:{
           left: 'agendaDay agendaWeek month',
           center: 'title',
@@ -355,8 +388,8 @@ angular.module('keepballin')
         timezone: 'local',
         dayClick: $scope.onDayClick,
         eventClick: $scope.onEventClick,
-        eventDrop: $scope.alertOnDrop,
-        eventResize: $scope.alertOnResize,
+        // eventDrop: $scope.alertOnDrop,
+        // eventResize: $scope.alertOnResize,
         eventRender: $scope.eventRender
       }
     };

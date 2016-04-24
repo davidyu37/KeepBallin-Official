@@ -8,8 +8,9 @@ var mongoose = require('mongoose'),
     _ = require('lodash');
 
 var TimeslotSchema = new Schema({
-  beginTime: Date,
-  endTime: Date,
+  start: Date,
+  end: Date,
+  title: String,
   numOfPeople: Number,
   minCapacity: Number, 
   maxCapacity: Number,
@@ -19,9 +20,18 @@ var TimeslotSchema = new Schema({
     type: Boolean,
     default: false
   },
+  full: {
+    type: Boolean,
+    default: false
+  },
   reservation: {
     type: Schema.ObjectId,
     ref: 'Reservation',
+    childPath: 'timeslot'
+  },
+  courtReserved: {
+    type: Schema.ObjectId,
+    ref: 'Indoor',
     childPath: 'timeslot'
   },
   reserveBy: [{
@@ -34,27 +44,26 @@ var TimeslotSchema = new Schema({
   }
 });
 
-TimeslotSchema.plugin(relationship, { relationshipPathName: 'reservation' });
+TimeslotSchema.plugin(relationship, { relationshipPathName: ['reservation', 'courtReserved'] });
 
 TimeslotSchema.statics = {
   generateTimeslot: function(obj, numOfTimeSlot, cb) {
-    var beginTime = moment(obj.beginTime);
-    var endTime = moment(obj.beginTime);
-    var slots = [];
+    var start = moment(obj.start);
+    var end = moment(obj.start);
     var model = this;
     var i = 1;
     async.whilst(function() { return i <= numOfTimeSlot; }, function(callback) {
       //If it's not the first timeslot set end time to the end of last timeslot
       if(i > 1) {
-        obj.beginTime = beginTime.add(30, 'm');
+        obj.start = start.add(30, 'm');
       }
-      var newEndTime = endTime.add(30, 'm');
-      obj.endTime = newEndTime;
+      var newend = end.add(30, 'm');
+      obj.end = newend;
       // i++;
       model.findOne({$and: [
 
-        { beginTime: obj.beginTime },
-        { endTime: obj.endTime }
+        { start: obj.start },
+        { end: obj.end }
 
       ]}, function(err, data) {
         if(err) { console.console(err); return; }
@@ -65,7 +74,6 @@ TimeslotSchema.statics = {
           var completeSlot = _.merge(newSlot, obj);
 
           completeSlot.save(function(err, data) {
-            slots.push(data);
             i++;
             callback(null);
           });
@@ -77,8 +85,12 @@ TimeslotSchema.statics = {
           if(data.numOfPeople >= data.minCapacity) {
             data.active = true;
           }
+
+          if(data.numOfPeople >= data.maxCapacity) {
+            data.full = true;
+          }
+
           data.save(function(err, data) {
-            slots.push(data);
             i++;
             callback(null);
           }); 
@@ -93,6 +105,10 @@ TimeslotSchema.statics = {
       }
       cb();
     });
+  },
+  findByCourt: function(id, cb) {
+    this.find({courtReserved: id})
+    .exec(cb);
   }
 };
 

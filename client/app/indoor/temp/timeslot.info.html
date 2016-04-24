@@ -1,0 +1,24 @@
+<div class="timeslot-bg">
+	<timer class="coutdown" end-time="event.timeForConfirmation">{{days}} 天 {{hours}}時 {{minutes}} 分 {{seconds}}秒後截止預約</timer>
+	<ul class="list-group">
+		<li class="list-group-item">
+			<i class="fa fa-calendar" tooltip="日期" tooltip-placement="left"></i>
+			<span>{{startDate}}</span>
+		</li>
+		<li class="list-group-item">
+			<i class="fa fa-clock-o" tooltip="時段" tooltip-placement="left"></i>
+			<span>{{start}}~{{end}}</span>
+		</li>
+		<li class="list-group-item">
+			<i class="fa fa-user" tooltip="目前人數" tooltip-placement="left"></i>
+			<span>{{event.numOfPeople}}</span>
+			<span> | 至少{{event.minCapacity}}人開放</span>
+			<span> | 最多容納{{event.maxCapacity}}人</span>
+		</li>
+		<li class="list-group-item">
+			<span ng-hide="event.active">未開放</span>
+			<span ng-show="event.active && !event.full">已開放</span>
+			<span ng-show="event.full">已客滿</span>
+		</li>
+	</ul>
+</div>

@@ -1,4 +1,5 @@
 <div style="margin: 20px;">
+	<i class="fa fa-remove pull-right pointer" ng-click="close()"></i>
 	<div class="page-header">
 		<h1>預約時間</h1>
 	</div>
@@ -99,5 +100,5 @@
 	<div class="page-header">
 		<h1>預約現況</h1>
 	</div>
-	<div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="eventCal"></div>
+	<div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="reserveCal" calendar-watch-event="extraEventSignature(event)"></div>
 </div>

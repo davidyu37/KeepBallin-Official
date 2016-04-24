@@ -30,15 +30,17 @@ exports.create = function(req, res) {
     
     //Prepare timeslot obj
     var singleTimeslot = {
-    	beginTime: reserve.beginTime,
-		endTime: reserve.endTime,
-		numOfPeople: reserve.numOfPeople,
-		minCapacity: reserve.minCapacity, 
-		maxCapacity: reserve.maxCapacity,
-		revenue: revenueOfSingleTimeslot,
-		timeForConfirmation: reserve.timeForConfirmation,
-		reservation: reserve._id,
-		reserveBy: reserve.reserveBy
+    	start: reserve.beginTime,
+  		end: reserve.endTime,
+  		numOfPeople: reserve.numOfPeople,
+      title: reserve.numOfPeople,
+  		minCapacity: reserve.minCapacity, 
+  		maxCapacity: reserve.maxCapacity,
+  		revenue: revenueOfSingleTimeslot,
+  		timeForConfirmation: reserve.timeForConfirmation,
+  		reservation: reserve._id,
+  		reserveBy: reserve.reserveBy,
+      courtReserved: reserve.courtReserved
     };
 
     if(reserve.active) {

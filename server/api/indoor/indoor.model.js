@@ -52,6 +52,14 @@ var IndoorSchema = new Schema({
   pictures: [{
     type: Schema.ObjectId,
     ref: 'Upload'
+  }],
+  reservation: [{
+    type: Schema.ObjectId,
+    ref: 'Reservation'    
+  }],
+  timeslot: [{
+    type: Schema.ObjectId,
+    ref: 'Timeslot'
   }]
 });
 
