@@ -65,6 +65,20 @@
 		</p>
 		<p ng-show="minDateErr && submitted">開始時間至少須在{{currentcourt.hoursBeforeReserve}}小時後</p>
 	</div>
+	<div class="alert alert-danger" role="alert" ng-show="timeslotNotAvailable || orderExceedMax">
+		<div ng-show="timeslotNotAvailable">
+			以下時間段已經客滿或不開放
+			<span ng-repeat="slot in nopeTimeslots">
+				<i class="fa fa-clock-o"></i>
+			{{slot.start | date: 'h: mm a'}}~{{slot.end | date: 'h: mm a'}}</span>
+		</div>
+		<div ng-show="orderExceedMax && !timeslotNotAvailable">
+			<span ng-repeat="slot in fewSpotTimeslots">
+				<i class="fa fa-clock-o"></i>
+				{{slot.start | date: 'h: mm a'}}~{{slot.end | date: 'h: mm a'}} 剩 {{slot.numOfPeopleTilFull}}人的空間
+			</span>
+		</div>
+	</div>
 	<div class="row" ng-hide="notAvailable">
 		<div class="col-sm-6" ng-show="estHour">
 			<div class="input-group">

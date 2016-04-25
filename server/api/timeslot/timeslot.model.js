@@ -14,6 +14,8 @@ var TimeslotSchema = new Schema({
   numOfPeople: Number,
   minCapacity: Number, 
   maxCapacity: Number,
+  numOfPeopleTilFull: Number,
+  numOfPeopleTilActive: Number,
   revenue: Number,
   timeForConfirmation: Date,
   active: {
@@ -21,6 +23,10 @@ var TimeslotSchema = new Schema({
     default: false
   },
   full: {
+    type: Boolean,
+    default: false
+  },
+  notOpen: {
     type: Boolean,
     default: false
   },
@@ -81,6 +87,16 @@ TimeslotSchema.statics = {
         } else {
           //When the data exist, update the number of people
           data.numOfPeople += obj.numOfPeople;
+          //calculate numOfPeopleTilActive and numOfPeopleTilFull
+          if(data.numOfPeople <= data.minCapacity) {
+            data.numOfPeopleTilActive = data.minCapacity - data.numOfPeople;  
+          }
+
+          if(data.numOfPeople <= data.maxCapacity) {
+            data.numOfPeopleTilFull = data.maxCapacity - data.numOfPeople;
+          }
+
+
           //check if the current numOfPeople fulfills the minCapacity
           if(data.numOfPeople >= data.minCapacity) {
             data.active = true;
@@ -107,7 +123,8 @@ TimeslotSchema.statics = {
     });
   },
   findByCourt: function(id, cb) {
-    this.find({courtReserved: id})
+    var dateNow = new Date();
+    this.find({ 'courtReserved': id, 'start': {$gt: dateNow}})
     .exec(cb);
   }
 };

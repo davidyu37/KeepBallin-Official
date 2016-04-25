@@ -74,6 +74,9 @@ angular.module('keepballin')
             $scope.end = timeToDate($scope.timeSlot2.selected);
             //Reset minDateErr, error that occurs when user selected a time that has already became too late to reserve
             $scope.minDateErr = false;
+            //Reset timeslot err and exceed max err
+            $scope.timeslotNotAvailable = false;
+            $scope.orderExceedMax = false;
         }
     });
 
@@ -221,16 +224,60 @@ angular.module('keepballin')
         }
     };
 
+    //Helper function to check timeslot
+    var findTimeslotByKeyValue = function(arraytosearch, key, valuetosearch) {
+        var timeslot = valuetosearch.getTime();
+        for (var i = 0; i < arraytosearch.length; i++) {
+            var date = new Date(arraytosearch[i][key]).getTime();
+            if(date === timeslot) {
+                return arraytosearch[i];
+            }
+        }
+        return null;
+    };
+
     //Sending reservation
     $scope.reserveNow = function(form) {
         $scope.submitted = true;
         //Form validation
         if(form.$valid) {
+            $scope.timeslotNotAvailable = false;
+            $scope.orderExceedMax = false;
+            //Timeslots checking -------------------------
+            var numOfTimeslots = $scope.estHour / 0.5;
+            //Array to put the timeslots that are not available
+            $scope.nopeTimeslots = [];
+            $scope.fewSpotTimeslots = [];
 
-            //Timeslots checking
-            
+            var initialStarttime = moment($scope.start);
 
+            for(var i = 0; i < numOfTimeslots; i++) {
+                var newTime = moment(initialStarttime);
+
+                if(i > 0) {
+                    newTime = moment(initialStarttime.add(30, 'm'));
+                }
+                var matchingTimeslot = findTimeslotByKeyValue($scope.events, 'start', new Date(newTime));
+                
+                if(matchingTimeslot) {
+                    //Check for remaining spots, if numOfPeople exceed the remaing spots, 
+                    if($scope.numOfPeople > matchingTimeslot.numOfPeopleTilFull) {
+                        $scope.orderExceedMax = true;
+                        $scope.fewSpotTimeslots.push(matchingTimeslot);
+                    }
+                    //Check if the timeslot's notOpen or full is true
+                    if(matchingTimeslot.notOpen || matchingTimeslot.full) {
+                        $scope.timeslotNotAvailable = true;
+                        $scope.nopeTimeslots.push(matchingTimeslot);
+                    }
+                }
+            }
+            if($scope.timeslotNotAvailable || $scope.orderExceedMax) {
+                return;
+            }
             
+            //Timeslots checking ends -------------------------
+
             var hoursBeforeBegin = moment($scope.start).subtract($scope.currentcourt.hoursBeforeReserve, 'h');
 
             var obj = {
@@ -245,7 +292,7 @@ angular.module('keepballin')
                 pricePaid: $scope.estPrice,
                 perPersonPrice: $scope.currentcourt.perPersonPrice,
                 duration: $scope.estHour,
-                timeForConfirmation: hoursBeforeBegin,
+                timeForConfirmation: hoursBeforeBegin._d,
                 courtReserved: $scope.currentcourt._id
             };
 
@@ -256,14 +303,18 @@ angular.module('keepballin')
 
             //Check if time now is smaller than hoursBeforeBegin
             var now = moment();
-            if(now < hoursBeforeBegin) {
+            if(now >= hoursBeforeBegin) {
+                $scope.minDateErr = true;
+                return;
+            } else if($scope.timeslotNotAvailable) {
+                return;
+            } else if($scope.orderExceedMax) {
+                return;
+            } else {
                 $scope.sending = true;
                 Reservation.save(obj, function(data) {
                     $scope.sending = false;
                 });
-            } else {
-                $scope.minDateErr = true;
-                return;
             }
 
         }
@@ -276,11 +327,16 @@ angular.module('keepballin')
     $scope.eventSources = [];
 
     Timeslot.getByCourtId({ id: $scope.currentcourt._id }, function(data) {
-        $scope.events = data;
+        if(data[0]) {
+            $scope.events = data;
+        } else {
+            $scope.events = [];    
+        }
         $scope.eventSources.push($scope.events);
 
         //socket.io instant updates 
         socket.syncUpdates('timeslot' + $scope.currentcourt._id, $scope.events);
+        
         $scope.$on('$destroy', function () {
             socket.unsyncUpdates('timeslot');
         });
