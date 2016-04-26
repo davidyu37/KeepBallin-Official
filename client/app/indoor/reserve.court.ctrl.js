@@ -441,6 +441,7 @@ angular.module('keepballin')
           center: 'title',
           right: 'today prev,next'
         },
+        allDaySlot: false,
         timezone: 'local',
         dayClick: $scope.onDayClick,
         eventClick: $scope.onEventClick,
@@ -449,6 +450,19 @@ angular.module('keepballin')
         eventRender: $scope.eventRender
       }
     };
+
+    //Change language of calendar
+    $scope.uiConfig.calendar.dayNames = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+    $scope.uiConfig.calendar.dayNamesShort = ['日', '一', '二', '三', '四', '五', '六'];
+    $scope.uiConfig.calendar.monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+    $scope.uiConfig.calendar.buttonText = {
+        today:    '今天',
+        month:    '月',
+        week:     '週',
+        day:      '日'
+    };
+
+
     //Calendar Stuff Ends
 
 
