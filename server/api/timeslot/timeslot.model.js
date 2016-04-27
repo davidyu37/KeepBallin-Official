@@ -79,6 +79,25 @@ TimeslotSchema.statics = {
           var newSlot = new model();
           var completeSlot = _.merge(newSlot, obj);
 
+          //calculate numOfPeopleTilActive and numOfPeopleTilFull
+          if(completeSlot.numOfPeople <= completeSlot.minCapacity) {
+            completeSlot.numOfPeopleTilActive = completeSlot.minCapacity - completeSlot.numOfPeople;  
+          }
+
+          if(completeSlot.numOfPeople <= completeSlot.maxCapacity) {
+            completeSlot.numOfPeopleTilFull = completeSlot.maxCapacity - completeSlot.numOfPeople;
+          }
+
+
+          //check if the current numOfPeople fulfills the minCapacity
+          if(completeSlot.numOfPeople >= completeSlot.minCapacity) {
+            completeSlot.active = true;
+          }
+
+          if(completeSlot.numOfPeople >= completeSlot.maxCapacity) {
+            completeSlot.full = true;
+          }
+
           completeSlot.save(function(err, data) {
             i++;
             callback(null);

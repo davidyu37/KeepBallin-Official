@@ -39,8 +39,7 @@ angular.module('keepballin')
         }
     };
 
-
-
+    
     //Place marker of the court
     $timeout(function() {
         var indoorMap = document.getElementById('indoorMap');
@@ -49,6 +48,7 @@ angular.module('keepballin')
             map: $scope.map,
             position: {lat: $scope.currentcourt.lat, lng: $scope.currentcourt.long}
         });
+
     });
 
   }]);

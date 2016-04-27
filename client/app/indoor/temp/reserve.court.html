@@ -39,7 +39,7 @@
 				</select>
 			</div>
 		</div>
-		<button type="sumbit" class="btn btn-primary" ng-disabled="notAvailable || invalidTime" tooltip="請先登入" tooltip-placement="right">
+		<button type="sumbit" class="btn btn-primary" ng-disabled="notAvailable || invalidTime" tooltip="請先登入" tooltip-placement="right" tooltip-enable="!(loggedIn())">
 			<div ng-hide="sending">預約</div>
 			<div class="loading-btn" ng-show="sending">
 			  <div class="rect1"></div>

@@ -17,6 +17,15 @@ exports.index = function(req, res) {
   });
 };
 
+// Get a single Reservation
+exports.show = function(req, res) {
+  Reservation.findById(req.params.id, function (err, reservation) {
+    if(err) { return handleError(res, err); }
+    if(!reservation) { return res.status(404).send('Not Found'); }
+    return res.json(reservation);
+  });
+};
+
 // Creates a new invite in the DB.
 exports.create = function(req, res) {
   //Attach user's id to invite's info
@@ -52,9 +61,9 @@ exports.create = function(req, res) {
     
     //Create individual time slot
     Timeslot.generateTimeslot(singleTimeslot, numOfTimeSlot, function() {
-
-	    return res.status(201).json(reserve);
+      return res.status(201).json(reserve);
     });
+    
     
   });
 };

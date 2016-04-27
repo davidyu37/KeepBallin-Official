@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', 'Reservation', 'Timeslot', '$compile', 'socket', '$modal', function ($scope, Indoor, $modalInstance, uiCalendarConfig, Reservation, Timeslot, $compile, socket, $modal) {
+  .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', 'Reservation', 'Timeslot', '$compile', 'socket', '$modal', 'Auth', '$state', function ($scope, Indoor, $modalInstance, uiCalendarConfig, Reservation, Timeslot, $compile, socket, $modal, Auth, $state) {
     
     //Close the modal
     $scope.close = function() {
@@ -236,8 +236,18 @@ angular.module('keepballin')
         return null;
     };
 
+    //Function for tooltip to check if user is login
+    $scope.loggedIn = Auth.isLoggedIn;
+
     //Sending reservation
     $scope.reserveNow = function(form) {
+
+        //Check if user is logged in
+        if(!(Auth.isLoggedIn())) {
+            $state.go('login');
+            return;
+        }
+
         $scope.submitted = true;
         //Form validation
         if(form.$valid) {
@@ -314,6 +324,9 @@ angular.module('keepballin')
                 $scope.sending = true;
                 Reservation.save(obj, function(data) {
                     $scope.sending = false;
+                   
+                    // $state.go('reservationthis', {id : data._id});
+
                 });
             }
 
@@ -355,31 +368,6 @@ angular.module('keepballin')
         uiCalendarConfig.calendars.reserveCal.fullCalendar('changeView', 'agendaDay');
 
     };
-    // /* alert on Drop */
-    // $scope.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view){
-    //   var newStuff = {
-    //     start: event.start,
-    //     end: event.end
-    //   };
-    //   $scope.updating = true;
-    //   var update = Event.update({id: event._id}, newStuff).$promise;
-    //   update.then(function(d) {
-    //     $scope.updating = false;
-    //   });
-        
-    // };
-    // /* alert on Resize */
-    // $scope.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view ){
-    //    var newStuff = {
-    //     start: event.start,
-    //     end: event.end
-    //   };
-    //   $scope.updating = true;
-    //   var update = Event.update({id: event._id}, newStuff).$promise;
-    //   update.then(function(d) {
-    //     $scope.updating = false;
-    //   });
-    // };
 
     $scope.onEventClick = function(calEvent, jsEvent, view) {
         $modal.open({
@@ -464,6 +452,5 @@ angular.module('keepballin')
 
 
     //Calendar Stuff Ends
-
 
   }]);
