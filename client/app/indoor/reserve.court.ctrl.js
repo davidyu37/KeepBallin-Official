@@ -239,6 +239,8 @@ angular.module('keepballin')
     //Function for tooltip to check if user is login
     $scope.loggedIn = Auth.isLoggedIn;
 
+    console.log($scope.currentcourt);
+
     //Sending reservation
     $scope.reserveNow = function(form) {
 
@@ -325,7 +327,7 @@ angular.module('keepballin')
                 Reservation.save(obj, function(data) {
                     $scope.sending = false;
                    
-                    // $state.go('reservationthis', {id : data._id});
+                    $state.go('reservationthis', {id : data._id});
 
                 });
             }
@@ -433,8 +435,6 @@ angular.module('keepballin')
         timezone: 'local',
         dayClick: $scope.onDayClick,
         eventClick: $scope.onEventClick,
-        // eventDrop: $scope.alertOnDrop,
-        // eventResize: $scope.alertOnResize,
         eventRender: $scope.eventRender
       }
     };

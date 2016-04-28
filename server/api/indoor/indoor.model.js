@@ -66,34 +66,6 @@ var IndoorSchema = new Schema({
 // //Record the creator of the court
 IndoorSchema.plugin(relationship, { relationshipPathName:'creator' });
 
-// IndoorSchema.plugin(deepPopulate, {
-//   populate: {
-//     'pictures.user': {
-//       select: 'name'
-//     },
-//     'pictures': {
-//       select: 'url user'
-//     },
-//     'creator': {
-//       select: 'name'
-//     },
-//     'lastEditedBy': {
-//       select: 'name'
-//     },
-//     'ratings.user.avatar': {
-//       select: 'url'
-//     },
-//     'ratings.user': {
-//       select: 'avatar name'
-//     },
-//     'ratings': {
-//       select: 'user rate reason'
-//     } 
-//   }
-// });
-// //search plugin
-// IndoorSchema.plugin(mongoosastic);
-
 IndoorSchema.statics = {
   getPublic: function(id, cb) {
     this.findOne({$and: [
@@ -112,32 +84,6 @@ IndoorSchema.statics = {
     })
     .exec(cb);
   }
-  // getRatings: function(courtID, cb) {
-  //   this.findOne({_id: courtID})
-  //     // .populate({path:'ratings', select: 'rate'})
-  //     .deepPopulate('ratings.user.avatar ratings.user ratings')
-  //     .select('ratings')
-  //     .exec(cb);
-  // },
-  // search: function(params, cb) {
-  //   var query = {
-  //     $text: { $search : params.query }
-  //   };
-  //   this.find(query)
-  //     .deepPopulate('pictures.user pictures creator lastEditedBy')
-  //     .exec(cb);
-  // },
-  // //Populate all but individual ratings
-  // findAndPopulate: function(cb) {
-  //   this.find()
-  //   .deepPopulate('pictures.user pictures creator lastEditedBy')
-  //   .exec(cb);
-  // },
-  // findOneAndPopulate: function(courtId, cb) {
-  //   this.findOne({_id: courtId})
-  //   .deepPopulate('pictures.user pictures creator lastEditedBy')
-  //   .exec(cb);
-  // }
 };
 // // $** wildcard text search
 // // CourtSchema.index({ "$**": "text" });

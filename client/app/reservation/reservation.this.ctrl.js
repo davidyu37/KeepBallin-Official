@@ -4,6 +4,8 @@ angular.module('keepballin')
   .controller('ReservationThisCtrl', ['$scope', 'reservation', function ($scope, reservation) {
     
     console.log(reservation);
+
+    $scope.res = reservation;
     //Check if the user is 
 
     // //Close the modal

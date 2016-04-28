@@ -1,17 +1,49 @@
 <div class="container" style="margin-top: 60px;">
-	<div class="col-sm-12" style="background-color: white;">
+	<div class="col-sm-12 white-bg padding-10">
 		<div class="page-header">
-			<h1>預約狀態</h1>
+			<h1>預約狀態
+				<span class="label label-warning" ng-hide="res.active">未開放</span>
+				<span class="label label-primary" ng-show="res.active">已開放</span>
+			</h1>
+		</div>
+		<div class="margin-bottom-20">
+			<timer class="coutdown" end-time="res.timeForConfirmation">
+				{{days}} 天 {{hours}}時 {{minutes}} 分 {{seconds}}秒後截止預約
+			</timer>
+			<p>等待以下時段人數達到{{res.minCapacity}}人</p>
+			<p>如截止時間已到，其中一個時段沒有達到最低人數限制，此預約將自動取消</p>
+		</div>
+		<div class="margin-bottom-20">
+			<div ng-repeat="slot in res.timeslot" class="timeslot-display">
+				<span>
+					<i class="fa fa-clock-o"></i>
+					{{slot.start | date: 'h:mm a'}}~{{slot.end | date: 'h:mm a'}}
+				</span>
+				<span class="pull-right" ng-hide="slot.active">
+					差{{slot.numOfPeopleTilActive}}人就開放
+				</span>
+				<span class="pull-right" ng-show="slot.active">
+					已開放 ｜ 差{{slot.numOfPeopleTilFull}}就客滿	
+				</span>
+			</div>	
 		</div>
 	</div>
-	<div class="col-sm-12" style="background-color: white;">
-		<div class="page-header">
-			<h1>預約時段</h1>
-		</div>
-	</div>
-	<div class="col-sm-12" style="background-color: white;">
+	<div class="col-sm-12 white-bg padding-10">
 		<div class="page-header">
 			<h1>預約細節</h1>
 		</div>
+		<p class="text-info">
+		<i class="fa fa-calendar"></i>
+		日期: {{res.beginTime | date: 'MM/dd/yyyy'}}</p>
+		<p class="text-info">
+		<i class="fa fa-clock-o"></i>
+		時段: {{res.beginString}} ~ {{res.endString}}</p>
+		<p class="text-info">
+		<i class="fa fa-users"></i>
+		人數: {{res.numOfPeople}}</p>
+		<p class="text-info">小時: {{res.duration}}</p>
+		<p class="text-info margin-bottom-20">
+		<i class="fa fa-dollar"></i>
+		金額: ${{res.pricePaid}}</p>
 	</div>
 </div>

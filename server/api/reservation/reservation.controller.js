@@ -19,7 +19,7 @@ exports.index = function(req, res) {
 
 // Get a single Reservation
 exports.show = function(req, res) {
-  Reservation.findById(req.params.id, function (err, reservation) {
+  Reservation.getReservation(req.params.id, req.user._id, function (err, reservation) {
     if(err) { return handleError(res, err); }
     if(!reservation) { return res.status(404).send('Not Found'); }
     return res.json(reservation);

@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    relationship = require('mongoose-relationship');
+    relationship = require('mongoose-relationship'),
+    deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var ReservationSchema = new Schema({
   dateReserved: Date,
@@ -39,6 +40,29 @@ var ReservationSchema = new Schema({
 });
 
 ReservationSchema.plugin(relationship, { relationshipPathName: ['reserveBy', 'courtReserved'] });
+
+ReservationSchema.plugin(deepPopulate, {
+  populate: {
+    'timeslot': {
+      select: 'start end numOfPeopleTilFull numOfPeopleTilActive active full'
+    },
+    'courtReserved': {
+      select: 'court address'
+    }
+  }
+});
+
+ReservationSchema.statics = {
+  getReservation: function(id, userId, cb) {
+    //find reservation by id and userId
+    this.findOne({$and: [
+       {_id: id}, {reserveBy: userId}
+      ]})
+      .deepPopulate('timeslot courtReserved')
+      .exec(cb);
+
+  }
+};
 
 
 module.exports = mongoose.model('Reservation', ReservationSchema);

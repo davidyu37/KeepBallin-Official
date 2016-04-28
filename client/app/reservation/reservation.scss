@@ -1,0 +1,34 @@
+.margin-bottom-20 {
+	margin-bottom: 20px;
+}
+
+.timeslot-display {
+	padding: 10px; 
+	border: 1px solid $brand-primary; 
+	border-radius: 5px; 
+	margin: 5px;
+	&:hover {
+		color: white;
+		background-color: $brand-primary;
+	}
+}
+
+.white-bg {
+	background-color: white;
+}
+
+.padding-10 {
+	padding: 10px;
+}
+
+.text-info {
+	font-size: 120%;
+	border-left: 2px solid black;
+	padding: 5px;
+	margin-left: 10px;
+	color: black;
+	&:hover {
+		background-color: $brand-primary;
+		color: white;
+	}
+}
