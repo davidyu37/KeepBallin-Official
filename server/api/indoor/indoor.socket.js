@@ -11,16 +11,6 @@ exports.register = function(socket) {
   });
 }
 
-// function onSave(socket, doc, cb) { 
-//   doc.deepPopulate('creator.avatar creator participants.avatar participants', function(err, _doc) {
-//     socket.emit('indoor:save', doc);
-//   });
-// }
-
-// function onRemove(socket, doc, cb) {
-//   socket.emit('indoor:remove', doc);
-// }
-
 function onSave(socket, doc, cb) {
   socket.emit('indoor:save', doc);
 }

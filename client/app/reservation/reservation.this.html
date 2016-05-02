@@ -6,7 +6,7 @@
 				<span class="label label-primary" ng-show="res.active">已開放</span>
 			</h1>
 		</div>
-		<div class="margin-bottom-20">
+		<div class="margin-bottom-20" ng-hide="res.active">
 			<timer class="coutdown" end-time="res.timeForConfirmation">
 				{{days}} 天 {{hours}}時 {{minutes}} 分 {{seconds}}秒後截止預約
 			</timer>
@@ -22,8 +22,11 @@
 				<span class="pull-right" ng-hide="slot.active">
 					差{{slot.numOfPeopleTilActive}}人就開放
 				</span>
-				<span class="pull-right" ng-show="slot.active">
+				<span class="pull-right" ng-show="slot.active && !slot.full">
 					已開放 ｜ 差{{slot.numOfPeopleTilFull}}就客滿	
+				</span>
+				<span class="pull-right" ng-show="slot.full">
+					已客滿	
 				</span>
 			</div>	
 		</div>
@@ -32,17 +35,17 @@
 		<div class="page-header">
 			<h1>預約細節</h1>
 		</div>
-		<p class="text-info">
+		<p class="reserve-info">
 		<i class="fa fa-calendar"></i>
 		日期: {{res.beginTime | date: 'MM/dd/yyyy'}}</p>
-		<p class="text-info">
+		<p class="reserve-info">
 		<i class="fa fa-clock-o"></i>
 		時段: {{res.beginString}} ~ {{res.endString}}</p>
-		<p class="text-info">
+		<p class="reserve-info">
 		<i class="fa fa-users"></i>
 		人數: {{res.numOfPeople}}</p>
-		<p class="text-info">小時: {{res.duration}}</p>
-		<p class="text-info margin-bottom-20">
+		<p class="reserve-info">小時: {{res.duration}}</p>
+		<p class="reserve-info margin-bottom-20">
 		<i class="fa fa-dollar"></i>
 		金額: ${{res.pricePaid}}</p>
 	</div>

@@ -5,12 +5,12 @@ var mongoose = require('mongoose'),
     relationship = require('mongoose-relationship'),
     moment = require('moment'),
     async = require('async'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    Reservation = require('../reservation/reservation.model');
 
 var TimeslotSchema = new Schema({
   start: Date,
   end: Date,
-  title: String,
   numOfPeople: Number,
   minCapacity: Number, 
   maxCapacity: Number,
@@ -30,11 +30,11 @@ var TimeslotSchema = new Schema({
     type: Boolean,
     default: false
   },
-  reservation: {
+  reservation: [{
     type: Schema.ObjectId,
     ref: 'Reservation',
     childPath: 'timeslot'
-  },
+  }],
   courtReserved: {
     type: Schema.ObjectId,
     ref: 'Indoor',
@@ -58,6 +58,7 @@ TimeslotSchema.statics = {
     var end = moment(obj.start);
     var model = this;
     var i = 1;
+    var timeslots = [];
     async.whilst(function() { return i <= numOfTimeSlot; }, function(callback) {
       //If it's not the first timeslot set end time to the end of last timeslot
       if(i > 1) {
@@ -65,11 +66,11 @@ TimeslotSchema.statics = {
       }
       var newend = end.add(30, 'm');
       obj.end = newend;
-      // i++;
       model.findOne({$and: [
 
         { start: obj.start },
-        { end: obj.end }
+        { end: obj.end },
+        { courtReserved: obj.courtReserved }
 
       ]}, function(err, data) {
         if(err) { console.console(err); return; }
@@ -98,12 +99,23 @@ TimeslotSchema.statics = {
             completeSlot.full = true;
           }
 
+          timeslots.push(completeSlot._id);
+
           completeSlot.save(function(err, data) {
             i++;
-            callback(null);
+            callback(null, timeslots);
           });
 
         } else {
+          //Add reservation
+          data.reservation.push(obj.reservation);
+          //Check if user already reserve before
+          if(data.reserveBy.indexOf(obj.reserveBy) < 0) {
+            data.reserveBy.push(obj.reserveBy);
+          }
+          data.reserveBy = _.merge(data.reserveBy, obj.reserveBy);
+          //Update the notification time
+          data.timeForConfirmation = obj.timeForConfirmation;
           //When the data exist, update the number of people
           data.numOfPeople += obj.numOfPeople;
           //calculate numOfPeopleTilActive and numOfPeopleTilFull
@@ -115,7 +127,6 @@ TimeslotSchema.statics = {
             data.numOfPeopleTilFull = data.maxCapacity - data.numOfPeople;
           }
 
-
           //check if the current numOfPeople fulfills the minCapacity
           if(data.numOfPeople >= data.minCapacity) {
             data.active = true;
@@ -125,26 +136,47 @@ TimeslotSchema.statics = {
             data.full = true;
           }
 
+          timeslots.push(data._id);
+
           data.save(function(err, data) {
             i++;
-            callback(null);
+            callback(null, timeslots);
           }); 
         }
-        
       });
 
-
-    }, function(err) {
+    }, function(err, arr) {
       if(err) {
         console.console('error while saving timeslot', err);
       }
-      cb();
+      cb(arr);
     });
   },
   findByCourt: function(id, cb) {
     var dateNow = new Date();
     this.find({ 'courtReserved': id, 'start': {$gt: dateNow}})
     .exec(cb);
+  },
+  //Checks the timeslots for active
+  checkActive: function(arryOfIds, cb) {
+    var model = this;
+    async.reduce(arryOfIds, true, function(active, id, callback){
+        model.findById(id, 'active', function(err, timeslot) {
+          //When at least one timeslot is not active, return active = false
+          if( active === false ) {
+            //There's already a timeslot that's not active, do nothing
+            callback(null, active);
+          } else {
+            //Initial value is true, so the first timeslot will come here, if it's active, it will stay true
+            if(!timeslot.active) {
+              active = false;
+            }
+            callback(null, active);
+          }
+        });
+    }, function(err, result){
+        cb(result);
+    });
   }
 };
 

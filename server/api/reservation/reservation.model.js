@@ -60,8 +60,13 @@ ReservationSchema.statics = {
       ]})
       .deepPopulate('timeslot courtReserved')
       .exec(cb);
-
   }
+  // getTimeslots: function(id, cb) {
+  //   //find reservation timeslot ids
+  //   this.findOne({_id: id})
+  //   .select('timeslot')
+  //   .exec(cb);
+  // }
 };
 
 

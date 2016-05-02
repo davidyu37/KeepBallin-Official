@@ -239,8 +239,6 @@ angular.module('keepballin')
     //Function for tooltip to check if user is login
     $scope.loggedIn = Auth.isLoggedIn;
 
-    console.log($scope.currentcourt);
-
     //Sending reservation
     $scope.reserveNow = function(form) {
 
@@ -441,7 +439,7 @@ angular.module('keepballin')
 
     //Change language of calendar
     $scope.uiConfig.calendar.dayNames = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-    $scope.uiConfig.calendar.dayNamesShort = ['日', '一', '二', '三', '四', '五', '六'];
+    $scope.uiConfig.calendar.dayNamesShort = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
     $scope.uiConfig.calendar.monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
     $scope.uiConfig.calendar.buttonText = {
         today:    '今天',
