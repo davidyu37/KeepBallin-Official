@@ -16,7 +16,8 @@ exports.register = function(socket) {
 }
 
 function onSave(socket, doc, cb) {
-  socket.emit('timeslot' + doc.courtReserved + ':save', doc);
+	//Update only the timeslots of the court
+  	socket.emit('timeslot' + doc.courtReserved + ':save', doc);
 }
 
 function onRemove(socket, doc, cb) {

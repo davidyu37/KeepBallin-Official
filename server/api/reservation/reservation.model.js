@@ -44,7 +44,7 @@ ReservationSchema.plugin(relationship, { relationshipPathName: ['reserveBy', 'co
 ReservationSchema.plugin(deepPopulate, {
   populate: {
     'timeslot': {
-      select: 'start end numOfPeopleTilFull numOfPeopleTilActive active full'
+      select: 'start end numOfPeople minCapacity maxCapacity numOfPeopleTilFull numOfPeopleTilActive timeForConfirmation courtReserved active full'
     },
     'courtReserved': {
       select: 'court address'
@@ -60,13 +60,12 @@ ReservationSchema.statics = {
       ]})
       .deepPopulate('timeslot courtReserved')
       .exec(cb);
+  },
+  getByUser: function(userId, cb) {
+    this.find({reserveBy: userId})
+      .deepPopulate('courtReserved')
+      .exec(cb);
   }
-  // getTimeslots: function(id, cb) {
-  //   //find reservation timeslot ids
-  //   this.findOne({_id: id})
-  //   .select('timeslot')
-  //   .exec(cb);
-  // }
 };
 
 

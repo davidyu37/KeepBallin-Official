@@ -88,6 +88,14 @@ input, input:before, input:after {
     background-color: $brand-primary;
 }
 
+.warningBg {
+  background-color: rgb(255, 192, 25);
+}
+
+.fullBg {
+  background-color: rgb(80, 45, 23);
+}
+
 input.ng-invalid, textarea.ng-invalid {
     border-color: $brand-primary;
 }

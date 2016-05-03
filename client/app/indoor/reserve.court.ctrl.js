@@ -351,7 +351,7 @@ angular.module('keepballin')
         socket.syncUpdates('timeslot' + $scope.currentcourt._id, $scope.events);
         
         $scope.$on('$destroy', function () {
-            socket.unsyncUpdates('timeslot');
+            socket.unsyncUpdates('timeslot' + $scope.currentcourt._id);
         });
     });
 

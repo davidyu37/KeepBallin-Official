@@ -8,6 +8,9 @@ var router = express.Router();
 
 router.get('/', controller.index);
 
+//Show a list of reservation for the user
+router.get('/getByUser', auth.isAuthenticated(), controller.getByUser);
+
 router.get('/:id', auth.isAuthenticated(), controller.show);
 
 router.post('/', auth.isAuthenticated(), controller.create);

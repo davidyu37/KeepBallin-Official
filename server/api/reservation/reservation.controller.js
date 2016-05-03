@@ -29,6 +29,15 @@ exports.show = function(req, res) {
   });
 };
 
+// Get a single Reservation for the user
+exports.getByUser = function(req, res) {
+  Reservation.getByUser( req.user._id, function (err, reservations) {
+    if(err) { return handleError(res, err); }
+    if(!reservations) { return res.status(404).send('Not Found'); }
+    return res.json(reservations);
+  });
+};
+
 // Creates a new invite in the DB.
 exports.create = function(req, res) {
   //Attach user's id to invite's info
@@ -107,5 +116,6 @@ exports.create = function(req, res) {
 };
 
 function handleError(res, err) {
+  console.log(err);
   return res.status(500).send(err);
 }

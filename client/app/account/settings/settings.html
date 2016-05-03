@@ -9,6 +9,7 @@
         <tab class="tab" heading="我的球場" ng-click="getTemplate(3)"></tab>
         <!-- <tab class="tab" heading="我的活動" ng-click="getTemplate(2)"></tab> -->
         <tab class="tab" heading="我的球隊" ng-click="getTemplate(1)"></tab>
+        <tab class="tab" heading="我的預約" ng-click="getTemplate(4)"></tab>
       </tabset>
     </div>
     <div class="col-sm-12">
@@ -16,7 +17,8 @@
         <div ng-show="profile" ng-include="'app/account/settings/temp/profile/profile.html'"></div>
         <div ng-show="team" ng-include="'app/account/settings/temp/team/team.html'"></div>
         <div ng-show="match" ng-include="'app/account/settings/temp/match/match.html'"></div>
-        <div ng-show="court" ng-include="'app/account/settings/temp/court/mycourt.html'"></div>  
+        <div ng-show="court" ng-include="'app/account/settings/temp/court/mycourt.html'"></div> 
+        <div ng-show="reservation" ng-include="'app/account/settings/temp/reservation/reservation.html'"></div>  
       </div>
     </div>
   </div>

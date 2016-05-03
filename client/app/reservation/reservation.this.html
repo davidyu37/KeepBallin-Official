@@ -14,7 +14,7 @@
 			<p>如截止時間已到，其中一個時段沒有達到最低人數限制，此預約將自動取消</p>
 		</div>
 		<div class="margin-bottom-20">
-			<div ng-repeat="slot in res.timeslot" class="timeslot-display">
+			<div ng-repeat="slot in res.timeslot" class="timeslot-display pointer" ng-click="openTimeslot(slot)">
 				<span>
 					<i class="fa fa-clock-o"></i>
 					{{slot.start | date: 'h:mm a'}}~{{slot.end | date: 'h:mm a'}}
@@ -44,7 +44,9 @@
 		<p class="reserve-info">
 		<i class="fa fa-users"></i>
 		人數: {{res.numOfPeople}}</p>
-		<p class="reserve-info">小時: {{res.duration}}</p>
+		<p class="reserve-info">
+		<i class="fa fa-map-pin"></i>
+		球場名: {{res.courtReserved.court}} 地址: {{res.courtReserved.address}}</p>
 		<p class="reserve-info margin-bottom-20">
 		<i class="fa fa-dollar"></i>
 		金額: ${{res.pricePaid}}</p>

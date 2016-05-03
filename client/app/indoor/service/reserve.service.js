@@ -6,6 +6,13 @@ angular.module('keepballin')
     { id: '@id' }, {
       update: {
         method: 'PUT'
+      },
+      getByUser: {
+      	method: 'GET',
+      	isArray: true,
+      	params: {
+      		id: 'getByUser'
+      	}
       }
 	  });
   }]);

@@ -12,6 +12,7 @@ angular.module('keepballin')
       $scope.team = false;
       $scope.match = false;
       $scope.court = false;
+      $scope.reservation = false;
     
       switch (temp) {
         case 0: $scope.profile = true;
@@ -21,6 +22,8 @@ angular.module('keepballin')
         case 2: $scope.match = true;
         break;
         case 3: $scope.court = true;
+        break;
+        case 4: $scope.reservation = true;
         break;
       }
     };

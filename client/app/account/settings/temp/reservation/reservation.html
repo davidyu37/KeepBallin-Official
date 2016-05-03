@@ -1,0 +1,19 @@
+<div class="jumbotron" ng-controller="MyReservationCtrl">
+	<ul class="list-group">
+		<a class="list-group-item" ng-repeat="r in reserves" ui-sref="reservationthis({id: r._id})">
+			<i class="fa fa-calendar-o"></i>
+			{{r.beginTime | date}}
+			<i class="fa fa-clock-o"></i>
+			{{r.beginString}}~{{r.endString}}
+			<i class="fa fa-users"></i>
+			{{r.numOfPeople}}
+			<i class="fa fa-dollar"></i>
+			{{r.pricePaid}}
+			<i class="fa fa-map-pin"></i>
+			{{r.courtReserved.court}}
+			<span class="badge warningBg" ng-hide="r.active">未開放</span>
+			<span class="badge primaryBg" ng-show="r.active">開放</span>
+			<span class="badge fullBg" ng-show="r.full">客滿</span>
+		</a>
+	</ul>
+</div>
