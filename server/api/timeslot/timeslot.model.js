@@ -5,8 +5,7 @@ var mongoose = require('mongoose'),
     relationship = require('mongoose-relationship'),
     moment = require('moment'),
     async = require('async'),
-    _ = require('lodash'),
-    Reservation = require('../reservation/reservation.model');
+    _ = require('lodash');
 
 var TimeslotSchema = new Schema({
   start: Date,
@@ -59,6 +58,7 @@ TimeslotSchema.statics = {
     var model = this;
     var i = 1;
     var timeslots = [];
+    var reservations = [];
     async.whilst(function() { return i <= numOfTimeSlot; }, function(callback) {
       //If it's not the first timeslot set end time to the end of last timeslot
       if(i > 1) {
@@ -103,7 +103,7 @@ TimeslotSchema.statics = {
 
           completeSlot.save(function(err, data) {
             i++;
-            callback(null, timeslots);
+            callback(null, timeslots, reservations);
           });
 
         } else {
@@ -130,6 +130,7 @@ TimeslotSchema.statics = {
           //check if the current numOfPeople fulfills the minCapacity
           if(data.numOfPeople >= data.minCapacity) {
             data.active = true;
+            reservations = _.merge(reservations, data.reservation);
           }
 
           if(data.numOfPeople >= data.maxCapacity) {
@@ -140,16 +141,17 @@ TimeslotSchema.statics = {
 
           data.save(function(err, data) {
             i++;
-            callback(null, timeslots);
+            callback(null, timeslots, reservations);
           }); 
         }
       });
 
-    }, function(err, arr) {
+    }, function(err, arr, res) {
       if(err) {
         console.console('error while saving timeslot', err);
       }
-      cb(arr);
+
+      cb(arr, res);
     });
   },
   findByCourt: function(id, cb) {
@@ -161,7 +163,7 @@ TimeslotSchema.statics = {
   checkActive: function(arryOfIds, cb) {
     var model = this;
     async.reduce(arryOfIds, true, function(active, id, callback){
-        model.findById(id, 'active', function(err, timeslot) {
+        model.findById(id, 'active reservation', function(err, timeslot) {
           //When at least one timeslot is not active, return active = false
           if( active === false ) {
             //There's already a timeslot that's not active, do nothing

@@ -36,7 +36,8 @@ var ReservationSchema = new Schema({
     ref: 'Indoor',
     childPath: 'reservation'
   },
-  timeslot: [{ type:Schema.ObjectId, ref:"Timeslot" }]
+  timeslot: [{ type:Schema.ObjectId, ref:"Timeslot" }],
+  confirmationCode: String
 });
 
 ReservationSchema.plugin(relationship, { relationshipPathName: ['reserveBy', 'courtReserved'] });
@@ -61,6 +62,7 @@ ReservationSchema.statics = {
       .deepPopulate('timeslot courtReserved')
       .exec(cb);
   },
+
   getByUser: function(userId, cb) {
     this.find({reserveBy: userId})
       .deepPopulate('courtReserved')

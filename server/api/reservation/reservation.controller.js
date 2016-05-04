@@ -5,11 +5,19 @@
 
 'use strict';
 
-var _ = require('lodash');
-var Reservation = require('./reservation.model');
-var Timeslot = require('../timeslot/timeslot.model');
-var schedule = require('node-schedule');
-var moment = require('moment');
+var _ = require('lodash'),
+Reservation = require('./reservation.model'),
+Timeslot = require('../timeslot/timeslot.model'),
+schedule = require('node-schedule'),
+moment = require('moment'),
+async = require('async'),
+crypto = require('crypto');
+
+function randomValueHex (len) {
+    return crypto.randomBytes(Math.ceil(len/2))
+        .toString('hex') // convert to hexadecimal format
+        .slice(0,len);   // return required number of characters
+}
 
 
 // Gets a list of Reservations
@@ -47,7 +55,11 @@ exports.create = function(req, res) {
     if(err) { return handleError(res, err); }
 
     if(reserve.active) {
-      //When the reservation is already active, send notification with qr code and confirmation code
+      //The reservation is already active, generate confirmation code and notify
+      var confirmationCode = randomValueHex(7);
+      console.log('Confirmation Code', confirmationCode);
+      reserve.confirmationCode = confirmationCode;
+      reserve.save();
     }
  	
  	  //Calculate individual timeslot rev
@@ -76,15 +88,34 @@ exports.create = function(req, res) {
 
 
     //Create individual time slot
-    Timeslot.generateTimeslot(singleTimeslot, numOfTimeSlot, function(slots) {
+    Timeslot.generateTimeslot(singleTimeslot, numOfTimeSlot, function(slots, reservationsNeedChecking) {
       reserve.timeslot = slots;
-      Timeslot.checkActive(slots, function(active) {
-        if(active) {
-          //If all the timeslots reserved are active, change reservation to active
-          reserve.active = true;
-        } 
-        reserve.save();
-      })
+      //Save the timeslots to reservation if the timeslots already exist
+      reserve.save();
+      console.log('reservations that need checking', reservationsNeedChecking);
+      if(reservationsNeedChecking) {
+        async.each(reservationsNeedChecking, function(id, callback) {
+          Reservation.findById(id, function(err, eachReserve) {
+            if(err) { console.log(err); }
+            Timeslot.checkActive(eachReserve.timeslot, function(active) {
+              if(active) {
+                //Only Do the following if it's not active
+                if(!eachReserve.active) {
+                  //If all the timeslots reserved are active, change reservation to active
+                  eachReserve.active = true;
+                  //Generate confirmation code
+                  console.log('This reservation became active', eachReserve._id);
+                  
+                }
+              } 
+              eachReserve.save();
+            })
+          });
+        }, function(err) {
+          if(err) { console.log(err); }
+        });
+      }
+  
       //Schedule reservation check
       //The scheduled time should be timeForConfirmation
       //For testing purpose the task will execute after two minute
@@ -98,6 +129,10 @@ exports.create = function(req, res) {
             //Success notification
             if(active) {
               console.log('reservation completed');
+              var confirmationCode = randomValueHex(7);
+              console.log('Confirmation Code', confirmationCode);
+              reserve.confirmationCode = confirmationCode;
+              reserve.save();
             } else {
               //Failed reservation notice
               //Return KB points
