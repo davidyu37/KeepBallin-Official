@@ -3,16 +3,6 @@
 angular.module('keepballin')
   .controller('TeammateCtrl', ['$scope', 'socket', 'Auth', 'Chat', 'Global', 'rooms', '$state', 'Lobby', 'Invite', '$timeout', 'User', function ($scope, socket, Auth, Chat, Global, rooms, $state, Lobby, Invite, $timeout, User) {
 
-    // Lobby.query(function(data) {
-    //     if(data[0]) {
-    //         $scope.numberOfUsers = data[0].userOnline.length;
-    //     }
-    // });
-
-    // socket.getUsersOnline($scope.usersOnline, function(users) {
-    //     $scope.numberOfUsers = users.length;
-    // });
-
     //Global chat begins
     User.getUserName(function(names) {
         $scope.takenNames = names;
@@ -20,6 +10,22 @@ angular.module('keepballin')
 
     var userName = angular.element('#userName');
     userName.focus();
+
+    //Delete message, only for manager or admin
+    $scope.removeMessage = function(message, globalId) {
+     
+        Global.deleteMessage({ globalId: globalId, messageId: message._id }, function() {
+            console.log('deleted');
+        });
+    };
+
+    $scope.checkPerson = function() {
+        if(Auth.isAdmin() || Auth.isManager()) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     //Get the element for chat thread container and its height
     var globalThread = angular.element(document.getElementById('globalThread'));
@@ -145,13 +151,7 @@ angular.module('keepballin')
         by: $scope.name
       };
       socket.globalMessage(message);
-      // Global.send(message, function(data) {
-      //   $scope.global = data;
-      //   $timeout(function() {
-      //       globalThread.scrollTo(0, globalContent[0].clientHeight);
-      //   });
-      //   socket.globalMessage(data.messages[0]);
-      // });
+      
       $scope.message = '';
     };
 

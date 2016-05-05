@@ -42,16 +42,6 @@ exports.enterRoom = function(req, res) {
 	});
 };
 
-//Send global message
-// exports.sendMessage = function(req, res) {
-// 	var message = {
-// 		message: req.body.message,
-//         by: req.body.by
-// 	};
-// 	Global.saveMessage(req.body.room, message, function(global) {
-// 		return res.status(201).json(global);
-// 	});
-// };
 
 //Async loading for messages
 exports.loadMessage = function(req, res) {
@@ -63,68 +53,20 @@ exports.loadMessage = function(req, res) {
     });
 };
 
-// //only admin can create global room
-// exports.createRoom = function(req, res) {
-// 	//when global room id doesn't exist
-// 	var global = new Global(_.merge(req.body));
-// 	// _.merge({ author: req.user._id }, req.body)
-// 	global.save(function(err, global) {
-// 		if(err) { return handleError(res, err); }
-// 		return res.status(201).json(global);
-// 	});
-// };
 
 // //only admin can delete global room
-// exports.destroy = function(req, res) {
-// 	Global.findById(req.params.globalRoomId, function (err, global) {
-//     if(err) { return handleError(res, err); }
-//     if(!global) { return res.status(404).send('Not Found'); }
-//     global.remove(function(err) {
-//       if(err) { return handleError(res, err); }
-//       return res.status(204).send('No Content');
-//     });
-//   });
-// };
-
-// //Get all the global rooms
-// exports.getRooms = function(req, res) {
-// 	Global.find(function (err, rooms) {
-// 		if(err) { return handleError(res, err); }
-// 		return res.status(200).json(rooms);
-// 	});
-// };
-
-// //When user leaves the room
-// exports.leaveRoom = function(req, res) {
-// 	Global.findById(req.body.globalRoomId, function (err, global) {
-//     	if(err) { return handleError(res, err); }
-//     	if(!global) { return res.status(404).send('Not Found'); }
-//     	//Find the user
-//     	var index = global.usersOnline.indexOf(req.body.userId);
-//     	global.usersOnline.splice(index, 1);
-//     	// global.usersOnline.push(req.user._id);
-//     	global.save(function (err) {
-// 	      if (err) { return handleError(res, err); }
-// 	      return res.status(200).json(global);
-// 	    });
-//     });
-// };
-
-// //Update room
-// exports.update = function(req, res) {
-//     if(req.body._id) { delete req.body._id; }
-//   	Global.findById(req.params.globalRoomId, function (err, global) {
-//     if (err) { return handleError(res, err); }
-//     if(!global) { return res.status(404).send('Not Found'); }
-//     global.usersOnline = req.body.usersOnline;
-//     global = _.merge(req.body, global);
-//     global.save(function (err) {
-//       if (err) { return handleError(res, err); }
-//       return res.status(200).json(global);
-//     });
-//   });
-// };
-
+exports.destroy = function(req, res) {
+    console.log('body', req.body);
+    Global.findById(req.body.globalId, function (err, global) {
+        if(err) { return handleError(res, err); }
+        if(!global) { return res.status(404).send('Not Found'); }
+        global.messages.id(req.body.messageId).remove();
+        global.save(function(err) {
+            if(err) { return handleError(res, err); }
+            return res.status(204).send('No Content');
+        });
+    });
+};
 
 function handleError(res, err) {
 	console.log(err);

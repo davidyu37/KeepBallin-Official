@@ -33,6 +33,12 @@ angular.module('keepballin')
       }, 
       update: {
         method: 'PUT'
+      },
+      deleteMessage: {
+        method: 'POST',
+        params: {
+          controller: 'delete'
+        }
       }
 	  });
   }]);

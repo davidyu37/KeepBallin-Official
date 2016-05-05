@@ -34,6 +34,7 @@
 						<i class="fa fa-2x fa-spinner fa-pulse"></i>
 					</div>
 					<li class="list-group-item" ng-repeat="m in global.messages | orderBy: 'date'">
+						<i class="fa fa-trash pull-right pointer" ng-click="removeMessage(m, global._id)" ng-show="checkPerson()"></i>
 						<h4 class="list-group-heading">
 							<a>
 								{{m.by}}
