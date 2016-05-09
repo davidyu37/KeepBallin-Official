@@ -51,6 +51,10 @@ exports.create = function(req, res) {
   //Attach user's id to invite's info
   var userId = { reserveBy: req.user._id };
   var newReserve = _.merge(req.body, userId);
+  //Create salt
+  newReserve.salt = Reservation.makeSalt();
+  //Testing code
+  var code = '';
   Reservation.create(newReserve, function(err, reserve) {
     if(err) { return handleError(res, err); }
 
@@ -58,7 +62,11 @@ exports.create = function(req, res) {
       //The reservation is already active, generate confirmation code and notify
       var confirmationCode = randomValueHex(7);
       console.log('Confirmation Code', confirmationCode);
-      reserve.confirmationCode = confirmationCode;
+      //Make salt and hash code
+      code = confirmationCode;
+      reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
+
+      console.log('active reservation', reserve);
       reserve.save();
     }
  	
@@ -103,7 +111,7 @@ exports.create = function(req, res) {
                 if(!eachReserve.active) {
                   //If all the timeslots reserved are active, change reservation to active
                   eachReserve.active = true;
-                  //Generate confirmation code
+                  
                   console.log('This reservation became active', eachReserve._id);
                   
                 }
@@ -123,25 +131,32 @@ exports.create = function(req, res) {
       date = date.add(1, 'm').toDate();
       var j = schedule.scheduleJob(date, function(y){
         //Check if all timeslots are active
-        // Reservation.getTimeslots(reserve._id, function(err, reservation) {
-        //   if(err) { return handleError(res, err); }
-          Timeslot.checkActive(slots, function(active) {
-            //Success notification
-            if(active) {
-              console.log('reservation completed');
-              var confirmationCode = randomValueHex(7);
-              console.log('Confirmation Code', confirmationCode);
-              reserve.confirmationCode = confirmationCode;
-              reserve.save();
-            } else {
-              //Failed reservation notice
-              //Return KB points
-              //Update individual timeslots
-              console.log('reservation failed');
-            }
-          });
+        Timeslot.checkActive(slots, function(active) {
+          //Success notification
+          if(active) {
+            console.log('reservation completed');
+            var confirmationCode = randomValueHex(7);
+            console.log('Confirmation Code', confirmationCode);
+            //Make hash code
+            reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
+            reserve.success = true;
+            console.log('active reservation', reserve);
+            reserve.save();
+            //Send notification
 
-        // });
+          } else {
+            //Failed reservation notice
+            //Return KB points
+            console.log('reservation failed');
+            //Update individual timeslots
+            Timeslot.cancelTimeslots(reserve, function() {
+              console.log('timeslot updated', reserve.timeslot);
+              reserve.success = false;
+              reserve.save();
+            });
+
+          }
+        });
       });
       return res.status(201).json(reserve);
     });

@@ -3,7 +3,8 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     relationship = require('mongoose-relationship'),
-    deepPopulate = require('mongoose-deep-populate')(mongoose);
+    deepPopulate = require('mongoose-deep-populate')(mongoose),
+    crypto = require('crypto');
 
 var ReservationSchema = new Schema({
   dateReserved: Date,
@@ -37,7 +38,9 @@ var ReservationSchema = new Schema({
     childPath: 'reservation'
   },
   timeslot: [{ type:Schema.ObjectId, ref:"Timeslot" }],
-  confirmationCode: String
+  hashedConfirmationCode: String,
+  salt: String,
+  success: Boolean
 });
 
 ReservationSchema.plugin(relationship, { relationshipPathName: ['reserveBy', 'courtReserved'] });
@@ -67,6 +70,20 @@ ReservationSchema.statics = {
     this.find({reserveBy: userId})
       .deepPopulate('courtReserved')
       .exec(cb);
+  },
+
+  authenticate: function(plainText, reservation) {
+    return this.encryptPassword(plainText, reservation.salt) === reservation.hashedConfirmationCode;
+  },
+
+  makeSalt: function() {
+    return crypto.randomBytes(16).toString('base64');
+  },
+
+  encryptPassword: function(password, salt) {
+    if (!password || !salt) return '';
+    var bufferSalt = new Buffer(salt, 'base64');
+    return crypto.pbkdf2Sync(password, bufferSalt, 10000, 64).toString('base64');
   }
 };
 

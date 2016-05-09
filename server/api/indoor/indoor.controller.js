@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
-var Indoor = require('./Indoor.model');
+var Indoor = require('./indoor.model');
 
 
 

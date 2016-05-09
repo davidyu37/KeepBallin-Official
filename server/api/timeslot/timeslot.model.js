@@ -55,7 +55,7 @@ TimeslotSchema.statics = {
   generateTimeslot: function(obj, numOfTimeSlot, cb) {
     var start = moment(obj.start);
     var end = moment(obj.start);
-    var model = this;
+    var Model = this;
     var i = 1;
     var timeslots = [];
     var reservations = [];
@@ -66,7 +66,7 @@ TimeslotSchema.statics = {
       }
       var newend = end.add(30, 'm');
       obj.end = newend;
-      model.findOne({$and: [
+      Model.findOne({$and: [
 
         { start: obj.start },
         { end: obj.end },
@@ -77,7 +77,7 @@ TimeslotSchema.statics = {
         //When there's no timeslot yet, create one
         if(!data) {
           //When there's no timeslot, push the data to slots
-          var newSlot = new model();
+          var newSlot = new Model();
           var completeSlot = _.merge(newSlot, obj);
 
           //calculate numOfPeopleTilActive and numOfPeopleTilFull
@@ -161,9 +161,9 @@ TimeslotSchema.statics = {
   },
   //Checks the timeslots for active
   checkActive: function(arryOfIds, cb) {
-    var model = this;
+    var Model = this;
     async.reduce(arryOfIds, true, function(active, id, callback){
-        model.findById(id, 'active reservation', function(err, timeslot) {
+        Model.findById(id, 'active reservation', function(err, timeslot) {
           //When at least one timeslot is not active, return active = false
           if( active === false ) {
             //There's already a timeslot that's not active, do nothing
@@ -178,6 +178,49 @@ TimeslotSchema.statics = {
         });
     }, function(err, result){
         cb(result);
+    });
+  },
+  //Cancellation
+  cancelTimeslots: function(reservation, cb) {
+    var Model = this;
+    async.each(reservation.timeslot, function(slotId, callback) {
+       Model.findById(slotId, function(err, timeslot) {
+        //Change the number of people for the timeslot
+        timeslot.numOfPeople -= reservation.numOfPeople;
+        //Change numOfPeopleTilActive
+        if(timeslot.numOfPeople <= timeslot.minCapacity) {
+          timeslot.numOfPeopleTilActive = timeslot.minCapacity - timeslot.numOfPeople;  
+        }
+        //Change numOfPeopleTilFull
+        if(timeslot.numOfPeople <= timeslot.maxCapacity) {
+          timeslot.numOfPeopleTilFull = timeslot.maxCapacity - timeslot.numOfPeople;
+        }
+        //Change active or full base on numOfPeople
+        if(timeslot.numOfPeople < timeslot.maxCapacity) {
+          timeslot.full = false;
+        }
+
+        if(timeslot.numOfPeople < timeslot.minCapacity) {
+          //When timeslot's num of people falls below min capacity, it's not active
+          timeslot.active = false;
+        }
+
+        //Remove reservation from reservation array
+        var indexOfReservation = timeslot.reservation.indexOf(reservation._id);
+        timeslot.reservation.splice(indexOfReservation, 1);
+
+        //Remove user id from reserveby array
+        var indexOfUser = timeslot.reserveBy.indexOf(reservation.reserveBy);
+        timeslot.reserveBy.splice(indexOfUser, 1);
+        
+        timeslot.save(function(err, data) {
+          if(err) { console.log(err); }
+          callback();
+        });
+
+       });
+    }, function(err) {
+      cb();
     });
   }
 };
