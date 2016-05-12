@@ -40,7 +40,10 @@ var ReservationSchema = new Schema({
   timeslot: [{ type:Schema.ObjectId, ref:"Timeslot" }],
   hashedConfirmationCode: String,
   salt: String,
-  success: Boolean
+  status: {
+    type: String, 
+    default: 'waiting'
+  }
 });
 
 ReservationSchema.plugin(relationship, { relationshipPathName: ['reserveBy', 'courtReserved'] });

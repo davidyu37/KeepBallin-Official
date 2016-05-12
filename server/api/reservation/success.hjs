@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+@media only screen and (max-width:600px) {
+  table[class="body"] img {
+    width: auto !important;
+    height: auto !important;
+  }
+  table[class="body"] center {
+    min-width: 0 !important;
+  }
+  table[class="body"] .container {
+    width: 95% !important;
+  }
+  table[class="body"] .row {
+    width: 100% !important;
+    display: block !important;
+  }
+  table[class="body"] .wrapper {
+    display: block !important;
+    padding-right: 0 !important;
+  }
+  table[class="body"] .columns,table[class="body"] .column {
+    table-layout: fixed !important;
+    float: none !important;
+    width: 100% !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    display: block !important;
+  }
+  table[class="body"] .wrapper.first .columns,table[class="body"] .wrapper.first .column {
+    display: table !important;
+  }
+  table[class="body"] table.columns td,table[class="body"] table.column td {
+    width: 100% !important;
+  }
+  table[class="body"] .columns td.one,table[class="body"] .column td.one {
+    width: 8.33333% !important;
+  }
+  table[class="body"] .columns td.two,table[class="body"] .column td.two {
+    width: 16.66667% !important;
+  }
+  table[class="body"] .columns td.three,table[class="body"] .column td.three {
+    width: 25% !important;
+  }
+  table[class="body"] .columns td.four,table[class="body"] .column td.four {
+    width: 33.33333% !important;
+  }
+  table[class="body"] .columns td.five,table[class="body"] .column td.five {
+    width: 41.66667% !important;
+  }
+  table[class="body"] .columns td.six,table[class="body"] .column td.six {
+    width: 50% !important;
+  }
+  table[class="body"] .columns td.seven,table[class="body"] .column td.seven {
+    width: 58.33333% !important;
+  }
+  table[class="body"] .columns td.eight,table[class="body"] .column td.eight {
+    width: 66.66667% !important;
+  }
+  table[class="body"] .columns td.nine,table[class="body"] .column td.nine {
+    width: 75% !important;
+  }
+  table[class="body"] .columns td.ten,table[class="body"] .column td.ten {
+    width: 83.33333% !important;
+  }
+  table[class="body"] .columns td.eleven,table[class="body"] .column td.eleven {
+    width: 91.66667% !important;
+  }
+  table[class="body"] .columns td.twelve,table[class="body"] .column td.twelve {
+    width: 100% !important;
+  }
+  table[class="body"] td.offset-by-one,table[class="body"] td.offset-by-two,table[class="body"] td.offset-by-three,table[class="body"] td.offset-by-four,table[class="body"] td.offset-by-five,table[class="body"] td.offset-by-six,table[class="body"] td.offset-by-seven,table[class="body"] td.offset-by-eight,table[class="body"] td.offset-by-nine,table[class="body"] td.offset-by-ten,table[class="body"] td.offset-by-eleven {
+    padding-left: 0 !important;
+  }
+  table[class="body"] table.columns td.expander {
+    width: 1px !important;
+  }
+  table[class="body"] .right-text-pad,table[class="body"] .text-pad-right {
+    padding-left: 10px !important;
+  }
+  table[class="body"] .left-text-pad,table[class="body"] .text-pad-left {
+    padding-right: 10px !important;
+  }
+  table[class="body"] .hide-for-small,table[class="body"] .show-for-desktop {
+    display: none !important;
+  }
+  table[class="body"] .show-for-small,table[class="body"] .hide-for-desktop {
+    display: inherit !important;
+  }
+}
+</style>
+  </head>
+  <body style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; min-width: 100%; padding: 0; text-align: left; width: 100%;">
+    <table class="body" style="background-color: #d9d9d9; border-collapse: collapse; border-spacing: 0; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; height: 100%; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;">
+      <tr style="padding: 0; text-align: left; vertical-align: top;">
+        <td align="center" valign="top" class="center" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: center; vertical-align: top; word-break: break-word;">
+          <center style="min-width: 580px; width: 100%;">
+            <table class="row header" style="border-collapse: collapse; border-spacing: 0; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">
+              <tr style="padding: 0; text-align: left; vertical-align: top;">
+                <h1 class="logo" style="background-color: #E6471C; color: #fff; font-family: Helvetica,Arial,sans-serif; font-size: 40px; font-weight: 400; line-height: 1.3; margin: 0; padding: 15px; text-align: center; word-break: normal;">KeepBallin</h1>
+              </tr>
+            </table>
+            <!-- Email content-->
+            <table class="container content" style="background-color: #fff; border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: inherit; vertical-align: top; width: 580px;">
+              <tr style="padding: 0; text-align: left; vertical-align: top;">
+                <td style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; word-break: break-word;">
+                  <!-- content start-->
+                  <table class="row" style="border-collapse: collapse; border-spacing: 0; display: block; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">
+                    <tbody>
+                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                        <th>
+                          <table class="twelve columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
+                            <tbody>
+                              <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                <th>
+                                  <h2 class="center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 36px; font-weight: 400; line-height: 1.3; margin: 10px; padding: 0; text-align: center; word-break: normal;">感謝您的預約</h2>
+                                </th>
+                                <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <table class="twelve columns success" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
+                            <tbody>
+                              <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                <td class="panel twelve" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: #5da423; border: 1px solid #d9d9d9; border-collapse: collapse; border-color: #457a1a; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px; text-align: left; vertical-align: top; width: 100%; word-break: break-word;">
+                                  <p class="message center padding-top" style="color: #fff; font-family: Helvetica,Arial,sans-serif; font-size: 20px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; padding-top: 10px; text-align: center;">
+                                  <i class="fa fa-check-square-o" style="-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font: 14px/1 FontAwesome; font-size: inherit; text-rendering: auto;"></i>
+                                  &nbsp; 預約成功</p>
+                                </td>
+                                <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: #5da423; border-collapse: collapse; border-color: #457a1a; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                      </tr>
+                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                        <th>
+                          <table class="twelve columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
+                            <tr style="padding: 0; text-align: left; vertical-align: top;">
+                              <th>
+                                <p class="center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: center;">
+                                {{name}}您好，請保管好驗證碼與QR-Code, 入場與出場時需要使用</p>
+                              </th>
+                              <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
+                            </tr>
+                          </table>
+                        </th>
+                      </tr> 
+                    </tbody>
+                  </table>
+                  <!-- Break Tag for row-->
+                  <table class="row" style="border-collapse: collapse; border-spacing: 0; display: block; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">
+                    <tr style="padding: 0; text-align: left; vertical-align: top;">
+                      <td style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; word-break: break-word;">
+                        <table class="six columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; margin-bottom: 10px; padding: 0; text-align: left; vertical-align: top; width: 280px;">
+                          <tr style="padding: 0; text-align: left; vertical-align: top;">
+                            <td class="panel" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: 0 0; border: 1px solid #d9d9d9; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px; text-align: left; vertical-align: top; word-break: break-word;">
+                              <h4 style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 28px; font-weight: 400; line-height: 1.3; margin: 0; margin-bottom: 5px; padding: 0; text-align: left; word-break: normal;">驗證碼:</h4>
+                              <h4 style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 28px; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; word-break: normal;">{{confirmationCode}}</h4>
+                              <img class="center" src="{{url}}" alt="QR Code" style="-ms-interpolation-mode: bicubic; clear: both; display: block; float: none; margin: 0 auto; max-width: 100%; outline: none; text-decoration: none; width: auto;">
+                            </td>
+                            <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
+                          </tr>
+                        </table>
+                        <table class="twelve columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
+                          <tr style="padding: 0; text-align: left; vertical-align: top;">
+                            <td class="panel" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: 0 0; border: 1px solid #d9d9d9; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px; text-align: left; vertical-align: top; word-break: break-word;">
+                              <h6 style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 20px; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; word-break: normal;">訂單細節</h6>
+                              <hr style="background-color: #d9d9d9; border: none; color: #d9d9d9; height: 1px;">
+                              <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                  <th class="large-offset-1 small-12 large-3 columns first">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <i class="fa fa-calendar-o" style="-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font: 14px/1 FontAwesome; font-size: inherit; text-rendering: auto;"></i>
+                                          日期:
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                  <th class="small-12 large-8 columns last">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <p class="small-text-center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">{{dateReserved}}</p>
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                </tr>
+                              </table>
+                              <hr style="background-color: #d9d9d9; border: none; color: #d9d9d9; height: 1px;">
+                             <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                  <th class="large-offset-1 small-12 large-3 columns first">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <i class="fa fa-clock-o" style="-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font: 14px/1 FontAwesome; font-size: inherit; text-rendering: auto;"></i>
+                                          時段:
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                  <th class="small-12 large-8 columns last">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <p class="small-text-center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">{{startTime}} ~ {{endTime}}</p>
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                </tr>
+                              </table>
+                              <hr style="background-color: #d9d9d9; border: none; color: #d9d9d9; height: 1px;">
+                              <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                  <th class="large-offset-1 small-12 large-3 columns first">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <i class="fa fa-users" style="-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font: 14px/1 FontAwesome; font-size: inherit; text-rendering: auto;"></i>
+                                          人數:
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                  <th class="small-12 large-8 columns last">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <p class="small-text-center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">{{numOfPeople}}人</p>
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                </tr>
+                              </table>
+                              <hr style="background-color: #d9d9d9; border: none; color: #d9d9d9; height: 1px;">
+                              <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                  <th class="large-offset-1 small-12 large-3 columns first">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <i class="fa fa-map-pin" style="-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font: 14px/1 FontAwesome; font-size: inherit; text-rendering: auto;"></i>
+                                          球場名:
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                  <th class="small-12 large-8 columns last">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <p class="small-text-center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">{{courtName}}</p>
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                </tr>
+                              </table>
+                              <hr style="background-color: #d9d9d9; border: none; color: #d9d9d9; height: 1px;">
+                              <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                  <th class="large-offset-1 small-12 large-3 columns first">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <i class="fa fa-map" style="-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font: 14px/1 FontAwesome; font-size: inherit; text-rendering: auto;"></i>
+                                          地址:
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                  <th class="small-12 large-8 columns last">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <p class="small-text-center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">{{courtAddress}}</p>
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                </tr>
+                              </table>
+                              <hr style="background-color: #d9d9d9; border: none; color: #d9d9d9; height: 1px;">
+                              <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                  <th class="large-offset-1 small-12 large-3 columns first">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <i class="fa fa-dollar" style="-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font: 14px/1 FontAwesome; font-size: inherit; text-rendering: auto;"></i>
+                                          金額:
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                  <th class="small-12 large-8 columns last">
+                                    <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                      <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                        <th>
+                                          <p class="small-text-center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">{{pricePaid}}NTD</p>
+                                        </th>
+                                      </tr>
+                                    </table>
+                                  </th>
+                                </tr>
+                              </table>
+                            </td>
+                            <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
+                          </tr>
+                        </table><br>
+                      </td>
+                    </tr>
+                  </table><br><br>
+                  <!-- Legal + Unsubscribe-->
+                  <table class="row" style="border-collapse: collapse; border-spacing: 0; display: block; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">
+                    <tr style="padding: 0; text-align: left; vertical-align: top;">
+                      <td class="wrapper last" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px 20px 0 0; padding-right: 0; position: relative; text-align: left; vertical-align: top; word-break: break-word;">
+                        <table class="twelve columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
+                          <tr style="padding: 0; text-align: left; vertical-align: top;">
+                            <td align="center" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0 0 10px; text-align: left; vertical-align: top; word-break: break-word;">
+                              <center style="min-width: 580px; width: 100%;">
+                                <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                  <td style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0 0 10px; text-align: left; vertical-align: top; word-break: break-word;"> 
+                                    <p class="social-media-btn" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">
+                                      <a href="https://www.facebook.com/Keepballin-1068176803214244/?fref=ts" style="color: #e6471c; text-decoration: none;">
+                                        <i class="fa fa-2x fa-facebook" style="-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font: 14px/1 FontAwesome; font-size: 2em; margin-top: 12px; text-rendering: auto;"></i>
+                                      </a>
+                                      
+                                    </p>
+                                  </td>                                 
+                                </table>
+                                <a href="https://keepballin.com" style="color: #E6471C; text-decoration: none;">
+                                  KeepBallin
+                                </a>
+                              </center>
+                            </td>
+                            <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                  <!-- container end below-->
+                </td>
+              </tr>
+            </table>
+            <!-- Email footer-->
+          </center>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -6,7 +6,7 @@ angular.module('keepballin')
     $scope.res = reservation;
 
     var courts = [];
-
+    
     reservation.timeslot.forEach(function(slot) {
         //Prevent duplicated socket for the same court
         if(courts.indexOf(slot.courtReserved) < 0) {
@@ -24,6 +24,15 @@ angular.module('keepballin')
             });  
         }
     });
+
+    socket.syncUpdates('reservation' + $scope.res._id, [], function(event, item, array) {
+        console.log('reservation updated');
+        $scope.res = item;
+    });
+    
+    $scope.$on('$destroy', function () {
+        socket.unsyncUpdates('reservation' + $scope.res._id);
+    });  
 
     $scope.openTimeslot = function(slot) {
         $modal.open({

@@ -2,17 +2,21 @@
 	<div class="col-sm-12 white-bg padding-10">
 		<div class="page-header">
 			<h1>預約狀態
-				<span class="label label-warning" ng-hide="res.active">未開放</span>
-				<span class="label label-primary" ng-show="res.active">已開放</span>
+				<span class="label label-warning" ng-hide="res.active || res.status == 'canceled'">未開放</span>
+				<span class="label label-primary" ng-show="res.active && !res.status == 'canceled'">已開放</span>
+				<span class="label label-primary" ng-show="res.status == 'completed'">訂單成功</span>
+				<span class="label label-warning" ng-show="res.status == 'canceled'">訂單取消</span>
+				<span class="label label-default" ng-show="res.status == 'waiting'">{{res.timeForConfirmation | date: 'shortTime'}} 通知最終預約狀態</span>
 			</h1>
 		</div>
-		<div class="margin-bottom-20" ng-hide="res.active">
+		<div class="margin-bottom-20" ng-hide="res.active || res.status == 'canceled'">
 			<timer class="coutdown" end-time="res.timeForConfirmation">
 				{{days}} 天 {{hours}}時 {{minutes}} 分 {{seconds}}秒後截止預約
 			</timer>
 			<p>等待以下時段人數達到{{res.minCapacity}}人</p>
 			<p>如截止時間已到，其中一個時段沒有達到最低人數限制，此預約將自動取消</p>
 		</div>
+		<p ng-show="res.status == 'canceled'">因在{{res.timeForConfirmation | date: 'hh:mm a'}}之前沒有足夠的人數，此訂單自動取消</p>
 		<div class="margin-bottom-20">
 			<div ng-repeat="slot in res.timeslot" class="timeslot-display pointer" ng-click="openTimeslot(slot)">
 				<span>
@@ -51,7 +55,7 @@
 		<i class="fa fa-dollar"></i>
 		金額: ${{res.pricePaid}}</p>
 	</div>
-	<div class="col-sm-12 white-bg padding-10">
+	<!-- <div class="col-sm-12 white-bg padding-10">
 		<div class="page-header">
 			<h1>認證密碼</h1>
 		</div>
@@ -60,5 +64,5 @@
 		<i class="fa fa-lock"></i>
 		密碼: {{res.confirmationCode}}</p>
 		
-	</div>
+	</div> -->
 </div>

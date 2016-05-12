@@ -16,7 +16,9 @@ exports.register = function(socket) {
 }
 
 function onSave(socket, doc, cb) {
-  socket.emit('reservation:save', doc);
+	doc.deepPopulate('timeslot courtReserved', function(err, _doc) {
+		socket.emit('reservation' + doc._id + ':save', _doc);
+	});
 }
 
 function onRemove(socket, doc, cb) {

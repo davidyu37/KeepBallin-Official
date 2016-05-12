@@ -303,7 +303,9 @@ angular.module('keepballin')
                 perPersonPrice: $scope.currentcourt.perPersonPrice,
                 duration: $scope.estHour,
                 timeForConfirmation: hoursBeforeBegin._d,
-                courtReserved: $scope.currentcourt._id
+                courtReserved: $scope.currentcourt._id,
+                court: $scope.currentcourt.court,
+                address: $scope.currentcourt.address
             };
 
             //If num of people reserved is larger than minCapacity, set to active
