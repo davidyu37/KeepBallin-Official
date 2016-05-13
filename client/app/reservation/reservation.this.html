@@ -3,7 +3,7 @@
 		<div class="page-header">
 			<h1>預約狀態
 				<span class="label label-warning" ng-hide="res.active || res.status == 'canceled'">未開放</span>
-				<span class="label label-primary" ng-show="res.active && !res.status == 'canceled'">已開放</span>
+				<span class="label label-primary" ng-show="res.active && !res.status == 'completed'">已開放</span>
 				<span class="label label-primary" ng-show="res.status == 'completed'">訂單成功</span>
 				<span class="label label-warning" ng-show="res.status == 'canceled'">訂單取消</span>
 				<span class="label label-default" ng-show="res.status == 'waiting'">{{res.timeForConfirmation | date: 'shortTime'}} 通知最終預約狀態</span>

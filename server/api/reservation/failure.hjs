@@ -123,50 +123,60 @@
                               </tr>
                             </tbody>
                           </table>
-                          <table class="twelve columns success" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
+                          <table class="twelve columns alert" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
                             <tbody>
                               <tr style="padding: 0; text-align: left; vertical-align: top;">
-                                <td class="panel twelve" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: #5da423; border: 1px solid #d9d9d9; border-collapse: collapse; border-color: #457a1a; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px; text-align: left; vertical-align: top; width: 100%; word-break: break-word;">
+                                <td class="panel twelve" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: #c60f13; border: 1px solid #d9d9d9; border-collapse: collapse; border-color: #970b0e; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px; text-align: left; vertical-align: top; width: 100%; word-break: break-word;">
                                   <p class="message padding-top" style="color: #fff; font-family: Helvetica,Arial,sans-serif; font-size: 20px; font-weight: 400; line-height: 19px; margin: auto; margin-bottom: 10px; padding: 0; padding-top: 10px; text-align: left; width: 110px;">
                                   <!-- <i class="fa fa-check-square-o"></i> -->
-                                  <img style="-ms-interpolation-mode: bicubic; clear: both; display: block; float: left; max-width: 100%; outline: none; padding-right: 5px; text-decoration: none; width: auto;" src="https://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/fa-check-square-o.png" alt="">
-                                  預約成功</p>
+                                  <img style="-ms-interpolation-mode: bicubic; clear: both; display: block; float: left; max-width: 100%; outline: none; padding-right: 5px; text-decoration: none; width: auto;" src="https://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/fa-user-times.png" alt="">
+                                  預約失敗</p>
                                 </td>
-                                <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: #5da423; border-collapse: collapse; border-color: #457a1a; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
+                                <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: #c60f13; border-collapse: collapse; border-color: #970b0e; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
                               </tr>
                             </tbody>
                           </table>
                         </th>
                       </tr>
+                    </tbody>
+                  </table>
+                  <!-- Break Tag for row-->
+                  <table class="row" style="border-collapse: collapse; border-spacing: 0; display: block; margin-bottom: 10px; margin-top: 10px; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">
+                    <tbody>
                       <tr style="padding: 0; text-align: left; vertical-align: top;">
                         <th>
-                          <table class="twelve columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
+                          <table class="five columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 230px;">
                             <tr style="padding: 0; text-align: left; vertical-align: top;">
-                              <th>
-                                <p class="center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: center;">
-                                {{name}}您好，請保管好驗證碼與QR-Code, 入場與出場時需要使用</p>
-                              </th>
+                              <td class="panel" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: 0 0; border: 1px solid #d9d9d9; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px; text-align: left; vertical-align: top; word-break: break-word;">
+                                <img src="https://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/dogeza2.gif" alt="" style="-ms-interpolation-mode: bicubic; clear: both; display: block; float: left; max-width: 100%; outline: none; text-decoration: none; width: auto;">
+                              </td>
+                            </tr>
+                          </table>
+                        </th>
+                        <th>
+                          <table class="seven columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 330px;">
+                            <tr style="padding: 0; text-align: left; vertical-align: top;">
+                              <td class="panel" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: 0 0; border: 1px solid #d9d9d9; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 40px; margin: 0; padding: 10px; text-align: left; vertical-align: top; word-break: break-word;">
+                                <span style="font-size: 16px">原因: 預約時段
+                                  &nbsp;
+                                  <span style="font-size: 20px">尚未累積足夠的人數</span>
+                                </span>
+                                
+                                <p style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">已退{{pricePaid}}KB點數給您</p>
+                                <p style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: 0; margin-bottom: 10px; padding: 0; text-align: left;">
+                                  下次預約後能夠透過Facebook或Line邀請更多人預約提高您的預約成功率
+                                </p>
+                              </td>
                               <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
                             </tr>
                           </table>
                         </th>
-                      </tr> 
+                      </tr>
                     </tbody>
                   </table>
-                  <!-- Break Tag for row-->
                   <table class="row" style="border-collapse: collapse; border-spacing: 0; display: block; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">
                     <tr style="padding: 0; text-align: left; vertical-align: top;">
                       <td style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; word-break: break-word;">
-                        <table class="six columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; margin-bottom: 10px; padding: 0; text-align: left; vertical-align: top; width: 280px;">
-                          <tr style="padding: 0; text-align: left; vertical-align: top;">
-                            <td class="panel" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: 0 0; border: 1px solid #d9d9d9; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px; text-align: left; vertical-align: top; word-break: break-word;">
-                              <h4 style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 28px; font-weight: 400; line-height: 1.3; margin: 0; margin-bottom: 5px; padding: 0; text-align: left; word-break: normal;">驗證碼:</h4>
-                              <h4 style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 28px; font-weight: 400; line-height: 1.3; margin: 0; padding: 0; text-align: left; word-break: normal;">{{confirmationCode}}</h4>
-                              <img class="center" src="{{url}}" alt="QR Code" style="-ms-interpolation-mode: bicubic; clear: both; display: block; float: none; margin: 0 auto; max-width: 100%; outline: none; text-decoration: none; width: auto;">
-                            </td>
-                            <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
-                          </tr>
-                        </table>
                         <table class="twelve columns" style="border-collapse: collapse; border-spacing: 0; margin: 0 auto; padding: 0; text-align: left; vertical-align: top; width: 580px;">
                           <tr style="padding: 0; text-align: left; vertical-align: top;">
                             <td class="panel" style="-moz-hyphens: auto; -webkit-hyphens: auto; background: 0 0; border: 1px solid #d9d9d9; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 10px; text-align: left; vertical-align: top; word-break: break-word;">
@@ -325,9 +335,28 @@
                             <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
                           </tr>
                         </table><br>
+                        <table class="button small success" style="border-collapse: collapse; border-spacing: 0; overflow: hidden; padding: 0; text-align: left; vertical-align: top; width: 100%;">
+                          <tr style="padding: 0; text-align: left; vertical-align: top;">
+                            <td style="-moz-hyphens: auto; -webkit-hyphens: auto; background: #5da423; border: 1px solid #2284a1; border-collapse: collapse; border-color: #457a1a; color: #fff; display: block; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 8px 0; text-align: center; vertical-align: top; width: auto; word-break: break-word;">
+                              <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
+                                <tr style="padding: 0; text-align: left; vertical-align: top;">
+                                  <a href="https://keepballin.com/indoor" style="color: #fff; display: block; font-family: Helvetica,Arial,sans-serif; font-size: 16px; font-weight: 700; height: 100%; text-decoration: none; width: 100%;">
+                                    <p style="color: white; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: auto; margin-bottom: 10px; padding: 0; text-align: left; width: 120px;">
+                                      
+                                      預約場地
+                                      <img style="-ms-interpolation-mode: bicubic; border: none; clear: both; display: block; float: left; max-width: 100%; outline: none; padding-right: 5px; text-decoration: none; width: auto;" src="https://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/fa-hand-pointer-o.png" alt="">
+                                    </p> 
+                                  </a>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
                       </td>
                     </tr>
-                  </table><br><br>
+                  </table>
+                  
+                  <br><br>
                   <!-- Legal + Unsubscribe-->
                   <table class="row" style="border-collapse: collapse; border-spacing: 0; display: block; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">
                     <tr style="padding: 0; text-align: left; vertical-align: top;">

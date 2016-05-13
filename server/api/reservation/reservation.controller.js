@@ -19,7 +19,9 @@ hogan = require('hogan.js'),
 fs = require('fs'),
 qr = require('qr-image'),
 template = fs.readFileSync('server/api/reservation/success.hjs', 'utf-8'),
-compiledTemplate = hogan.compile(template);
+failTemplate = fs.readFileSync('server/api/reservation/failure.hjs', 'utf-8'),
+compiledTemplate = hogan.compile(template),
+compiledFailTemplate = hogan.compile(failTemplate);
 //AWS uploading for QR code
 var uuid = require('uuid');
 var AWS = require('aws-sdk');
@@ -72,30 +74,56 @@ var generateQRCode = function(code, callback) {
 };
 
 //Send notification
-var sendNotice = function(req, reserve, code, dateString, url) {
-
-  sendgrid.send({
-      to:       req.user.email,
-      from:     config.email.me,
-      subject:  '預約成功',
-      html: compiledTemplate.render({
-        name: req.user.name, 
-        confirmationCode: code, 
-        dateReserved: dateString,
-        startTime: reserve.beginString,
-        endTime: reserve.endString,
-        numOfPeople: reserve.numOfPeople,
-        courtName: req.body.court,
-        courtAddress: req.body.address,
-        pricePaid: reserve.pricePaid,
-        url: url
-      })
-    }, function(err, json) {
-      if (err) { return console.error(err); }
-      console.log('email sent');
-      //Record that email has been sent
-      // return res.status(200);
-  });
+var sendNotice = function(req, reserve, code, dateString, url, success) {
+  if(success) {
+    //Successful reservation
+    sendgrid.send({
+        to:       req.user.email,
+        from:     config.email.me,
+        subject:  '預約成功',
+        html: compiledTemplate.render({
+          name: req.user.name, 
+          confirmationCode: code, 
+          dateReserved: dateString,
+          startTime: reserve.beginString,
+          endTime: reserve.endString,
+          numOfPeople: reserve.numOfPeople,
+          courtName: req.body.court,
+          courtAddress: req.body.address,
+          pricePaid: reserve.pricePaid,
+          url: url
+        })
+      }, function(err, json) {
+        if (err) { return console.error(err); }
+        console.log('success email sent');
+        //Record that email has been sent
+        // return res.status(200);
+    });
+  } else {
+    //Failed reservation
+    sendgrid.send({
+        to:       req.user.email,
+        from:     config.email.me,
+        subject:  '預約失敗',
+        html: compiledFailTemplate.render({
+          name: req.user.name, 
+          confirmationCode: code, 
+          dateReserved: dateString,
+          startTime: reserve.beginString,
+          endTime: reserve.endString,
+          numOfPeople: reserve.numOfPeople,
+          courtName: req.body.court,
+          courtAddress: req.body.address,
+          pricePaid: reserve.pricePaid,
+          url: url
+        })
+      }, function(err, json) {
+        if (err) { return console.error(err); }
+        console.log('fail email sent');
+        //Record that email has been sent
+        // return res.status(200);
+    });
+  }
 
 };
 
@@ -132,6 +160,7 @@ exports.create = function(req, res) {
   var newReserve = _.merge(req.body, userId);
   //Create salt
   newReserve.salt = Reservation.makeSalt();
+  var dateReservedString = moment(req.body.dateReserved).format("MM-DD-YYYY");
 
   Reservation.create(newReserve, function(err, reserve) {
     if(err) { return handleError(res, err); }
@@ -144,34 +173,10 @@ exports.create = function(req, res) {
       reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
       reserve.status = 'completed';
       reserve.save(function() {
-        var dateReservedString = moment(reserve.dateReserved);
-        dateReservedString.format('MM DD YYYY');
         generateQRCode(confirmationCode, function(err, url) {
           if(err) { console.log('error occur while upload qr code'); }
           sendNotice(req, reserve, confirmationCode, dateReservedString, url); 
         });
-        //send email and notify this mofo
-        // sendgrid.send({
-        //     to:       req.user.email,
-        //     from:     config.email.me,
-        //     subject:  '預約成功',
-        //     html: compiledTemplate.render({
-        //       name: req.user.name, 
-        //       confirmationCode: confirmationCode, 
-        //       dateReserved: dateReservedString,
-        //       startTime: reserve.beginString,
-        //       endTime: reserve.endString,
-        //       numOfPeople: reserve.numOfPeople,
-        //       courtName: req.body.court,
-        //       courtAddress: req.body.address,
-        //       pricePaid: reserve.pricePaid
-        //     })
-        //   }, function(err, json) {
-        //     if (err) { return console.error(err); }
-        //     //Record that email has been sent
-        //     return res.status(200);
-        // });
-
       });
     }
  	
@@ -238,26 +243,32 @@ exports.create = function(req, res) {
         Timeslot.checkActive(slots, function(active) {
           //Success notification
           if(active) {
-            console.log('reservation completed');
-            var confirmationCode = randomValueHex(7);
-            console.log('Confirmation Code', confirmationCode);
-            //Make hash code
-            reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
-            reserve.active = true;
-            reserve.status = 'completed';
-            reserve.save();
-            //Send notification
-
-
+            if(!(reserve.status == 'completed')) {
+              console.log('reservation completed');
+              var confirmationCode = randomValueHex(7);
+              console.log('Confirmation Code', confirmationCode);
+              //Make hash code
+              reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
+              reserve.active = true;
+              reserve.status = 'completed';
+              reserve.save(function() {
+                //Send notification
+                generateQRCode(confirmationCode, function(err, url) {
+                  if(err) { console.log('error occur while upload qr code'); }
+                  sendNotice(req, reserve, confirmationCode, dateReservedString, url, true); 
+                });
+              });
+            }
           } else {
             //Failed reservation notice
             //Return KB points
             console.log('reservation failed');
             //Update individual timeslots
             Timeslot.cancelTimeslots(reserve, function() {
-              console.log('timeslot updated', reserve.timeslot);
               reserve.status = 'canceled';
-              reserve.save();
+              reserve.save(function() {
+                sendNotice(req, reserve, null, dateReservedString, null, false);
+              });
             });
 
           }
