@@ -30,6 +30,7 @@ angular.module('keepballin')
         })
         .catch( function(err) {
           $scope.errors.other = err.message;
+          $scope.sending = false;
           SweetAlert.swal({
             title: err.message,
             type: 'warning',

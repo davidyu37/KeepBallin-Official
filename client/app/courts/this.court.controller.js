@@ -111,13 +111,6 @@ angular.module('keepballin')
 		    	});
 		    });
 
-			// modalState.state('thiscourt.picture', {
-			// 	templateUrl: 'app/courts/temp/pictures.html',
-			// 	scope: $scope, 
-			// 	size: 'lg'
-			// });
-			
-
 			$scope.openGallery = function() {
 				$modal.open({
 					animation: true,

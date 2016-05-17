@@ -13,10 +13,7 @@
   z-index: 1;
   
 }
-/* scroll.js adds this class when scrol up */
-.header-up {
-  top: -80px;
-}
+
 /*.nav-header class includes thing that appear on smaller screen*/
 /*It includes .navbar-toggle button*/
 .navbar-inverse .navbar-toggle .icon-bar {
@@ -31,49 +28,47 @@
 }
 /* overwrite the default colors for .navbar inverse*/
 .navbar-inverse .navbar-nav > li > a {
-  color: black;
   @media screen and (min-width: $screen-sm-min) {
     padding-top: 20px;
     height: 60px;
-    font-size: 150%;
+    font-size: 14px;
     text-align: center;
     -webkit-transition: all linear 0.3s;
     transition: all linear 0.3s;
     
   }
   &:hover {
-    color: $brand-primary;
-    background-color: white;
-    border-bottom: 10px solid $brand-primary;
-    span {
-      bottom: 0px;
-      padding-right: 5px;
-      position: relative;
-      top: 0;
-    }
+    color: white;
+    background-color: $brand-primary;
   }
 }
+
+.navbar-inverse .navbar-nav > li > a.active {
+  background-color: $brand-primary;
+}
+
 /* the spans hold the glyphicon */
 .navbar-nav {
   position: relative;
   margin: 0;
   span{
     /* overwrite glyphicon class's default positioning and line height */
-    position: absolute;
+    /*position: absolute;
     top: -9999px;
     line-height: 0;
     transition: all linear 0.3s;
-    -webkit-transition: all linear 0.3s;
+    -webkit-transition: all linear 0.3s;*/
+    padding-right: 5px;
   }
 }
+
 .right-padding {
   @media screen and (min-width: ($screen-sm-min + 1px)) {
     padding-right: 30px;    
   }
 }
+
 .navbar-inverse .navbar-text {
-  font-size: 150%;
-  color: white;
   margin: 0;
 }
 
@@ -90,49 +85,27 @@
 .navbar-brand {
   padding-left: 0;
 }
+
 .logo {
-  color: white;
-  margin: 0;
-  font-size: 20pt;
+  width: 25px; 
+  height: 25px;
 }
+
 #mobileLogo {
-  padding: 0px;
-  margin: 8px 15px;
+  margin: 0px;
+  padding: 10px;
   @media screen and (min-width: ($screen-sm-min + 1px)) {
     display: none;
   }
 }
+
 #desktopLogo {
+  margin: 0px;
+  padding-right: 10px;
   padding-left: 10px;
   @media screen and (max-width: $screen-sm-min) {
     display: none;
   }
 }
 
-.messageAlert {
-  position: absolute;
-  top: 60px;
-  font-size: 150%;
-  color: white;
-  padding: 15px;
-  width: 200px;
-  height: 100px;
-  border: solid 3px $brand-primary;
-  background-color: black;
-  overflow: hidden;
-  border-radius: 25px;
-  opacity: 1;
-  p {
-    font-size: 80%;
-  } 
-}
 
-.messageAlert.ng-hide-add, .messageAlert.ng-hide-remove {
-  transition: all linear 0.5s;
-}
-
-.messageAlert.ng-hide {
-  top: 0;
-  opacity: 0;
-
-}

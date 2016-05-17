@@ -98,7 +98,6 @@ function uploadTos3AndRecordOnDB (req, res, category) {
       var destPath = '';
       var courtId, userId, eventId, teamId;
       if(category === 'courts') {
-        console.log(fields.courtId);
         courtId = fields.courtId;
         destPath = 'pictures/' + category + '/' + courtId + '/' + uuid.v4() + extension;
       }

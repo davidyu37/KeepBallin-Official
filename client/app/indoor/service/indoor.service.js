@@ -20,6 +20,18 @@ angular.module('keepballin')
           id: 'all',
           controller: 'queryPublic'
         }
+      },
+      deletePic: {
+        method: 'POST',
+        params: {
+          controller: 'deletePicture'
+        }
+      },
+      setCover: {
+        method: 'POST',
+        params: {
+          controller: 'setCover'
+        }
       }
 	  });
   }]);

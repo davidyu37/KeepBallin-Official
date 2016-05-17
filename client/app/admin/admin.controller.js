@@ -1,11 +1,19 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('AdminCtrl', ['$scope', '$window', '$http', 'Auth', 'User', '$modal', function ($scope, $window, $http, Auth, User, $modal) {
+  .controller('AdminCtrl', ['$scope', '$window', '$http', 'Auth', 'User', '$modal', 'Indoor', function ($scope, $window, $http, Auth, User, $modal, Indoor) {
 
     // Use the User $resource to fetch all users
     $scope.users = User.adminGet();
     $scope.open = false;
+
+    $scope.courts = Indoor.query();
+
+    $scope.current = 'user';
+
+    $scope.changeTab = function(string) {
+      $scope.current = string;
+    };
 
     $scope.delete = function(user) {
       var check = $window.confirm('確定要刪嗎？');

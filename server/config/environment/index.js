@@ -58,7 +58,8 @@ var all = {
 
   s3: {
     key: process.env.S3_KEY || 'key',
-    secret: process.env.S3_SECRET || 'secret'
+    secret: process.env.S3_SECRET || 'secret',
+    bucket: process.env.S3_BUCKET || 'keepballin-dev'
   },
 
   sendgrid: {

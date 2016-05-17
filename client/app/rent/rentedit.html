@@ -1,11 +1,11 @@
 <div ng-show="showPreview">
 	<div class="jumbotron pic-overlay">
-		<img src="/assets/images/pic4.jpg" class="coverPic" ng-hide="event.pics[0].url">
-		<img ng-src="{{currentcourt.pictures[0].url}}" class="coverPic">
+		<img src="/assets/images/pic4.jpg" class="coverPic" ng-hide="currentcourt.pictures[0]">
+		<img ng-src="{{currentcourt.pictures[0]}}" class="coverPic">
 		<div class="jumbotron-content-container">		
 			<h1 >{{currentcourt.court}}</h1>
 			<p>{{currentcourt.address}}</p>
-			<div style="text-align: center">
+			<div class="text-center">
 				<div ng-controller="ratingCtrl">
 		        	<div ng-mouseover="totalRating = true"
 		        	ng-mouseleave="totalRating = false">
@@ -25,7 +25,6 @@
 		            /小時</div>
 		            <div>每小時至少{{currentcourt.minCapacity}}人開放</div>
 			        <div style="margin-top: 20px;">
-			        	<button style="font-size:90%" class="eventBtn" ng-click="openRate()">給予評價</button>
 			        	<button style="font-size:90%" class="eventBtn" ng-click="openRate()">預約場地</button>
 			        </div>
 		        </div>
@@ -222,24 +221,18 @@
 						照片
 					</h2>
 				</div>
-				<p ng-hide="currentcourt.pictures[0].url">目前還沒有照片</p>
+				<p ng-hide="currentcourt.pictures[0]">目前還沒有照片</p>
 				<div style="width: 100%">
 					
 				</div>
-				<div ng-click="openGallery()"
-				class="pointer commentBtn" 
-				style="font-size: 120%; margin: 10px auto; text-align: center" 
-				tooltip="管理球場的照片"
-			    tooltip-trigger="mouseenter"
-		        tooltip-placement="right">看所有照片</div>
 				<carousel interval="5000" no-wrap="false">
-					<slide ng-repeat="slide in currentcourt.pictures track by $index" active="slide.active">
+					<slide ng-repeat="slide in currentcourt.pictures track by $index">
 						<img class="img-responsive" 
-						ng-src="{{slide.url}}" 
+						ng-src="{{slide}}" 
 						style="margin:auto;">
-						<div class="carousel-caption">
+						<!-- <div class="carousel-caption">
 				          <h4>由{{slide.user.name}}提供</h4>
-				        </div>
+				        </div> -->
 					</slide>
 				</carousel>
 					
@@ -295,23 +288,50 @@
 		<h3>是否公開？</h3>
 	</div>
 	<div style="text-align: center">
+		<p>目前
+			<span ng-hide="currentcourt.isPublic">未公開<i class="fa fa-circle" style="color: grey; padding-left: 5px;"></i></span>
+			<span ng-show="currentcourt.isPublic">已公開<i class="fa fa-circle" style="color: green; padding-left: 5px;"></i></span>
+
+		</p>
 		<button class="trans-btn">
 			<div ng-hide="currentcourt.isPublic" ng-click="goPublic()">公開
-				<i class="fa fa-circle" style="color: green"></i>
 			</div>
 			<div ng-show="currentcourt.isPublic" ng-click="goPublic()">不公開
-				<i class="fa fa-circle" style="color: grey"></i>
+				
 			</div>
 		</button>
 	</div>
 	<div class="page-header">
 		<h3>照片</h3>
 	</div>
+	<div class="row">
+		<div class="thumbnail col-sm-3" ng-repeat="pic in currentcourt.pictures">
+			<img ng-src="{{pic}}" alt="picture">
+			<button class="btn btn-danger image-btn-right" tooltip="刪除" tooltip-placement="bottom" ng-click="deletePic(pic)">
+				<i class="fa fa-trash"></i>
+			</button>
+			<button class="btn image-btn-left" tooltip="設定為封面照片" tooltip-placement="bottom" ng-click="setCover(pic)">
+				<i class="fa fa-image"></i>
+			</button>
+		</div>
+	</div>
 	<div style="text-align: center">
-		<div class="text-muted">目前無照片</div>
-		<button class="trans-btn">新增照片
-			<i class="fa fa-camera"></i>
-		</button>
+		<div class="text-muted" ng-hide="currentcourt.pictures[0]">目前無照片</div>
+		<form name="form" novalidate>
+			<button class="trans-btn" ngf-select="upload(files)" ng-model="files" name="pic" ngf-multiple="true" ng-disabled="uploading" ngf-min-height="720" ngf-min-width="1080" ngf-model-invalid="errorFile" required>
+				<span ng-hide="uploading">
+					新增照片
+					<i class="fa fa-camera"></i>
+				</span>
+				<div class="loading-btn" ng-show="uploading">
+				  <div class="rect1"></div>
+				  <div class="rect2"></div>
+				  <div class="rect3"></div>
+				  <div class="rect4"></div>
+				</div>
+			</button>
+		</form>
+		<div ng-show="errorFile[0].$error" style="margin-top: 10px">照片必須至少寬1080像素X高720像素</div>
 	</div>
 	<form class="form-horizontal" name="editform" novalidate>
 		<div class="page-header">
@@ -646,6 +666,9 @@
 	    </div>
 	</form>
 	<div class="col-sm-12">
-		<p class="btn btn-primary" ng-show="isAdmin()" ng-click="approve()">通過</p>
+		<p class="btn btn-primary" ng-show="isAdmin()" ng-click="approve()">
+		<span ng-hide="currentcourt.approved">通過</span>
+		<span ng-show="currentcourt.approved">不通過</span>	
+		</p>
 	</div>
 </div>

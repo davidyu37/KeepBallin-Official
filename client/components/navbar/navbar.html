@@ -8,32 +8,34 @@
         <span class="icon-bar"></span>
       </button>
       <a ui-sref="main">
-        <h3 class="logo" id="mobileLogo" ng-click="close()">
-          <img src="/assets/images/logo.png" style="width: 25px; height: 25px;">
+        <h3 id="mobileLogo" ng-click="close()">
+          <img src="/assets/images/KB_LOGO.png" class="logo">
         </h3>
       </a>
     </div>
-    <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
-      <a class="navbar-brand" ui-sref="main" ng-click="close()">
-        <h3 class="logo" id="desktopLogo">KeepBallin</h3>
+    <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main" style="background: none;">
+      <a style="padding: 15px; float: left" ui-sref="main" ng-click="close()">
+        <h3 id="desktopLogo">
+          <img src="assets/images/KB_LOGO.png" alt="" class="logo">
+        </h3>
       </a>
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-            <a ui-sref="{{item.link}}" ng-click="close()">
+            <a ui-sref="{{item.link}}" ng-click="close()" style="color: white">
               <span class="glyphicon {{item.icon}}"></span>{{item.title}}
             </a>
         </li>
-        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a ui-sref="admin" ng-click="close()">管理者</a></li>
+        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a ui-sref="admin" ng-click="close()" style="color: white">管理者</a></li>
         <!-- <li ng-show="isManager()" ng-class="{active: isActive('/manager')}"><a ui-sref="manager" ng-click="close()">經理</a></li> -->
       </ul>
 
       <ul class="nav navbar-nav navbar-right right-padding">
-        <li ng-class="{active: isActive('/signup')}"><a ng-click="goToRent(); close()" ng-hide="hasCourt()">出租球場</a></li>
-        <li ng-class="{active: isActive('/signup')}"><a ng-click="manageCourt(); close()" ng-show="hasCourt()">管理球場</a></li>
-        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a ui-sref="signup" ng-click="close()">註冊</a></li>
+        <li ng-class="{active: isActive('/signup')}"><a ng-click="goToRent(); close()" ng-hide="hasCourt()" style="color: white">出租球場</a></li>
+        <li ng-class="{active: isActive('/signup')}"><a ng-click="manageCourt(); close()" ng-show="hasCourt()" style="color: white">管理球場</a></li>
+        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a ui-sref="signup" ng-click="close()" style="color: white">註冊</a></li>
         <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a ui-sref="login" ng-click="close()">登入</a></li>
         <li ng-show="isLoggedIn()">
-          <a ui-sref="conversation" ng-click="close()">
+          <a ui-sref="conversation" ng-click="close()" style="color: white">
             <i class="fa fa-comments-o"></i>  
           </a>
         </li>
@@ -43,11 +45,11 @@
           <p>{{words}}</p>
         </div> -->
         <li ng-show="isLoggedIn()">
-          <a ui-sref="settings" class="navbar-text" ng-click="close()">
+          <a ui-sref="settings" class="navbar-text" ng-click="close()" style="color: white">
             {{ getCurrentUser().name }}
           </a>
         </li>
-        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout(); close()">登出</a></li>
+        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout(); close()" style="color: white">登出</a></li>
       </ul>
     </div>
   </div>

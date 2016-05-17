@@ -1,0 +1,23 @@
+<div class="container spaceFromTop">
+	<div class="row">
+		<div class="col-sm-12" ng-repeat="c in courts">
+				<div class="thumbnail myCourtPic">
+					<img class="img-responsive" ng-src="{{c.pictures[0].url}}" style="margin:auto;">
+					<button class="btn pull-right" ui-sref="rentedit({id: c._id})">
+						<i class="fa fa-pencil"></i>
+					</button>
+					<div class="caption">
+						<h3>{{c.court}}
+							<div class="label label-success" ng-show="c.isPublic">公開中</div>
+							<div class="label label-default" ng-hide="c.isPublic">未公開</div>
+							<div class="label label-primary" ng-show="c.approved">已驗證</div>
+							<div class="label label-warning" ng-hide="c.approved">未驗證</div>
+						</h3>
+						<p>每人${{c.perPersonPrice}}/小時</p>
+						<p>{{c.address}}</p>
+						<p>{{c.dateCreated | date}}建立</p>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>

@@ -49,10 +49,7 @@ var IndoorSchema = new Schema({
     ref: 'User',
     childPath: 'courtManagerOf'
   },
-  pictures: [{
-    type: Schema.ObjectId,
-    ref: 'Upload'
-  }],
+  pictures: [String],
   reservation: [{
     type: Schema.ObjectId,
     ref: 'Reservation'    

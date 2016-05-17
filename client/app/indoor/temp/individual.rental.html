@@ -24,7 +24,6 @@
 	            /小時</div>
 	            <div>每小時至少{{currentcourt.minCapacity}}人開放</div>
 		        <div style="margin-top: 20px;">
-		        	<button style="font-size:90%" class="eventBtn" ng-click="openRate()">給予評價</button>
 		        	<button style="font-size:90%" class="eventBtn" ng-click="reserve()">預約場地</button>
 		        </div>
 	        </div>
@@ -221,24 +220,15 @@
 					照片
 				</h2>
 			</div>
-			<p ng-hide="currentcourt.pictures[0].url">目前還沒有照片</p>
-			<div style="width: 100%">
-				
-			</div>
-			<div ng-click="openGallery()"
-			class="pointer commentBtn" 
-			style="font-size: 120%; margin: 10px auto; text-align: center" 
-			tooltip="管理球場的照片"
-		    tooltip-trigger="mouseenter"
-	        tooltip-placement="right">看所有照片</div>
+			<p ng-hide="currentcourt.pictures[0]">目前還沒有照片</p>
 			<carousel interval="5000" no-wrap="false">
-				<slide ng-repeat="slide in currentcourt.pictures track by $index" active="slide.active">
+				<slide ng-repeat="slide in currentcourt.pictures track by $index">
 					<img class="img-responsive" 
-					ng-src="{{slide.url}}" 
+					ng-src="{{slide}}" 
 					style="margin:auto;">
-					<div class="carousel-caption">
+					<!-- <div class="carousel-caption">
 			          <h4>由{{slide.user.name}}提供</h4>
-			        </div>
+			        </div> -->
 				</slide>
 			</carousel>
 				

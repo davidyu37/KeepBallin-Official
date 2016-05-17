@@ -47,8 +47,8 @@
 			    <p>{{courts[i].desc}}</p>
 			  </div>
 			  <a ui-sref="thisindoor({id: courts[i]._id})">
-				  <img ng-hide="courts[i].teampic[0]" src="/assets/images/teamPic.jpg" alt="...">
-				  <img ng-show="courts[i].teampic[0]" ng-src="{{courts[i].teampic[0].url}}" alt="...">
+				  <img ng-hide="courts[i].pictures[0]" src="/assets/images/teamPic.jpg" alt="...">
+				  <img ng-show="courts[i].pictures[0]" ng-src="{{courts[i].pictures[0]}}" alt="...">
 			  </a>
 			  <div class="caption">
 			    <p>${{courts[i].perPersonPrice}}/小時</p>

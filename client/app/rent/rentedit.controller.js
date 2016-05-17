@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('RentEditCtrl', ['$scope', 'Auth', '$timeout', 'Indoor', 'thisCourt', '$animate', function ($scope, Auth, $timeout, Indoor, thisCourt, $animate) {
+  .controller('RentEditCtrl', ['$scope', 'Auth', '$timeout', 'Indoor', 'thisCourt', '$animate', 'Upload', 'SweetAlert', function ($scope, Auth, $timeout, Indoor, thisCourt, $animate, Upload, SweetAlert) {
 
   	$scope.currentcourt = thisCourt;
 
@@ -275,6 +275,66 @@ angular.module('keepballin')
 		$scope.sending = true;
 		Indoor.update({ id: $scope.currentcourt._id }, $scope.currentcourt, function(data) {
 			$scope.sending = false;
+		});
+	};
+
+	function upload(file) {
+        Upload.upload({
+            url: 'api/indoors/pictures',
+            fields: {
+                'IndoorCourtId': $scope.currentcourt._id
+            },
+            file: file
+        }).progress(function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            $scope.log = progressPercentage;
+        }).success(function (data) {
+        	var newPic = data.pictures[data.pictures.length - 1];
+        	$scope.currentcourt.pictures.push(newPic);
+            $scope.log = 0;
+            $scope.uploading = false;
+        });
+    }
+
+	$scope.upload = function(files) {
+        if (files && files.length) {
+			$scope.uploading = true;
+            for (var i = 0; i < files.length; i++) {
+              var file = files[i];
+              if (!file.$error) {
+                upload(file);     
+              }
+            }
+        }
+	};
+
+	$scope.deletePic = function(url) {
+		SweetAlert.swal({   
+			title: '你確定要刪除?',   
+			text: '按下確定後，就無法走回頭路囉',   
+			type: 'warning',   
+			showCancelButton: true,   
+			confirmButtonColor: '#DD6B55',   
+			confirmButtonText: '確定',
+			cancelButtonText: '取消',
+			showLoaderOnConfirm: true,   
+			closeOnConfirm: false }, 
+			function(confirmed){
+				if(confirmed) {
+					Indoor.deletePic({id: $scope.currentcourt._id, url: url}, function(data) {
+			    		$scope.currentcourt = data;
+			    		SweetAlert.swal('已刪除!', '乾淨溜溜', 'success');
+					});
+				} else {
+					return;
+				}
+			});//callback after confirm  
+	};//deletePic ends
+
+	//Put this pic as cover
+	$scope.setCover = function(url) {
+		Indoor.setCover({id: $scope.currentcourt._id, url: url}, function(data) {
+    		$scope.currentcourt = data;
 		});
 	};
 
