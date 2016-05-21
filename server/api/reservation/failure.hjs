@@ -101,7 +101,7 @@
           <center style="min-width: 580px; width: 100%;">
             <table class="row header" style="border-collapse: collapse; border-spacing: 0; padding: 0; position: relative; text-align: left; vertical-align: top; width: 100%;">
               <tr style="padding: 0; text-align: left; vertical-align: top;">
-                <h1 class="logo" style="background-color: #E6471C; color: #fff; font-family: Helvetica,Arial,sans-serif; font-size: 40px; font-weight: 400; line-height: 1.3; margin: 0; padding: 15px; text-align: center; word-break: normal;">KeepBallin</h1>
+                <h1 class="logo" style="background-color: #E6471C; color: #fff; font-family: Helvetica,Arial,sans-serif; font-size: 40px; font-weight: 400; line-height: 1.3; margin: 0; padding: 15px; text-align: center; word-break: normal;"></h1>
               </tr>
             </table>
             <!-- Email content-->
@@ -117,7 +117,12 @@
                             <tbody>
                               <tr style="padding: 0; text-align: left; vertical-align: top;">
                                 <th>
-                                  <h2 class="center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 36px; font-weight: 400; line-height: 1.3; margin: 10px; padding: 0; text-align: center; word-break: normal;">感謝您的預約</h2>
+                                  <h1 class="center" style="color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 40px; font-weight: 400; height: 60px; line-height: 1.3; margin: 35px auto 30px; padding: 0; text-align: center; width: 350px; word-break: normal;">
+                                  <span>
+                                    <img src="https://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/KB_LOGO.png" style="-ms-interpolation-mode: bicubic; background-color: white; clear: both; display: block; float: left; height: 50px; margin-right: 15px; max-width: 100%; outline: none; text-decoration: none; width: 50px;" alt="">
+                                  </span>
+                                  感謝您的預約
+                                  </h1>
                                 </th>
                                 <td class="expander" style="-moz-hyphens: auto; -webkit-hyphens: auto; border-collapse: collapse; color: #222; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; hyphens: auto; line-height: 19px; margin: 0; padding: 0; text-align: left; vertical-align: top; visibility: hidden; width: 0; word-break: break-word;"></td>
                               </tr>
@@ -341,7 +346,7 @@
                               <table style="border-collapse: collapse; border-spacing: 0; padding: 0; text-align: left; vertical-align: top;">
                                 <tr style="padding: 0; text-align: left; vertical-align: top;">
                                   <a href="https://keepballin.com/indoor" style="color: #fff; display: block; font-family: Helvetica,Arial,sans-serif; font-size: 16px; font-weight: 700; height: 100%; text-decoration: none; width: 100%;">
-                                    <p style="color: white; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: auto; margin-bottom: 10px; padding: 0; text-align: left; width: 120px;">
+                                    <p style="color: white; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: 400; line-height: 19px; margin: auto; margin-bottom: 10px; padding: 0; padding-top: 2px; text-align: center; width: 100px;" class="center">
                                       
                                       預約場地
                                       <img style="-ms-interpolation-mode: bicubic; border: none; clear: both; display: block; float: left; max-width: 100%; outline: none; padding-right: 5px; text-decoration: none; width: auto;" src="https://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/fa-hand-pointer-o.png" alt="">

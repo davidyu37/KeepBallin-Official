@@ -296,6 +296,7 @@ angular.module('keepballin')
                 endString: $scope.timeSlot2.selected,
                 beginTime: $scope.start,
                 endTime: $scope.end,
+                flexible: $scope.flexible,
                 numOfPeople: $scope.numOfPeople,
                 minCapacity: $scope.currentcourt.minCapacity, 
                 maxCapacity: $scope.currentcourt.maxCapacity,

@@ -10,9 +10,9 @@
 	<form class="form-inline" ng-submit="reserveNow(reserveForm)" name="reserveForm" novalidate>
 		<div class="form-group">
 			<div class="input-group">
-				<input type="date" name="theDate" class="form-control event-input" datepicker-popup is-open="opened" show-button-bar="false" min-date="minDate" ng-model="date" ng-disabled="sending" style="height: 35px; color: black; font-size: 14px;" ng-click="openCal($event)" required/>
+				<input type="date" name="theDate" class="form-control input-left" datepicker-popup is-open="opened" show-button-bar="false" min-date="minDate" ng-model="date" ng-disabled="sending" style="height: 35px; color: black; font-size: 14px;" ng-click="openCal($event)" required/>
 				<span class="input-group-btn">
-		          <button type="button" class="btn btn-default custom-addon" ng-click="openCal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+		          <button type="button" class="btn btn-default custom-addon-right" ng-click="openCal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
 		        </span>
 			</div>
 		</div>
@@ -31,12 +31,28 @@
 		</ui-select>
 		<div class="form-group" ng-show="people[0]">
 			<div class="input-group">
-				<span class="input-group-btn">
-		          <button type="button" class="btn btn-default custom-addon" popover="一人${{currentcourt.perPersonPrice}} /小時" popover-placement="bottom" popover-append-to-body="true"><i class="glyphicon glyphicon-user"></i></button>
+				<span class="input-group-btn" popover="每小時一人${{currentcourt.perPersonPrice}}" popover-placement="bottom" popover-append-to-body="false" popover-trigger="mouseover">
+		          <button type="button" class="btn btn-default custom-addon-left"><i class="glyphicon glyphicon-user"></i></button>
 		        </span>
-				<select class="form-control event-input" ng-model="numOfPeople" name="people" ng-options="p for p in people" style="height: 35px; color: black; font-size: 14px;" required>
+				<select class="form-control input-left" ng-model="numOfPeople" name="people" ng-options="p for p in people" style="height: 35px; color: black; font-size: 14px;" required>
 					<option value="">-- 幾位 --</option>
 				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<span class="input-group-btn" popover="點選彈性時間代表您接受部份開放的時間" popover-placement="bottom" popover-append-to-body="false" popover-trigger="mouseover">
+		          <button type="button" class="btn btn-default custom-addon-left">
+		          	彈性時間
+		          </button>
+		        </span>
+		        <div class="form-control input-checkbox">
+		        	<div class="checkbox"></div>
+			        	<input type="checkbox" ng-model="flexible">
+		        </div>
+				<!-- <select class="form-control input-left" ng-model="numOfPeople" name="people" ng-options="p for p in people" style="height: 35px; color: black; font-size: 14px;" required>
+					<option value="">-- 幾位 --</option>
+				</select> -->
 			</div>
 		</div>
 		<button type="sumbit" class="btn btn-primary" ng-disabled="notAvailable || invalidTime" tooltip="請先登入" tooltip-placement="right" tooltip-enable="!(loggedIn())">

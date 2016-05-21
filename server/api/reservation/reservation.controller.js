@@ -12,120 +12,14 @@ schedule = require('node-schedule'),
 moment = require('moment'),
 async = require('async'),
 crypto = require('crypto');
-//Stuff for sending notification email
-var config = require('../../config/environment'),
-sendgrid  = require('sendgrid')(config.sendgrid.apiKey),
-hogan = require('hogan.js'),
-fs = require('fs'),
-qr = require('qr-image'),
-template = fs.readFileSync('server/api/reservation/success.hjs', 'utf-8'),
-failTemplate = fs.readFileSync('server/api/reservation/failure.hjs', 'utf-8'),
-compiledTemplate = hogan.compile(template),
-compiledFailTemplate = hogan.compile(failTemplate);
-//AWS uploading for QR code
-var uuid = require('uuid');
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3({
-  accessKeyId: config.s3.key,
-  secretAccessKey: config.s3.secret
-});
-
+var QR = require('../../components/qrcode.service');
+var SG = require('../../components/sendgrid.service');
 
 function randomValueHex (len) {
     return crypto.randomBytes(Math.ceil(len/2))
         .toString('hex') // convert to hexadecimal format
         .slice(0,len);   // return required number of characters
 }
-
-//Generate QR code and upload it to S3
-var generateQRCode = function(code, callback) {
-
-  var png_string = qr.imageSync(code, { type: 'png' });
-  
-  var destination = 'pictures/reservation/' + uuid.v4() + '.png';
-
-  var params = {
-    Bucket: 'keepballin', /* required */
-    Key: destination, /* required */
-    ACL: 'public-read',
-    Body: png_string,
-    ContentType: 'png'
-    // Expires: new Date || 'Wed Dec 31 1969 16:00:00 GMT-0800 (PST)' || 123456789
-  };
-  s3.putObject(params, function(err, data) {
-    if (err) { console.log(err, err.stack); 
-      // an error occurred
-      callback(err);
-    }
-    else { 
-      // successful response
-      s3.getSignedUrl('putObject', params, function (err, url) {
-
-        var searched = url.search('png');
-
-        searched += 3;
-
-        var sliced = url.slice(0, searched);
-        
-        callback(null, sliced);
-      });
-    }          
-  });
-};
-
-//Send notification
-var sendNotice = function(req, reserve, code, dateString, url, success) {
-  if(success) {
-    //Successful reservation
-    sendgrid.send({
-        to:       req.user.email,
-        from:     config.email.me,
-        subject:  '預約成功',
-        html: compiledTemplate.render({
-          name: req.user.name, 
-          confirmationCode: code, 
-          dateReserved: dateString,
-          startTime: reserve.beginString,
-          endTime: reserve.endString,
-          numOfPeople: reserve.numOfPeople,
-          courtName: req.body.court,
-          courtAddress: req.body.address,
-          pricePaid: reserve.pricePaid,
-          url: url
-        })
-      }, function(err, json) {
-        if (err) { return console.error(err); }
-        console.log('success email sent');
-        //Record that email has been sent
-        // return res.status(200);
-    });
-  } else {
-    //Failed reservation
-    sendgrid.send({
-        to:       req.user.email,
-        from:     config.email.me,
-        subject:  '預約失敗',
-        html: compiledFailTemplate.render({
-          name: req.user.name, 
-          confirmationCode: code, 
-          dateReserved: dateString,
-          startTime: reserve.beginString,
-          endTime: reserve.endString,
-          numOfPeople: reserve.numOfPeople,
-          courtName: req.body.court,
-          courtAddress: req.body.address,
-          pricePaid: reserve.pricePaid,
-          url: url
-        })
-      }, function(err, json) {
-        if (err) { return console.error(err); }
-        console.log('fail email sent');
-        //Record that email has been sent
-        // return res.status(200);
-    });
-  }
-
-};
 
 // Gets a list of Reservations
 exports.index = function(req, res) {
@@ -156,26 +50,26 @@ exports.getByUser = function(req, res) {
 // Creates a new invite in the DB.
 exports.create = function(req, res) {
   //Attach user's id to invite's info
-  var userId = { reserveBy: req.user._id };
-  var newReserve = _.merge(req.body, userId);
+  var user = { reserveBy: req.user._id, contactEmail: req.user.email, whoReserved: req.user.name, courtName: req.body.court, courtAddress: req.body.address };
+  var newReserve = _.merge(req.body, user);
   //Create salt
   newReserve.salt = Reservation.makeSalt();
   var dateReservedString = moment(req.body.dateReserved).format("MM-DD-YYYY");
 
   Reservation.create(newReserve, function(err, reserve) {
     if(err) { return handleError(res, err); }
-
     if(reserve.active) {
       //The reservation is already active, generate confirmation code and notify
       var confirmationCode = randomValueHex(7);
-      console.log('Confirmation Code', confirmationCode);
       //Make salt and hash code
       reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
       reserve.status = 'completed';
       reserve.save(function() {
-        generateQRCode(confirmationCode, function(err, url) {
+        QR.generateQRCode(confirmationCode, function(err, url) {
           if(err) { console.log('error occur while upload qr code'); }
-          sendNotice(req, reserve, confirmationCode, dateReservedString, url); 
+          SG.sendNotice(reserve, confirmationCode, url, true, function() {
+            console.log('email cb');
+          }); 
         });
       });
     }
@@ -192,8 +86,8 @@ exports.create = function(req, res) {
   		maxCapacity: reserve.maxCapacity,
   		revenue: revenueOfSingleTimeslot,
   		timeForConfirmation: reserve.timeForConfirmation,
-  		reservation: reserve._id,
-  		reserveBy: reserve.reserveBy,
+  		reservation: [reserve._id],
+  		reserveBy: [reserve.reserveBy],
       courtReserved: reserve.courtReserved
     };
 
@@ -209,77 +103,76 @@ exports.create = function(req, res) {
     Timeslot.generateTimeslot(singleTimeslot, numOfTimeSlot, function(slots, reservationsNeedChecking) {
       reserve.timeslot = slots;
       //Save the timeslots to reservation if the timeslots already exist
-      reserve.save();
-      if(reservationsNeedChecking) {
-        async.each(reservationsNeedChecking, function(id, callback) {
-          Reservation.findById(id, function(err, eachReserve) {
+      reserve.save(function() {
+        if(reservationsNeedChecking) {
+          async.each(reservationsNeedChecking, function(id, callback) {
+            Reservation.findById(id, function(err, eachReserve) {
+              if(err) { console.log(err); }
+              Timeslot.checkActive(eachReserve.timeslot, function(active) {
+                if(active) {
+                  //Only Do the following if it's not active
+                  if(!eachReserve.active) {
+                    //If all the timeslots reserved are active, change reservation to active
+                    eachReserve.active = true;
+                    console.log('This reservation became active', eachReserve._id);
+                    console.log('The timeslots', eachReserve.timeslot);
+                    
+                  }
+                } 
+                eachReserve.save();
+              })
+            });
+          }, function(err) {
             if(err) { console.log(err); }
-            Timeslot.checkActive(eachReserve.timeslot, function(active) {
-              if(active) {
-                //Only Do the following if it's not active
-                if(!eachReserve.active) {
-                  //If all the timeslots reserved are active, change reservation to active
-                  eachReserve.active = true;
-                  
-                  console.log('This reservation became active', eachReserve._id);
-                  
-                }
-              } 
-              eachReserve.save();
-            })
           });
-        }, function(err) {
-          if(err) { console.log(err); }
-        });
-      }
+        }
+        return res.status(201).json(reserve);   
+      });
   
       //Schedule reservation check
       //The scheduled time should be timeForConfirmation
-      //For testing purpose the task will execute after two minute
-      var date = moment();
-      date = date.add(1, 'm').toDate();
-      var j = schedule.scheduleJob(date, function(y){
-        //Check if all timeslots are active
-        Timeslot.checkActive(slots, function(active) {
-          //Success notification
-          if(active) {
-            if(!(reserve.status == 'completed')) {
-              console.log('reservation completed');
-              var confirmationCode = randomValueHex(7);
-              console.log('Confirmation Code', confirmationCode);
-              //Make hash code
-              reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
-              reserve.active = true;
-              reserve.status = 'completed';
-              reserve.save(function() {
-                //Send notification
-                generateQRCode(confirmationCode, function(err, url) {
-                  if(err) { console.log('error occur while upload qr code'); }
-                  sendNotice(req, reserve, confirmationCode, dateReservedString, url, true); 
-                });
-              });
-            }
-          } else {
-            //Failed reservation notice
-            //Return KB points
-            console.log('reservation failed');
-            //Update individual timeslots
-            Timeslot.cancelTimeslots(reserve, function() {
-              reserve.status = 'canceled';
-              reserve.save(function() {
-                sendNotice(req, reserve, null, dateReservedString, null, false);
-              });
-            });
+      // var date = moment("2016-05-17 22:40:00");
+      // // date = date.add(1, 'm').toDate();
+      // var j = schedule.scheduleJob(date._d, function(y){
+      //   //Check if all timeslots are active
+      //   Timeslot.checkActive(slots, function(active) {
+      //     //Success notification
+      //     if(active) {
+      //       if(!(reserve.status == 'completed')) {
+      //         console.log('reservation completed');
+      //         var confirmationCode = randomValueHex(7);
+      //         console.log('Confirmation Code', confirmationCode);
+      //         //Make hash code
+      //         reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
+      //         reserve.active = true;
+      //         reserve.status = 'completed';
+      //         reserve.save(function() {
+      //           //Send notification
+      //           generateQRCode(confirmationCode, function(err, url) {
+      //             if(err) { console.log('error occur while upload qr code'); }
+      //             sendNotice(req, reserve, confirmationCode, dateReservedString, url, true); 
+      //           });
+      //         });
+      //       }
+      //     } else {
+      //       //Failed reservation notice
+      //       //Return KB points
+      //       console.log('reservation failed');
+      //       //Update individual timeslots
+      //       Timeslot.cancelTimeslots(reserve, function() {
+      //         reserve.status = 'canceled';
+      //         reserve.save(function() {
+      //           sendNotice(req, reserve, null, dateReservedString, null, false);
+      //         });
+      //       });
 
-          }
-        });
-      });
-      return res.status(201).json(reserve);
-    });
-    
-    
-  });
-};
+      //     }
+      //   });//Timeslot check active ends
+      // });//Schedule ends
+      
+    });//generateTimeslot ends    
+  });//reservation create ends
+};//exports.create ends
 
 function handleError(res, err) {
   console.log(err);

@@ -53,7 +53,7 @@
 			  <div class="caption">
 			    <p>${{courts[i].perPersonPrice}}/小時</p>
 			    <p>至少{{courts[i].minCapacity}}人開放</p>
-			    <p class="pull-right"><a class="btn btn-primary" role="button">預約</a></p>
+			    <p class="pull-right"><a class="btn btn-primary" role="button" ng-click="openReserve(courts[i]._id)">預約</a></p>
 			  </div>
 			</div>
 		</div>

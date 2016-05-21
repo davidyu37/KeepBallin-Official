@@ -22,7 +22,7 @@
     "method-override": "~1.0.0",
     "moment": "^2.13.0",
     "mongoosastic": "^3.3.2",
-    "mongoose": "~4.0.3",
+    "mongoose": "^4.0.8",
     "mongoose-deep-populate": "^2.0.3",
     "mongoose-relationship": "^0.1.4",
     "morgan": "~1.0.0",

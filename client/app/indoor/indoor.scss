@@ -15,3 +15,58 @@
 	font-size: 150%;
     font-weight: bolder;
 }
+
+.input-checkbox {
+	height: 35px;
+	color: white;
+    border-radius: 5px;
+    line-height: 22px;
+    background-color: transparent;
+    border: 2px solid #E6471C;
+    border-left: none;
+    transition: all 0.3s;
+    padding: 4px 10px 10px 5px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: 0;
+}
+
+.input-left {
+  color:white;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight:500;
+  font-size: 18px;
+  border-radius: 5px;
+  line-height: 22px;
+  background-color: transparent;
+  border:2px solid  $brand-primary;
+  transition: all 0.3s;
+  padding: 13px;
+  margin-bottom: 15px;
+  width:100%;
+  box-sizing: border-box;
+  outline:0;
+}
+
+.custom-addon-right {
+  color: $brand-primary;
+  border: 2px solid $brand-primary;
+  border-left: none;
+  transition: all 0.3s;
+  background-color: transparent;
+  &:hover {
+    background: white;
+  }
+}
+
+.custom-addon-left {
+  color: $brand-primary;
+  border: 2px solid $brand-primary;
+  border-right: none;
+  transition: all 0.3s;
+  background-color: transparent;
+  &:hover {
+    background: white;
+  }
+}

@@ -8,10 +8,16 @@ var mongoose = require('mongoose'),
 
 var ReservationSchema = new Schema({
   dateReserved: Date,
+  whoReserved: String,
+  contactEmail: String,
   beginString: String,
   endString: String,
   beginTime: Date,
   endTime: Date,
+  flexible: {
+    type: Boolean,
+    default: false
+  },
   numOfPeople: Number,
   minCapacity: Number, 
   maxCapacity: Number,
@@ -37,7 +43,9 @@ var ReservationSchema = new Schema({
     ref: 'Indoor',
     childPath: 'reservation'
   },
-  timeslot: [{ type:Schema.ObjectId, ref:"Timeslot" }],
+  courtName: String,
+  courtAddress: String,
+  timeslot: [{ type:Schema.ObjectId, ref:'Timeslot' }],
   hashedConfirmationCode: String,
   salt: String,
   status: {
