@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('RentEditCtrl', ['$scope', 'Auth', '$timeout', 'Indoor', 'thisCourt', '$animate', 'Upload', 'SweetAlert', function ($scope, Auth, $timeout, Indoor, thisCourt, $animate, Upload, SweetAlert) {
+  .controller('RentEditCtrl', ['$scope', 'Auth', '$timeout', 'Indoor', 'thisCourt', '$animate', 'Upload', 'SweetAlert', 'timeslots', 'socket', '$compile', 'uiCalendarConfig', '$modal', function ($scope, Auth, $timeout, Indoor, thisCourt, $animate, Upload, SweetAlert, timeslots, socket, $compile, uiCalendarConfig, $modal) {
 
   	$scope.currentcourt = thisCourt;
 
@@ -337,5 +337,242 @@ angular.module('keepballin')
     		$scope.currentcourt = data;
 		});
 	};
+
+	//Calendar stuff
+
+	//Open datepicker
+    $scope.openCal = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $scope.opened = true;
+    };
+
+    $scope.minDate = moment();
+
+   //When $scope.date changes, update hour selection for start and end time based on availabiility
+    var watchDate = $scope.$watch('date', function(val) {
+        //If there's a new date
+        if(val) {
+            var d = days[val.getDay()];
+            $scope.chosenDate = checkAvailability(val);
+            $scope.timeSlot = generateTimeSelect($scope.chosenDate.begin, $scope.chosenDate.end);
+            $scope.timeSlot.pop(); 
+            $scope.timeSlot2 = generateTimeSelect($scope.chosenDate.begin, $scope.chosenDate.end);
+            if($scope.timeSlot[0]) {
+                //If there's time slot, set notAvailable to false
+                $scope.notAvailable = false;
+            } else {
+                $scope.notAvailable = true;
+            }
+        }
+    });
+
+    //Watch start time and end time and change estHour and estPrice
+    var watchSelections = $scope.$watchGroup(['timeSlot.selected', 'timeSlot2.selected', 'numOfPeople'], function(vals) {
+        if(vals[0] && vals[1]) { 
+            $scope.start = timeToDate($scope.timeSlot.selected);
+            $scope.end = timeToDate($scope.timeSlot2.selected);
+        }
+    });
+
+    //Cancel the watches when user leaves page
+    $scope.$on('$destroy', function () {
+        watchDate();
+        watchSelections();
+    });
+
+    //Convert time to date obj
+    var timeToDate = function(str) {
+        var reservedDate = moment($scope.date);
+        var hour = parseInt(str.slice(0, 2));
+        var min = parseInt(str.slice((str.length - 2), str.length));
+        reservedDate.set({'hour': hour, 'minute': min, 'second': 0, 'millisecond': 0});
+        return reservedDate;
+    };
+
+    var days = [
+        'sunday',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday'
+    ];
+
+    //Check available time with current court's hours
+    var checkAvailability = function(val) {
+        var day = days[val.getDay()];
+        var obj = {};
+
+        obj.begin = $scope.currentcourt.hours[day].begin;
+        obj.end = $scope.currentcourt.hours[day].end;
+        
+        return obj;
+    };
+
+    //Generate array of time selection based on given start to end time
+    var generateTimeSelect = function(start, end) {
+        //Start hours and minutes
+        var s = moment(start).hours();
+        var sMinute = moment(start).minute();
+        //End hours and minutes
+        var e = moment(end).hours();
+        var eMinute = moment(end).minute();
+
+        var count = s;
+
+        var selections = [];
+        var stringH, stringM;
+        //If it starts at 
+        if(sMinute === 30) {
+            //Push the 30 min and skip the first hour 
+            if(count < 10) {
+                stringM = '0' + count + ':30';
+            } else {
+                stringM = count + ':30';
+            }
+            selections.push(stringM);
+            count += 1;
+        } else if(sMinute > 30) {
+            //Skip the first hour
+            count += 1;
+        }
+        
+        //While the count is smaller than the end hour, continue
+        while(count <= e) {
+            //Add padding to number
+            if(count < 10) {
+                stringH = '0' + count + ':00';
+                stringM = '0' + count + ':30';
+            } else {
+                stringH = count + ':00';
+                stringM = count + ':30';
+            }
+            selections.push(stringH);
+            if(!(count === e && eMinute < 30)) {
+                selections.push(stringM);
+            }
+            count++;
+        }
+        return selections;
+    };
+
+	$scope.eventSources = [];
+
+	// $scope.events = timeslots;
+
+	$scope.events = $scope.currentcourt.reservation;
+
+	$scope.eventSources.push($scope.events);
+
+	//socket.io instant updates 
+    socket.syncUpdates('timeslot' + $scope.currentcourt._id, $scope.events);
+    
+    $scope.$on('$destroy', function () {
+        socket.unsyncUpdates('timeslot' + $scope.currentcourt._id);
+    });
+
+    /* alert on eventClick */
+    $scope.onDayClick = function( date, jsEvent, view){
+        //open day view
+        uiCalendarConfig.calendars.reserveCal.fullCalendar('gotoDate', date);
+        uiCalendarConfig.calendars.reserveCal.fullCalendar('changeView', 'agendaDay');
+
+    };
+
+    $scope.onEventClick = function(calEvent, jsEvent, view) {
+        $modal.open({
+            templateUrl: 'app/rent/rent.info.html',
+            scope: $scope,
+            size: 'md',
+            controller: 'TimeslotCtrl',
+            resolve: {
+                theEvent: function() {
+                    return calEvent;
+                }
+            }
+        });
+    };
+
+    //Change timeSlot2 so user doesnt choose time earlier than start
+    $scope.changeEndTimeSlot = function($model) {
+        //Reset timeSlot2 to be like timeSlot
+        $scope.timeSlot2 = generateTimeSelect($scope.chosenDate.begin, $scope.chosenDate.end);
+        //Add one to index so start and end will have at least 30mins gap
+        var index = $scope.timeSlot2.indexOf($model) + 1;
+        $scope.timeSlot2.splice(0, index);
+    };
+
+    //Render tooltip for calendar
+    $scope.eventRender = function( event, element, view ) { 
+
+        var start = moment(event.start).format('h:mma');
+        var end =  moment(event.end).format('h:mma');
+        var message;
+
+        var text = start + '~' + end;
+
+        if(event.status == 'waiting') {
+            var lacking = event.minCapacity - event.numOfPeople;
+            message = '還缺' + lacking + '人才開放';
+            text += ' ' + message;
+            element.css({'background-color': '#ffc019', 'color': 'black'});
+        } else if (event.status == 'completed') {
+            var spotsLeft = event.maxCapacity - event.numOfPeople;
+            message = '已確認';
+            text += ' ' + message;
+            element.css({'background-color': '#E6471C'});
+        } else {
+            message = '已取消';
+            text += ' ' + message;
+            element.css({'background-color': '#502d17'});
+        }
+
+        element.text(text);
+        
+        element.attr({'tooltip': event.numOfPeople + '人',
+                     'tooltip-append-to-body': true});
+        $compile(element)($scope);
+    };
+
+    $scope.extraEventSignature = function(event) {
+       return "" + event.numOfPeople;
+    };
+
+	$scope.uiConfig = {
+      calendar:{
+        height: 450,
+        editable: false,
+        header:{
+          left: 'agendaDay agendaWeek month',
+          center: 'title',
+          right: 'today prev,next'
+        },
+        allDaySlot: false,
+        timezone: 'local',
+        dayClick: $scope.onDayClick,
+        eventClick: $scope.onEventClick,
+        eventRender: $scope.eventRender
+      }
+    };
+
+    //Change language of calendar
+    $scope.uiConfig.calendar.dayNames = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+    $scope.uiConfig.calendar.dayNamesShort = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
+    $scope.uiConfig.calendar.monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+    $scope.uiConfig.calendar.buttonText = {
+        today:    '今天',
+        month:    '月',
+        week:     '週',
+        day:      '日'
+    };
+	//Calendar stuff ends
+
+	//Mark as unavailable
+	$scope.confirm = function(form) {
+		console.log($scope.start, $scope.end);
+	};	
 
   }]);

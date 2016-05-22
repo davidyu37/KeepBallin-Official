@@ -63,6 +63,14 @@ var IndoorSchema = new Schema({
 // //Record the creator of the court
 IndoorSchema.plugin(relationship, { relationshipPathName:'creator' });
 
+IndoorSchema.plugin(deepPopulate, {
+  populate: {
+    'reservation': {
+      select: 'dateReserved whoReserved contactEmail beginString endString start end flexible numOfPeople pricePaid duration timeForConfirmation active dateCreated status'
+    }
+  }
+});
+
 IndoorSchema.statics = {
   getPublic: function(id, cb) {
     this.findOne({$and: [
@@ -79,6 +87,12 @@ IndoorSchema.statics = {
         {approved: true}
       ]
     })
+    .exec(cb);
+  },
+  //Only for admin or creator of the court
+  getPopulated: function(id, cb) {
+    this.findById(id)
+    .deepPopulate('reservation')
     .exec(cb);
   }
 };

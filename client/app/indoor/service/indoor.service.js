@@ -21,6 +21,13 @@ angular.module('keepballin')
           controller: 'queryPublic'
         }
       },
+      //Get for manager
+      getPopulated: {
+        method: 'GET',
+        params: {
+          controller: 'getPopulated'
+        }
+      },
       deletePic: {
         method: 'POST',
         params: {

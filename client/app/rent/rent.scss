@@ -12,6 +12,18 @@
 	opacity: 0.8;
 }
 
+.btn-transparent {
+	background: none;
+	border: 2px solid $brand-primary;
+	-webkit-transition: background 0.3s;
+	-moz-transition: background 0.3s;
+	transition: background 0.3s;
+	&:hover {
+		background-color: $brand-primary;
+		color: white;
+	}
+}
+
 .rentPageContainer {
     margin-top: 65px;
 	@media(min-width: $screen-sm-min) {

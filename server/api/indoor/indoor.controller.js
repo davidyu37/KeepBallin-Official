@@ -133,13 +133,13 @@ exports.create = function(req, res) {
 };
 
 // Get a single Indoor only for the creator or admin
-exports.show = function(req, res) {
-  Indoor.findById(req.params.id, function (err, indoor) {
-    if(err) { return handleError(res, err); }
-    if(!indoor) { return res.status(404).send('Not Found'); }
-    return res.json(indoor);
-  });
-};
+// exports.show = function(req, res) {
+//   Indoor.findById(req.params.id, function (err, indoor) {
+//     if(err) { return handleError(res, err); }
+//     if(!indoor) { return res.status(404).send('Not Found'); }
+//     return res.json(indoor);
+//   });
+// };
 
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
@@ -178,6 +178,21 @@ exports.queryPublic = function(req, res) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(indoor);
   });
+};
+
+//Get indoor populated for creator or admin only
+exports.getPopulated = function(req, res) {
+  Indoor.getPopulated(req.params.id, function(err, indoor) {
+    if(err) { return handleError(res, err); }
+    var creator = JSON.stringify(indoor.creator);
+    var userId = JSON.stringify(req.user._id);
+    if(creator == userId || req.user.role == 'admin') {
+      return res.status(200).json(indoor);
+    } else {
+      return res.status(401).send('Unauthorized');
+    }
+  })
+
 };
 
 function handleError(res, err) {

@@ -12,8 +12,8 @@ var ReservationSchema = new Schema({
   contactEmail: String,
   beginString: String,
   endString: String,
-  beginTime: Date,
-  endTime: Date,
+  start: Date,
+  end: Date,
   flexible: {
     type: Boolean,
     default: false

@@ -79,8 +79,8 @@ exports.create = function(req, res) {
     
     //Prepare timeslot obj
     var singleTimeslot = {
-    	start: reserve.beginTime,
-  		end: reserve.endTime,
+    	start: reserve.start,
+  		end: reserve.end,
   		numOfPeople: reserve.numOfPeople,
   		minCapacity: reserve.minCapacity, 
   		maxCapacity: reserve.maxCapacity,
@@ -128,47 +128,6 @@ exports.create = function(req, res) {
         }
         return res.status(201).json(reserve);   
       });
-  
-      //Schedule reservation check
-      //The scheduled time should be timeForConfirmation
-      // var date = moment("2016-05-17 22:40:00");
-      // // date = date.add(1, 'm').toDate();
-      // var j = schedule.scheduleJob(date._d, function(y){
-      //   //Check if all timeslots are active
-      //   Timeslot.checkActive(slots, function(active) {
-      //     //Success notification
-      //     if(active) {
-      //       if(!(reserve.status == 'completed')) {
-      //         console.log('reservation completed');
-      //         var confirmationCode = randomValueHex(7);
-      //         console.log('Confirmation Code', confirmationCode);
-      //         //Make hash code
-      //         reserve.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, reserve.salt);
-      //         reserve.active = true;
-      //         reserve.status = 'completed';
-      //         reserve.save(function() {
-      //           //Send notification
-      //           generateQRCode(confirmationCode, function(err, url) {
-      //             if(err) { console.log('error occur while upload qr code'); }
-      //             sendNotice(req, reserve, confirmationCode, dateReservedString, url, true); 
-      //           });
-      //         });
-      //       }
-      //     } else {
-      //       //Failed reservation notice
-      //       //Return KB points
-      //       console.log('reservation failed');
-      //       //Update individual timeslots
-      //       Timeslot.cancelTimeslots(reserve, function() {
-      //         reserve.status = 'canceled';
-      //         reserve.save(function() {
-      //           sendNotice(req, reserve, null, dateReservedString, null, false);
-      //         });
-      //       });
-
-      //     }
-      //   });//Timeslot check active ends
-      // });//Schedule ends
       
     });//generateTimeslot ends    
   });//reservation create ends

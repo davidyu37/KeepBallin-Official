@@ -13,8 +13,19 @@ angular.module('keepballin')
       	templateUrl: 'app/rent/rentedit.html',
       	//Resolve rental court before entering
       	resolve: {
-          thisCourt: ['$stateParams', 'Indoor', function($stateParams, Indoor) {
-            return Indoor.get({id: $stateParams.id});  
+          thisCourt: ['$stateParams', 'Indoor', '$q', function($stateParams, Indoor, $q) {
+            var defer = $q.defer();
+            Indoor.getPopulated({id: $stateParams.id}, function(data) {
+              defer.resolve(data);
+            });  
+            return defer.promise;
+          }],
+          timeslots: ['$stateParams', 'Timeslot', '$q', function($stateParams, Timeslot, $q) {
+            var defer = $q.defer();
+            Timeslot.getByCourtId({ id: $stateParams.id }, function(data) {
+              defer.resolve(data);
+            }); 
+            return defer.promise; 
           }]
         },
       	controller: 'RentEditCtrl'

@@ -1,0 +1,41 @@
+<div class="timeslot-bg">
+	<i class="fa fa-remove pull-right pointer" ng-click="close()"></i>
+	<timer class="coutdown" end-time="event.timeForConfirmation">{{days}} 天 {{hours}}時 {{minutes}} 分 {{seconds}}秒後截止預約
+	</timer>
+	
+	<ul class="list-group">
+		<li class="list-group-item">
+			<i class="fa fa-calendar" tooltip="日期" tooltip-placement="left"></i>
+			<span>{{startDate}}</span>
+		</li>
+		<li class="list-group-item">
+			<i class="fa fa-clock-o" tooltip="時段" tooltip-placement="left"></i>
+			<span>{{start}}~{{end}}</span>
+			<span>{{event.duration}}小時</span>
+		</li>
+		<li class="list-group-item">
+			<i class="fa fa-user" tooltip="人數" tooltip-placement="left"></i>
+			<span>{{event.numOfPeople}}</span>
+			<span ng-show="event.flexible"> | 時間可彈性</span>
+			<span ng-hide="event.flexible"> | 固定時間</span>
+		</li>
+		<li class="list-group-item">
+			<span>狀態: </span>
+			<span ng-hide="event.active">未開放</span>
+			<span ng-show="event.active && !event.full">已開放</span>
+			<span ng-show="event.full">已客滿</span>
+			<span ng-show="event.status == 'canceled'">已取消</span>
+			<span ng-show="event.status == 'completed'">已確認</span>
+			<span ng-show="event.status == 'waiting'">等待確認</span>
+		</li>
+		<li class="list-group-item">
+			<i class="fa fa-dollar" tooltip="已付金額" tooltip-placement="left"></i>
+			<span>{{event.pricePaid}}</span>
+		</li>
+		<li class="list-group-item">
+			<i class="fa fa-bookmark" tooltip="預約人" tooltip-placement="left"></i>
+			<span>{{event.whoReserved}}</span>
+			<span> | {{event.contactEmail}}</span>
+		</li>
+	</ul>
+</div>

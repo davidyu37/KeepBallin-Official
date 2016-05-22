@@ -25,7 +25,7 @@
 		            /小時</div>
 		            <div>每小時至少{{currentcourt.minCapacity}}人開放</div>
 			        <div style="margin-top: 20px;">
-			        	<button style="font-size:90%" class="eventBtn" ng-click="openRate()">預約場地</button>
+			        	<button style="font-size:90%" class="eventBtn">預約場地</button>
 			        </div>
 		        </div>
 		        <div class="fbContainer">
@@ -284,6 +284,53 @@
 </div>
 <!-- Editing page -->
 <div class="editPageBackground rentPageContainer" ng-click="stopPropagate($event)" style="margin-top: 100px;" ng-hide="showPreview">
+	<div class="page-header">
+		<h3>時間管理</h3>	
+	</div>
+	<form class="form-inline" ng-submit="confirm(reserveForm)" name="reserveForm" novalidate>
+		<div class="form-group">
+			<div class="input-group">
+				<input type="date" name="theDate" class="form-control input-left" datepicker-popup is-open="opened" show-button-bar="false" min-date="minDate" ng-model="date" ng-disabled="sending" style="height: 35px; color: black; font-size: 14px;" ng-click="openCal($event)" required/>
+				<span class="input-group-btn">
+		          <button type="button" class="btn btn-default custom-addon-right" ng-click="openCal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+		        </span>
+			</div>
+		</div>
+		<ui-select ng-model="timeSlot.selected" name="start" theme="bootstrap" class="reserve-time-select" ng-show="timeSlot[0]" on-select="changeEndTimeSlot($model)" required>
+			<ui-select-match placeholder="開始時間">{{$select.selected}}</ui-select-match>
+			<ui-select-choices repeat="slot in timeSlot | filter: $select.search">
+			<div ng-bind-html="slot | highlight: $select.search"></div>
+			</ui-select-choices>
+		</ui-select>
+		<p style="display: inline-block" ng-show="timeSlot[0]">~</p>
+		<ui-select ng-model="timeSlot2.selected" name="end" theme="bootstrap" class="reserve-time-select" ng-show="timeSlot2[0]" required>
+			<ui-select-match placeholder="結束時間">{{$select.selected}}</ui-select-match>
+			<ui-select-choices repeat="slot in timeSlot2 | filter: $select.search">
+			<div ng-bind-html="slot | highlight: $select.search"></div>
+			</ui-select-choices>
+		</ui-select>
+		<div class="form-group" ng-show="people[0]">
+			<div class="input-group">
+				<span class="input-group-btn" popover="每小時一人${{currentcourt.perPersonPrice}}" popover-placement="bottom" popover-append-to-body="false" popover-trigger="mouseover">
+		          <button type="button" class="btn btn-default custom-addon-left"><i class="glyphicon glyphicon-user"></i></button>
+		        </span>
+				<select class="form-control input-left" ng-model="numOfPeople" name="people" ng-options="p for p in people" style="height: 35px; color: black; font-size: 14px;" required>
+					<option value="">-- 幾位 --</option>
+				</select>
+			</div>
+		</div>
+		<button type="sumbit" class="btn btn-transparent" ng-disabled="notAvailable || invalidTime">
+			<div ng-hide="sending">不開放</div>
+			<div class="loading-btn" ng-show="sending">
+			  <div class="rect1"></div>
+			  <div class="rect2"></div>
+			  <div class="rect3"></div>
+			  <div class="rect4"></div>
+			</div>	
+		</button>
+		<p class="text-muted" ng-show="notAvailable">此日期無開放時間可以預約</p>
+	</form>
+	<div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="reserveCal" calendar-watch-event="extraEventSignature(event)" style="margin-top: 20px;"></div>
 	<div class="page-header">
 		<h3>是否公開？</h3>
 	</div>

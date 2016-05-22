@@ -9,7 +9,7 @@ var router = express.Router();
 //Create rental court
 router.post('/', auth.isAuthenticated(), controller.create);
 //View the edit page of the rental court
-router.get('/:id', auth.isAuthenticated(), controller.show);
+router.get('/:id/getPopulated', auth.isAuthenticated(), controller.getPopulated);
 //View individual rental court, anyone can view
 router.get('/:id/getPublic', controller.getPublic);
 //View all the rental courts
