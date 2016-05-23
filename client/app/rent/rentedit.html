@@ -319,7 +319,7 @@
 				</select>
 			</div>
 		</div>
-		<button type="sumbit" class="btn btn-transparent" ng-disabled="notAvailable || invalidTime">
+		<button type="sumbit" class="btn btn-transparent" ng-disabled="invalidTime">
 			<div ng-hide="sending">不開放</div>
 			<div class="loading-btn" ng-show="sending">
 			  <div class="rect1"></div>
@@ -328,7 +328,7 @@
 			  <div class="rect4"></div>
 			</div>	
 		</button>
-		<p class="text-muted" ng-show="notAvailable">此日期無開放時間可以預約</p>
+		<p class="text-muted" ng-show="overlap">已有預約的時間無法取消開放</p>
 	</form>
 	<div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="reserveCal" calendar-watch-event="extraEventSignature(event)" style="margin-top: 20px;"></div>
 	<div class="page-header">

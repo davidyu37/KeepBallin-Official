@@ -366,19 +366,17 @@ angular.module('keepballin')
             }
         }
     });
+    //When there's no time chosen
+    $scope.invalidTime = true;
 
     //Watch start time and end time and change estHour and estPrice
     var watchSelections = $scope.$watchGroup(['timeSlot.selected', 'timeSlot2.selected', 'numOfPeople'], function(vals) {
         if(vals[0] && vals[1]) { 
+        	$scope.invalidTime = false;
+        	$scope.estHour = calcTotalHours(vals[0], vals[1]);
             $scope.start = timeToDate($scope.timeSlot.selected);
             $scope.end = timeToDate($scope.timeSlot2.selected);
         }
-    });
-
-    //Cancel the watches when user leaves page
-    $scope.$on('$destroy', function () {
-        watchDate();
-        watchSelections();
     });
 
     //Convert time to date obj
@@ -459,19 +457,36 @@ angular.module('keepballin')
         return selections;
     };
 
+    //Filter timeslots that is notOpen
+    var filterTimeslots = function(slots) {
+    	var arr = [];
+    	slots.forEach(function(slot) {
+    		if(slot.notOpen) {
+    			arr.push(slot);
+    		}
+    	});
+    	return arr;
+    };
+
 	$scope.eventSources = [];
 
-	// $scope.events = timeslots;
+	$scope.timeslots = filterTimeslots(timeslots);
 
-	$scope.events = $scope.currentcourt.reservation;
+	console.log($scope.timeslots);
 
-	$scope.eventSources.push($scope.events);
+	$scope.reservations = $scope.currentcourt.reservation;
+
+	$scope.eventSources.push($scope.timeslots);
+	
+	$scope.eventSources.push($scope.reservations);
 
 	//socket.io instant updates 
-    socket.syncUpdates('timeslot' + $scope.currentcourt._id, $scope.events);
+    socket.syncUpdates('reservation' + $scope.currentcourt._id, $scope.reservations);
     
     $scope.$on('$destroy', function () {
-        socket.unsyncUpdates('timeslot' + $scope.currentcourt._id);
+        socket.unsyncUpdates('indoor' + $scope.currentcourt._id);
+        watchDate();
+        watchSelections();
     });
 
     /* alert on eventClick */
@@ -515,26 +530,32 @@ angular.module('keepballin')
         var text = start + '~' + end;
 
         if(event.status == 'waiting') {
-            var lacking = event.minCapacity - event.numOfPeople;
-            message = '還缺' + lacking + '人才開放';
+            message = '等待確認';
             text += ' ' + message;
             element.css({'background-color': '#ffc019', 'color': 'black'});
         } else if (event.status == 'completed') {
-            var spotsLeft = event.maxCapacity - event.numOfPeople;
             message = '已確認';
             text += ' ' + message;
             element.css({'background-color': '#E6471C'});
+        } else if (event.notOpen) {
+        	message = '不開放'
+        	text += ' ' + message;
+            element.css({'background-color': '#502d17'});
         } else {
             message = '已取消';
             text += ' ' + message;
-            element.css({'background-color': '#502d17'});
+            element.css({'background-color': '#e6e6e6', 'color': 'black'});
         }
 
         element.text(text);
-        
-        element.attr({'tooltip': event.numOfPeople + '人',
-                     'tooltip-append-to-body': true});
-        $compile(element)($scope);
+        if(event.numOfPeople) {
+	        element.attr({'tooltip': event.numOfPeople + '人',
+	                     'tooltip-append-to-body': true});
+	        $compile(element)($scope);
+        }
+        if(event.notOpen) {
+
+        }
     };
 
     $scope.extraEventSignature = function(event) {
@@ -570,9 +591,84 @@ angular.module('keepballin')
     };
 	//Calendar stuff ends
 
+	//Check if this timeframe already has reservations
+
+	var checkTime = function(start, end) {
+
+		var result = true;
+		
+		$scope.currentcourt.reservation.forEach(function(res) {
+			var resStart = moment(res.start);
+			var resEnd = moment(res.end);
+			
+			if(start.isSame(resStart) || start.isBetween(resStart, resEnd) || end.isBetween(resStart, resEnd) || end.isSame(resEnd)) {
+				result = false;
+			}
+		});
+		
+		return result;
+	};
+
+	//Calculate total hours help func
+    var calcTotalHours = function(start, end) {
+        var newStartString = start.replace(':', '');
+        var newEndString = end.replace(':', '');
+        //Before we convert string to number
+        var testEnd = newEndString.slice((newEndString.length - 2), (newEndString.length));
+        var testStart = newStartString.slice((newStartString.length - 2), (newStartString.length));
+        //If the string end with 30, create new string with 50
+        if(testEnd === '30') {
+            newEndString = newEndString.slice(0, 2) + '50';
+        }
+        if(testStart === '30') {
+            newStartString = newStartString.slice(0, 2) + '50';
+        }
+        //Convert to number
+        var newEndNumber = parseInt(newEndString);
+        var newStartNumber = parseInt(newStartString);
+        var totalHours;
+        //Check if start time is smaller than end time
+        if(newStartNumber < newEndNumber) {
+            $scope.invalidTime = false;
+            var diff = newEndNumber - newStartNumber;
+            totalHours = Math.round(diff) / 100;
+        } else {
+            $scope.invalidTime = true;
+            totalHours = 0;
+        }
+
+        return totalHours;
+    };
+
 	//Mark as unavailable
 	$scope.confirm = function(form) {
-		console.log($scope.start, $scope.end);
+		//Check if this timeframe already has reservations
+		if(checkTime($scope.start, $scope.end)) {
+			console.log('no overlap');
+			$scope.overlap = false;
+			var numOfTimeslot = $scope.estHour / 0.5;
+			var obj = {
+				id: $scope.currentcourt._id, 
+				start: $scope.start, 
+				end: $scope.end,
+				minCapacity: $scope.currentcourt.minCapacity,
+				maxCapacity: $scope.currentcourt.maxCapacity,
+				courtReserved: $scope.currentcourt._id,
+				notOpen: true,
+				numOfTimeslot: numOfTimeslot
+			};
+
+			Indoor.closeTimeslot(obj, function(data) {
+				var slots = data;
+				data.forEach(function(d) {
+					$scope.timeslots.push(d);
+				});
+			});			
+		} else {
+			console.log('overlap');
+			$scope.overlap = true;
+		}
 	};	
+
 
   }]);

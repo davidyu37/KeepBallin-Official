@@ -500,6 +500,58 @@ TimeslotSchema.statics = {
     }, function(err) {
       cb();
     });//async each ends
+  },
+  //Block timeslots
+  blockTimeslots: function(obj, numOfTimeSlot, cb) {
+    var start = moment(obj.start);
+    var end = moment(obj.start);
+    var Model = this;
+    var i = 1;
+    var timeslots = [];
+    async.whilst(function() { return i <= numOfTimeSlot; }, function(callback) {
+      //If it's not the first timeslot set end time to the end of last timeslot
+      if(i > 1) {
+        obj.start = start.add(30, 'm');
+      }
+      var newend = end.add(30, 'm');
+      obj.end = newend;
+      Model.findOne({$and: [
+
+        { start: obj.start },
+        { end: obj.end },
+        { courtReserved: obj.courtReserved }
+
+      ]}, function(err, data) {
+        if(err) { console.console(err); return; }
+        //When there's no timeslot yet, create one
+        if(!data) {
+          //When there's no timeslot, push the data to slots
+          var newSlot = new Model();
+          
+          var completeSlot = _.merge(newSlot, obj);
+
+
+          completeSlot.save(function(err, data) {
+            if(err) {
+              console.log('err while saving new timeslot', err);
+            }
+            timeslots.push(data);
+            i++;
+            callback(null, timeslots);
+          });
+
+        } else {
+          //When the timeslot already exists
+          callback(null, timeslots);
+        }
+      });
+
+    }, function(err, arr, res) {
+      if(err) {
+        console.log('error while saving timeslot', err);
+      }
+      cb(arr);
+    });
   }
 };
 

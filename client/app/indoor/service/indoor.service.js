@@ -39,6 +39,13 @@ angular.module('keepballin')
         params: {
           controller: 'setCover'
         }
+      },
+      closeTimeslot: {
+        method: 'POST',
+        isArray: true, 
+        params: {
+          controller: 'closeTimeslot'
+        }
       }
 	  });
   }]);

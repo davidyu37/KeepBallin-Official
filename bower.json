@@ -31,7 +31,7 @@
     "angular-easyfb": "~1.4.1",
     "angular-ui-calendar": "~1.0.1",
     "angular-moment": "~0.10.3",
-    "moment": "~2.10.6",
+    "moment": "^2.13.0",
     "angular-filter": "~0.5.8",
     "angular-translate": "~2.9.0",
     "angular-scroll": "~1.0.0",

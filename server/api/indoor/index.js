@@ -24,6 +24,7 @@ router.post('/pictures', auth.isAuthenticated(), controller.upload);
 router.post('/:id/deletePicture', auth.isAuthenticated(), controller.deletePic);
 //Set cover photo
 router.post('/:id/setCover', auth.isAuthenticated(), controller.setCover);
-
+//Close timeslots
+router.post('/:id/closeTimeslot', auth.isAuthenticated(), controller.closeTimeslot);
 
 module.exports = router;

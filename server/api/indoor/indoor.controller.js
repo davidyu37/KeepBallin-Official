@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Indoor = require('./indoor.model');
+var Timeslot = require('../timeslot/timeslot.model');
 var multiparty = require('multiparty');
 var config = require('../../config/environment');
 var uuid = require('uuid');
@@ -193,6 +194,15 @@ exports.getPopulated = function(req, res) {
     }
   })
 
+};
+
+//Close timeslots
+exports.closeTimeslot = function(req, res) {
+  Timeslot.blockTimeslots(req.body, req.body.numOfTimeslot, function(slots) {
+    console.log('finished blocking', slots);
+    return res.status(201).json(slots);  
+  });
+  
 };
 
 function handleError(res, err) {
