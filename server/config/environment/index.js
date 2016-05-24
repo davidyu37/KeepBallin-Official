@@ -72,6 +72,13 @@ var all = {
 
   prerender: {
     token: process.env.PRERENDER_TOKEN || 'token'
+  },
+
+  allpay: {
+    merchantID: process.env.MERCHANT_ID || 'merchantID',
+    hashKey: process.env.HASH_KEY || 'hashKey',
+    hashIV: process.env.HASH_IV || 'hashIV',
+    mode: process.env.MODE || 'test'
   }
 
 

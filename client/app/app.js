@@ -24,7 +24,8 @@ angular.module('keepballin', [
   'angular-google-adsense',
   'timer',
   'textAngular',
-  'ui.select'
+  'ui.select',
+  'credit-cards'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

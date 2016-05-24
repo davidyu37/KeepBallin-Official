@@ -10,7 +10,7 @@ angular.module('keepballin')
     $scope.getTemplate = function(temp) {
       $scope.profile = false;
       $scope.team = false;
-      $scope.match = false;
+      $scope.points = false;
       $scope.court = false;
       $scope.reservation = false;
     
@@ -19,7 +19,7 @@ angular.module('keepballin')
         break;
         case 1: $scope.team = true;
         break;
-        case 2: $scope.match = true;
+        case 2: $scope.points = true;
         break;
         case 3: $scope.court = true;
         break;

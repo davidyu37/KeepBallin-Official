@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "main": "server/app.js",
   "dependencies": {
+    "allpay": "^1.1.0",
     "async": "^1.5.2",
     "aws-sdk": "^2.3.10",
     "body-parser": "~1.5.0",

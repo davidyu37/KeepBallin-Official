@@ -1,0 +1,59 @@
+<div ng-controller="PointsCtrl">
+	<div class="page-header">
+		<h1>目前點數:</h1>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="panel panel-default panel-custom" ng-class="{'selected-panel': isRookie}" ng-click="changeClass('isRookie')">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">菜鳥計畫</h3>
+			  </div>
+			  <div class="panel-body">
+			    <h4>
+			    	<i class="fa fa-dollar"></i>
+			    	500
+			    	<i class="fa fa-check-square-o" ng-show="isRookie"></i>
+			    </h4>
+			  </div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="panel panel-default panel-custom" ng-class="{'selected-panel': isMVP}" ng-click="changeClass('isMVP')">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">MVP</h3>
+			  </div>
+			  <div class="panel-body">
+			    <h4>
+			    	<i class="fa fa-dollar"></i>
+			    	1000
+			    	<i class="fa fa-check-square-o" ng-show="isMVP"></i>
+			    </h4>
+			  </div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="panel panel-default panel-custom" ng-class="{'selected-panel': isVeteran}" ng-click="changeClass('isVeteran')">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">經驗老手</h3>
+			  </div>
+			  <div class="panel-body">
+			    <h4>
+			    	<i class="fa fa-dollar"></i>
+			    	5000
+			    	<i class="fa fa-check-square-o" ng-show="isVeteran"></i>
+			    </h4>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<div ng-include="'app/checkout/checkout.html'">
+		
+	</div>
+
+	<div class="marginAndCenter">
+		<div class="btn point-btn faa-parent animated-hover" ng-click="openModal()">
+			加點數
+			<i class="fa fa-plus faa-pulse"></i>
+		</div>
+	</div>
+</div>

@@ -1,6 +1,8 @@
 /* Profile tab */
 .wrapContent {
-	padding-top: 50px;
+    @media(min-width: $screen-sm-min) {
+    	padding-top: 50px;
+    }
 	border: 1px solid #ddd;
 	border-top: none;
     overflow: scroll;
@@ -9,6 +11,11 @@
 
 .accordHead {
 	cursor: pointer;
+}
+
+.marginAndCenter {
+    margin: 50px 0px; 
+    text-align: center;
 }
 
 .profilePicOverlay {
@@ -51,5 +58,87 @@
     height: 100%;
     margin: 25px auto;
     text-align: center;
+}
+
+.point-btn {
+    @media(min-width: $screen-sm-min) {
+        width: 30%;
+        font-size: 16pt;
+        padding: 10px;
+    }
+    border: 2px solid #E6471C;
+    border-radius: 5px;
+    background: #E6471C;
+    color: white;
+    transition: background 0.3s;
+    &:hover {
+        background: none;
+        color: black;
+        border-radius: 25px;
+    }
+}
+
+.panel-custom {
+    width: 100%;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    .panel-body {
+        text-align: center;
+    }
+    &:hover {
+        .panel-heading {
+            background-color: $brand-primary;
+            color: white;
+        }
+    }
+}
+
+.panel-custom:before {
+  pointer-events: none;
+  content: '';
+  position: absolute;
+  border: $brand-primary solid 4px;
+  top: -16px;
+  right: -16px;
+  bottom: -16px;
+  left: -16px;
+  opacity: 0;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: top, right, bottom, left;
+  transition-property: top, right, bottom, left;
+}
+.panel-custom:hover:before, .panel-custom:focus:before, .panel-custom:active:before {
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
+  opacity: 1;
+}
+
+.selected-panel {
+    .panel-heading {
+        background-color: $brand-primary;
+        color: white;
+    }
+    &:before {
+        pointer-events: none;
+        content: '';
+        position: absolute;
+        border: $brand-primary solid 4px;
+        top: -8px;
+        right: -8px;
+        bottom: -8px;
+        left: -8px;
+        opacity: 1;
+    }
 }
 

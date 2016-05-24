@@ -34,11 +34,21 @@ exports.enterRoom = function(req, res) {
 	Global.findById(req.body.id, function(err, global) {
 		if(err) { return handleError(res, err); }
 		//Push user name to user online
-		global.usersOnline.push(req.body.name);
-		global.save(function(err, saved) {
-			if(err) { return handleError(res, err); }
-			return res.status(201).json(saved);
-		});
+        if(!global) {
+            Global.find({}, function(err, globals) {
+                globals[0].usersOnline.push(req.body.name);
+                globals[0].save(function(err, saved) {
+                    if(err) { return handleError(res, err); }
+                    return res.status(201).json(saved);
+                });
+            });
+        } else {
+    		global.usersOnline.push(req.body.name);
+    		global.save(function(err, saved) {
+    			if(err) { return handleError(res, err); }
+    			return res.status(201).json(saved);
+    		});
+        }
 	});
 };
 
