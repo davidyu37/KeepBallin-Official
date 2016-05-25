@@ -142,3 +142,12 @@
     }
 }
 
+.custom-alert {
+    @media(min-width: $screen-sm-min) {
+        width: 40%; 
+    }
+    width: 100%;
+    text-align: center; 
+    margin: auto;
+}
+

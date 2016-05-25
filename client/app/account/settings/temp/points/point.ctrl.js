@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('PointsCtrl', ['$scope', 'Auth', '$modal', function ($scope, Auth, $modal) {
+  .controller('PointsCtrl', ['$scope', 'Auth', '$modal', 'Checkout', '$http', function ($scope, Auth, $modal, Checkout, $http) {
     
     $scope.changeClass = function(val) {
       $scope.isVeteran = false;
@@ -28,17 +28,22 @@ angular.module('keepballin')
 
     $scope.points = 0;
 
-    $scope.openModal = function() {
-      $modal.open({
-          templateUrl: 'app/checkout/checkout.modal.html',
-          size: 'md',
-          controller: 'CheckoutCtrl',
-          resolve: {
-              points: function() {
-                  return $scope.points;
-              }
-          }
-      });
+    $scope.sendOrder = function() {
+      if($scope.points > 0) {
+        Checkout.save({points: $scope.points}, function(data) {
+          console.log('points saved', data);
+          $scope.allPay = data.html;
+        });
+      } else {
+        $scope.noPoint = true;
+      }
     };
+
+    $scope.$watch('points', function(val) {
+      if(val) {
+        $scope.noPoint = false;
+      }
+    });
+   
     
   }]);

@@ -45,13 +45,14 @@
 			  </div>
 			</div>
 		</div>
+		<div class="col-sm-12" ng-show="noPoint">
+			<div class="alert alert-danger custom-alert" >請選擇要加多少點數</div>
+		</div>
 	</div>
-	<div ng-include="'app/checkout/checkout.html'">
-		
-	</div>
+	<div dynamic="allPay"></div>
 
 	<div class="marginAndCenter">
-		<div class="btn point-btn faa-parent animated-hover" ng-click="openModal()">
+		<div class="btn point-btn faa-parent animated-hover" ng-click="sendOrder()">
 			加點數
 			<i class="fa fa-plus faa-pulse"></i>
 		</div>
