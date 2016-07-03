@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('keepballin')
-  .config(function ($stateProvider, modalStateProvider) {
+  .config(function ($stateProvider) {
   
     $stateProvider
       .state('courts', {
-        url: '/courts',
+        url: '/',
         templateUrl: 'app/courts/courts.html',
         controller: 'CourtsCtrl'
       })
@@ -23,16 +23,5 @@ angular.module('keepballin')
         templateUrl: 'app/comments/comments.html',
         controller: 'CommentCtrl'
       });
-
-    // modalStateProvider.state('thiscourt.picture', {
-    //   templateUrl: 'app/courts/temp/pictures.html',
-    //   size: 'lg',
-    //   resolve: {
-    //     chosenCourt: ['$stateParams', 'Court', function($stateParams, Court) {
-    //       return Court.get({id: $stateParams.id});
-    //     }]
-    //   }, 
-    //   controller: 'ThisCourtCtrl'
-    // });
 
   });//end of config

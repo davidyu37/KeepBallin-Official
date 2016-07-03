@@ -15,6 +15,12 @@ angular.module('keepballin')
       update: {
         method: 'PUT'
       },
+      increaseView: {
+        method: 'PUT',
+        params: {
+          controller: 'increaseView'
+        }
+      },
       getRatings: {
         method: 'GET',
         params: {

@@ -50,7 +50,7 @@ module.exports = {
 			        to:       reserve.contactEmail,
 			        from:     config.email.me,
 			        subject:  '預約成功',
-			        html: compiledTemplate.render({
+			        html: compiledPartialTemplate.render({
 			          name: reserve.whoReserved, 
 			          confirmationCode: code, 
 			          dateReserved: dateString,
@@ -65,7 +65,7 @@ module.exports = {
 			        })
 			      }, function(err, json) {
 			        if (err) { return console.error(err); }
-			        console.log('success email sent');
+			        console.log('partial success email sent');
 			        callback();
 			    });
 				break;

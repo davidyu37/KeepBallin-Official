@@ -5,7 +5,7 @@ angular.module('keepballin')
 
     $scope.menu = [
     {
-      'title': '球場',
+      'title': '籃球場',
       'link': 'courts',
       'icon': 'glyphicon-map-marker'
     },
@@ -14,13 +14,13 @@ angular.module('keepballin')
       'link': 'team',
       'icon': 'glyphicon-user'
     },
+    // {
+    //   'title': '球友',
+    //   'link': 'teammate',
+    //   'icon': 'glyphicon-fire'
+    // },
     {
-      'title': '球友',
-      'link': 'teammate',
-      'icon': 'glyphicon-fire'
-    },
-    {
-      'title': '租場',
+      'title': '室內籃球場',
       'link': 'indoor',
       'icon': 'glyphicon-home'
     }
@@ -36,25 +36,6 @@ angular.module('keepballin')
 
     // Check if user is created a rental court
     $scope.hasCourt = Auth.hasCourt;
-
-    // socket.socket.on('conversation:save', function(convo) {
-      
-    //   var messages = convo.messages;//array of messages
-
-    //   //If the new message is from self, don't do anything
-    //   if(messages[messages.length-1].from._id === $scope.getCurrentUser()._id) {
-    //     return;
-    //   } else {
-    //     var message = messages[messages.length-1];
-    //     $scope.from = message.from.name;
-    //     $scope.words = message.message;
-    //     $scope.showAlert = true;
-    //     $timeout(function(){ 
-    //       $scope.showAlert = false;
-    //     }, 3000);
-    //   }
-      
-    // });
 
     $scope.logout = function() {
       var userNow = Auth.getCurrentUser().$promise;
@@ -75,6 +56,14 @@ angular.module('keepballin')
     $scope.goToRent = function() {
       if(Auth.isLoggedIn()) {
         $state.go('rent');
+      } else {
+        $state.go('login');
+      }
+    };
+
+    $scope.goToPoint = function() {
+      if(Auth.isLoggedIn()) {
+        $state.go('settings',{choice: 1});
       } else {
         $state.go('login');
       }

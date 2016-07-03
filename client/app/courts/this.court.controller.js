@@ -10,7 +10,6 @@ angular.module('keepballin')
 			// $scope.readonly = true;
 			chosenCourt.$promise.then(function(data){
 				$scope.currentcourt = data;
-				
 				//Show google map for the court
 			  	$scope.courtMap = new google.maps.Map(document.getElementById('courtMap'), {
 			  		//map options

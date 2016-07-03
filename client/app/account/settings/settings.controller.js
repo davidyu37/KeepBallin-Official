@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('SettingsCtrl', ['$scope', 'Auth', function ($scope, Auth) {
+  .controller('SettingsCtrl', ['$scope', 'Auth', 'choice', function ($scope, Auth, choice) {
     $scope.errors = {};
     $scope.settingUrl = '';
     $scope.profile = true;
-   
+
     $scope.userNow = Auth.getCurrentUser();
     $scope.getTemplate = function(temp) {
       $scope.profile = false;
@@ -13,20 +13,26 @@ angular.module('keepballin')
       $scope.points = false;
       $scope.court = false;
       $scope.reservation = false;
-    
+      var which = 'active' + temp;
+      $scope[which] = true;
       switch (temp) {
         case 0: $scope.profile = true;
         break;
-        case 1: $scope.team = true;
+        case 1: $scope.points = true;
         break;
-        case 2: $scope.points = true;
+        // case 2: $scope.team = true;
+        // break;
+        case 2: $scope.court = true;
         break;
-        case 3: $scope.court = true;
-        break;
-        case 4: $scope.reservation = true;
+        case 3: $scope.reservation = true;
         break;
       }
     };
+
+    if(choice) {
+      var num = Number(choice);
+      $scope.getTemplate(num);
+    }
 
     $scope.showSignup = false;
 

@@ -106,6 +106,12 @@ angular.module('keepballin')
         params: {
           controller: 'getNameOnly'
         }
+      },
+      confirmEmail: {
+        method: 'GET',
+        params: {
+          controller: 'confirmEmail'
+        }
       }
 	  });
   });

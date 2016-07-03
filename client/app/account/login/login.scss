@@ -27,6 +27,65 @@ $btnGithubBackgroundHighlight:      #ccc;
 .btn-github {
   @include button-variant($btnTextAlt, $btnGithubBackground, $btnGithubBackgroundHighlight);
 }
+.btn-line {
+	@media (max-width: 768px) {
+		margin-top: 10px;
+	}
+	display: inline-block;
+	color: white;
+	border-radius: 4px;
+	padding: 0px;
+	background-color: #00C300;
+	.line-img {
+		float: left;
+		padding: 7px;
+		.line-wrapper {
+			width: 34px;
+			height: 36px;
+			overflow: hidden;
+		}
+		svg {
+			background-color: white;
+			fill: #00C300;
+			width: 45px;
+			height: 45px;
+			position: relative;
+			top: -4px;
+			left: -5px;
+		}
+	}
+
+	.line-message {
+		padding: 15px;
+		font-size: 14px;
+		text-align: center;
+		float: right;
+	}
+
+	&:hover {
+		color: white;
+		background-color: #00E000;
+		svg {
+			fill: #00E000;
+		}
+	}
+
+	&:active {
+		color: white;
+		background-color: #00B300;
+		svg {
+			fill: #00B300;
+		}
+	}
+
+	&:disabled {
+		color: white;
+		background-color: #C6C6C6;
+		svg {
+			fill: #C6C6C6;
+		}
+	}
+}
 
 // NEW LOGIN HTML STYLES-----------------------------
 

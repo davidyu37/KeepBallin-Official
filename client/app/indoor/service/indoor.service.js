@@ -6,6 +6,12 @@ angular.module('keepballin')
     { id: '@id' }, {
       update: {
         method: 'PUT'
+      },
+      changeCreator: {
+        method: 'PUT',
+        params: {
+          controller: 'changeCreator'
+        }
       }, 
       getPublic: {
       	method: 'GET',
@@ -45,6 +51,12 @@ angular.module('keepballin')
         isArray: true, 
         params: {
           controller: 'closeTimeslot'
+        }
+      },
+      getRating: {
+        method: 'GET',
+        params: {
+          controller: 'getRating'
         }
       }
 	  });

@@ -14,6 +14,86 @@
   
 }
 
+.admin-nav {
+  color: white;
+  @media(min-width: ($screen-sm-min + 1px)) {
+    display: none;
+  }
+  display: inline-block;
+}
+
+/* Profile avatar starts */
+
+.profile-container {
+  @media screen and (min-width: $screen-sm-min) {
+    padding: 20px 20px; 
+    text-align: center;
+    float: left;
+    display: block;
+  } 
+  display: none;
+}
+
+.profile-avatar-circle {
+  cursor: pointer;
+  width: 30px; 
+  height: 30px; 
+  background-color: #333; 
+  border-radius: 25px; 
+  border: 2px solid white; 
+  display: table;
+}
+
+.profile-avatar-placeholder {
+  color: white; 
+  display: table-cell; 
+  vertical-align: middle;
+}
+
+.profile-avatar {
+  width: 30px; 
+  height: 26px; 
+  border-radius: 25px;
+}
+
+/* Icon Forward */
+.hvr-sign-in {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  padding-right: 2.2em;
+  -webkit-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+}
+.hvr-sign-in:before {
+  content: "\f090";
+  position: absolute;
+  right: 1em;
+  padding: 0 1px;
+  font-family: FontAwesome;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.hvr-sign-in:hover:before, .hvr-sign-in:focus:before, .hvr-sign-in:active:before {
+  -webkit-transform: translateX(4px);
+  transform: translateX(4px);
+}
+
+
+/* Profile avatar ends */
+
 /*.nav-header class includes thing that appear on smaller screen*/
 /*It includes .navbar-toggle button*/
 .navbar-inverse .navbar-toggle .icon-bar {
@@ -29,8 +109,8 @@
 /* overwrite the default colors for .navbar inverse*/
 .navbar-inverse .navbar-nav > li > a {
   @media screen and (min-width: $screen-sm-min) {
-    padding-top: 20px;
-    height: 60px;
+    padding: 27px 20px;
+    height: 70px;
     font-size: 14px;
     text-align: center;
     -webkit-transition: all linear 0.3s;
@@ -70,6 +150,10 @@
 
 .navbar-inverse .navbar-text {
   margin: 0;
+  display: block;  
+  @media screen and (min-width: ($screen-sm-min + 1px)) {
+    display: none;
+  }
 }
 
 /* align text to center for mobile view */
@@ -94,6 +178,7 @@
 #mobileLogo {
   margin: 0px;
   padding: 10px;
+  width: 50px;
   @media screen and (min-width: ($screen-sm-min + 1px)) {
     display: none;
   }

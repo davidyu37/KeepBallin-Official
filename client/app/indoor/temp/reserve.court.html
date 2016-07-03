@@ -1,11 +1,17 @@
 <div style="margin: 20px;">
 	<i class="fa fa-remove pull-right pointer" ng-click="close()"></i>
 	<div class="page-header">
-		<h1>預約時間</h1>
-	</div>
-	<div class="well">
-		<p>此球場需{{currentcourt.hoursBeforeReserve}}小時前預約</p>
-		<p>每小時至少{{currentcourt.minCapacity}}人開放</p>
+		<h1 style="margin-bottom: 10px;">預約{{currentcourt.court}}</h1>
+		<span class="label label-primary custom-label" style="font-size: 100%; font-weight: normal;">{{currentcourt.hoursBeforeReserve}}小時前預約</span>
+		<span class="label label-warning" style="font-size: 100%; font-weight: normal; margin-right: 5px;">
+			{{currentcourt.minCapacity}}人開放
+		</span>
+		<span class="label label-success" style="font-size: 100%; font-weight: normal;" ng-show="user.points">
+			{{user.points.Points}}點可用
+		</span>
+		<span class="label label-success" style="font-size: 100%; font-weight: normal;" ng-hide="user.points">
+			0點可用
+		</span>
 	</div>
 	<form class="form-inline" ng-submit="reserveNow(reserveForm)" name="reserveForm" novalidate>
 		<div class="form-group">
@@ -31,7 +37,7 @@
 		</ui-select>
 		<div class="form-group" ng-show="people[0]">
 			<div class="input-group">
-				<span class="input-group-btn" popover="每小時一人${{currentcourt.perPersonPrice}}" popover-placement="bottom" popover-append-to-body="false" popover-trigger="mouseover">
+				<span class="input-group-btn" tooltip="每小時一人${{currentcourt.perPersonPrice}}">
 		          <button type="button" class="btn btn-default custom-addon-left"><i class="glyphicon glyphicon-user"></i></button>
 		        </span>
 				<select class="form-control input-left" ng-model="numOfPeople" name="people" ng-options="p for p in people" style="height: 35px; color: black; font-size: 14px;" required>
@@ -41,18 +47,15 @@
 		</div>
 		<div class="form-group">
 			<div class="input-group">
-				<span class="input-group-btn" popover="點選彈性時間代表您接受部份開放的時間" popover-placement="bottom" popover-append-to-body="false" popover-trigger="mouseover">
+				<span class="input-group-btn" tooltip="接受任何開放時間">
 		          <button type="button" class="btn btn-default custom-addon-left">
 		          	彈性時間
 		          </button>
 		        </span>
 		        <div class="form-control input-checkbox">
-		        	<div class="checkbox"></div>
-			        	<input type="checkbox" ng-model="flexible">
+		        	<!-- <div class="checkbox"></div> -->
+			        <input type="checkbox" ng-model="flexible">
 		        </div>
-				<!-- <select class="form-control input-left" ng-model="numOfPeople" name="people" ng-options="p for p in people" style="height: 35px; color: black; font-size: 14px;" required>
-					<option value="">-- 幾位 --</option>
-				</select> -->
 			</div>
 		</div>
 		<button type="sumbit" class="btn btn-primary" ng-disabled="notAvailable || invalidTime" tooltip="請先登入" tooltip-placement="right" tooltip-enable="!(loggedIn())">
@@ -66,7 +69,7 @@
 		</button>
 		<p class="text-muted" ng-show="notAvailable">此日期無開放時間可以預約</p>
 	</form>
-	<div class="alert alert-danger" role="alert" ng-show="(reserveForm.theDate.$error.required || reserveForm.start.$error.required || reserveForm.end.$error.required || reserveForm.people.$error.required || minDateErr) && submitted">
+	<div class="alert alert-danger text-center" role="alert" ng-show="(reserveForm.theDate.$error.required || reserveForm.start.$error.required || reserveForm.end.$error.required || reserveForm.people.$error.required || minDateErr || notEnough) && submitted">
 		<p ng-show="reserveForm.theDate.$error.required && submitted">
 			請選擇日期
 		</p>
@@ -80,6 +83,14 @@
 			請選擇人數
 		</p>
 		<p ng-show="minDateErr && submitted">開始時間至少須在{{currentcourt.hoursBeforeReserve}}小時後</p>
+		<p ng-show="notEnough && submitted">
+			不夠點數
+		</p>
+		<a ui-sref="settings({choice: 1})">
+			<div class="btn btn-primary hvr-icon-forward" style="width: 15%">
+				加點數
+			</div>
+		</a>
 	</div>
 	<div class="alert alert-danger" role="alert" ng-show="timeslotNotAvailable || orderExceedMax">
 		<div ng-show="timeslotNotAvailable">
@@ -95,11 +106,11 @@
 			</span>
 		</div>
 	</div>
-	<div class="row" ng-hide="notAvailable">
+	<div class="row" ng-hide="notAvailable" style="margin: 15px;">
 		<div class="col-sm-6" ng-show="estHour">
 			<div class="input-group">
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default">
+					<button type="button" class="btn btn-default" tooltip="總共幾小時" tooltip-placement="left">
 			          <i class="fa fa-clock-o"></i>
 					</button>
 		        </span>
@@ -117,7 +128,7 @@
 		<div class="col-sm-6" ng-show="estPrice">
 			<div class="input-group">
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default">
+					<button type="button" class="btn btn-default" tooltip="所需點數" tooltip-placement="left">
 			          <i class="fa fa-dollar"></i>
 					</button>
 		        </span>
@@ -127,8 +138,5 @@
 	</div>
 </div>
 <div style="margin: 20px">
-	<div class="page-header">
-		<h1>預約現況</h1>
-	</div>
 	<div ui-calendar="uiConfig.calendar" ng-model="eventSources" calendar="reserveCal" calendar-watch-event="extraEventSignature(event)"></div>
 </div>

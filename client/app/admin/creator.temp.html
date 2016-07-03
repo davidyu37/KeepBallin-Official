@@ -1,0 +1,22 @@
+<div style="display: flexbox; justify-content: center; align-items: center; margin: 20px;">
+	<p>
+		{{thisIndoor.court}}
+	</p>
+	<p>
+		Owner now: {{thisIndoor.creator}}
+	</p>
+	<form class="form-inline" ng-submit="addPoint(point, user)">
+		<div class="form-group">
+		    <label for="captain" class="control-label">轉換經營權</label>
+		    <div class="input-group">
+			    <input type="text" ng-model="creator" placeholder="請輸入用戶名" class="form-control" typeahead="user as (user.name + ' ' + user._id) for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)">
+			    <div class="input-group-btn">
+			    	<button class="btn btn-primary" ng-click="changeCreator(creator)">
+				    	<span class="fa fa-plus" ng-hide="sending"></span>
+						<span class="fa fa-spinner faa-spin animated" ng-show="sending"></span>
+			    	</button>
+			    </div>
+		    </div>
+		</div>
+	</form>
+</div>

@@ -49,7 +49,16 @@ var CourtSchema = new Schema({
   pictures: [{
     type: Schema.ObjectId,
     ref: 'Upload'
-  }]
+  }],
+  canRent: Boolean,
+  indoorId: {
+    type: Schema.ObjectId,
+    ref: 'Indoor'
+  },
+  views: {
+    type: Number,
+    default: 0
+  }
 });
 
 //Record the creator of the court

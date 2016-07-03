@@ -3,59 +3,80 @@
 	<div style="display: table-cell; vertical-align: middle; color: white;">
 	<!-- /assets/images/pic4.jpg -->
 		<h1>雨天.晴天.都是籃球天</h1>
-		<p>再也找不到不變強藉口</p>
+		<p>就是想打球</p>
 		<div style="text-align: center">
 	        <div style="margin-top: 20px;">
-	        	<button style="font-size:120%" class="eventBtn">找球場</button>
+	        	<button style="font-size:120%" class="eventBtn" ng-click="openInfo()">瞭解更多
+					<i class="fa fa-question-circle"></i>
+	        	</button>
 	        </div>
         </div>
 	</div>
 </div>
 <div class="container" style="margin-bottom: 60px; background-color: white; padding-bottom: 40px; padding-top: 40px;">
-	<!-- <form class="form-inline">
-	  <div class="form-group">
-	    <label for="sort">排序方式:</label>
-	    <select ng-options="method.ch for method in methods" ng-model="method" class="form-control" ng-change="orderTeam()">
-    		 <option value="">-- 請選擇 --</option>
-    	</select>
-	  </div>
-	  <div class="form-group">
-	    <label for="filter">篩選條件:</label>
-	    <select ng-options="district for district in districts" ng-model="search.district" class="form-control" ng-change="getCities(search.district)">
-    		 <option value="">-- 請選區域 --</option>
-    	</select>
-	  </div>
-	  <div class="form-group" ng-show="cities[0]">
-	    <select ng-options="city for city in cities" ng-model="search.city" class="form-control">
-    		 <option value="">-- 請選城市 --</option>
-    	</select>
-	  </div>
-	</form> -->
 	<div style="text-align: center" ng-hide="courts[0]">
 		<i class="fa fa-4x fa-spinner fa-pulse"></i>
 	</div>
-	<!-- <div class="row" ng-repeat="team in teams | orderBy: method.value | filter: search track by $index"> -->
-	<div class="row" ng-repeat="court in courts | orderBy: method.value | filter: search track by $index" ng-if="$index % 4 == 0">
-		<div class="col-sm-6" 
-		   ng-repeat="i in [$index, $index + 1, $index + 2, $index + 3]" 
-		   ng-if="courts[i] != null">
-			<div class="thumbnail">
+	<div class="row">
+		<div class="col-sm-6" ng-repeat="court in courts" style="margin-bottom: 30px;">
+		   	<div class="img-container">
+				  <img ng-hide="court.pictures[0]" src="/assets/images/indoor_court.jpg" alt="...">
+				  <img ng-show="court.pictures[0]" ng-src="{{court.pictures[0]}}" alt="...">
+				<a ui-sref="thisindoor({id: court._id})">
+			   		<div class="indoor-img-overlay indoor-img-overlay">
+			   			<div class="overlay-header">
+					    	<h3>{{court.court}}
+						    	<!-- <span class="label label-primary">
+									<i class="fa fa-dollar"></i>
+								    {{court.perPersonPrice}}
+									<span>
+									    /小時
+									</span>
+						    	</span> -->
+						    	<span class="label label-primary">
+									<i class="fa fa-dollar"></i>
+								    {{court.rentprice}}
+									<span>
+									    /小時
+									</span>
+						    	</span>
+					    	</h3>
+					    	<div class="pull-right">
+					    		<i class="fa fa-eye"></i>
+					    		{{court.views}}
+					    	</div>
+					    	<div style="margin-left: 10px;">
+								<rating class="pointer"
+								style="color: gold;"
+					            ng-model="court.averagedRating" 
+					            max="5" 
+								data-readonly="true" 
+					            titles="['不要去','有瑕疵','不錯', '很好打', '極品']"></rating>
+					    	</div>
+			   			</div>
+				    	<p>
+							<i class="fa fa-map-marker"></i>
+				    		{{court.address}}
+				    	</p>
+				    	<!-- <p>
+							<i class="fa fa-users"></i>
+						    至少{{court.minCapacity}}人開放
+				    	</p> -->
+				    	<p>
+				    		<i class="fa fa-phone"></i>
+				    		{{court.telnumber}}
+				    	</p>
+				  
+					    <p>{{court.desc}}</p>
+			   			
+			   		</div>
+				</a>
+		   	</div>
 			  <div class="caption">
-			    <a ui-sref="thisindoor({id: courts[i]._id})">
-			    	<h3>{{courts[i].court}}</h3>
+			  	<a ui-sref="thisindoor({id: court._id})">
 			    </a>	
-			    <p>{{courts[i].desc}}</p>
+			    <!-- <button class="pull-right trans-btn" ng-click="openReserve(court._id)">預約</button> -->
 			  </div>
-			  <a ui-sref="thisindoor({id: courts[i]._id})">
-				  <img ng-hide="courts[i].pictures[0]" src="/assets/images/teamPic.jpg" alt="...">
-				  <img ng-show="courts[i].pictures[0]" ng-src="{{courts[i].pictures[0]}}" alt="...">
-			  </a>
-			  <div class="caption">
-			    <p>${{courts[i].perPersonPrice}}/小時</p>
-			    <p>至少{{courts[i].minCapacity}}人開放</p>
-			    <p class="pull-right"><a class="btn btn-primary" role="button" ng-click="openReserve(courts[i]._id)">預約</a></p>
-			  </div>
-			</div>
 		</div>
 		<!-- <p>{{team}}</p>
 		<div class="col-sm-4" ng-repeat="t in team">

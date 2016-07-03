@@ -10,6 +10,7 @@ var path = require('path');
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/points', require('./api/point'));
   app.use('/api/checkouts', require('./api/checkout'));
   app.use('/api/timeslots', require('./api/timeslot'));
   app.use('/api/reservations', require('./api/reservation'));
@@ -28,8 +29,9 @@ module.exports = function(app) {
   app.use('/api/users', require('./api/user'));
   app.use('/api/courts', require('./api/court'));
   app.use('/api/FB', require('./api/fb'));
-
+  app.use('/line', require('./api/line'));
   app.use('/auth', require('./auth'));
+
 
 
 

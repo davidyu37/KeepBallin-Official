@@ -1,0 +1,61 @@
+ <div class="modal-header">
+ <i class="fa fa-2x fa-remove pull-right pointer" ng-click="close()"></i>
+    <h1 class="modal-title">{{currentcourt.court}}</h1>
+</div>
+<div class="modal-body" style="height: 80vh; overflow-y: scroll;">
+    <div ng-hide="rates.ratings[0]">
+        <h4>目前還沒有任何評價</h4>
+    </div>
+    <div class="list-group" ng-repeat="r in rates.ratings | orderBy: '-rate'" >
+      <div class="list-group-item">
+        <h4 class="list-group-item-heading">
+        <a ui-sref="profile({id: r.user._id})">
+            {{r.user.name}}
+        </a>
+        <rating class="pointer pull-right" 
+        style="color: gold; font-size: 120%;"
+        ng-model="r.rate" 
+        max="5" 
+        data-readonly="true"></rating>
+                    
+        </h4>
+        <p class="list-group-item-text">{{r.reason}}</p>
+      </div>
+    </div>
+    <hr>   
+    <button class="trans-btn" ng-click="showRate = true" ng-hide="showRate">給予評價</button>
+    <div class="modal-body" style="text-align: center" ng-show="showRate">
+        <h3>你給{{currentcourt.court}}幾顆星</h3>
+        <rating 
+        style="color: gold; font-size: 150%;"
+        ng-model="rate" 
+        max="5" 
+        on-hover="hoveringOver(value)" 
+        on-leave="overStar = null" 
+        titles="['很差','有瑕疵','不錯', '很好打', '極品']"></rating>
+        <div style="font-size: 130%; position: absolute"
+        class="label" 
+        ng-class="{'label-danger': rate<=1, 'label-warning': rate>1 && rate<=3, 'label-success': rate>3}">{{rate}}顆星
+        <span ng-show="rate <= 1">很差</span>
+        <span ng-show="rate === 2">有瑕疵</span>
+        <span ng-show="rate === 3">不錯</span>
+        <span ng-show="rate === 4">很好打</span>
+        <span ng-show="rate === 5">極品</span>
+        </div>
+        <hr>
+        <h3 ng-show="rate">給予{{rate}}顆星的原因</h3 ng-show="rate">
+        <textarea style="color: black;" name="reason" class="feedback-input" rows="3" placeholder="因為..." ng-model="reason" ng-disable="sending" required></textarea>
+        <div ng-show="!rate && submit" class="alert alert-danger" role="alert">
+            最低請給予一顆星
+        </div>
+        <div ng-show="!reason && submit" class="alert alert-danger" role="alert">
+            稍微寫一下原因，方便其他球友了解
+        </div>
+        <button class="btn btn-primary" ng-click="sendRate()">送出
+        <i ng-show="sending" class="fa fa-spinner fa-pulse"></i>
+        </button>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="pull-left" ui-sref="contact" ng-click="close()">聯絡我們</a>
+</div>

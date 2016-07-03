@@ -48,7 +48,7 @@
 	        </div> -->
 	        <div class="fbContainer">
 		        <div class="fb-like" onrender="fbLikeRendered()"
-				  data-href="https://keepballin.com/courts/{{currentcourt._id}}" 
+				  data-href="https://keepballin.com/{{currentcourt._id}}" 
 				  data-layout="button_count" 
 				  data-action="like"
 				  data-image="http://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/preview.png" 
@@ -83,8 +83,8 @@
 					球場資訊
 				</h2>
 			</div>
-			<p ng-show="currentcurrentcourt.indoor">室內</p>
-            <p ng-show="!currentcurrentcourt.indoor">室外</p>
+			<p ng-show="currentcourt.indoor">室內</p>
+            <p ng-hide="currentcourt.indoor">室外</p>
             <p>籃框數:{{currentcourt.basketnumber}}</p>
             <p>籃網:{{currentcourt.net | exist}}</p>
             <p ng-hide="currentcourt.net">沒籃網</p>

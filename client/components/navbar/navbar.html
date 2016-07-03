@@ -14,7 +14,7 @@
       </a>
     </div>
     <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main" style="background: none;">
-      <a style="padding: 15px; float: left" ui-sref="main" ng-click="close()">
+      <a style="padding: 20px; float: left" ui-sref="main" ng-click="close()">
         <h3 id="desktopLogo">
           <img src="assets/images/KB_LOGO.png" alt="" class="logo">
         </h3>
@@ -22,44 +22,67 @@
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
             <a ui-sref="{{item.link}}" ng-click="close()" style="color: white">
-              <span class="glyphicon {{item.icon}}"></span>{{item.title}}
+              <span class="glyphicon {{item.icon}}"></span>
+              <h1 style="font-size: 100%; margin: 0px; display: inline;">
+                {{item.title}}
+              </h1>
             </a>
         </li>
-        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a ui-sref="admin" ng-click="close()" style="color: white">管理者</a></li>
-        <!-- <li ng-show="isManager()" ng-class="{active: isActive('/manager')}"><a ui-sref="manager" ng-click="close()">經理</a></li> -->
+        <<!-- li role="menuitem"><a ng-click="goToPoint(); close()" style="color: white">KB點數</a></li> -->
+        <li ng-class="{active: isActive('/signup')}"><a ng-click="goToRent(); close()" ng-hide="hasCourt()" style="color: white">出租球場</a></li>
+        <li ng-class="{active: isActive('/signup')}"><a ng-click="manageCourt(); close()" ng-show="hasCourt()" style="color: white;">管理球場</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right right-padding">
-        <li ng-class="{active: isActive('/signup')}"><a ng-click="goToRent(); close()" ng-hide="hasCourt()" style="color: white">出租球場</a></li>
-        <li ng-class="{active: isActive('/signup')}"><a ng-click="manageCourt(); close()" ng-show="hasCourt()" style="color: white">管理球場</a></li>
-        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a ui-sref="signup" ng-click="close()" style="color: white">註冊</a></li>
+        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}">
+          <a ui-sref="login" ng-click="close()" style="color: white">登入
+            <i class="fa fa-sign-in"></i>
+          </a>
+        </li>
+        <!-- dropdown -->
+        <div dropdown is-open="status.isopen" class="profile-container" ng-show="isLoggedIn()" ng-mouseenter="status.isopen = true">
+          <div class="profile-avatar-circle">
+            <!-- If there's avatar url or fb profile pic hide placeholder -->
+            <i class="fa fa-user profile-avatar-placeholder" ng-hide="getCurrentUser().avatar.url || getCurrentUser().fbprofilepic || getCurrentUser().lineProfilepic"></i>
+            <!-- show avatar url, if there's one -->
+            <img ng-show="getCurrentUser().avatar.url" ng-src="{{getCurrentUser().avatar.url}}" alt="avatar" class="profile-avatar">
+            <!-- Show if there's fb profile and avatar url doesn't exist -->
+            <img ng-show="getCurrentUser().fbprofilepic && !(getCurrentUser().avatar.url)" ng-src="{{getCurrentUser().fbprofilepic}}" alt="avatar" class="profile-avatar">
+            <img ng-show="getCurrentUser().lineProfilepic && !(getCurrentUser().avatar.url) && !(getCurrentUser().fbprofilepic)" ng-src="{{getCurrentUser().lineProfilepic}}" alt="avatar" class="profile-avatar">
+          </div>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="single-button" ng-mouseleave="status.isopen = false">
+            <li role="menuitem"><a ui-sref="settings({choice: 0})">設定</a></li>
+            <li role="menuitem"><a ui-sref="settings({choice: 2})">我的球場</a></li>
+            <li role="menuitem"><a ui-sref="settings({choice: 3})">我的預約</a></li>
+            <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a ui-sref="admin" ng-click="close()">管理者</a></li>
+            <li class="divider"></li>
+            <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}">
+              <a class="hvr-sign-in" ng-click="logout(); close()">登出</a>
+            </li>
+          </ul>
+        </div>
+        <li ng-show="isLoggedIn()">
+          <a ui-sref="settings" class="navbar-text" ng-click="close()" style="color: white">
+            {{ getCurrentUser().name }}
+          </a>
+        </li>
+        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}">
+          <a class="navbar-text" ui-sref="admin" ng-click="close()">管理者</a>
+        </li>
+
+        <!-- <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a ui-sref="signup" ng-click="close()" style="color: white">註冊</a></li>
         <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a ui-sref="login" ng-click="close()" style="color: white">登入</a></li>
         <li ng-show="isLoggedIn()">
           <a ui-sref="conversation" ng-click="close()" style="color: white">
             <i class="fa fa-comments-o"></i>  
           </a>
         </li>
-        <!-- <div class="messageAlert" ng-show="showAlert">
-          <i class="faa-ring animated fa fa-bell"></i>
-          <strong>{{from}}</strong>
-          <p>{{words}}</p>
-        </div> -->
         <li ng-show="isLoggedIn()">
           <a ui-sref="settings" class="navbar-text" ng-click="close()" style="color: white">
             {{ getCurrentUser().name }}
           </a>
         </li>
-        <!-- <li class="dropdown" ng-show="isLoggedIn()">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li> -->
-        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout(); close()" style="color: white">登出</a></li>
+        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout(); close()" style="color: white">登出</a></li> -->
       </ul>
     </div>
   </div>

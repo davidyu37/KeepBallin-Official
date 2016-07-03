@@ -16,10 +16,15 @@ var RatingSchema = new Schema({
   	type: Schema.ObjectId,
     ref: 'User',
     childPath: 'courtRatings'
+  },
+  indoor: {
+    type: Schema.ObjectId,
+    ref: 'Indoor',
+    childPath: 'ratings'
   }
 });
 
-RatingSchema.plugin(relationship, { relationshipPathName: ['user', 'court'] });
+RatingSchema.plugin(relationship, { relationshipPathName: ['user', 'court', 'indoor'] });
 
 
 module.exports = mongoose.model('Rating', RatingSchema);

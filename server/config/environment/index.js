@@ -78,7 +78,18 @@ var all = {
     merchantID: process.env.MERCHANT_ID || 'merchantID',
     hashKey: process.env.HASH_KEY || 'hashKey',
     hashIV: process.env.HASH_IV || 'hashIV',
-    mode: process.env.MODE || 'test'
+    mode: process.env.MODE || 'test',
+    apiURL:  (process.env.DOMAIN || '') + '/api/checkouts/complete',
+    clientURL: (process.env.DOMAIN || '') + '/payment/complete'
+  },
+
+  line: {
+    channelID: process.env.CHANNEL_ID || 'channelID',
+    channelSecret: process.env.CHANNEL_SECRET || 'channelSecret',
+    channelID_BOT: process.env.CHANNEL_ID_BOT || 'channel id for bot',
+    channelSecret_BOT: process.env.CHANNEL_SECRET_BOT || 'channel secret for bot',
+    channelMID: process.env.CHANNEL_MID || 'channelMID',
+    callbackURL:  (process.env.DOMAIN || '') + '/auth/line/callback'
   }
 
 

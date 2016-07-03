@@ -21,23 +21,23 @@
     <meta property="og:image" content="https://s3-ap-northeast-1.amazonaws.com/keepballin/pictures/assets/screenshot.png"/>
     
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/favicons/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/favicons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/favicons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/favicons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/favicons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/favicons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/favicons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="/favicons/android-chrome-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="/favicons/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="/favicons/manifest.json">
-    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="57x57" href="./favicons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./favicons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./favicons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./favicons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./favicons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./favicons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./favicons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./favicons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="./favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./favicons/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="./favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="./favicons/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="./favicons/manifest.json">
+    <link rel="mask-icon" href="./favicons/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="/favicons/mstile-144x144.png">
+    <meta name="msapplication-TileImage" content="./favicons/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
@@ -151,6 +151,7 @@
       <script src="app/app.js"></script>
       <!-- injector:js -->
       <script src="app/account/account.js"></script>
+      <script src="app/account/confirm.ctrl.js"></script>
       <script src="app/account/login/login.controller.js"></script>
       <script src="app/account/login/loginMobile.controller.js"></script>
       <script src="app/account/reset.controller.js"></script>
@@ -170,7 +171,10 @@
       <script src="app/account/signup/signupMobile.controller.js"></script>
       <script src="app/admin/admin.controller.js"></script>
       <script src="app/admin/admin.js"></script>
+      <script src="app/admin/point/point.service.js"></script>
       <script src="app/checkout/checkout.ctrl.js"></script>
+      <script src="app/checkout/checkout.js"></script>
+      <script src="app/checkout/controller/payment.ctrl.js"></script>
       <script src="app/checkout/directive/dynamicHtml.js"></script>
       <script src="app/checkout/service/checkout.service.js"></script>
       <script src="app/comments/comments.controller.js"></script>
@@ -211,9 +215,9 @@
       <script src="app/indoor/individual.indoor.ctrl.js"></script>
       <script src="app/indoor/indoor.controller.js"></script>
       <script src="app/indoor/indoor.js"></script>
+      <script src="app/indoor/info.ctrl.js"></script>
       <script src="app/indoor/reserve.court.ctrl.js"></script>
       <script src="app/indoor/service/indoor.service.js"></script>
-      <script src="app/indoor/service/reserve.service.js"></script>
       <script src="app/indoor/service/timeslot.service.js"></script>
       <script src="app/indoor/timeslot.ctrl.js"></script>
       <script src="app/lobby/lobby.service.js"></script>
@@ -223,16 +227,19 @@
       <script src="app/manager/manager.js"></script>
       <script src="app/profile/profile.controller.js"></script>
       <script src="app/profile/profile.js"></script>
+      <script src="app/rating/indoor.rating.submit.controller.js"></script>
       <script src="app/rating/rating.service.js"></script>
       <script src="app/rating/ratings.controller.js"></script>
       <script src="app/rating/ratings.show.controller.js"></script>
       <script src="app/rating/ratings.submit.controller.js"></script>
+      <script src="app/rent/checkinModal/checkin.ctrl.js"></script>
       <script src="app/rent/rent.controller.js"></script>
       <script src="app/rent/rent.js"></script>
       <script src="app/rent/rentedit.controller.js"></script>
       <script src="app/rent/view.rentals.ctrl.js"></script>
       <script src="app/reservation/reservation.js"></script>
       <script src="app/reservation/reservation.this.ctrl.js"></script>
+      <script src="app/reservation/reserve.service.js"></script>
       <script src="app/sendmail/sendmail.controller.js"></script>
       <script src="app/sendmail/sendmail.js"></script>
       <script src="app/share/fb.service.js"></script>

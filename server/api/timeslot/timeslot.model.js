@@ -9,6 +9,7 @@ var mongoose = require('mongoose'),
     schedule = require('node-schedule'),
     crypto = require('crypto');
 var Reservation = require('../reservation/reservation.model');
+var Point = require('../point/point.model');
 //Stuff for sending notification email
 var config = require('../../config/environment'),
     sendgrid  = require('sendgrid')(config.sendgrid.apiKey),
@@ -21,6 +22,7 @@ var config = require('../../config/environment'),
     compiledFailTemplate = hogan.compile(failTemplate);
 var QR = require('../../components/qrcode.service');
 var SG = require('../../components/sendgrid.service');
+var Line = require('../../components/line.service');
 
 var TimeslotSchema = new Schema({
   start: Date,
@@ -141,12 +143,15 @@ var scheduledChecking = function(timeslot, Model) {
                   queue[i].save(function() {
                     console.log('reservation success', queue[i].beginString, queue[i].endString);
                     //Send notification
-                    // QR.generateQRCode(confirmationCode, function(err, url) {
-                    //   if(err) { console.log('error occur while upload qr code'); }
-                    //   SG.sendNotice(queue[i], confirmationCode, url, 'success', function() {
-
-                    //   }); 
-                    // });
+                    QR.generateQRCode(confirmationCode, function(err, url) {
+                      if(err) { console.log('error occur while upload qr code'); }
+                      if(queue[i].contactEmail) {
+                        SG.sendNotice(queue[i], confirmationCode, url, 'success', null, function() {});
+                      }
+                      if(queue[i].mid) {
+                        Line.sendNotification(queue[i].reserveBy, '預約成功, 您的驗證碼是: ' + confirmationCode, url, {address: queue[i].courtAddress, lat: queue[i].courtLat, lng: queue[i].courtLng}, true);
+                      } 
+                    });
                     //Continue to next loop
                     if(i < queue.length - 1) {
                       startCheck(queue, i + 1);
@@ -167,21 +172,36 @@ var scheduledChecking = function(timeslot, Model) {
                   //Update individual timeslots
                   Model.cancelTimeslots(queue[i], function() {
                     queue[i].status = 'canceled';
-                    queue[i].save(function() {
-                      // SG.sendNotice(queue[i], null, null, 'fail', function() {
-
-                      // });
-                      //Continue to next loop
-                      if(i < queue.length - 1) {
-                        startCheck(queue, i + 1);
-                      }
-                      if(i == queue.length - 1) {
-                        //callback for the next function in waterfall
-                        fixCB(null, flexible);
-                      }
-                    });
-                  });
-                }
+                    //Return the points to the user
+                    Point.findPointByUser(queue[i].reserveBy, function(err, pointsOfUser) {
+                      if(err) { console.log(err); }
+                      if(pointsOfUser) {
+                        pointsOfUser.Points += queue[i].pricePaid;
+                        pointsOfUser.save(function(err, d) {
+                          if(err) { console.log(err); }
+                          
+                          queue[i].save(function() {
+                            if(queue[i].contactEmail) {
+                              SG.sendNotice(queue[i], null, null, 'fail', null, function() {});
+                            }
+                            if(queue[i].mid) {
+                              var dateReserved = moment(queue[i].dateReserved).format('YYYY-MM-DD');
+                              Line.sendNotification(queue[i].reserveBy, '不好意思您的預約: ' + dateReserved + ' ' + queue[i].beginString + '~' + queue[i].endString + ', 因人數不足而取消', null, {address: queue[i].courtAddress, lat: queue[i].courtLat, lng: queue[i].courtLng}, false);
+                            } 
+                            //Continue to next loop
+                            if(i < queue.length - 1) {
+                              startCheck(queue, i + 1);
+                            }
+                            if(i == queue.length - 1) {
+                              //callback for the next function in waterfall
+                              fixCB(null, flexible);
+                            }
+                          });//Reservation saved     
+                        });//Points of user updated
+                      }//Update point and reservation only if user has points
+                    });//Find the point by reservation's user
+                  });//Status of timeslots within the reservation are updated
+                }//If the reservation is not canceled yet
               }//else ends
               
             });//checkActive ends
@@ -196,6 +216,7 @@ var scheduledChecking = function(timeslot, Model) {
       function(flexible, flexCb) {
           console.log('number of flexible reservations', flexible.length);
           async.each(flexible, function(res, AeCb) {
+            var pointsShouldReturn;
             Model.checkAnyActive(res.timeslot, function(actives, inactives) {
               if(actives.length > 0) {
                 //If there's at least one active timeslot, it's success
@@ -205,20 +226,65 @@ var scheduledChecking = function(timeslot, Model) {
                 res.hashedConfirmationCode = Reservation.encryptPassword(confirmationCode, res.salt);
                 res.active = true;
                 res.status = 'completed';
+                //Update the cost of the reservation and return kb points
+                console.log('total timeslots of reservation', res.timeslot.length);
+                console.log(actives.length + ' out of ' + res.timeslot.length + ' are active');
+                console.log(inactives.length + ' out of ' + res.timeslot.length + ' are inactive');
+              
                 res.save(function(err) {
                   if(err) { console.log('err while saving flexible success reservation', err ); }
                   //Send notification
                   QR.generateQRCode(confirmationCode, function(err, url) {
                     if(err) { console.log('error occur while upload qr code'); }
-                    if(res.timeslot == actives.length) {
+                    if(res.timeslot.length === actives.length) {
                     //If all successful, send normal success email
                       console.log('all timeslots successful', res.beginString, res.endString);
-                      SG.sendNotice(res, confirmationCode, url, 'success', function() {}); 
+                      if(res.contactEmail) {
+                        SG.sendNotice(res, confirmationCode, url, 'success', null, function() {}); 
+                      }
+                      if(res.mid) {
+                        Line.sendNotification(res.reserveBy, '預約成功, 您的驗證碼是: ' + confirmationCode, url, {address: res.courtAddress, lat: res.courtLat, lng: res.courtLng}, true);
+                      } 
                     } else {
+                      //Calculate the points should be returned and the new pricePaid
+                      pointsShouldReturn = inactives[0].revenue * res.numOfPeople * inactives.length;
+                      console.log('points return to user', pointsShouldReturn);
+                      res.pricePaid -= pointsShouldReturn;
                       //Send partial success email
                       console.log('partially successful', res.beginString, res.endString);
-                      //save the new price and return partial kb point
+                      console.log('partial actives', actives);
+                      //Loop through the actives generate a string a active timeslots times
+                      var strOfSuccess = '';
+                      actives.forEach(function(t) {
+                        strOfSuccess += moment(t.start).format('HH:mm');
+                        strOfSuccess += '~';
+                        strOfSuccess += moment(t.end).format('HH:mm');
+                        strOfSuccess += ' ';
+                      });
 
+                      res.partialTimeslots = strOfSuccess;
+
+                      Point.findPointByUser(res.reserveBy, function(err, pointsOfUser) {
+                        if(err) { console.log(err); }
+                        if(pointsOfUser) {
+                          //Return kb points
+                          pointsOfUser.Points += pointsShouldReturn;
+                          pointsOfUser.save(function(err, d) {
+                            if(err) { console.log(err); }
+                            res.save(function() {
+                              //Cancel partial timeslots
+                              Model.cancelPartialTimeslots(inactives, res, function() {
+                                if(res.contactEmail) {
+                                  SG.sendNotice(res, confirmationCode, url, 'partial-success', strOfSuccess, function() {}); 
+                                }
+                                if(res.mid) {
+                                  Line.sendNotification(res.reserveBy, '部分時間預約成功, 您的驗證碼是: ' + confirmationCode + ' 以下時間預約成功\n' + strOfSuccess, url, {address: res.courtAddress, lat: res.courtLat, lng: res.courtLng}, true);
+                                } 
+                              });//cancel partial timeslots
+                            });//Reservation saved     
+                          });//Points of user updated
+                        }//Update point and reservation only if user has points
+                      });       
                     }
                   });
                   AeCb();
@@ -226,13 +292,30 @@ var scheduledChecking = function(timeslot, Model) {
               } else {
                 //If there's no active, it fails
                 console.log('reservation failed', res.beginString, res.endString);
-                // SG.sendNotice(res, null, null, 'fail', function() {});
                 res.status = 'canceled';
-                res.save(function() {
-                  AeCb();
-                });
+                Point.findPointByUser(res.reserveBy, function(err, pointsOfUser) {
+                  if(err) { console.log(err); }
+                  if(pointsOfUser) {
+                    pointsOfUser.Points += res.pricePaid;
+                    pointsOfUser.save(function(err, d) {
+                      if(err) { console.log(err); }
+                      
+                      res.save(function() {
+                        Model.cancelTimeslots(res, function() {
+                          if(res.contactEmail) {
+                            SG.sendNotice(res, null, null, 'fail', null, function() {});
+                          }
+                          if(res.mid) {
+                            var dateReserved = moment(res.dateReserved).format('YYYY-MM-DD');
+                            Line.sendNotification(res.reserveBy, '不好意思您的預約: ' + dateReserved + ' ' + res.beginString + '~' + res.endString + ', 因人數不足而取消', null, {address: res.courtAddress, lat: res.courtLat, lng: res.courtLng}, false);
+                          } 
+                        });
+                      });//Reservation saved     
+                    });//Points of user updated
+                  }//Update point and reservation only if user has points
+                });//Find the point by reservation's user
+                AeCb();
               }
-              
             });
           }, function(err) {
             //Final callback of the async waterfall
@@ -313,7 +396,7 @@ TimeslotSchema.statics = {
                 console.log('scheduled checking for new timeslots', completeSlot._id);
                 //The scheduled time should be timeForConfirmation
                 // var date = moment("2016-05-17 22:40:00")._d;
-                var date = moment().add(2, 'm').toDate();
+                var date = moment().add(1, 'm').toDate();
                 var j = schedule.scheduleJob(date, function(y){
                   //Check if all timeslots are active
                   scheduledChecking(completeSlot, Model); 
@@ -381,7 +464,7 @@ TimeslotSchema.statics = {
                 //The scheduled time should be timeForConfirmation
                 // var date = moment("2016-05-17 22:40:00")._d;
                 console.log('scheduled checking for old timeslots', data._id);
-                var date = moment().add(2, 'm').toDate();
+                var date = moment().add(1, 'm').toDate();
                 var j = schedule.scheduleJob(date, function(y){
                   //Check if all timeslots are active
                   scheduledChecking(data, Model);
@@ -460,6 +543,7 @@ TimeslotSchema.statics = {
   //Cancellation
   cancelTimeslots: function(reservation, cb) {
     var Model = this;
+    console.log('timeslots to cancel', reservation.timeslot);
     async.each(reservation.timeslot, function(slotId, callback) {
        Model.findById(slotId, function(err, timeslot) {
         console.log('timeslot canceled', timeslot.start, timeslot.end);
@@ -483,20 +567,62 @@ TimeslotSchema.statics = {
           timeslot.active = false;
         }
 
-        //Remove reservation from reservation array
-        var indexOfReservation = timeslot.reservation.indexOf(reservation._id);
-        timeslot.reservation.splice(indexOfReservation, 1);
+        // //Remove reservation from reservation array
+        // var indexOfReservation = timeslot.reservation.indexOf(reservation._id);
+        // timeslot.reservation.splice(indexOfReservation, 1);
 
-        //Remove user id from reserveby array
-        var indexOfUser = timeslot.reserveBy.indexOf(reservation.reserveBy);
-        timeslot.reserveBy.splice(indexOfUser, 1);
-        
+        // //Remove user id from reserveby array
+        // var indexOfUser = timeslot.reserveBy.indexOf(reservation.reserveBy);
+        // timeslot.reserveBy.splice(indexOfUser, 1);
+        console.log('timeslot about to be saved', timeslot);
         timeslot.save(function(err, data) {
           if(err) { console.log(err); }
           callback();
         });
 
        });
+    }, function(err) {
+      cb();
+    });//async each ends
+  },
+  //Cancel partial timeslots
+  //Cancellation
+  cancelPartialTimeslots: function(timeslots, reservation, cb) {
+    var Model = this;
+    async.each(timeslots, function(timeslot, callback) {
+      console.log('timeslot canceled', timeslot.start, timeslot.end);
+      //Change the number of people for the timeslot
+      timeslot.numOfPeople -= reservation.numOfPeople;
+      //Change numOfPeopleTilActive
+      if(timeslot.numOfPeople <= timeslot.minCapacity) {
+        timeslot.numOfPeopleTilActive = timeslot.minCapacity - timeslot.numOfPeople;  
+      }
+      //Change numOfPeopleTilFull
+      if(timeslot.numOfPeople <= timeslot.maxCapacity) {
+        timeslot.numOfPeopleTilFull = timeslot.maxCapacity - timeslot.numOfPeople;
+      }
+      //Change active or full base on numOfPeople
+      if(timeslot.numOfPeople < timeslot.maxCapacity) {
+        timeslot.full = false;
+      }
+
+      if(timeslot.numOfPeople < timeslot.minCapacity) {
+        //When timeslot's num of people falls below min capacity, it's not active
+        timeslot.active = false;
+      }
+
+      //Remove reservation from reservation array
+      var indexOfReservation = timeslot.reservation.indexOf(reservation._id);
+      timeslot.reservation.splice(indexOfReservation, 1);
+
+      //Remove user id from reserveby array
+      var indexOfUser = timeslot.reserveBy.indexOf(reservation.reserveBy);
+      timeslot.reserveBy.splice(indexOfUser, 1);
+      
+      timeslot.save(function(err, data) {
+        if(err) { console.log(err); }
+        callback();
+      });
     }, function(err) {
       cb();
     });//async each ends

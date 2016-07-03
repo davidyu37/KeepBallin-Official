@@ -26,7 +26,6 @@ angular.module('keepballin')
     });
 
     socket.syncUpdates('reservation' + $scope.res._id, [], function(event, item, array) {
-        console.log('reservation updated');
         $scope.res = item;
     });
     

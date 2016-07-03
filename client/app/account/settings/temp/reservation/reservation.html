@@ -1,4 +1,8 @@
 <div class="jumbotron" ng-controller="MyReservationCtrl">
+	<div ng-hide="reserves[0]">
+		<p>目前沒有任何預約</p>
+		<button class="trans-btn" ui-sref="indoor">預約球場</button>
+	</div>
 	<ul class="list-group">
 		<a class="list-group-item" ng-repeat="r in reserves" ui-sref="reservationthis({id: r._id})">
 			<i class="fa fa-calendar-o"></i>

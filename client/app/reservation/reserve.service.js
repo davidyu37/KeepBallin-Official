@@ -13,6 +13,18 @@ angular.module('keepballin')
       	params: {
       		id: 'getByUser'
       	}
+      },
+      checkIn: {
+        method: 'POST',
+        params: {
+          controller: 'checkIn'
+        }
+      },
+      checkOut: {
+        method: 'POST',
+        params: {
+          controller: 'checkOut'
+        }
       }
 	  });
   }]);

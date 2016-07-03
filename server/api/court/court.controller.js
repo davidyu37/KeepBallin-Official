@@ -86,6 +86,18 @@ exports.destroy = function(req, res) {
   });
 };
 
+// Increase views of the court
+exports.increaseView = function(req, res) {
+  court.findById(req.params.id, function(err, court) {
+    if(err) { return handleError(res, err); }
+    if(!court) { return res.status(404).send('Not Found'); }
+    court.views += 1;
+    court.save(function(err, c) {
+      return res.status(200).json(court);
+    });
+  });
+};
+
 function handleError(res, err) {
   return res.status(500).send(err);
 }

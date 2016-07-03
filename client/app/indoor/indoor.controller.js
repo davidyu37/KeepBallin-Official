@@ -7,18 +7,29 @@ angular.module('keepballin')
     	$scope.courts = data;
     });
 
-    $scope.openReserve = function(id) {
-    	$scope.loading = true;
-    	Indoor.getPublic({id: id}, function(data) {
-			$scope.currentcourt = data;
-			$scope.loading = false;
-	    	$modal.open({
-	    		templateUrl: 'app/indoor/temp/reserve.court.html',
-				scope: $scope,
-				size: 'lg',
-				controller: 'ReserveCtrl'
-	    	});	
-		});  
+  //   $scope.openReserve = function(id) {
+  //   	$scope.loading = true;
+  //   	Indoor.getPublic({id: id}, function(data) {
+		// 	$scope.currentcourt = data;
+		// 	$scope.loading = false;
+	 //    	$modal.open({
+	 //    		templateUrl: 'app/indoor/temp/reserve.court.html',
+		// 		scope: $scope,
+		// 		size: 'lg',
+		// 		controller: 'ReserveCtrl'
+	 //    	});	
+		// });  
+  //   };
+
+    $scope.openInfo = function() {
+        $modal.open({
+            templateUrl: 'app/indoor/temp/info.html',
+            scope: $scope,
+            size: 'lg',
+            controller: 'InfoCtrl'
+        });
     };
+
+
 
   }]);

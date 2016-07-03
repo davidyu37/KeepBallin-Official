@@ -15,9 +15,13 @@ router.get('/:id/getPublic', controller.getPublic);
 //View all the rental courts
 router.get('/', auth.hasRole('admin'), controller.index);
 //Query rental courts that's public and approved
-router.get('/all/queryPublic', controller.queryPublic)
+router.get('/all/queryPublic', controller.queryPublic);
+//Get ratings
+router.get('/:id/getRating', controller.getRating);
 //Update the rental court info
 router.put('/:id', auth.isAuthenticated(), controller.update);
+//Update creator of the court
+router.put('/:id/changeCreator', auth.hasRole('admin'), controller.changeCreator);
 //Upload pictures
 router.post('/pictures', auth.isAuthenticated(), controller.upload);
 //Delete pictures

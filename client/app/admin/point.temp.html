@@ -1,0 +1,29 @@
+<div style="text-align:center;">
+	<form class="form-inline" ng-submit="addPoint(point, username)">
+		<div class="form-group">
+		    <label for="captain" class="control-label">用戶</label>
+		    <div class="input-group">
+			    <input type="text" ng-model="username" placeholder="請輸入用戶名" class="form-control" typeahead="user as user.name for user in users | filter:$viewValue | limitTo:8" typeahead-on-select="selectMember($item)">
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label for="captain" class="control-label">點數</label>
+		    <div class="input-group">
+			    <input class="form-control" type="number" ng-model="point">
+			    <span class="input-group-btn">
+					<button type="submit" class="btn">
+						<span class="glyphicon glyphicon-plus" ng-hide="sending"></span>
+						<span class="fa fa-spinner faa-spin animated" ng-show="sending"></span>
+					</button>
+				</span>	
+		    </div>
+		</div>
+	</form>
+	<ul class="list-group">
+		<li class="list-group-item" ng-repeat="u in users">
+			<h4>{{u.name}}:</h4>
+			<span ng-hide="u.points">0點</span>
+			<span ng-show="u.points">{{u.points.Points}}點</span>
+		</li>
+	</ul>
+</div>

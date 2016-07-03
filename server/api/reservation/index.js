@@ -15,4 +15,9 @@ router.get('/:id', auth.isAuthenticated(), controller.show);
 
 router.post('/', auth.isAuthenticated(), controller.create);
 
+//Check in
+router.post('/:id/checkIn', auth.isAuthenticated(), controller.checkIn);
+//Check out
+router.post('/:id/checkOut', auth.isAuthenticated(), controller.checkOut);
+
 module.exports = router;

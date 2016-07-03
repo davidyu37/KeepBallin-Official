@@ -19,9 +19,24 @@ angular.module('keepballin')
 			}
 		};
 
+		//Show indoor court's rating
+		$scope.openIndoorRate = function() {
+			if(Auth.getCurrentUser().name) {
+				$modal.open({
+					animation: true,
+					templateUrl: 'app/rating/indoor.show.html',
+					scope: $scope,
+					size: 'lg',
+					controller: 'indoorRatingSubmitCtrl'
+				});	
+			} else {
+				$state.go('login');
+				return;
+			}
+		};
+ 
 		//Show all the rates to the court
 		$scope.openRates = function() {
-			console.log('click');
 			$modal.open({
 				animation: true,
 				templateUrl: 'app/rating/rating.show.html',

@@ -120,7 +120,7 @@ function uploadTos3AndRecordOnDB (req, res, category) {
       var params = {
         localFile: file.path,
         s3Params: {
-          Bucket: 'keepballin',
+          Bucket: config.s3.bucket,
           Key: destPath,
           ACL: 'public-read',
           ContentType: contentType

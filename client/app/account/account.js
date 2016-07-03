@@ -5,14 +5,15 @@ var app = angular.module('keepballin');
 app.config(function ($stateProvider) {
   $stateProvider
     .state('settings', {
-      url: '/settings',
-      views: {
-        '': {
-          templateUrl: 'app/account/settings/settings.html',
-          controller: 'SettingsCtrl',
-          authenticate: true
-        }
-      }
+      url: '/settings/:choice',
+      resolve: {
+        choice: ['$stateParams', function($stateParams) {
+          return $stateParams.choice;
+        }]
+      },
+      templateUrl: 'app/account/settings/settings.html',
+      authenticate: true,
+      controller: 'SettingsCtrl'
     })
     .state('reset', {
       url: '/reset/:token',
@@ -30,6 +31,23 @@ app.config(function ($stateProvider) {
         }]
       },
       controller: 'ResetCtrl'
+    })
+    .state('confirm', {
+      url: '/confirm/:token',
+      templateUrl: 'app/account/confirm.html',
+      resolve: {
+        tokenUser: ['$stateParams', 'User', '$q', function($stateParams, User, $q) {
+          var deferred = $q.defer();
+          User.confirmEmail({token: $stateParams.token}, function(data) {
+            deferred.resolve(data);
+          });
+          return deferred.promise;
+        }],
+        token: ['$stateParams', function($stateParams) {
+          return $stateParams.token;
+        }]
+      },
+      controller: 'ConfirmCtrl'
     })
 });
 

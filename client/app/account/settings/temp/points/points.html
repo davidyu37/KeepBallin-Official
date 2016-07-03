@@ -1,8 +1,9 @@
 <div ng-controller="PointsCtrl">
 	<div class="page-header">
-		<h1>目前點數:</h1>
+		<h1>目前點數: {{user.points.Points}}</h1>
 	</div>
-	<div class="row">
+	<div class="row text-center">
+		<p>選擇以下方案，增加點數</p>
 		<div class="col-sm-4">
 			<div class="panel panel-default panel-custom" ng-class="{'selected-panel': isRookie}" ng-click="changeClass('isRookie')">
 			  <div class="panel-heading">
@@ -49,8 +50,6 @@
 			<div class="alert alert-danger custom-alert" >請選擇要加多少點數</div>
 		</div>
 	</div>
-	<div dynamic="allPay"></div>
-
 	<div class="marginAndCenter">
 		<div class="btn point-btn faa-parent animated-hover" ng-click="sendOrder()">
 			加點數

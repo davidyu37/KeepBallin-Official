@@ -88,6 +88,23 @@
               <div class="rect4"></div>
             </div>  
           </a>
+          <a class="btn btn-line" href="" ng-click="loginOauth('line')" ng-disabled="sending">
+            <div class="line-img">
+              <div class="line-wrapper" ng-include="'./assets/images/line.svg'"></div>
+            </div>
+            <div class="line-message">
+              <p style="margin: 0px" ng-hide="sending">
+                LINE登入
+              </p>
+              <div class="loading-btn" ng-show="sending">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+              </div>  
+
+            </div>
+          </a>
         </div>
       </form>
     </div>

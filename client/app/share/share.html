@@ -3,7 +3,8 @@
 		<h1>分享{{currentcourt.court}}球場</h1>
 	</div>
 	<div class="input-group urlShare">
-	  <input type="text" id="courtURL" class="form-control" value="https://keepballin.com/courts/{{currentcourt._id}}">
+	  <input type="text" id="courtURL" class="form-control" value="https://keepballin.com/courts/{{currentcourt._id}}" ng-hide="currentcourt.canRent">
+	  <input type="text" id="courtURL" class="form-control" value="https://keepballin.com/indoor/{{currentcourt.indoorId}}" ng-show="currentcourt.canRent">
 	  <span class="input-group-btn">
 		<button class="btn shareBtn" data-clipboard-target="#courtURL" tooltip-placement="top" tooltip="已複製" tooltip-trigger="click">複製<i class="fa fa-clone"></i>
 		</button>

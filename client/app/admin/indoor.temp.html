@@ -3,9 +3,14 @@
 		<div class="col-sm-12" ng-repeat="c in courts">
 				<div class="thumbnail myCourtPic">
 					<img class="img-responsive" ng-src="{{c.pictures[0].url}}" style="margin:auto;">
-					<button class="btn pull-right" ui-sref="rentedit({id: c._id})">
-						<i class="fa fa-pencil"></i>
-					</button>
+					<div class="pull-right">
+						<button class="btn" ng-click="changeUser(c)">
+							<i class="fa fa-user"></i>
+						</button>
+						<button class="btn" ui-sref="rentedit({id: c._id})">
+							<i class="fa fa-pencil"></i>
+						</button>
+					</div>
 					<div class="caption">
 						<h3>{{c.court}}
 							<div class="label label-success" ng-show="c.isPublic">公開中</div>

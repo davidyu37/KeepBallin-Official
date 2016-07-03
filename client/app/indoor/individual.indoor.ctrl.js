@@ -5,7 +5,6 @@ angular.module('keepballin')
 
     $scope.currentcourt = thisIndoor;
     
-
     //Open modal to reserve
     $scope.reserve = function() {
     	$modal.open({

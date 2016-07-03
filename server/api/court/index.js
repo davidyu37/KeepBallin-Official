@@ -13,6 +13,7 @@ router.get('/:id', controller.show);
 router.get('/:id/ratings', controller.getRating);
 router.post('/', auth.hasRole('vip'), controller.create);
 router.put('/:id', auth.hasRole('vip'), controller.update);
+router.put('/:id/increaseView', controller.increaseView);
 router.delete('/:id', controller.destroy);
 
 module.exports = router;

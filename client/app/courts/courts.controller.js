@@ -19,6 +19,7 @@ angular.module('keepballin')
 			$scope.courtsCached = data;
 	    	$scope.courts = data;
 	    	$scope.courtList = data;
+
     		//socket.io instant updates
 		    socket.syncUpdates('court', $scope.courts, function(event, item , arr) {
 		    	$scope.courts = arr;
@@ -34,7 +35,7 @@ angular.module('keepballin')
 				//when user uses the search box stop changing the list
 				if($scope.searching) {
 					return;
-				} else {
+				} else if($scope.searchWithin) {
 					var courts = [];
 					data.forEach(function(court) {
 						var latlng = new google.maps.LatLng(court.lat, court.long);
@@ -52,6 +53,9 @@ angular.module('keepballin')
 					}	
 					$scope.courtList = courts;
 					$scope.$apply();
+					
+				} else {
+					return;
 				}
 			});
 	    });//Court query promise then function ends here
@@ -85,7 +89,54 @@ angular.module('keepballin')
 		    		}
 		    	}
 	    	}
-	    } 
+	    }
+
+	    $scope.checked = false; 
+	    $scope.checkMessage = '只顯示室內球場';
+
+	    $scope.searchIndoor = function() {
+			$scope.checked = !($scope.checked);
+			if($scope.checked) {
+				//Filter only indoor
+				$scope.checkMessage = '只顯示室外球場';
+				$scope.courtList = $filter('filter')($scope.courtsCached, {indoor: true}, false);
+			} else {
+				$scope.checkMessage = '只顯示室內球場';
+				$scope.courtList = $filter('filter')($scope.courtsCached, {indoor: false}, false);
+			}
+	    };
+
+	    $scope.searchWithin = false;
+	    $scope.searchMessage = '地圖上的球場';
+
+	    //To load all courts or within the map
+	    $scope.loadAll = function() {
+	    	$scope.searchWithin = !($scope.searchWithin);
+	    	if($scope.searchWithin) {
+	    		//When the map loads only the courts within map boundary
+	    		$scope.searchMessage = '列出所有球場';
+	    		var courts = [];
+				$scope.courtsCached.forEach(function(court) {
+					var latlng = new google.maps.LatLng(court.lat, court.long);
+					//Check if the markers is contained in the map bounds
+					if(map.getBounds().contains(latlng)) {
+						courts.push(court);
+					}
+				});
+				if ($scope.currentOrder) {
+					courts = $filter('orderBy')(courts, $scope.currentOrder, false);
+					if ($scope.currentOrder === '-averagedRating') {
+						//If the court doesn't have any ratings, it goes to the end
+						courts = $filter('emptyToEnd')(courts, 'averagedRating');
+					}
+				}	
+				$scope.courtList = courts;
+	    	} else {
+	    		//Load all courts
+	    		$scope.courtList = $scope.courtsCached;
+	    		$scope.searchMessage = '地圖上的球場';
+	    	}
+	    };
 
 	    //Mouseover function to open info window
 	    $scope.openInfo = function(e, court) {
@@ -253,6 +304,10 @@ angular.module('keepballin')
 			{
 				ch: '最新球場',
 				method: '-dateCreated'			
+			},
+			{
+				ch: '最常瀏覽',
+				method: '-views'			
 			}
 		];
 
@@ -310,7 +365,6 @@ angular.module('keepballin')
 				var filteredData = $filter('orderBy')($scope.courts, value.method, false);
 				if (value.method === '-averagedRating') {
 					filteredData = $filter('emptyToEnd')(filteredData, 'averagedRating');
-					console.log(filteredData);
 				}
 				$scope.courts = filteredData;
 				$scope.courtList = filteredData;
@@ -478,103 +532,18 @@ angular.module('keepballin')
 	    var addMarkerBtn = document.getElementById('addMarker');
 	    map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(addMarkerBtn);
 
-	    //Place search ------- Begin
-	 //    var input = document.getElementById('placeSearch');
-		// var searchBox = new google.maps.places.SearchBox(input);
-
-		// // Bias the SearchBox results towards current map's viewport.
-		// // map.addListener('bounds_changed', function() {
-		// // 	searchBox.setBounds(map.getBounds());
-		// // });
-
-		// var markers = [];
-		// // [START region_getplaces]
-		// // Listen for the event fired when the user selects a prediction and retrieve
-		// // more details for that place.
-		// searchBox.addListener('places_changed', function() {
-		// 	var places = searchBox.getPlaces();
-
-		// 	if (places.length == 0) {
-		// 		return;
-		// 	}
-
-		// 	// Clear out the old markers.
-		// 	markers.forEach(function(marker) {
-		// 		marker.setMap(null);
-		// 	});
-		// 	markers = [];
-
-		// 	// For each place, get the icon, name and location.
-		// 	var bounds = new google.maps.LatLngBounds();
-			
-		// 	places.forEach(function(place) {
-		// 		// Create a marker for each place.
-		// 		markers.push(new google.maps.Marker({
-		// 			map: map,
-		// 			title: place.name,
-		// 			position: place.geometry.location
-		// 		}));
-
-		// 		if (place.geometry.viewport) {
-		// 		// Only geocodes have viewport.
-		// 			bounds.union(place.geometry.viewport);
-		// 		} else {
-		// 			bounds.extend(place.geometry.location);
-		// 		}
-		// 	});
-		// 	map.fitBounds(bounds);
-		// });
-	    //Searchbox
-	 //    $scope.availableSearchParams = [
-		//   { key: 'court', name: '球場名', placeholder: '球場名...' },
-		//   { key: 'city', name: '城市', placeholder: '城市...' },
-		//   { key: 'district', name: '區域', placeholder: '區域...' },
-		//   { key: 'address', name: '住址', placeholder: '住址...' }
-		// ];
-
-		// $scope.noResult = false;
-		// $scope.gotResult = false;
-
-		// $scope.searchCourt = function(params) {
-		// 	var hasParams = (params.query || params.court || params.city || params.district || params.address);
-		// 	if(hasParams === undefined) {
-		// 		$timeout(function() {
-		// 			$scope.emptyField = false;
-		// 		}, 1000);
-		// 		return;
-		// 	} else {
-		// 		Court.search(params, function(data) {
-		// 			if(data.length === 0) {
-		// 				$scope.noResult = true;
-		// 				$timeout(function() {
-		// 					$scope.noResult = false;
-		// 				}, 1000);
-		// 			} else {
-		// 				$scope.courts = data;
-		// 				$scope.map.panTo({lat: data[0].lat, lng: data[0].long});
-		// 				$scope.map.setZoom(13);
-		// 				$scope.gotResult = true;
-		// 				$timeout(function() {
-		// 					$scope.gotResult = false;
-		// 				}, 1000);
-		// 			}
-		// 		});
-		// 	}
-		// };
-
-		// $scope.getLocation = function(val) {
-			
-		// 	var params = {
-		// 		query: val
-		// 	};
-		// 	return Court.search(params).$promise
-		// 		.then(function(data) {
-		// 			return data.map(function(item) {
-		// 				return item.address;
-		// 			});
-		// 		});	
-		// };
-
+	    //Go to individual court
+	    $scope.goIndividual = function(court) {
+	    	//Record views persist to db
+	    	Court.increaseView({id: court._id}, function(c) {
+		    	//Decide whether to go court or indoor court based on canRent
+	    		if(court.canRent) {
+	    			$state.go('thisindoor', {id: court.indoorId});
+	    		} else {
+	    			$state.go('thiscourt', {id: court._id});
+	    		}
+	    	});//increase view ends
+	    };
 
 }]);//mapCtrl ends here
 

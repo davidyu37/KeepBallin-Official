@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('PointsCtrl', ['$scope', 'Auth', '$modal', 'Checkout', '$http', function ($scope, Auth, $modal, Checkout, $http) {
+  .controller('PointsCtrl', ['$scope', 'Auth', '$window', '$state', 'User', function ($scope, Auth, $window, $state, User) {
     
     $scope.changeClass = function(val) {
       $scope.isVeteran = false;
@@ -28,12 +28,17 @@ angular.module('keepballin')
 
     $scope.points = 0;
 
+    $scope.user = User.get();
+
+    var currrentUrl = $window.location.href;
+
+    var index = $window.location.href.indexOf('/settings');
+
+    var checkOutUrl = $window.location.href.slice(0, index) + '/checkout/';
+
     $scope.sendOrder = function() {
       if($scope.points > 0) {
-        Checkout.save({points: $scope.points}, function(data) {
-          console.log('points saved', data);
-          $scope.allPay = data.html;
-        });
+        $window.open(checkOutUrl + $scope.points);
       } else {
         $scope.noPoint = true;
       }

@@ -3,13 +3,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var crypto = require('crypto');
-var authTypes = ['github', 'twitter', 'facebook', 'google'];
+var authTypes = ['github', 'twitter', 'facebook', 'google', 'line'];
 var relationship = require('mongoose-relationship');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var UserSchema = new Schema({
   name: String,
   email: { type: String, lowercase: true },
+  confirmedEmail: { type: Boolean, default: false },
   role: {
     type: String,
     default: 'user'
@@ -38,6 +39,8 @@ var UserSchema = new Schema({
   hashedPassword: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
+  confirmToken: String,
+  confirmExpires: Date,
   provider: String,
   salt: String,
   courtRatings: [{
@@ -45,6 +48,9 @@ var UserSchema = new Schema({
     ref: 'Rating'
   }],
   fbprofilepic: String,
+  lineProfilepic: String,
+  lineID: String,
+  line: {},
   facebook: {},
   google: {},
   github: {},
@@ -53,7 +59,10 @@ var UserSchema = new Schema({
   courtManagerOf: [{ type:Schema.ObjectId, ref:"Indoor" }],
   eventsJoined: [{ type:Schema.ObjectId, ref:"Event" }],
   invitesJoined: [{ type:Schema.ObjectId, ref:"Invite" }],
-  reservation: [{ type:Schema.ObjectId, ref:"Reservation" }]
+  reservation: [{ type:Schema.ObjectId, ref:"Reservation" }],
+  points: { type:Schema.ObjectId, ref:"Point" },
+  refreshToken: String,
+  accessToken: String
 });
 
 UserSchema.set('versionKey', false);
@@ -209,7 +218,10 @@ UserSchema.plugin(deepPopulate, {
 UserSchema.statics = {
   findByIdAndPopulate: function(userId, cb) {
     this.findOne({_id: userId})
-      .populate({path:'avatar', select: 'url date'})
+      .populate([
+        {path:'avatar', select: 'url date'},
+        {path:'points', select: 'Points'}
+      ])
       .select('-salt -hashedPassword')
       .exec(cb);
   },
@@ -233,7 +245,7 @@ UserSchema.statics = {
   },
   adminSearch: function(cb) {
     this.find()
-    .deepPopulate('courtRatings courtRatings.court courtCreated')
+    .deepPopulate('courtRatings courtRatings.court courtCreated points')
     .select('-salt -hashedPassword')
     .exec(cb);
   }

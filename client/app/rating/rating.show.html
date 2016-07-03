@@ -5,9 +5,6 @@
 <div class="modal-body" style="height: 80vh; overflow-y: scroll;">
     <div ng-hide="rates[0]">
         <h4>目前還沒有任何評價</h4>
-        <!-- <div style="margin-top: 20px;">
-            <button style="font-size:90%" class="eventBtn" ng-click="openRate()">給予評價</button>
-        </div> -->
         <div><a ui-sref="thiscourt({id: currentcourt._id})">前往球場主頁</a></div>
     </div>
     <div class="list-group" ng-repeat="r in rates | orderBy: '-rate'" >

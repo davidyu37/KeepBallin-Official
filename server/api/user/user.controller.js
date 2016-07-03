@@ -11,7 +11,9 @@ var async = require('async');
 var hogan = require('hogan.js');
 var fs = require('fs');
 var template = fs.readFileSync('server/api/user/forgot.hjs', 'utf-8');
+var confirmTemplate = fs.readFileSync('server/api/user/confirm.hjs', 'utf-8');
 var compiledTemplate = hogan.compile(template);
+var compiledConfirm = hogan.compile(confirmTemplate);
 var sendgrid  = require('sendgrid')(config.sendgrid.apiKey);
 //For user to login after pw reset
 var passport = require('passport');
@@ -94,7 +96,7 @@ exports.resetPassword = function(req, res) {
     function(user, done) {
       var message = '您的密碼已成功更改成功.\n' +
         '快去找球友一起揮灑汗水吧\n' +
-        'https://' + req.headers.host + '/teammate\n' +
+        'https://' + req.headers.host + '\n' +
         '感謝您的支持與愛護.\n';
         sendgrid.send({
             to:       user.email,
@@ -179,10 +181,47 @@ exports.create = function (req, res, next) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
   newUser.role = 'vip';
-  newUser.save(function(err, user) {
-    if (err) return validationError(res, err);
-    var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
-    res.json({ token: token });
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var confirmToken = buf.toString('hex');
+        done(err, confirmToken);
+      });
+    },function(confirmToken, done) {
+      newUser.confirmToken = confirmToken;
+      newUser.confirmExpires = Date.now() + 3600000;
+      newUser.save(function(err, user) {
+        if (err) return validationError(res, err);
+        var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*8 });
+        //Send email for verification
+        sendgrid.send({
+            to:       user.email,
+            from:     config.email.me,
+            subject:  '請驗證Email',
+            html: compiledConfirm.render({link: 'https://' + req.headers.host + '/confirm/' + token})
+          }, function(err, json) {
+            if (err) { return console.error(err); }
+            console.log('confirm email sent');
+        });
+        res.json({ token: token });
+      });
+      
+    }], function(err) {
+      console.log('error while sending email confirmation email', err);
+  });//Waterfall ends
+};
+
+//Confirm the email
+exports.confirmEmail = function(req, res) {
+  User.findOne({ confirmToken: req.params.token }, 'name', function(err, user) {
+    if (err) { return handleError(res, err); }
+    if (!user) {
+      return res.status(200).json({expired: true});
+    }
+    user.confirmedEmail = true;
+    user.save(function() {
+      return res.status(200).json(user);
+    });
   });
 };
 

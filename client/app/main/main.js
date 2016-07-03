@@ -5,7 +5,7 @@ angular.module('keepballin')
     
     $stateProvider
       .state('main', {
-        url: '/',
+        url: '/brand',
         templateUrl: 'app/main/main.html',
         controller: 'MainCtrl',
         resolve: {

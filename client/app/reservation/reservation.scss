@@ -1,3 +1,18 @@
+.reservation-status-success {
+	background: $brand-primary; 
+	border-radius: 5px; 
+	color: white; 
+	padding: 10px;
+}
+
+.reservation-status-cancel {
+	background: #444; 
+	border-radius: 5px; 
+	color: white; 
+	padding: 10px;
+}
+
+
 .margin-bottom-20 {
 	margin-bottom: 20px;
 }

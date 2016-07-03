@@ -5,8 +5,10 @@
       <tabset justified="true">
         <tab class="tab" heading="使用者" ng-click="changeTab('user')"></tab>
         <tab class="tab" heading="出租球場" ng-click="changeTab('indoor')"></tab>
+        <tab class="tab" heading="管理點數" ng-click="changeTab('point')"></tab>
       </tabset>
     </div>
     <div ng-include="'app/admin/user.temp.html'" ng-show="current == 'user'"></div>
     <div ng-include="'app/admin/indoor.temp.html'" ng-show="current == 'indoor'"></div>
+    <div ng-include="'app/admin/point.temp.html'" ng-show="current == 'point'"></div>
 </div>

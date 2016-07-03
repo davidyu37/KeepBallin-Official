@@ -471,8 +471,7 @@ angular.module('keepballin')
 	$scope.eventSources = [];
 
 	$scope.timeslots = filterTimeslots(timeslots);
-
-	console.log($scope.timeslots);
+	
 
 	$scope.reservations = $scope.currentcourt.reservation;
 
@@ -665,7 +664,6 @@ angular.module('keepballin')
 				});
 			});			
 		} else {
-			console.log('overlap');
 			$scope.overlap = true;
 		}
 	};	

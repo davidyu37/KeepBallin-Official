@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Indoor = require('./indoor.model');
 var Timeslot = require('../timeslot/timeslot.model');
+var Court = require('../court/court.model');
 var multiparty = require('multiparty');
 var config = require('../../config/environment');
 var uuid = require('uuid');
@@ -129,18 +130,15 @@ exports.create = function(req, res) {
   var newIndoor = _.merge(req.body, userId);
   Indoor.create(newIndoor, function(err, indoor) {
     if(err) { return handleError(res, err); }
-    return res.status(201).json(indoor);
+    newIndoor = _.merge(newIndoor, {canRent: true, indoorId: indoor._id});
+    Court.create(newIndoor, function(err, court) {
+      if(err) { return handleError(res, err); }
+      indoor.courtID = court._id;
+      indoor.save();
+      return res.status(201).json(indoor);
+    });
   });
 };
-
-// Get a single Indoor only for the creator or admin
-// exports.show = function(req, res) {
-//   Indoor.findById(req.params.id, function (err, indoor) {
-//     if(err) { return handleError(res, err); }
-//     if(!indoor) { return res.status(404).send('Not Found'); }
-//     return res.json(indoor);
-//   });
-// };
 
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
@@ -151,7 +149,14 @@ exports.update = function(req, res) {
     newIndoor.markModified('hours');
     newIndoor.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.status(200).json(newIndoor);
+      Court.findById(indoor.courtID, function(err, court) {
+        if (err) { return handleError(res, err); }
+        delete indoor.pictures;
+        var mergeCourt = _.merge(court, indoor);
+        mergeCourt.save(function() {
+          return res.status(200).json(newIndoor);
+        });
+      });
     });
   });
 };
@@ -168,8 +173,11 @@ exports.index = function(req, res) {
 exports.getPublic = function(req, res) {
   Indoor.getPublic(req.params.id, function(err, indoor) {
     if(err) { return handleError(res, err); }
-    if(!indoor) { console.log('theres no indoor', indoor) }
-    return res.status(200).json(indoor);
+    if(!indoor) { return handleError(res, 'no indoor court found');}
+    indoor.views += 1;
+    indoor.save(function(err, newIndoor) {
+      return res.status(200).json(newIndoor);
+    });  
   })
 };
 
@@ -187,7 +195,7 @@ exports.getPopulated = function(req, res) {
     if(err) { return handleError(res, err); }
     var creator = JSON.stringify(indoor.creator);
     var userId = JSON.stringify(req.user._id);
-    if(creator == userId || req.user.role == 'admin') {
+    if(creator === userId || req.user.role === 'admin') {
       return res.status(200).json(indoor);
     } else {
       return res.status(401).send('Unauthorized');
@@ -205,6 +213,28 @@ exports.closeTimeslot = function(req, res) {
   
 };
 
+// Get ratings of the court
+exports.getRating = function(req, res) {
+  Indoor.getRatings(req.params.id, function (err, court) {
+    if(err) { return handleError(res, err); }
+    if(!court) { return res.status(404).send('Not Found'); }
+    return res.json(court);
+  });
+};
+
+// Change creator of the court, only for admin
+exports.changeCreator = function(req, res) {
+  Indoor.findById(req.params.id, function(err, indoor) {
+    if(err) { return handleError(res, err); }
+    if(!indoor) { return res.status(404).send('Not Found'); }
+    var newIndoor = _.merge(indoor, req.body);
+    newIndoor.save(function(err, data) {
+      return res.status(201).json(data);
+    });
+  });
+};
+
 function handleError(res, err) {
+  console.log(err);
   return res.status(500).send(err);
 }

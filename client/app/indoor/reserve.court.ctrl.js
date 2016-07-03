@@ -1,8 +1,13 @@
 'use strict';
 
 angular.module('keepballin')
-  .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', 'Reservation', 'Timeslot', '$compile', 'socket', '$modal', 'Auth', '$state', function ($scope, Indoor, $modalInstance, uiCalendarConfig, Reservation, Timeslot, $compile, socket, $modal, Auth, $state) {
+  .controller('ReserveCtrl', ['$scope', 'Indoor', '$modalInstance', 'uiCalendarConfig', 'Reservation', 'Timeslot', '$compile', 'socket', '$modal', 'Auth', '$state', 'User', function ($scope, Indoor, $modalInstance, uiCalendarConfig, Reservation, Timeslot, $compile, socket, $modal, Auth, $state, User) {
     
+    
+    if(Auth.isLoggedIn()) {
+        $scope.user = User.get();
+    }
+
     //Close the modal
     $scope.close = function() {
         $modalInstance.close();
@@ -242,100 +247,126 @@ angular.module('keepballin')
     //Sending reservation
     $scope.reserveNow = function(form) {
 
+        $scope.submitted = true;
         //Check if user is logged in
         if(!(Auth.isLoggedIn())) {
             $state.go('login');
             return;
-        }
+        } else {
+            User.get(function(data) {
+                $scope.user = data;
+                //Form validation
+                if(form.$valid) {
+                    $scope.notEnough = false;
+                    //Check if there's enough points
+                    if($scope.user.points) {
+                        if($scope.estPrice > $scope.user.points.Points) {
+                            //not enough points
+                            console.log('not enough');
+                            $scope.notEnough = true;
+                            return;
+                        } else {
+                            //Enough points
+                            console.log('enough points');
 
-        $scope.submitted = true;
-        //Form validation
-        if(form.$valid) {
-            $scope.timeslotNotAvailable = false;
-            $scope.orderExceedMax = false;
-            //Timeslots checking -------------------------
-            var numOfTimeslots = $scope.estHour / 0.5;
-            //Array to put the timeslots that are not available
-            $scope.nopeTimeslots = [];
-            $scope.fewSpotTimeslots = [];
-
-            var initialStarttime = moment($scope.start);
-
-            for(var i = 0; i < numOfTimeslots; i++) {
-                var newTime = moment(initialStarttime);
-
-                if(i > 0) {
-                    newTime = moment(initialStarttime.add(30, 'm'));
-                }
-                var matchingTimeslot = findTimeslotByKeyValue($scope.events, 'start', new Date(newTime));
-                
-                if(matchingTimeslot) {
-                    //Check for remaining spots, if numOfPeople exceed the remaing spots, 
-                    if($scope.numOfPeople > matchingTimeslot.numOfPeopleTilFull) {
-                        $scope.orderExceedMax = true;
-                        $scope.fewSpotTimeslots.push(matchingTimeslot);
+                        }  
+                    } else {
+                        //User never bought points before
+                        console.log('no point');
+                        $scope.notEnough = true;
+                        return;
                     }
-                    //Check if the timeslot's notOpen or full is true
-                    if(matchingTimeslot.notOpen || matchingTimeslot.full) {
-                        $scope.timeslotNotAvailable = true;
-                        $scope.nopeTimeslots.push(matchingTimeslot);
+                    $scope.timeslotNotAvailable = false;
+                    $scope.orderExceedMax = false;
+                    //Timeslots checking -------------------------
+                    var numOfTimeslots = $scope.estHour / 0.5;
+                    //Array to put the timeslots that are not available
+                    $scope.nopeTimeslots = [];
+                    $scope.fewSpotTimeslots = [];
+
+                    var initialStarttime = moment($scope.start);
+
+                    for(var i = 0; i < numOfTimeslots; i++) {
+                        var newTime = moment(initialStarttime);
+
+                        if(i > 0) {
+                            newTime = moment(initialStarttime.add(30, 'm'));
+                        }
+                        var matchingTimeslot = findTimeslotByKeyValue($scope.events, 'start', new Date(newTime));
+                        
+                        if(matchingTimeslot) {
+                            //Check for remaining spots, if numOfPeople exceed the remaing spots, 
+                            if($scope.numOfPeople > matchingTimeslot.numOfPeopleTilFull) {
+                                $scope.orderExceedMax = true;
+                                $scope.fewSpotTimeslots.push(matchingTimeslot);
+                            }
+                            //Check if the timeslot's notOpen or full is true
+                            if(matchingTimeslot.notOpen || matchingTimeslot.full) {
+                                $scope.timeslotNotAvailable = true;
+                                $scope.nopeTimeslots.push(matchingTimeslot);
+                            }
+                        }
                     }
-                }
-            }
-            if($scope.timeslotNotAvailable || $scope.orderExceedMax) {
-                return;
-            }
-            
-            //Timeslots checking ends -------------------------
+                    if($scope.timeslotNotAvailable || $scope.orderExceedMax) {
+                        return;
+                    }
+                    
+                    //Timeslots checking ends -------------------------
 
-            var hoursBeforeBegin = moment($scope.start).subtract($scope.currentcourt.hoursBeforeReserve, 'h');
+                    var hoursBeforeBegin = moment($scope.start).subtract($scope.currentcourt.hoursBeforeReserve, 'h');
 
-            var obj = {
-                dateReserved: $scope.date,
-                beginString: $scope.timeSlot.selected,
-                endString: $scope.timeSlot2.selected,
-                start: $scope.start,
-                end: $scope.end,
-                flexible: $scope.flexible,
-                numOfPeople: $scope.numOfPeople,
-                minCapacity: $scope.currentcourt.minCapacity, 
-                maxCapacity: $scope.currentcourt.maxCapacity,
-                pricePaid: $scope.estPrice,
-                perPersonPrice: $scope.currentcourt.perPersonPrice,
-                duration: $scope.estHour,
-                timeForConfirmation: hoursBeforeBegin._d,
-                courtReserved: $scope.currentcourt._id,
-                court: $scope.currentcourt.court,
-                address: $scope.currentcourt.address
-            };
+                    var obj = {
+                        dateReserved: $scope.date,
+                        beginString: $scope.timeSlot.selected,
+                        endString: $scope.timeSlot2.selected,
+                        start: $scope.start,
+                        end: $scope.end,
+                        flexible: $scope.flexible,
+                        numOfPeople: $scope.numOfPeople,
+                        minCapacity: $scope.currentcourt.minCapacity, 
+                        maxCapacity: $scope.currentcourt.maxCapacity,
+                        pricePaid: $scope.estPrice,
+                        perPersonPrice: $scope.currentcourt.perPersonPrice,
+                        duration: $scope.estHour,
+                        timeForConfirmation: hoursBeforeBegin._d,
+                        courtReserved: $scope.currentcourt._id,
+                        courtName: $scope.currentcourt.court,
+                        courtAddress: $scope.currentcourt.address,
+                        courtLat: $scope.currentcourt.lat,
+                        courtLng: $scope.currentcourt.long
+                    };
 
-            //If num of people reserved is larger than minCapacity, set to active
-            if($scope.numOfPeople >= $scope.currentcourt.minCapacity) {
-                obj.active = true;
-            }
+                    //If num of people reserved is larger than minCapacity, set to active
+                    if($scope.numOfPeople >= $scope.currentcourt.minCapacity) {
+                        obj.active = true;
+                    }
 
-            //Check if time now is smaller than hoursBeforeBegin
-            var now = moment();
-            if(now >= hoursBeforeBegin) {
-                $scope.minDateErr = true;
-                return;
-            } else if($scope.timeslotNotAvailable) {
-                return;
-            } else if($scope.orderExceedMax) {
-                return;
-            } else {
-                $scope.sending = true;
-                Reservation.save(obj, function(data) {
-                    $scope.sending = false;
-                   
-                    $state.go('reservationthis', {id : data._id});
+                    //Check if time now is smaller than hoursBeforeBegin
+                    var now = moment();
+                    if(now >= hoursBeforeBegin) {
+                        $scope.minDateErr = true;
+                        return;
+                    } else if($scope.timeslotNotAvailable) {
+                        return;
+                    } else if($scope.orderExceedMax) {
+                        return;
+                    } else {
+                        $scope.sending = true;
+                        Reservation.save(obj, function(data) {
+                            $scope.sending = false;
+                            //Check if data.error exist
+                            if(data.error) {
+                                //Let the user know
+                                $scope.notEnough = true;
+                            } else {
+                                $state.go('reservationthis', {id : data._id});
+                            }
+                        });
+                    }
 
-                });
-            }
-
+                }         
+            });
         }
-        //Add reservation
-        //Proceed them to checkout
     };
 
     //Calendar Stuff Begins

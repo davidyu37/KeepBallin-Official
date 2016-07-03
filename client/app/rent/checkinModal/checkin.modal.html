@@ -1,0 +1,71 @@
+<div style="margin: 20px;">
+	<div class="page-header">
+			<h3>Check-in/out</h3>	
+	</div>
+	<form name="search" ng-submit="displayReserve(searchText)">
+	    <div class="input-group input-group-lg court-input-group">
+	      <input type="text" ng-model="searchText" placeholder="尋找訂單" typeahead="r as (r.whoReserved + ' ' + (r.start | date: 'MM/dd/yyyy hh:mm')) for r in reservations | filter:$viewValue | limitTo:8" class="court-input form-control" style="color: black" autofocus>
+	      <span class="input-group-btn">
+	        <button class="btn btn-primary" type="submit" style="height: 47px; color: black">
+	            <i ng-hide="loadingLocations" class="fa fa-search"></i>
+	            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+	        </button>
+	      </span>
+	    </div>         
+	</form>
+	<div class="row" style="margin-top: 15px;" ng-show="showReservation">
+		<div class="col-sm-6">
+			<p style="font-size: 150%;">訂單狀態</p>
+			<div style="text-align: center">
+	    		<div class="reservation-status-success" ng-show="chosenReserve.status == 'completed'">成功</div>
+	    		<div class="reservation-status-cancel" ng-show="chosenReserve.status == 'canceled'">取消</div>
+	    		<h3>
+	    			<div class="label label-default" style="font-weight: 100;" ng-show="chosenReserve.checkInTime && chosenReserve.checkOutTime">已離場</div>
+	    		</h3>
+	    		<form ng-submit="enterCourt(confirmCode)" ng-hide="chosenReserve.checkInTime" style="margin-top:20px">
+	    			<div>驗證碼</div>
+		    		<div class="input-group">
+		    			<input type="text" ng-model="confirmCode" placeholder="請輸入驗證碼" class="form-control court-input" style="color: black;">
+		    			<span class="input-group-btn">
+		    				<button class="btn btn-primary" type="submit" style="padding-bottom: 7px;">
+			    				入場
+		    				</button>
+		    			</span>
+		    		</div>			
+	    		</form>
+	    		<button class="btn btn-warning btn-lg" ng-show="chosenReserve.checkInTime && !(chosenReserve.checkOutTime)" style="margin-top:20px" ng-click="checkOut()" ng-disabled="sending">
+		    		<p style="margin: 0;" ng-hide="sending">
+		    			離場
+		    		</p>
+					<div class="spinner" style="margin: 0px; height: 20px; width: 30px;" ng-show="sending">
+					  <div class="rect1" style="background-color: white;"></div>
+					  <div class="rect2" style="background-color: white;"></div>
+					  <div class="rect3" style="background-color: white;"></div>
+					  <div class="rect4" style="background-color: white;"></div>
+					</div>
+	    		</button>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<p class="reserve-info">
+			<i class="fa fa-calendar"></i>
+			日期: {{chosenReserve.start | date: 'MM/dd/yyyy'}}</p>
+			<p class="reserve-info" ng-hide="chosenReserve.partialTimeslots">
+			<i class="fa fa-clock-o"></i>
+			時段: {{chosenReserve.beginString}} ~ {{chosenReserve.endString}}</p>
+			<p class="reserve-info" ng-show="chosenReserve.partialTimeslots">
+				<i class="fa fa-clock-o"></i>
+				成功時段: {{chosenReserve.partialTimeslots}}
+			</p>
+			<p class="reserve-info">
+			<i class="fa fa-users"></i>
+			人數: {{chosenReserve.numOfPeople}}</p>
+			<p class="reserve-info">
+			<i class="fa fa-user"></i>
+			使用者: {{chosenReserve.whoReserved}}</p>
+			<p class="reserve-info margin-bottom-20">
+			<i class="fa fa-dollar"></i>
+			金額: ${{chosenReserve.pricePaid}}</p>
+		</div>
+	</div>	
+</div>

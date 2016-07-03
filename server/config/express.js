@@ -5,6 +5,7 @@
 'use strict';
 
 var express = require('express');
+var session = require('express-session');
 var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var compression = require('compression');
@@ -29,11 +30,11 @@ module.exports = function(app) {
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
+  app.use(session({ secret: 'keepballin123' }));
   app.use(passport.initialize());
-  app.use(require('prerender-node').set('prerenderToken', config.prerender.token));
+  app.use(passport.session());
 
   if ('production' === env) {
-    app.use(require('../urlredirects'));
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));
     app.set('appPath', path.join(config.root, 'public'));
