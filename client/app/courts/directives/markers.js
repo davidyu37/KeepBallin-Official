@@ -23,13 +23,25 @@ angular.module('keepballin')
 			
 			function createMarker(court) {
 
-				var image = {
-				  url: '../assets/images/basket.png',
-				  size: new google.maps.Size(35, 60),
-				  origin: new google.maps.Point(0, 0),
-				  anchor: new google.maps.Point(17, 60),
-				  scaledSize: new google.maps.Size(35, 60)
-				};
+				var image;
+
+				if(court.canRent) {
+					image = {
+					  url: '../assets/images/indoor.png',
+					  // size: new google.maps.Size(35, 60),
+					  // origin: new google.maps.Point(0, 0),
+					  // anchor: new google.maps.Point(17, 60),
+					  scaledSize: new google.maps.Size(50, 50)
+					}; 
+				} else {
+					image = {
+					  url: '../assets/images/basket.png',
+					  size: new google.maps.Size(35, 60),
+					  origin: new google.maps.Point(0, 0),
+					  anchor: new google.maps.Point(17, 60),
+					  scaledSize: new google.maps.Size(35, 60)
+					};
+				}
 
 				var marker = new google.maps.Marker({
 		            map: $scope.map,

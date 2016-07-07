@@ -10,9 +10,6 @@ exports.setup = function (User, config) {
       state: 'placeholder'
     },
     function(accessToken, refreshToken, profile, done) {
-      console.log('accessToken', accessToken);
-      console.log('refreshToken', refreshToken);
-      console.log('profile', profile);
       User.findOne({ lineID: profile.id }, function(err, user) {
         if(err) { console.log(err); return done(err); }
         if(!user) {

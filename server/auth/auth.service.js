@@ -120,26 +120,10 @@ function setTokenCookie(req, res) {
   if (!req.user) return res.status(404).json({ message: 'Something went wrong, please try again.'});
   var token = signToken(req.user._id, req.user.role);
   res.cookie('token', JSON.stringify(token));
-  Line.sendMessage(req.user.line.mid, '您在Keepballin登入, 打球拉');
-  // Lobby.find({}, function(err, found) {
-  //   //If there's no lobby
-  //   if(found.length <= 0) {
-  //     //if it doesn't exist create one
-  //     var lobby = new Lobby();
-  //     lobby.userOnline.push(req.user._id);
-  //     lobby.save(function(err, saved) {});
-  //   } else {
-  //     //If the tracker exist, check if the user exist in the array
-  //     if( found[0].userOnline.indexOf(req.user._id) < 0 ) {
-  //       //If user doesn't exist, add to list
-  //       found[0].userOnline.push(req.user._id);
-
-  //       found[0].save(function(err, newLobby) {
-  //         console.log('Number of users online: ', newLobby.userOnline.length);
-  //       });
-  //     }
-  //   }
-  // });//Lobby tracker ends
+  if(req.user.line) {
+    Line.sendMessage(req.user.line.mid, '您在Keepballin登入, 打球拉');
+  }
+  
   res.redirect('/');
 }
 

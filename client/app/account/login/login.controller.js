@@ -57,7 +57,6 @@ angular.module('keepballin')
     };
 
     $scope.loginOauth = function(provider) {
-      console.log(provider);
       $scope.sending = true;
       $window.location.href = '/auth/' + provider;
     };
